@@ -6,15 +6,6 @@
 
 #Usage:
 
-```shell
-work-store-directory>python path/to/pymake.py ...
-```
-
-ok, it will work itself. follow config file, program will chdir to build path, then it follow your command to generate build install e.g. You can also execute genmake command raw from this program command-line.
-
-
-##How to Configure
-
 work-store-directory>python path/to/pymake.py -h
 
 ```shell
@@ -60,7 +51,9 @@ Options:
 ```
 You can follow this tips to do configure thing. now it support cmake.
 
-##Configure file
+#How to Configure
+
+##From config file
 
 ```shell
 pymake.ini
@@ -94,4 +87,14 @@ pymake.json
 ```
 I use json format to store the configure, it is easy to read. You can make some lot of by this file(also template) to create new building task file.
 
-I wish you would like it.
+##From command-line 
+
+```shell
+work-store-directory>python path/to/pymake.py ...
+```
+
+from command-line, you can config all that path and command. program will follow configured file, chdir to build path, then execute your command to generate build install e.g. You can also execute genmake command raw from this program command-line. 
+
+
+An last it works itself, I wish you would like it.
+
