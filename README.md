@@ -1,1 +1,1 @@
-Hello PyMake
+#PyMake 1.0
