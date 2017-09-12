@@ -71,8 +71,8 @@ pymake.json
 {
     "add-to-env": {
         "PYMAKE_TOOLCHAIN_PATH": "C:/Users/Administrator/Qt/Tools/mingw530_32/bin", 
-        "PYMAKE_MAKE_PATH": "C:/Users/Administrator/Qt/Tools/mingw530_32/bin", 
-        "PYMAKE_GENMAKE_PATH": "Z:/abel/Develop/b0-toolskits/a1-QQtToolsKits-Windows/compliers/cmake3.9.1_64/bin"
+        "PYMAKE_GENMAKE_PATH": "Z:/abel/Develop/b0-toolskits/compliers/cmake3.9.1_64/bin",
+        "PYMAKE_MAKE_PATH": "C:/Users/Administrator/Qt/Tools/mingw530_32/bin"
     }, 
     "source-to-build": {
         "PYMAKE_BUILD_PATH": "Z:/abel/Develop/a0-Developworkspace/a0-qqtpruduct-qqtfoundation/build", 
