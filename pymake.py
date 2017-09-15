@@ -52,19 +52,19 @@ from pycore.docopt import docopt
 def main_function():
 
     d = {
-        "add-to-env": {
+        "a0-add-to-env": {
             'PYMAKE_TOOLCHAIN_PATH': "C:/Users/Administrator/Qt/Tools/mingw530_32/bin",
             'PYMAKE_MAKE_PATH': "C:/Users/Administrator/Qt/Tools/mingw530_32/bin",
             'PYMAKE_GENMAKE_PATH': "Z:/abel/Develop/b0-toolskits/compliers/cmake3.9.1_64/bin"
         },
-        "source-to-build": {
-            "PYMAKE_BUILD_PATH": "Z:/abel/Develop/a0-Developworkspace/a0-qqtpruduct-qqtfoundation/build",
+        "a1-add-custom-bin-path-to-env": {
+            "qt5.9-win32": "C:/Users/Administrator/Qt/5.9.1/mingw53_32/bin"
+        },
+        "b2-source-to-build": {
+            "PYMAKE_BUILD_PATH": "Z:/abel/Develop/c0-buildstation/mingw32-qqt",
             "PYMAKE_GENMAKE_COMMAND": "cmake -G\"MinGW Makefiles\" ../",
             "PYMAKE_MAKE_COMMAND": "mingw32-make",
             "PYMAKE_INSTALL_COMMAND": "mingw32-make install"
-        },
-        "add-other-bin-path-to-env": {
-            "qt5.9-win32": "C:/Users/Administrator/Qt/5.9.1/mingw53_32/bin"
         }
     }
     if (not os.path.exists('pymake.json')):
@@ -137,6 +137,7 @@ def main_function():
                     if (os.path.exists(args['<config-file-name>'])):
                         conf.set('pymake', 'config', args['<config-file-name>'])
                         conf.write(open('pymake.ini', 'w'))
+                        print("switch source config: %s" % file)
                     else:
                         print("source file %s isn't exists" % args['<config-file-name>'])
                 else:
@@ -150,9 +151,9 @@ def main_function():
 
     while (True):
         if (args['list-path'] == True):
-            dict0 = config['add-to-env'].copy()
-            dict0.update(config['add-other-bin-path-to-env'])
-            dict0['PYMAKE_BUILD_PATH'] = config['source-to-build']['PYMAKE_BUILD_PATH']
+            dict0 = config['a0-add-to-env'].copy()
+            dict0.update(config['a1-add-custom-bin-path-to-env'])
+            dict0['PYMAKE_BUILD_PATH'] = config['b2-source-to-build']['PYMAKE_BUILD_PATH']
             if(args["--keys"] is True) :
                 for k in dict0.keys():
                     print(k)
@@ -170,22 +171,22 @@ def main_function():
         if (args['config'] == True):
             if(args['--toolchain'] == True):
                 if( args["<path>"] is not None):
-                    config["add-to-env"]["PYMAKE_TOOLCHAIN_PATH"] = args["<path>"]
+                    config["a0-add-to-env"]["PYMAKE_TOOLCHAIN_PATH"] = args["<path>"]
                 else:
                     ''
             elif (args['--genmake'] == True):
                 if (args["<path>"] is not None):
-                    config["add-to-env"]["PYMAKE_GENMAKE_PATH"] = args["<path>"]
+                    config["a0-add-to-env"]["PYMAKE_GENMAKE_PATH"] = args["<path>"]
                 else:
                     ''
             elif (args['--make'] == True):
                 if (args["<path>"] is not None):
-                    config["add-to-env"]["PYMAKE_MAKE_PATH"] = args["<path>"]
+                    config["a0-add-to-env"]["PYMAKE_MAKE_PATH"] = args["<path>"]
                 else:
                     ''
             elif (args['--build'] == True):
                 if (args["<path>"] is not None):
-                    config["source-to-build"]["PYMAKE_BUILD_PATH"] = args["<path>"]
+                    config["b2-source-to-build"]["PYMAKE_BUILD_PATH"] = args["<path>"]
                 else:
                     ''
             else:
@@ -193,13 +194,13 @@ def main_function():
         elif ( args['other-bin'] is True):
             if(args['--add'] == True):
                 if( args['<name>'] and args["<path>"] is not None):
-                    config["add-other-bin-path-to-env"][args['<name>']] = args["<path>"]
+                    config["a1-add-custom-bin-path-to-env"][args['<name>']] = args["<path>"]
                 else:
                     ''
             elif (args['--del'] == True):
                 if( args["<name>"] is not None):
                     if(config['add-other-bin-path-to-dev'].__contains__(args['<name>'])):
-                        config["add-other-bin-path-to-env"].__delitem__(args['<name>'])
+                        config["a1-add-custom-bin-path-to-env"].__delitem__(args['<name>'])
                     else:
                         ''
                 else:
@@ -223,36 +224,34 @@ def main_function():
         path = ""
 
         if( args['generate'] == True ):
-            cmd = config["source-to-build"]["PYMAKE_GENMAKE_COMMAND"]
+            cmd = config["b2-source-to-build"]["PYMAKE_GENMAKE_COMMAND"]
         elif (args['build'] == True):
-            cmd = config["source-to-build"]["PYMAKE_MAKE_COMMAND"]
+            cmd = config["b2-source-to-build"]["PYMAKE_MAKE_COMMAND"]
         elif (args['install'] == True):
-            cmd = config["source-to-build"]["PYMAKE_INSTALL_COMMAND"]
-        elif(args['genmake'] == True):
-            if(len(args['<genmake-command>']) > 0):
-                cmd = args['<cmake-command>'][0]
-            else:
-                ''
+            cmd = config["b2-source-to-build"]["PYMAKE_INSTALL_COMMAND"]
+        elif ( args['genmake'] == True ):
+            cmd = args['<genmake-command>']
         else:
             ''
 
         env = os.environ
-        path = config["add-to-env"]['PYMAKE_TOOLCHAIN_PATH']
-        env["Path"] = path + ";" + env["Path"]
-        path = config["add-to-env"]['PYMAKE_MAKE_PATH']
-        env["Path"] = path + ";" + env["Path"]
-        path = config["add-to-env"]['PYMAKE_GENMAKE_PATH']
-        env["Path"] = path + ";" + env["Path"]
-        path = config["source-to-build"]['PYMAKE_BUILD_PATH']
-        env["Path"] = path + ";" + env["Path"]
-        if( False == os.path.exists(path) ):
+        path = config["a0-add-to-env"]['PYMAKE_TOOLCHAIN_PATH']
+        env["PATH"] = path + os.path.pathsep + env["PATH"]
+        path = config["a0-add-to-env"]['PYMAKE_MAKE_PATH']
+        env["PATH"] = path + os.path.pathsep + env["PATH"]
+        path = config["a0-add-to-env"]['PYMAKE_GENMAKE_PATH']
+        env["PATH"] = path + os.path.pathsep + env["PATH"]
+        path = config["b2-source-to-build"]['PYMAKE_BUILD_PATH']
+        env["PATH"] = path + os.path.pathsep + env["PATH"]
+        if ( not os.path.exists(path) ):
             os.makedirs(path)
-        for path in config["add-other-bin-path-to-env"].values():
-            env["Path"] = path + ';' + env["Path"]
+        for path in config["a1-add-custom-bin-path-to-env"].values():
+            env["PATH"] = path + os.path.pathsep + env["PATH"]
 
-        #print(env["Path"].replace(';', '\n'))
-        path = config["source-to-build"]["PYMAKE_BUILD_PATH"]
+        #print(env["PATH"].replace(os.path.pathsep, '\n'))
+        path = config["b2-source-to-build"]["PYMAKE_BUILD_PATH"]
         os.chdir(path)
+        #print( cmd )
         os.system(cmd)
         break
 

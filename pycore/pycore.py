@@ -31,7 +31,7 @@ def readJsonData(file):
 def writeJsonData(file, data):
 
     with open(file, 'w') as json_file:
-        json_file.write(json.dumps(data, indent=4))
+        json_file.write(json.dumps(data, indent=4, sort_keys=True))
 
     """
     with open(file, 'w') as json_file:
