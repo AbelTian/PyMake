@@ -46,16 +46,16 @@ from pycore.docopt import docopt
 def main_function():
 
     d = {
-        "a0-env-variables": {
+        "env-variables": {
             "PYCMD_MYNAME": "T.D.R"
         },
-        "b1-add-path-to-env": {
+        "add-path-to-env": {
             "gen-path": "/Users/abel/Develop/b0-toolskits/compliers/CMake.app/Contents/bin",
             "macos10.12-xcode": "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk/System/Library/Frameworks",
             "make-and-toolchain-path": "/usr/bin",
             "qt5.9-clang64": "/Users/abel/Develop/b0-toolskits/Libraries/QtLibraries/5.9.1/clang_64/bin"
         },
-        "b2-store-named-command": {
+        "store-named-command": {
             "cd-buildpath": "/Users/abel/Develop/c0-buildstation/mac-qqt",
             "cd-productpath": "/Users/abel/Develop/b1-Product/a0-qqtbased/Application",
             "gen": "cmake -G\"Unix Makefiles\" -DCMAKE_INSTALL_PREFIX=${CMAKE_SOURCE_DIR}../../b1-Product/a0-qqtbased/Application ../../a0-Developworkspace/a0-qqtpruduct-qqtfoundation/",
@@ -66,7 +66,7 @@ def main_function():
             "pwd": "pwd",
             "rmcache": "rm -f CMakeCache.txt"
         },
-        "c3-execute-stream": {
+        "execute-stream": {
             "buildqqt": [
                 "cd-buildpath",
                 "rmcache",
@@ -190,21 +190,21 @@ def main_function():
     while (True):
         if (args['list'] == True):
             if( args['--vars'] == True):
-                dict0 = config['a0-env-variables'].copy()
+                dict0 = config['env-variables'].copy()
                 for (k, v) in dict0.items():
                     print("%-24s %s" % (k, v) )
             elif( args['--pathes'] == True):
-                dict0 = config['b1-add-path-to-env'].copy()
+                dict0 = config['add-path-to-env'].copy()
                 for (k, v) in dict0.items():
                     print("%-24s %s" % (k, v) )
             elif( args['--commands'] == True):
-                dict0 = config['b2-store-named-command'].copy()
+                dict0 = config['store-named-command'].copy()
                 for (k, v) in dict0.items():
                     print("%-24s %s" % (k, v) )
             elif( args['--task'] == True):
-                dict0 = config['execute-task'].copy()
-                for k in dict0.items():
-                    print("%s" % (k) )
+                dict0 = config['execute-stream'].copy()
+                for (k,v) in dict0.items():
+                    print("%-24s %s" % (k,v) )
         else:
             ''
         break
@@ -214,7 +214,7 @@ def main_function():
             if (args['env-var'] is True):
                 if (args['--add'] == True):
                     if (args['<name>'] and args["<value>"] is not None):
-                        config["a0-env-variables"][args['<name>']] = args[
+                        config["env-variables"][args['<name>']] = args[
                             "<value>"]
                         print ( "successed %s:%s" % (args['<name>'],
                                                     args[ "<value>"]))
@@ -222,9 +222,9 @@ def main_function():
                         ''
                 elif (args['--del'] == True):
                     if (args["<name>"] is not None):
-                        if (config['a0-env-variables'].__contains__(
+                        if (config['env-variables'].__contains__(
                                 args['<name>'])):
-                            config["a0-env-variables"].__delitem__(
+                            config["env-variables"].__delitem__(
                                 args['<name>'])
                             print ("successed %s" % (args['<name>']))
                         else:
@@ -233,9 +233,9 @@ def main_function():
                         ''
                 elif (args['--mod'] == True):
                     if (args['<name>'] and args["<value>"] is not None):
-                        if (config['a0-env-variables'].__contains__(
+                        if (config['env-variables'].__contains__(
                                 args['<name>'])):
-                            config["a0-env-variables"][args['<name>']] = \
+                            config["env-variables"][args['<name>']] = \
                             args["<value>"]
                             print ("successed %s:%s" % (args['<name>'],
                                                         args["<value>"]))
@@ -248,7 +248,7 @@ def main_function():
             elif (args['env-path'] is True):
                 if (args['--add'] == True):
                     if (args['<name>'] and args["<value>"] is not None):
-                        config["b1-add-path-to-env"][args['<name>']] = args[
+                        config["add-path-to-env"][args['<name>']] = args[
                             "<value>"]
                         print ( "successed %s:%s" % (args['<name>'],
                                                     args[ "<value>"]))
@@ -256,9 +256,9 @@ def main_function():
                         ''
                 elif (args['--del'] == True):
                     if (args["<name>"] is not None):
-                        if (config['b1-add-path-to-env'].__contains__(
+                        if (config['add-path-to-env'].__contains__(
                                 args['<name>'])):
-                            config["b1-add-path-to-env"].__delitem__(
+                            config["add-path-to-env"].__delitem__(
                                 args['<name>'])
                             print ("successed %s" % (args['<name>']))
                         else:
@@ -267,9 +267,9 @@ def main_function():
                         ''
                 elif (args['--mod'] == True):
                     if (args['<name>'] and args["<value>"] is not None):
-                        if (config['b1-add-path-to-env'].__contains__(
+                        if (config['add-path-to-env'].__contains__(
                                 args['<name>'])):
-                            config["b1-add-path-to-env"][args['<name>']] = \
+                            config["add-path-to-env"][args['<name>']] = \
                             args["<value>"]
                             print ("successed %s:%s" % (args['<name>'],
                                                         args["<value>"]))
@@ -282,7 +282,7 @@ def main_function():
             elif (args['cmd'] is True):
                 if (args['--add'] == True):
                     if (args['<name>'] and args["<value>"] is not None):
-                        config["b2-store-named-command"][args['<name>']] = args[
+                        config["store-named-command"][args['<name>']] = args[
                             "<value>"]
                         print ( "successed %s:%s" % (args['<name>'],
                                                     args[ "<value>"]))
@@ -290,9 +290,9 @@ def main_function():
                         ''
                 elif (args['--del'] == True):
                     if (args["<name>"] is not None):
-                        if (config['b2-store-named-command'].__contains__(
+                        if (config['store-named-command'].__contains__(
                                 args['<name>'])):
-                            config["b2-store-named-command"].__delitem__(
+                            config["store-named-command"].__delitem__(
                                 args['<name>'])
                             print ("successed %s" % (args['<name>']))
                         else:
@@ -301,9 +301,9 @@ def main_function():
                         ''
                 elif (args['--mod'] == True):
                     if (args['<name>'] and args["<value>"] is not None):
-                        if (config['b2-store-named-command'].__contains__(
+                        if (config['store-named-command'].__contains__(
                                 args['<name>'])):
-                            config["b2-store-named-command"][args['<name>']] = \
+                            config["store-named-command"][args['<name>']] = \
                             args["<value>"]
                             print ("successed %s:%s" % (args['<name>'],
                                                         args["<value>"]))
@@ -318,7 +318,7 @@ def main_function():
         elif (args['stream'] is True):
             if (args['--add'] == True):
                 if (args['<name>'] and args["<values>"] is not None):
-                    config["c3-execute-stream"][args['<name>']] = args[
+                    config["execute-stream"][args['<name>']] = args[
                         "<values>"]
                     print ("successed %s:%s" % (args['<name>'],
                                                 args["<values>"]))
@@ -326,9 +326,9 @@ def main_function():
                     ''
             elif (args['--del'] == True):
                 if (args["<name>"] is not None):
-                    if (config['c3-execute-stream'].__contains__(
+                    if (config['execute-stream'].__contains__(
                             args['<name>'])):
-                        config["c3-execute-stream"].__delitem__(
+                        config["execute-stream"].__delitem__(
                             args['<name>'])
                         print ("successed %s" % (args['<name>']))
                     else:
@@ -337,7 +337,7 @@ def main_function():
                     ''
             elif (args['--mod'] == True):
                 if (args['<name>'] and args["<values>"] is not None):
-                    config["c3-execute-stream"][args['<name>']] = args[
+                    config["execute-stream"][args['<name>']] = args[
                         "<values>"]
                     print ("successed %s:%s" % (args['<name>'],
                                                 args["<values>"]))
@@ -359,24 +359,33 @@ def main_function():
             if(args['<stream-names>'] is not None):
 
                 env = os.environ
-                for (name, path) in config["b1-add-path-to-env"].items():
+                
+                for (key, value) in config["env-variables"].items():
+                    env[key] = value
+
+                for (key, value) in env.items():
+                    #print ("%-24s %s" % (key, value) )
+                    ''
+
+
+                for (name, path) in config["add-path-to-env"].items():
                     env["PATH"] = path + os.path.pathsep + env["PATH"]
                 #print(env["PATH"].replace(os.path.pathsep, '\n'))
 
                 for stream in args['<stream-names>']:
-                    if( config["c3-execute-stream"].__contains__(stream) ):
-                        for cmd in config["c3-execute-stream"][stream]:
-                            if( config['b2-store-named-command'].__contains__(cmd) ):
-                                #print("execute %s %s %s" % (stream, cmd, config['b2-store-named-command'][cmd]))
+                    if( config["execute-stream"].__contains__(stream) ):
+                        for cmd in config["execute-stream"][stream]:
+                            if( config['store-named-command'].__contains__(cmd) ):
+                                #print("execute %s %s %s" % (stream, cmd, config['store-named-command'][cmd]))
                                 if(cmd.strip().startswith('cd', 0, 2)):
-                                    if (not os.path.exists(config['b2-store-named-command'][cmd])):
+                                    if (not os.path.exists(config['store-named-command'][cmd])):
                                         #os.makedirs(path)
-                                        print ("path unexist %s create it" % config['b2-store-named-command'][cmd])
-                                    os.chdir(config['b2-store-named-command'][cmd])
-                                    #print ("chdir %s" % config['b2-store-named-command'][cmd])
+                                        print ("path unexist %s create it" % config['store-named-command'][cmd])
+                                    os.chdir(config['store-named-command'][cmd])
+                                    #print ("chdir %s" % config['store-named-command'][cmd])
                                 else:
-                                    os.system(config['b2-store-named-command'][cmd])
-                                    #print ("now execute %s" % config['b2-store-named-command'][cmd])
+                                    os.system(config['store-named-command'][cmd])
+                                    #print ("now execute %s" % config['store-named-command'][cmd])
                                     ''
                             else:
                                 print ("can't find command %s" % cmd)

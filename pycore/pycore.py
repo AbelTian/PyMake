@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 import os
 import sys
 import json
+from collections import OrderedDict
 
 if ( sys.version_info[0] == 2 ):
     import ConfigParser as PyConfigParser
@@ -21,7 +22,8 @@ def readJsonData(file):
     with open(file, 'r') as json_file:
         for line in json_file.readlines():
             datas += line
-    data = json.loads(datas, encoding='utf-8')
+    data = json.loads(datas, encoding='utf-8', object_pairs_hook=OrderedDict);
+
     """
     with open(file, 'r') as json_file:
         data = json.load(json_file)
@@ -31,7 +33,7 @@ def readJsonData(file):
 def writeJsonData(file, data):
 
     with open(file, 'w') as json_file:
-        json_file.write(json.dumps(data, indent=4, sort_keys=True))
+        json_file.write(json.dumps(data, indent=4, sort_keys=False))
 
     """
     with open(file, 'w') as json_file:
