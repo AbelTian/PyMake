@@ -37,9 +37,14 @@ Options:
 
 import os
 import sys
+import pwd
 import shutil
 import time
 import json
+import locale
+import codecs
+import threading
+import subprocess
 from pycore.pycore import *
 from pycore.docopt import docopt
 
@@ -352,6 +357,26 @@ def main_function():
         writeJsonData(file, config)
         break
 
+    def read_thread_function(p):
+        ''
+        code = (codecs.lookup(locale.getpreferredencoding()).name)
+        while(True):
+            l = p.stdout.readline().rstrip().decode(code)
+
+            if (l is None):
+                #print ('ddd')
+                break
+
+            if(p.poll() is not None):
+                #print("eee")
+                break
+
+            print (l)
+            #print (l)
+            #stdout.flush()
+
+    def write_thread_function(list0):
+        ''
 
     while ( True ):
 
@@ -372,25 +397,47 @@ def main_function():
                     env["PATH"] = path + os.path.pathsep + env["PATH"]
                 #print(env["PATH"].replace(os.path.pathsep, '\n'))
 
+
+                list0 = []
                 for stream in args['<stream-names>']:
-                    if( config["execute-stream"].__contains__(stream) ):
+                    if (config["execute-stream"].__contains__(stream)):
                         for cmd in config["execute-stream"][stream]:
-                            if( config['store-named-command'].__contains__(cmd) ):
-                                #print("execute %s %s %s" % (stream, cmd, config['store-named-command'][cmd]))
-                                if(cmd.strip().startswith('cd', 0, 2)):
-                                    if (not os.path.exists(config['store-named-command'][cmd])):
-                                        #os.makedirs(path)
-                                        print ("path unexist %s create it" % config['store-named-command'][cmd])
-                                    os.chdir(config['store-named-command'][cmd])
-                                    #print ("chdir %s" % config['store-named-command'][cmd])
-                                else:
-                                    os.system(config['store-named-command'][cmd])
-                                    #print ("now execute %s" % config['store-named-command'][cmd])
-                                    ''
+                            if (config['store-named-command'].__contains__(cmd)):
+                                # print("execute %s %s %s" % (stream, cmd, config['store-named-command'][cmd]))
+                                list0.append( config['store-named-command'][cmd] )
                             else:
                                 print ("can't find command %s" % cmd)
                     else:
                         print ("can't find stream %s" % stream)
+                list0.append("exit 0")
+                #print (list0)
+
+                shell = pwd.getpwuid(os.getuid()).pw_shell
+                if shell is None: shell = os.environ.get( 'SHELL'   )
+                if shell is None: shell = os.environ.get( 'COMSPEC' )
+                #print ( 'Running under', shell )
+
+                p = subprocess.Popen(shell, shell = True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                read_thread = threading.Thread(target=read_thread_function, args=(p,))
+                read_thread.start()
+                write_thread = threading.Thread(target=write_thread_function, args=(list0,))
+                #write_thread.start()
+                time.sleep(1)
+
+                for cmd in list0:
+                    #print  ("command:%s" % cmd)
+                    p.stdin.write(cmd + '\n')
+                    p.stdin.flush()
+                    #p.stdin.write("ping 127.0.0.1 -c 2 \n")
+                    #p.stdin.flush()
+
+                p.wait()
+                #read_thread.close()
+                time.sleep(1)
+
+                #return
+
+
             else:
                 print ("stream-names is none")
         else:
