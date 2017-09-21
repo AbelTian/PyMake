@@ -12,7 +12,7 @@ Usage:
   pycmd.py --version
 
 Command:
-  source            switch to another source file
+  source           switch to another source file
   set env-path     config work directory
   set env-var
   set exec-dir     config execute directory
@@ -381,6 +381,24 @@ def main_function():
             #print (l)
             #stdout.flush()
 
+    def read_stderr_thread_function(p):
+        ''
+        code = (codecs.lookup(locale.getpreferredencoding()).name)
+        while(True):
+            l = p.stderr.readline().rstrip().decode(code)
+
+            if (l is None):
+                #print ('ddd')
+                break
+
+            if(p.poll() is not None):
+                #print("eee")
+                break
+
+            print (l)
+            #print (l)
+            #stdout.flush()
+
     def write_thread_function(list0):
         ''
 
@@ -487,6 +505,8 @@ def main_function():
                 p = subprocess.Popen(shell, shell = True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
                 read_thread = threading.Thread(target=read_thread_function, args=(p,))
                 read_thread.start()
+                read_err_thread = threading.Thread(target=read_stderr_thread_function, args=(p,))
+                read_err_thread.start()
                 write_thread = threading.Thread(target=write_thread_function, args=(list0,))
                 #write_thread.start()
                 time.sleep(1)
