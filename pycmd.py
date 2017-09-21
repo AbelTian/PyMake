@@ -36,6 +36,7 @@ Options:
 # -*- coding: utf-8 -*-
 
 import os
+import re
 import sys
 import pwd
 import shutil
@@ -378,33 +379,94 @@ def main_function():
     def write_thread_function(list0):
         ''
 
+
+    ### config -> raw config
+    rawconfig = config.copy()
+    #print ( rawconfig )
+    env = os.environ
+
+    for (key, value) in rawconfig["env-variables"].items():
+        #print (key) #...
+
+        startpos = 0
+        while (True):
+            #print (startpos)
+
+            index = value.find('${', startpos)
+            if (index == -1):
+                break
+
+            index2 = value.find('}', index)
+            startpos = index2
+
+            key0 = value[index:index2 + 1]
+            #print ( key0 ) #${...}
+            key1 = key0.split('{')[1].split('}')[0].strip()
+            #print ( key1 ) #...
+            if (env.has_key(key1)):
+                rawconfig["env-variables"][key] = rawconfig["env-variables"][key].replace(key0, env[key1])
+            else:
+                for (key2, value2) in config["env-variables"].items():
+                    if (key2 == key1):
+                        rawconfig["env-variables"][key] = rawconfig["env-variables"][key].replace(key0, rawconfig["env-variables"][key1])
+                        #print ("%s:%s" % (key, rawconfig["env-variables"][key]))
+                    else:
+                        ''
+
+    for (key, value) in rawconfig["store-named-command"].items():
+        #print (key) #...
+
+        startpos = 0
+        while (True):
+            #print (startpos)
+
+            index = value.find('${', startpos)
+            if (index == -1):
+                break
+
+            index2 = value.find('}', index)
+            startpos = index2
+
+            key0 = value[index:index2 + 1]
+            #print ( key0 ) #${...}
+            key1 = key0.split('{')[1].split('}')[0].strip()
+            #print ( key1 ) #...
+            if (env.has_key(key1)):
+                rawconfig["store-named-command"][key] = rawconfig["store-named-command"][key].replace(key0, env[key1])
+            else:
+                for (key2, value2) in rawconfig["env-variables"].items():
+                    if (key2 == key1):
+                        rawconfig["store-named-command"][key] = rawconfig["store-named-command"][key].replace(key0, rawconfig["env-variables"][key1])
+                        #print ("%s:%s" % (key, rawconfig["store-named-command"][key]))
+                    else:
+                        ''
+
     while ( True ):
 
         if( args['exec'] == True):
             if(args['<stream-names>'] is not None):
 
                 env = os.environ
-                
-                for (key, value) in config["env-variables"].items():
+
+                for (key, value) in rawconfig["env-variables"].items():
                     env[key] = value
 
                 for (key, value) in env.items():
                     #print ("%-24s %s" % (key, value) )
                     ''
 
-
-                for (name, path) in config["add-path-to-env"].items():
+                for (name, path) in rawconfig["add-path-to-env"].items():
                     env["PATH"] = path + os.path.pathsep + env["PATH"]
                 #print(env["PATH"].replace(os.path.pathsep, '\n'))
 
 
                 list0 = []
                 for stream in args['<stream-names>']:
-                    if (config["execute-stream"].__contains__(stream)):
-                        for cmd in config["execute-stream"][stream]:
-                            if (config['store-named-command'].__contains__(cmd)):
-                                # print("execute %s %s %s" % (stream, cmd, config['store-named-command'][cmd]))
-                                list0.append( config['store-named-command'][cmd] )
+                    if (rawconfig["execute-stream"].__contains__(stream)):
+                        for cmd in rawconfig["execute-stream"][stream]:
+                            if (rawconfig['store-named-command'].__contains__(cmd)):
+                                # print("execute %s %s %s" % (stream, cmd, rawconfig['store-named-command'][cmd]))
+                                list0.append( rawconfig['store-named-command'][cmd] )
                             else:
                                 print ("can't find command %s" % cmd)
                     else:
