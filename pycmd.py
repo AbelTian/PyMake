@@ -126,8 +126,6 @@ def main_function():
 
     args = docopt(__doc__, version='pycmd.py 1.0')
     #print(args)
-    config = readJsonData(file)
-    #print(config)
 
     exceptFile = ( 'pycmd.ini', 'pycmd.py', '.gitignore', '.git', 'pycore', 'README.md', '.idea')
     while (True):
@@ -193,7 +191,10 @@ def main_function():
                 print(file)
         else:
             ''
-        break
+        return
+
+    config = readJsonData(file)
+    #print(config)
 
 
     while (True):

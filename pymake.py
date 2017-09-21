@@ -98,8 +98,6 @@ def main_function():
 
     args = docopt(__doc__, version='pymake.py 1.0')
     #print(args)
-    config = readJsonData(file)
-    #print(config)
 
     exceptFile = ( 'pymake.ini', 'pymake.py', '.gitignore', '.git', 'pycore', 'README.md', '.idea')
     while (True):
@@ -148,6 +146,9 @@ def main_function():
             ''
         break
 
+
+    config = readJsonData(file)
+    #print(config)
 
     while (True):
         if (args['list-path'] == True):
