@@ -52,13 +52,13 @@ from pycore.docopt import docopt
 def main_function():
 
     d = {
+        "add-custom-bin-path-to-env": {
+            "qt5.9-win32": "C:/Users/Administrator/Qt/5.9.1/mingw53_32/bin"
+        },
         "add-to-env": {
             'PYMAKE_TOOLCHAIN_PATH': "C:/Users/Administrator/Qt/Tools/mingw530_32/bin",
             'PYMAKE_MAKE_PATH': "C:/Users/Administrator/Qt/Tools/mingw530_32/bin",
             'PYMAKE_GENMAKE_PATH': "Z:/abel/Develop/b0-toolskits/compliers/cmake3.9.1_64/bin"
-        },
-        "add-custom-bin-path-to-env": {
-            "qt5.9-win32": "C:/Users/Administrator/Qt/5.9.1/mingw53_32/bin"
         },
         "source-to-build": {
             "PYMAKE_BUILD_PATH": "Z:/abel/Develop/c0-buildstation/mingw32-qqt",

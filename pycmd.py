@@ -52,18 +52,19 @@ from pycore.docopt import docopt
 def main_function():
 
     d = {
-        "env-variables": {
-            "PYCMD_MYNAME": "T.D.R"
-        },
         "add-path-to-env": {
-            "gen-path": "/Users/abel/Develop/b0-toolskits/compliers/CMake.app/Contents/bin",
-            "macos10.12-xcode": "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk/System/Library/Frameworks",
+            "cmake-bin-path": "/Users/abel/Develop/b0-toolskits/compliers/CMake.app/Contents/bin",
+            "macosx-sdk-xcode": "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.13.sdk/System/Library/Frameworks",
             "make-and-toolchain-path": "/usr/bin",
             "qt5.9-clang64": "/Users/abel/Develop/b0-toolskits/Libraries/QtLibraries/5.9.1/clang_64/bin"
         },
+        "env-variables": {
+            "PYCMD_MYNAME": "T.D.R"
+        },
         "store-named-command": {
-            "cd-buildpath": "/Users/abel/Develop/c0-buildstation/mac-qqt",
-            "cd-productpath": "/Users/abel/Develop/b1-Product/a0-qqtbased/Application",
+            "mk-buildpath": "mkdir -p /Users/abel/Develop/c0-buildstation/mac-qqt",
+            "cd-buildpath": "cd /Users/abel/Develop/c0-buildstation/mac-qqt",
+            "cd-productpath": "cd /Users/abel/Develop/b1-Product/a0-qqtbased/Application",
             "gen": "cmake -G\"Unix Makefiles\" -DCMAKE_INSTALL_PREFIX=${CMAKE_SOURCE_DIR}../../b1-Product/a0-qqtbased/Application ../../a0-Developworkspace/a0-qqtpruduct-qqtfoundation/",
             "gen-xcode": "cmake -GXCode -DCMAKE_INSTALL_PREFIX=${CMAKE_SOURCE_DIR}../../b1-Product/a0-qqtbased/Application ../../a0-Developworkspace/a0-qqtpruduct-qqtfoundation/",
             "install": "make install",
@@ -74,6 +75,7 @@ def main_function():
         },
         "execute-stream": {
             "buildqqt": [
+                "mk-buildpath",
                 "cd-buildpath",
                 "rmcache",
                 "gen",
@@ -82,6 +84,7 @@ def main_function():
                 "msg"
             ],
             "genqqt": [
+                "mk-buildpath",
                 "cd-buildpath",
                 "gen",
                 "msg"
