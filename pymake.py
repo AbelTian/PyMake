@@ -142,6 +142,7 @@ def main_function():
                     print('You can\'t add pymake\'s file...')
             else:
                 print(file)
+            return
         else:
             ''
         break

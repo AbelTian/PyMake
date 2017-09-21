@@ -1,9 +1,9 @@
 """PyCmd 1.0.
 
 Usage:
-  pycmd.py group [ --add | --del | --switch ] [ <config-file-name> ]
-  pycmd.py group --mod <config-file-name> <new-config-file-name>
-  pycmd.py group [ --show | --restore ]
+  pycmd.py source [ --add | --del | --switch ] [ <config-file-name> ]
+  pycmd.py source --mod <config-file-name> <new-config-file-name>
+  pycmd.py source [ --show | --restore ]
   pycmd.py list [ --vars | --pathes | --commands | --task ]
   pycmd.py set ( env-var | env-path | cmd ) ( --add | --del | --mod ) <name> [ <value> ]
   pycmd.py stream (--add | --del | --mod ) <name> [ <values> ... ]
@@ -12,7 +12,7 @@ Usage:
   pycmd.py --version
 
 Command:
-  group            switch to another group file
+  source            switch to another source file
   set env-path     config work directory
   set env-var
   set exec-dir     config execute directory
@@ -24,7 +24,7 @@ Options:
   --add
   --del
   --mod         add or delete or modify a config or path
-  --switch      switch to another group
+  --switch      switch to another source
   --vars
   --pathes
   --commands
@@ -129,7 +129,7 @@ def main_function():
 
     exceptFile = ( 'pycmd.ini', 'pycmd.py', '.gitignore', '.git', 'pycore', 'README.md', '.idea')
     while (True):
-        if(args['group'] is True):
+        if(args['source'] is True):
             if(args['--del'] is True):
                 if (args['<config-file-name>'] is not None and args['<config-file-name>'] == 'pycmd.json'):
                     print('You can\'t remove pycmd\'s file...')
@@ -180,18 +180,19 @@ def main_function():
                     if (os.path.exists(args['<config-file-name>'])):
                         conf.set('pycmd', 'config', args['<config-file-name>'])
                         conf.write(open('pycmd.ini', 'w'))
-                        print("switch to group config: %s" % args[
+                        print("switch to source config: %s" % args[
                             '<config-file-name>'])
                     else:
-                        print("group file %s isn't exists" % args[
+                        print("source file %s isn't exists" % args[
                             '<config-file-name>'])
                 else:
                     print('You can\'t switch pycmd\'s file...')
             else:
                 print(file)
+            return
         else:
             ''
-        return
+        break
 
     config = readJsonData(file)
     #print(config)
