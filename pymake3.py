@@ -4,12 +4,10 @@ Usage:
   pymake3.py source [ --add | --del | --switch ] [ <config-file-name> ]
   pymake3.py source --mod <config-file-name> <new-config-file-name>
   pymake3.py source [ --show | --restore ]
-
-  pymake3.py list [ --var | --path | --command | --stream ] [--raw]
-  pymake3.py set ( env-var | env-path | project | cmd ) ( --add | --del | --mod ) <name> [ <value> ]
+  pymake3.py set ( env-var | env-path | proj | cmd ) ( --add | --del | --mod ) <name> [ <value> ]
   pymake3.py set stream (--add | --del | --mod ) <name> [ <values> ... ]
-  pymake3.py switch [ --env | --path | --command | --project | --stream ] <name>
-
+  pymake3.py switch [ --env | --path | --cmd | --proj | --stream ] <name>
+  pymake3.py list [ --var | --path | --cmd | --stream ] [--raw]
   pymake3.py exec [ <stream-names> ... ]
   pymake3.py (-h | --help)
   pymake3.py --version
@@ -19,7 +17,7 @@ Command:
   set env-path     config work directory
   set env-var
   set cmd
-  set project      config project's pattern
+  set proj         config project's pattern
   list             list configed values
   switch           switch to current env path project or stream
 
@@ -32,10 +30,10 @@ Options:
   --switch      switch to another source
   --var
   --path
-  --command
-  --stream        list info params
+  --cmd
+  --stream      show cmd list
   --show        display haved stream config files
-  --restore     reset to pymake3.json stream config file
+  --restore     reset to pymake.json stream config file
 """
 
 # -*- coding: utf-8 -*-
@@ -269,6 +267,8 @@ def main_function():
     config = readJsonData(file)
     #print(config)
 
+    #create store-named-variable
+
     while (True):
         if (args['set'] == True):
             if (args['env-var'] is True):
@@ -414,9 +414,15 @@ def main_function():
                     print ("current %s" % (args['<name>']))
                 else:
                     ''
-            elif (args['--command'] == True):
+            elif (args['--cmd'] == True):
                 if (args['<name>'] is not None):
                     config['command']['current'] = args['<name>']
+                    print ("current %s" % (args['<name>']))
+                else:
+                    ''
+            elif (args['--proj'] == True):
+                if (args['<name>'] is not None):
+                    config['project']['current'] = args['<name>']
                     print ("current %s" % (args['<name>']))
                 else:
                     ''
@@ -436,143 +442,14 @@ def main_function():
     ### config -> raw config
     rawconfig = config.copy()
     #print ( rawconfig )
+
+    # maybe not env, it is env's variable dict
     env = os.environ
 
-    #replace env-variables's ${...}
-    for (key, value) in rawconfig["environ"].items():
-        #print (key) #...
-        if(not isinstance( value, str)):
-            continue
-
-        startpos = 0
-        while (True):
-            #print (startpos)
-
-            index = value.find('${', startpos)
-            if (index == -1):
-                break
-
-            index2 = value.find('}', index)
-            startpos = index2
-
-            key0 = value[index:index2 + 1]
-            #print ( key0 ) #${...}
-            key1 = key0.split('{')[1].split('}')[0].strip()
-            #print ( key1 ) #...
-
-            if (env.has_key(key1)):
-                rawconfig["environ"][key] = rawconfig["environ"][key].replace(key0, env[key1])
-
-            for (key2, value2) in config["environ"].items():
-
-                if (not isinstance(value2, str)):
-                    continue
-                if (key2 == key1):
-                    rawconfig["environ"][key] = rawconfig["environ"][key].replace(key0, rawconfig["environ"][key1])
-                    #print ("%s:%s" % (key, rawconfig["env-variables"][key]))
-                else:
-                    ''
-
     # replace env-variables current's ${...}
+    # env env-current
     current_vars = rawconfig["environ"]["current"]
     for (key, value) in rawconfig["environ"][current_vars].items():
-        #print (key) #...
-
-        startpos = 0
-        while (True):
-            #print (startpos)
-
-            index = value.find('${', startpos)
-            if (index == -1):
-                break
-
-            index2 = value.find('}', index)
-            startpos = index2
-
-            key0 = value[index:index2 + 1]
-            #print ( key0 ) #${...}
-            key1 = key0.split('{')[1].split('}')[0].strip()
-            #print ( key1 ) #...
-            if (env.has_key(key1)):
-                rawconfig["environ"][current_vars][key] = rawconfig["environ"][current_vars][key].replace(key0, env[key1])
-
-            #env set
-            for (key2, value2) in config["environ"].items():
-
-                if (not isinstance(value2, str)):
-                    continue
-
-                if (key2 == key1):
-                    rawconfig["environ"][current_vars][key] = rawconfig["environ"][current_vars][key].replace(key0, rawconfig["environ"][key1])
-                    #print ("%s:%s" % (key, rawconfig["env-variables"][key]))
-                else:
-                    ''
-            #current env-variable
-            for (key2, value2) in config["environ"][current_vars].items():
-
-                if (key2 == key1):
-                    rawconfig["environ"][current_vars][key] = rawconfig["environ"][current_vars][key].replace(key0,rawconfig["environ"][current_vars][key1])
-                    # print ("%s:%s" % (key, rawconfig["env-variables"][key]))
-                else:
-                    ''
-
-    # replace path+'s ${}
-    current_vars = rawconfig["environ"]['path+']["current"]
-    for (key, value) in rawconfig["environ"]['path+'][current_vars].items():
-        #print (key) #...
-
-        startpos = 0
-        while (True):
-            #print (startpos)
-
-            index = value.find('${', startpos)
-            if (index == -1):
-                break
-
-            index2 = value.find('}', index)
-            startpos = index2
-
-            key0 = value[index:index2 + 1]
-            #print ( key0 ) #${...}
-            key1 = key0.split('{')[1].split('}')[0].strip()
-            #print ( key1 ) #...
-            if (env.has_key(key1)):
-                rawconfig["environ"]['path+'][current_vars][key] = rawconfig["environ"]['path+'][current_vars][key].replace(key0, env[key1])
-
-            #env set
-            for (key2, value2) in config["environ"].items():
-
-                if (not isinstance(value2, str)):
-                    continue
-
-                if (key2 == key1):
-                    rawconfig["environ"]['path+'][current_vars][key] = rawconfig["environ"]['path+'][current_vars][key].replace(key0, rawconfig["environ"][key1])
-                    #print ("%s:%s" % (key, rawconfig["env-variables"][key]))
-                else:
-                    ''
-
-            #current env-variable
-            current_env_vars = rawconfig["environ"]['current']
-            for (key2, value2) in rawconfig["environ"][current_env_vars].items():
-
-                if (key2 == key1):
-                    rawconfig["environ"]['path+'][current_vars][key] = rawconfig["environ"]['path+'][current_vars][key].replace(key0, rawconfig["environ"][current_env_vars][key1])
-                    #print ("%s:%s" % (key, rawconfig["env-variables"][key]))
-                else:
-                    ''
-
-            #current path
-            for (key2, value2) in rawconfig["environ"]["path+"][current_vars].items():
-
-                if (key2 == key1):
-                    rawconfig["environ"]['path+'][current_vars][key] = rawconfig["environ"]['path+'][current_vars][key].replace(key0, rawconfig["environ"]["path+"][current_vars][key1])
-                    #print ("%s:%s" % (key, rawconfig["env-variables"][key]))
-                else:
-                    ''
-
-    # replace project's ${}
-    current_vars = rawconfig['project']["current"]
-    for (key, value) in rawconfig["project"][current_vars].items():
         #print (key) #...
 
         startpos = 0
@@ -593,8 +470,228 @@ def main_function():
 
             #env
             if (env.has_key(key1)):
+                rawconfig["environ"][current_vars][key] = rawconfig["environ"][current_vars][key].replace(key0, env[key1])
+
+            #current env-variable
+            for (key2, value2) in config["environ"][current_vars].items():
+
+                if (key2 == key1):
+                    rawconfig["environ"][current_vars][key] = rawconfig["environ"][current_vars][key].replace(key0,rawconfig["environ"][current_vars][key1])
+                    # print ("%s:%s" % (key, rawconfig["env-variables"][key]))
+                else:
+                    ''
+
+    # replace env-variables's ${...}
+    # env env-current env-comm
+    for (key, value) in rawconfig["environ"].items():
+        # print (key) #...
+        if (not isinstance(value, str)):
+            continue
+
+        startpos = 0
+        while (True):
+            # print (startpos)
+
+            index = value.find('${', startpos)
+            if (index == -1):
+                break
+
+            index2 = value.find('}', index)
+            startpos = index2
+
+            key0 = value[index:index2 + 1]
+            # print ( key0 ) #${...}
+            key1 = key0.split('{')[1].split('}')[0].strip()
+            # print ( key1 ) #...
+
+            # env
+            if (env.has_key(key1)):
+                rawconfig["environ"][key] = rawconfig["environ"][key].replace(key0, env[key1])
+
+            # env-current
+            current_env_vars = rawconfig["environ"]["current"]
+            for (key2, value2) in config["environ"][current_env_vars].items():
+
+                if (not isinstance(value2, str)):
+                    continue
+                if (key2 == key1):
+                    rawconfig["environ"][key] = rawconfig["environ"][key].replace(key0, rawconfig["environ"][current_env_vars][key1])
+                    # print ("%s:%s" % (key, rawconfig["env-variables"][key]))
+                else:
+                    ''
+
+            # env comm
+            for (key2, value2) in config["environ"].items():
+
+                if (not isinstance(value2, str)):
+                    continue
+
+                if (key2 == key1):
+                    rawconfig["environ"][key] = rawconfig["environ"][key].replace(key0, rawconfig["environ"][key1])
+                    # print ("%s:%s" % (key, rawconfig["env-variables"][key]))
+                else:
+                    ''
+
+    # replace path+'s current ${}
+    # env env-comm env-current path-current
+    current_vars = rawconfig["environ"]['path+']["current"]
+    for (key, value) in rawconfig["environ"]['path+'][current_vars].items():
+        #print (key) #...
+
+        startpos = 0
+        while (True):
+            #print (startpos)
+
+            index = value.find('${', startpos)
+            if (index == -1):
+                break
+
+            index2 = value.find('}', index)
+            startpos = index2
+
+            key0 = value[index:index2 + 1]
+            #print ( key0 ) #${...}
+            key1 = key0.split('{')[1].split('}')[0].strip()
+            #print ( key1 ) #...
+
+            # env
+            if (env.has_key(key1)):
+                rawconfig["environ"]['path+'][current_vars][key] = rawconfig["environ"]['path+'][current_vars][key].replace(key0, env[key1])
+
+            # current env-variable
+            current_env_vars = rawconfig["environ"]['current']
+            for (key2, value2) in rawconfig["environ"][current_env_vars].items():
+
+                if (key2 == key1):
+                    rawconfig["environ"]['path+'][current_vars][key] = rawconfig["environ"]['path+'][current_vars][key].replace(key0, rawconfig["environ"][current_env_vars][key1])
+                    #print ("%s:%s" % (key, rawconfig["env-variables"][key]))
+                else:
+                    ''
+
+            # env comm
+            for (key2, value2) in config["environ"].items():
+
+                if (not isinstance(value2, str)):
+                    continue
+
+                if (key2 == key1):
+                    rawconfig["environ"]['path+'][current_vars][key] = rawconfig["environ"]['path+'][current_vars][key].replace(key0, rawconfig["environ"][key1])
+                    #print ("%s:%s" % (key, rawconfig["env-variables"][key]))
+                else:
+                    ''
+
+            #current path
+            for (key2, value2) in rawconfig["environ"]["path+"][current_vars].items():
+
+                if (key2 == key1):
+                    rawconfig["environ"]['path+'][current_vars][key] = rawconfig["environ"]['path+'][current_vars][key].replace(key0, rawconfig["environ"]["path+"][current_vars][key1])
+                    #print ("%s:%s" % (key, rawconfig["env-variables"][key]))
+                else:
+                    ''
+
+    # replace path+ comm's ${}
+    # env env-comm env-current path-current path-comm
+    for (key, value) in rawconfig["environ"]['path+'].items():
+        #print (key) #...
+
+        startpos = 0
+        while (True):
+            #print (startpos)
+
+            index = value.find('${', startpos)
+            if (index == -1):
+                break
+
+            index2 = value.find('}', index)
+            startpos = index2
+
+            key0 = value[index:index2 + 1]
+            #print ( key0 ) #${...}
+            key1 = key0.split('{')[1].split('}')[0].strip()
+            #print ( key1 ) #...
+
+            # env
+            if (env.has_key(key1)):
+                rawconfig["environ"]['path+'][key] = rawconfig["environ"]['path+'][key].replace(key0, env[key1])
+
+            # current env-variable
+            current_env_vars = rawconfig["environ"]['current']
+            for (key2, value2) in rawconfig["environ"][current_env_vars].items():
+
+                if (key2 == key1):
+                    rawconfig["environ"]['path+'][key] = rawconfig["environ"]['path+'][key].replace(key0, rawconfig["environ"][current_env_vars][key1])
+                    #print ("%s:%s" % (key, rawconfig["env-variables"][key]))
+                else:
+                    ''
+
+            # env comm
+            for (key2, value2) in config["environ"].items():
+
+                if (not isinstance(value2, str)):
+                    continue
+
+                if (key2 == key1):
+                    rawconfig["environ"]['path+'][key] = rawconfig["environ"]['path+'][key].replace(key0, rawconfig["environ"][key1])
+                    #print ("%s:%s" % (key, rawconfig["env-variables"][key]))
+                else:
+                    ''
+
+            #current path
+            current_path_vars = rawconfig["environ"]['path+']["current"]
+            for (key2, value2) in rawconfig["environ"]["path+"][current_path_vars].items():
+
+                if (key2 == key1):
+                    rawconfig["environ"]['path+'][key] = rawconfig["environ"]['path+'][key].replace(key0, rawconfig["environ"]["path+"][current_path_vars][key1])
+                    #print ("%s:%s" % (key, rawconfig["env-variables"][key]))
+                else:
+                    ''
+
+            # comm path
+            for (key2, value2) in rawconfig["environ"]["path+"].items():
+
+                if (key2 == key1):
+                    rawconfig["environ"]['path+'][key] = rawconfig["environ"]['path+'][key].replace(key0, rawconfig["environ"]["path+"][key1])
+                    # print ("%s:%s" % (key, rawconfig["env-variables"][key]))
+                else:
+                    ''
+
+    # replace project's ${}
+    # env env-comm env-current path-current path-comm project
+    current_vars = rawconfig['project']["current"]
+    for (key, value) in rawconfig["project"][current_vars].items():
+        #print (key) #...
+
+        startpos = 0
+        while (True):
+            #print (startpos)
+
+            index = value.find('${', startpos)
+            if (index == -1):
+                break
+
+            index2 = value.find('}', index)
+            startpos = index2
+
+            key0 = value[index:index2 + 1]
+            #print ( key0 ) #${...}
+            key1 = key0.split('{')[1].split('}')[0].strip()
+            #print ( key1 ) #...
+
+            # env
+            if (env.has_key(key1)):
                 rawconfig["project"][current_vars][key] = rawconfig["project"][current_vars][key].replace(key0, env[key1])
 
+            # env current
+            current_env_vars = rawconfig["environ"]['current']
+            for (key2, value2) in rawconfig["environ"][current_env_vars].items():
+
+                if (key2 == key1):
+                    rawconfig["project"][current_vars][key] = rawconfig["project"][current_vars][key].replace(key0, rawconfig["environ"][current_env_vars][key1])
+                    # print ("%s:%s" % (key, rawconfig["env-variables"][key]))
+                else:
+                    ''
+
+            # env comm
             for (key2, value2) in config["environ"].items():
 
                 if (not isinstance(value2, str)):
@@ -605,21 +702,23 @@ def main_function():
                     #print ("%s:%s" % (key, rawconfig["env-variables"][key]))
                 else:
                     ''
-            current_env_vars = rawconfig["environ"]['current']
-            for (key2, value2) in rawconfig["environ"][current_env_vars].items():
 
-                if (key2 == key1):
-                    rawconfig["project"][current_vars][key] = rawconfig["project"][current_vars][key].replace(key0, rawconfig["environ"][current_env_vars][key1])
-                    # print ("%s:%s" % (key, rawconfig["env-variables"][key]))
-                else:
-                    ''
 
-            #current path+
+            # current path+
             current_path_vars = rawconfig["environ"]['path+']['current']
             for (key2, value2) in config["environ"]['path+'][current_path_vars].items():
 
                 if (key2 == key1):
                     rawconfig["project"][current_vars][key] = rawconfig["project"][current_vars][key].replace(key0,config["environ"]['path+'][current_path_vars][key1])
+                    # print ("%s:%s" % (key, rawconfig["env-variables"][key]))
+                else:
+                    ''
+
+            # comm path+
+            for (key2, value2) in config["environ"]['path+'].items():
+
+                if (key2 == key1):
+                    rawconfig["project"][current_vars][key] = rawconfig["project"][current_vars][key].replace(key0,config["environ"]['path+'][key1])
                     # print ("%s:%s" % (key, rawconfig["env-variables"][key]))
                 else:
                     ''
@@ -635,6 +734,7 @@ def main_function():
 
 
     # replace command's ${}
+    # env env-comm env-current path-current path-comm command
     current_vars = rawconfig['command']["current"]
     for (key, value) in rawconfig["command"][current_vars].items():
         # print (key) #...
@@ -659,6 +759,17 @@ def main_function():
             if (env.has_key(key1)):
                 rawconfig["command"][current_vars][key] = rawconfig["command"][current_vars][key].replace(key0, env[key1])
 
+            # env current
+            current_env_vars = rawconfig["environ"]['current']
+            for (key2, value2) in rawconfig["environ"][current_env_vars].items():
+
+                if (key2 == key1):
+                    rawconfig["command"][current_vars][key] = rawconfig["command"][current_vars][key].replace(key0, rawconfig["environ"][current_env_vars][key1])
+                    # print ("%s:%s" % (key, rawconfig["env-variables"][key]))
+                else:
+                    ''
+
+            # env comm
             for (key2, value2) in config["environ"].items():
 
                 if (not isinstance(value2, str)):
@@ -669,14 +780,6 @@ def main_function():
                     #print ("%s:%s" % (key, rawconfig["env-variables"][key]))
                 else:
                     ''
-            current_env_vars = rawconfig["environ"]['current']
-            for (key2, value2) in rawconfig["environ"][current_env_vars].items():
-
-                if (key2 == key1):
-                    rawconfig["command"][current_vars][key] = rawconfig["command"][current_vars][key].replace(key0, rawconfig["environ"][current_env_vars][key1])
-                    # print ("%s:%s" % (key, rawconfig["env-variables"][key]))
-                else:
-                    ''
 
             # current path+
             current_path_vars = rawconfig["environ"]['path+']['current']
@@ -684,6 +787,15 @@ def main_function():
 
                 if (key2 == key1):
                     rawconfig["command"][current_vars][key] = rawconfig["command"][current_vars][key].replace(key0, config["environ"]['path+'][current_path_vars][key1])
+                    # print ("%s:%s" % (key, rawconfig["env-variables"][key]))
+                else:
+                    ''
+
+            # comm path+
+            for (key2, value2) in config["environ"]['path+'].items():
+
+                if (key2 == key1):
+                    rawconfig["command"][current_vars][key] = rawconfig["command"][current_vars][key].replace(key0, config["environ"]['path+'][key1])
                     # print ("%s:%s" % (key, rawconfig["env-variables"][key]))
                 else:
                     ''
@@ -698,7 +810,7 @@ def main_function():
                     ''
 
     # replace store-named-variable's ${}
-    # from env path+ command project
+    # env env-comm env-current path-current path-comm command project
     for (key, value) in rawconfig["store-named-variable"].items():
         #print (key) #...
 
@@ -718,9 +830,21 @@ def main_function():
             key1 = key0.split('{')[1].split('}')[0].strip()
             #print ( key1 ) #...
 
+            # env
             if (env.has_key(key1)):
                 rawconfig["store-named-variable"][key] = rawconfig["store-named-variable"][key].replace(key0, env[key1])
 
+            # env current
+            current_env_vars = rawconfig["environ"]['current']
+            for (key2, value2) in rawconfig["environ"][current_env_vars].items():
+
+                if (key2 == key1):
+                    rawconfig["store-named-variable"][key] = rawconfig["store-named-variable"][key].replace(key0, rawconfig["environ"][current_env_vars][key1])
+                    # print ("%s:%s" % (key, rawconfig["env-variables"][key]))
+                else:
+                    ''
+
+            # env comm
             for (key2, value2) in config["environ"].items():
 
                 if (not isinstance(value2, str)):
@@ -731,14 +855,7 @@ def main_function():
                     #print ("%s:%s" % (key, rawconfig["env-variables"][key]))
                 else:
                     ''
-            current_env_vars = rawconfig["environ"]['current']
-            for (key2, value2) in rawconfig["environ"][current_env_vars].items():
 
-                if (key2 == key1):
-                    rawconfig["store-named-variable"][key] = rawconfig["store-named-variable"][key].replace(key0, rawconfig["environ"][current_env_vars][key1])
-                    # print ("%s:%s" % (key, rawconfig["env-variables"][key]))
-                else:
-                    ''
 
             # current path+
             current_path_vars = rawconfig["environ"]['path+']['current']
@@ -750,6 +867,16 @@ def main_function():
                 else:
                     ''
 
+            # comm path+
+            for (key2, value2) in config["environ"]['path+'].items():
+
+                if (key2 == key1):
+                    rawconfig["store-named-variable"][key] = rawconfig["store-named-variable"][key].replace(key0, config["environ"]['path+'][key1])
+                    # print ("%s:%s" % (key, rawconfig["env-variables"][key]))
+                else:
+                    ''
+
+            # current command
             current_command_vars = rawconfig["command"]['current']
             for (key2, value2) in rawconfig["command"][current_command_vars].items():
 
@@ -758,6 +885,8 @@ def main_function():
                     # print ("%s:%s" % (key, rawconfig["env-variables"][key]))
                 else:
                     ''
+
+            # current project
             current_project_vars = rawconfig["project"]['current']
             for (key2, value2) in rawconfig["project"][current_project_vars].items():
 
@@ -766,6 +895,7 @@ def main_function():
                     # print ("%s:%s" % (key, rawconfig["env-variables"][key]))
                 else:
                     ''
+
             # self
             for (key2, value2) in config["store-named-variable"].items():
 
@@ -795,15 +925,19 @@ def main_function():
             #print ( key0 ) #${...}
             key1 = key0.split('{')[1].split('}')[0].strip()
             #print ( key1 ) #...
+
+            # env
             if (env.has_key(key1)):
                 rawconfig["store-named-command"][key] = rawconfig["store-named-command"][key].replace(key0, env[key1])
 
+            # env
             for (key2, value2) in rawconfig["store-named-variable"].items():
                 if (key2 == key1):
                     rawconfig["store-named-command"][key] = rawconfig["store-named-command"][key].replace(key0, rawconfig["store-named-variable"][key1])
                     #print ("%s:%s" % (key, rawconfig["store-named-command"][key]))
                 else:
                     ''
+
             # self
             for (key2, value2) in config["store-named-command"].items():
 
@@ -825,7 +959,7 @@ def main_function():
 
                 current_vars = list_config['environ']['current']
                 dict0 = list_config['environ'][current_vars].copy()
-                for (k, v) in list_config['environ']:
+                for (k, v) in list_config['environ'].items():
                     if(isinstance(v, str)):
                         dict0.update((k, v))
 
@@ -839,7 +973,7 @@ def main_function():
                 for (k, v) in dict0.items():
                     print("%-24s %s" % (k, v) )
 
-            elif( args['--command'] == True):
+            elif( args['--cmd'] == True):
                 dict0 = list_config['store-named-command'].copy()
                 for (k, v) in dict0.items():
                     print("%-24s %s" % (k, v) )
@@ -854,15 +988,18 @@ def main_function():
         break
 
     # set into env
-    # env-varible
-    for (key, value) in config["environ"].items():
-        if (not isinstance(value, str)):
-            continue
-        env[key] = value
     # current env-variable
     current_env_vars = rawconfig["environ"]['current']
     for (key, value) in rawconfig["environ"][current_env_vars].items():
         env[key] = value
+    # env-varible
+    for (key, value) in config["environ"].items():
+        if (not isinstance(value, str)):
+            continue
+        if (key == "current"):
+            continue
+        env[key] = value
+
     for (key, value) in env.items():
         print ("%-24s %s" % (key, value) )
         ''
@@ -871,6 +1008,10 @@ def main_function():
     current_vars = rawconfig["environ"]['path+']['current']
     for (key, value) in rawconfig["environ"]["path+"][current_vars].items():
         env["PATH"] = path + os.path.pathsep + env["PATH"]
+    # comm path
+    for (key, value) in rawconfig["environ"]["path+"].items():
+        env["PATH"] = path + os.path.pathsep + env["PATH"]
+
     print(env["PATH"].replace(os.path.pathsep, '\n'))
 
     def read_thread_function(p):
