@@ -1,15 +1,15 @@
-"""PyCmd 1.0.
+"""PyMake 2.0.
 
 Usage:
-  pycmd.py source [ --add | --del | --switch ] [ <config-file-name> ]
-  pycmd.py source --mod <config-file-name> <new-config-file-name>
-  pycmd.py source [ --show | --restore ]
-  pycmd.py list [ --vars | --pathes | --commands | --task ]
-  pycmd.py set ( env-var | env-path | cmd ) ( --add | --del | --mod ) <name> [ <value> ]
-  pycmd.py stream (--add | --del | --mod ) <name> [ <values> ... ]
-  pycmd.py exec <stream-names> ...
-  pycmd.py (-h | --help)
-  pycmd.py --version
+  pymake2.py source [ --add | --del | --switch ] [ <config-file-name> ]
+  pymake2.py source --mod <config-file-name> <new-config-file-name>
+  pymake2.py source [ --show | --restore ]
+  pymake2.py list [ --vars | --pathes | --commands | --task ]
+  pymake2.py set ( env-var | env-path | cmd ) ( --add | --del | --mod ) <name> [ <value> ]
+  pymake2.py stream (--add | --del | --mod ) <name> [ <values> ... ]
+  pymake2.py exec <stream-names> ...
+  pymake2.py (-h | --help)
+  pymake2.py --version
 
 Command:
   source           switch to another source file
@@ -30,7 +30,7 @@ Options:
   --commands
   --task        list info params
   --show        display haved task config files
-  --restore     reset to pycmd.json task config file
+  --restore     reset to pymake.json task config file
 """
 
 # -*- coding: utf-8 -*-
@@ -46,6 +46,7 @@ import locale
 import codecs
 import threading
 import subprocess
+import collections
 from pycore.pycore import *
 from pycore.docopt import docopt
 
@@ -95,60 +96,62 @@ def main_function():
             ]
         }
     }
-    if (not os.path.exists('pycmd.json')):
-        writeJsonData('pycmd.json', d)
+    # python's transfer parameters is a unordered dict,
+    # these data will be unordered, you should copy them into pymake.json
+    if (not os.path.exists('pymake.json')):
+        writeJsonData('pymake.json', d)
 
     """
-    [pycmd]
-    config = pycmd.json
+    [pymake]
+    config = pymake.json
     """
-    file = 'pycmd.json'
+    file = 'pymake.json'
     conf = MyConfigParser()
-    conf.read('pycmd.ini')
-    if(conf.has_section('pycmd') ):
-        if(conf.has_option('pycmd', 'config')):
-            if(conf.get('pycmd', 'config')):
-                file = conf.get('pycmd', 'config')
+    conf.read('pymake.ini')
+    if(conf.has_section('pymake') ):
+        if(conf.has_option('pymake', 'config')):
+            if(conf.get('pymake', 'config')):
+                file = conf.get('pymake', 'config')
                 print("use source config: %s" % file)
             else:
-                conf.set('pycmd', 'config', 'pycmd.json')
-                conf.write(open('pycmd.ini', 'w'))
-                print('initial pycmd.ini')
+                conf.set('pymake', 'config', 'pymake.json')
+                conf.write(open('pymake.ini', 'w'))
+                print('initial pymake.ini')
         else:
-            conf.set('pycmd', 'config', 'pycmd.json')
-            conf.write(open('pycmd.ini', 'w'))
-            print('initial pycmd.ini')
+            conf.set('pymake', 'config', 'pymake.json')
+            conf.write(open('pymake.ini', 'w'))
+            print('initial pymake.ini')
     else:
-        conf.add_section('pycmd')
-        conf.set('pycmd', 'config', 'pycmd.json')
-        conf.write(open('pycmd.ini', 'w'))
-        print ( 'initial pycmd.ini')
+        conf.add_section('pymake')
+        conf.set('pymake', 'config', 'pymake.json')
+        conf.write(open('pymake.ini', 'w'))
+        print ( 'initial pymake.ini')
 
-    args = docopt(__doc__, version='pycmd.py 1.0')
+    args = docopt(__doc__, version='pymake2.py v2.0')
     #print(args)
 
-    exceptFile = ( 'pycmd.ini', 'pycmd.py', '.gitignore', '.git', 'pycore', 'README.md', '.idea')
+    exceptFile = ( 'pymake.ini', 'pymake.py', '.gitignore', '.git', 'pycore', 'README.md', '.idea')
     while (True):
         if(args['source'] is True):
             if(args['--del'] is True):
-                if (args['<config-file-name>'] is not None and args['<config-file-name>'] == 'pycmd.json'):
-                    print('You can\'t remove pycmd\'s file...')
+                if (args['<config-file-name>'] is not None and args['<config-file-name>'] == 'pymake.json'):
+                    print('You can\'t remove pymake\'s file...')
                 elif (args['<config-file-name>'] is not None and not exceptFile.__contains__(args['<config-file-name>']) ):
                     os.remove(args['<config-file-name>'])
-                    conf.set('pycmd', 'config', 'pycmd.json')
-                    conf.write(open('pycmd.ini', 'w'))
+                    conf.set('pymake', 'config', 'pymake.json')
+                    conf.write(open('pymake.ini', 'w'))
                 else:
-                    print ( 'You can\'t remove pycmd\'s file...')
+                    print ( 'You can\'t remove pymake\'s file...')
             elif(args['--add'] is True):
                 if (args['<config-file-name>'] is not None and not exceptFile.__contains__(args['<config-file-name>']) ):
                     if(file != args['<config-file-name>']):
                         shutil.copyfile(file, args['<config-file-name>'])
-                        conf.set('pycmd', 'config', args['<config-file-name>'])
-                        conf.write(open('pycmd.ini', 'w'))
+                        conf.set('pymake', 'config', args['<config-file-name>'])
+                        conf.write(open('pymake.ini', 'w'))
                     else:
                         print('You can\'t add same named file...')
                 else:
-                    print ( 'You can\'t add pycmd\'s file...')
+                    print ( 'You can\'t add pymake\'s file...')
             elif (args['--mod'] is True):
                 if ( ( args['<config-file-name>'] and args[
                     '<new-config-file-name>']) is not None and not \
@@ -159,34 +162,34 @@ def main_function():
                               args['<new-config-file-name>'])
 
                     if (file == args['<config-file-name>']):
-                        conf.set('pycmd', 'config',
+                        conf.set('pymake', 'config',
                                  args['<new-config-file-name>'])
-                        conf.write(open('pycmd.ini', 'w'))
+                        conf.write(open('pymake.ini', 'w'))
 
                 else:
-                    print ('You can\'t mod pycmd\'s file...')
+                    print ('You can\'t mod pymake\'s file...')
             elif(args['--show'] is True):
                 files = os.listdir(os.getcwd())
                 for f in files:
                     if (not exceptFile.__contains__(f)):
                         print(f)
             elif(args['--restore'] is True):
-                conf.set('pycmd', 'config', 'pycmd.json')
-                conf.write(open('pycmd.ini', 'w'))
+                conf.set('pymake', 'config', 'pymake.json')
+                conf.write(open('pymake.ini', 'w'))
             elif (args['--switch'] is True
                   or ( args['<config-file-name>'] is not None and args[\
                           '<config-file-name>'] != '' )):
                 if (args['<config-file-name>'] is not None and not exceptFile.__contains__(args['<config-file-name>']) ):
                     if (os.path.exists(args['<config-file-name>'])):
-                        conf.set('pycmd', 'config', args['<config-file-name>'])
-                        conf.write(open('pycmd.ini', 'w'))
+                        conf.set('pymake', 'config', args['<config-file-name>'])
+                        conf.write(open('pymake.ini', 'w'))
                         print("switch to source config: %s" % args[
                             '<config-file-name>'])
                     else:
                         print("source file %s isn't exists" % args[
                             '<config-file-name>'])
                 else:
-                    print('You can\'t switch pycmd\'s file...')
+                    print('You can\'t switch pymake\'s file...')
             else:
                 print(file)
             return

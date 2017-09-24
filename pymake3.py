@@ -8,7 +8,7 @@ Usage:
   pymake3.py set stream (--add | --del | --mod ) <name> [ <values> ... ]
   pymake3.py set comm ( env-var | env-path ) ( --add | --del | --mod ) <name> [ <value> ]
   pymake3.py switch [ --env | --path | --cmd | --proj | --stream ] <name>
-  pymake3.py list [ --var | --path | --cmd | --stream ] [--raw]
+  pymake3.py list [ --var | --path | --project | --command | --value | --cmd | --stream ] [--raw]
   pymake3.py exec [ <stream-names> ... ]
   pymake3.py (-h | --help)
   pymake3.py --version
@@ -54,125 +54,175 @@ import threading
 import subprocess
 from pycore.pycore import *
 from pycore.docopt import docopt
+from collections import OrderedDict
 
 def main_function():
 
     d = {
-        "environ":{
+        "environ": {
             "PYCMD_MYNAME": "T.D.R",
-            "a_special_var_const":"hello world",
+            "a_special_var_const": "hello world",
 
-            "ios":{
-
+            "ios": {
+                "QKIT": "iOS"
             },
-            "macOS":{
+            "macOS": {
                 "QKIT": "macOS",
-                "QTDIR": "/Users/abel/Develop/b0-toolskits/Libraries/QtLibraries/5.9.1/clang_64",
+                "QtSDK": "clang_64",
+                "QtVer": "5.9.1",
+                "QSYSNAME": "MacOS",
+                "BUILDTYPE": "Release",
+                "cmake-bin": "CMake.app/Contents/bin",
+                "path-toolchain": "/usr/bin",
+                "dev-root": "/Users/abel/Develop",
+                "QSYSNAME_BUILDTYPE": "${QSYSNAME}/${BUILDTYPE}",
+                "os-sdk": "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.13.sdk/System/Library/Frameworks"
             },
-            "current":"macOS",
+            "current": "macOS",
 
-            "path+":{
-                "mymac":{
-                    "cc-path":"/usr/bin/ccddeef",
-                    "qt5.9-clang64": "/Users/abel/Develop/b0-toolskits/Libraries/QtLibraries/5.9.1/clang_64/bin",
-                    "cmake-path": "/Users/abel/Develop/b0-toolskits/compliers/CMake.app/Contents/bin",
-                    "macosx-sdk": "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.13.sdk/System/Library/Frameworks",
-                    "make-and-toolchain-path": "/usr/bin",
-                    "qqt-framework-path": "/Users/abel/Develop/c0-buildstation/qqt-mac/src/bin"
+            "src-root": "${dev-root}/a0-Developworkspace",
+            "prod-root": "${dev-root}/b1-Product/a0-qqtbased/Application",
+            "build-root": "${dev-root}/c0-buildstation",
+            "tool-root": "${dev-root}/b0-toolskits",
+            "test-root": "${dev-root}/a1-testspace",
+            "webrc-root": "${dev-root}/b2-webrc",
+            "QTDIR": "${tool-root}/Libraries/QtLibraries/${QtVer}/${QtSDK}",
+
+            "path+": {
+                "dev-?": {
+                    "cc-path": "ee/ff"
                 },
-                "mymac-ios":{
-                    "cc-path":"/..."
+                "develop-mac": {
+                    "target-sdk": "${os-sdk}"
                 },
-                "current":"mymac"
+                "current": "develop-mac",
+
+                "QtSDK": "${tool-root}/Libraries/QtLibraries/${QtVer}/${QtSDK}/bin",
+                "cmake-path": "${tool-root}/compliers/${cmake-bin}",
+                "make-and-toolchain-path": "${path-toolchain}"
             }
-
         },
-
-        "project":{
-            "qqt":{
-                "product-name": "QQt",
-                "build-path": "/Users/abel/Develop/c0-buildstation/qqt-mac",
-                "source-path": "/Users/abel/Develop/a0-Developworkspace/a0-qqtfoundation",
-                "source-pro": "a0-qqtfoundation.pro"
+        "project": {
+            "qqt": {
+                "prod-name": "QQt",
+                "prod-major-version": "1",
+                "app-name": "qqtframe",
+                "proj-name": "a0-qqtfoundation",
+                "build-path": "${build-root}/${proj-name}/${QSYSNAME_BUILDTYPE}",
+                "source-path": "${src-root}/${proj-name}",
+                "qmake-pro": "${proj-name}.pro",
+                "release-path": "${build-path}/src/bin",
+                "app-release-path": "${build-path}/examples/${app-name}/bin"
             },
-            "wiz":{
-                "build-path":""
+            "wiz": {
+                "build-path": ""
             },
-            "current":"qqt"
+            "current": "qqt"
         },
-
-        "command":{
-            "macClang":{
-                "cd":"cd",
-                "CC":"clang++"
-            },
-            "gcc":{
-                "CC":"g++",
-                "cd":"cd"
+        "command": {
+            "macgcc": {
+                "mkdir": "mkdir -p",
+                "cd": "cd",
+                "deployqt": "macdeployqt",
+                "make": "make"
             },
             "win-mingw32": {
-                "cd":"cd /d",
-                "make":"mingw32-make"
+                "cd": "cd /d",
+                "make": "mingw32-make"
             },
-            "win-msvc": {
-                "cd":"cd /d",
-                "make":"nmake"
-            },
-            "current":"gcc"
+            "current": "macgcc"
         },
+        "store-named-variable": {
+            "tips": "put your any common & special variables here, you worn it",
+            "cd": "${cd}",
+            "mkdir": "${mkdir}",
+            "make": "${make}",
+            "deployqt": "${deployqt}",
+            "prod-name": "${prod-name}",
+            "app-bundle": "${app-name}.app",
+            "app": "${app-bundle}",
+            "app-native": "${app-bundle}/Contents/MacOS",
 
-        "store-named-variable":{
-            "cd":"${cd}",
-            "now-make":"${make}",
-            "now-app-bundle":"${product-name}.app",
-            "now-framework-bundle":"${product-name}.framework",
-            "now-product-name": "${product-name}",
-            "now-install-path": "/Users/abel/Develop/b1-Product/a0-qqtbased/Application",
-            "now-qmake-pro": "${source-pro}",
-            "now-source-path": "${ source-path }",
-            "now-build-path": "${build-path}"
+            "framework-bundle": "${prod-name}.framework",
+            "app-dep": "${app-release-path}/${app-bundle}/Contents/Frameworks",
+            "dep-lib-qqt": "${release-path}/${framework-bundle}",
+            "dep-lib": "${dep-lib-qqt}",
+            "dep-lib-qqt-native": "${framework-bundle}/Versions/${prod-major-version}/${prod-name}",
+            "install-path": "${prod-root}/a0-qqtbased/Application",
+            "qmake-pro": "${qmake-pro}",
+            "source-path": "${ source-path }",
+            "build-path": "${build-path}",
+            "release-path": "${release-path}",
+            "app-release-path": "${app-release-path}"
         },
-
         "store-named-command": {
-            "why-to-set-these":"I'm not similar to these command, so list them here, rather than forgotten them",
-            "mkdir-build-path": "mkdir -p ${now-build-path}",
-            "cd-build-path": "${cd} ${now-build-path}",
-            "cd-product-path": "cd ${now-install-path}",
-            "qmake": "qmake ${now-source-path}/${now-qmake-pro} -spec macx-g++ CONFIG+=x86_64 && /usr/bin/make qmake_all",
-            "qmake-macdeployqt": "macdeployqt examples/qqtframe/bin/qqtframe.app -verbose=1",
-            "make": "${make} -j4",
-            "make-clean": "${make} clean in ${now-build-path}",
-            "make-install": "${now-make} install",
-            "cmake": "cmake -G\"Unix Makefiles\" -DCMAKE_INSTALL_PREFIX=${now-install-path} ${now-source-path}",
-            "cmake-xcode": "cmake -GXCode -DCMAKE_INSTALL_PREFIX=${now-install-path} ${now-source-path}",
-            "cmake-rmcache": "rm -f CMakeCache.txt",
-            "test-pwd": "pwd",
-            "test-var": "echo 'qtdir:' $QTDIR ",
-            "test-msg": "echo 'work complete!'"
-        },
+            "why-to-set-these": "I'm not similar to these command, so list them here, rather than forgotten them",
+            "here": "cl-command, sys-command",
+            "here-1": "replace? no, append? easy!",
 
+            "mk-build-path": "${mkdir} ${build-path}",
+            "cd-build-path": "${cd} ${build-path}",
+            "cd-release-path": "${cd} ${release-path}",
+            "cd-app-release-path": "${cd} ${app-release-path}",
+            "cd-prod-path": "${cd} ${install-path}",
+
+            "cmake": "cmake -G\"Unix Makefiles\" -DCMAKE_INSTALL_PREFIX=${install-path} ${source-path}",
+            "cmake-xcode": "cmake -GXCode -DCMAKE_INSTALL_PREFIX=${install-path} ${source-path}",
+            "cmake-rmcache": "rm -f CMakeCache.txt",
+
+            "qmake": "qmake ${source-path}/${qmake-pro} -spec macx-g++ CONFIG+=x86_64 && ${make} qmake_all",
+            "make": "${make} -j4",
+            "make-clean": "${make} clean in ${build-path}",
+            "make-install": "${make} install",
+
+            "deployqt": "${deployqt} ${app-release-path}/${app} -verbose=1",
+            "deployqt-dmg": "${deployqt} -dmg",
+            "deployqt-help": "${deployqt} --help",
+
+            "cp-dep": "cp -fr ${dep-lib} ${app-dep}",
+            "install_name_tool": "install_name_tool -change ${dep-lib-qqt-native} @rpath/${dep-lib-qqt-native} ${app-release-path}/${app-native}/${app-name} ",
+
+            "pwd": "pwd",
+            "var": "echo 'qtdir:' $QTDIR ",
+            "var2": "echo 'qtdir:' ${QTDIR} ",
+            "msg": "echo 'work complete!'"
+        },
         "execute-stream": {
-            "ss": [
-                "test-pwd",
-                "test-pwd",
-                "test-pwd",
-                "test-msg"
+            "t": [
+                "pwd",
+                "pwd",
+                "var",
+                "var2",
+                "pwd",
+                "msg",
+                "set ${build-path}",
+                "macdeployqt --help"
             ],
             "build": [
-                "mkdir-build-path",
+                "mk-build-path",
                 "cd-build-path",
-                "test-pwd",
                 "qmake",
                 "make",
-                "qmake-macdeployqt",
-                "test-msg"
+                "deployqt",
+                "cp-dep",
+                "install_name_tool",
+                "msg"
+            ],
+            "rebuild": [
+                "mk-build-path",
+                "cd-build-path",
+                "qmake",
+                "make",
+                "deployqt",
+                "cp-dep",
+                "msg"
             ],
             "install": [
                 "cd-build-path",
-                "test-pwd",
-                "qmake-macdeployqt"
+                "pwd",
+                "qdeployqt"
             ],
-            "current":"ss"
+            "current": "build"
         }
     }
     if (not os.path.exists('pymake.json')):
@@ -505,8 +555,8 @@ def main_function():
 
     ### config -> raw config
     rawconfig = copy.deepcopy(config)
-    #print ( config )
-    #print ( rawconfig )
+    # print ( config )
+    # print ( rawconfig )
 
     # maybe not env, it is env's variable dict
     # yeah, it is env, env is a dict, not a platform based variable
@@ -540,7 +590,7 @@ def main_function():
                 rawconfig["environ"][current_vars][key] = rawconfig["environ"][current_vars][key].replace(key0, env[key1])
 
             #current env-variable
-            for (key2, value2) in config["environ"][current_vars].items():
+            for (key2, value2) in rawconfig["environ"][current_vars].items():
 
                 if (key2 == key1):
                     rawconfig["environ"][current_vars][key] = rawconfig["environ"][current_vars][key].replace(key0,rawconfig["environ"][current_vars][key1])
@@ -577,7 +627,7 @@ def main_function():
 
             # env-current
             current_env_vars = rawconfig["environ"]["current"]
-            for (key2, value2) in config["environ"][current_env_vars].items():
+            for (key2, value2) in rawconfig["environ"][current_env_vars].items():
 
                 if (not isinstance(value2, basestring)):
                     continue
@@ -588,7 +638,7 @@ def main_function():
                     ''
 
             # env comm
-            for (key2, value2) in config["environ"].items():
+            for (key2, value2) in rawconfig["environ"].items():
 
                 if (not isinstance(value2, basestring)):
                     continue
@@ -636,7 +686,7 @@ def main_function():
                     ''
 
             # env comm
-            for (key2, value2) in config["environ"].items():
+            for (key2, value2) in rawconfig["environ"].items():
 
                 if (not isinstance(value2, basestring)):
                     continue
@@ -695,7 +745,7 @@ def main_function():
                     ''
 
             # env comm
-            for (key2, value2) in config["environ"].items():
+            for (key2, value2) in rawconfig["environ"].items():
 
                 if (not isinstance(value2, basestring)):
                     continue
@@ -757,50 +807,49 @@ def main_function():
             # env current
             current_env_vars = rawconfig["environ"]['current']
             for (key2, value2) in rawconfig["environ"][current_env_vars].items():
-
+                #print (key0, key1, key2, isinstance(value2, basestring), key2==key1)
                 if (key2 == key1):
+
                     rawconfig["project"][current_vars][key] = rawconfig["project"][current_vars][key].replace(key0, rawconfig["environ"][current_env_vars][key1])
+
                     # print ("%s:%s" % (key, rawconfig["env-variables"][key]))
                 else:
                     ''
 
             # env comm
-            for (key2, value2) in config["environ"].items():
+            for (key2, value2) in rawconfig["environ"].items():
 
                 if (not isinstance(value2, basestring)):
                     continue
-
                 if (key2 == key1):
                     rawconfig["project"][current_vars][key] = rawconfig["project"][current_vars][key].replace(key0, rawconfig["environ"][key1])
-                    #print ("%s:%s" % (key, rawconfig["env-variables"][key]))
+                    # print ("%s:%s" % (key, rawconfig["env-variables"][key]))
                 else:
                     ''
 
-
             # current path+
             current_path_vars = rawconfig["environ"]['path+']['current']
-            for (key2, value2) in config["environ"]['path+'][current_path_vars].items():
-
+            for (key2, value2) in rawconfig["environ"]['path+'][current_path_vars].items():
                 if (key2 == key1):
-                    rawconfig["project"][current_vars][key] = rawconfig["project"][current_vars][key].replace(key0,config["environ"]['path+'][current_path_vars][key1])
+                    rawconfig["project"][current_vars][key] = rawconfig["project"][current_vars][key].replace(key0, rawconfig["environ"]["path+"][current_path_vars][key1])
                     # print ("%s:%s" % (key, rawconfig["env-variables"][key]))
                 else:
                     ''
 
             # comm path+
-            for (key2, value2) in config["environ"]['path+'].items():
+            for (key2, value2) in rawconfig["environ"]['path+'].items():
 
                 if (not isinstance(value2, basestring)):
                     continue
 
                 if (key2 == key1):
-                    rawconfig["project"][current_vars][key] = rawconfig["project"][current_vars][key].replace(key0,config["environ"]['path+'][key1])
+                    rawconfig["project"][current_vars][key] = rawconfig["project"][current_vars][key].replace(key0, rawconfig["environ"]['path+'][key1])
                     # print ("%s:%s" % (key, rawconfig["env-variables"][key]))
                 else:
                     ''
 
             #self
-            for (key2, value2) in config["project"][current_vars].items():
+            for (key2, value2) in rawconfig["project"][current_vars].items():
 
                 if (key2 == key1):
                     rawconfig["project"][current_vars][key] = rawconfig["project"][current_vars][key].replace(key0,rawconfig["project"][current_vars][key1])
@@ -846,7 +895,7 @@ def main_function():
                     ''
 
             # env comm
-            for (key2, value2) in config["environ"].items():
+            for (key2, value2) in rawconfig["environ"].items():
 
                 if (not isinstance(value2, basestring)):
                     continue
@@ -859,29 +908,29 @@ def main_function():
 
             # current path+
             current_path_vars = rawconfig["environ"]['path+']['current']
-            for (key2, value2) in config["environ"]['path+'][current_path_vars].items():
+            for (key2, value2) in rawconfig["environ"]['path+'][current_path_vars].items():
 
                 if (key2 == key1):
-                    rawconfig["command"][current_vars][key] = rawconfig["command"][current_vars][key].replace(key0, config["environ"]['path+'][current_path_vars][key1])
+                    rawconfig["command"][current_vars][key] = rawconfig["command"][current_vars][key].replace(key0, rawconfig["environ"]['path+'][current_path_vars][key1])
                     # print ("%s:%s" % (key, rawconfig["env-variables"][key]))
                 else:
                     ''
 
             # comm path+
-            for (key2, value2) in config["environ"]['path+'].items():
+            for (key2, value2) in rawconfig["environ"]['path+'].items():
 
                 if (not isinstance(value2, basestring)):
                     continue
 
 
                 if (key2 == key1):
-                    rawconfig["command"][current_vars][key] = rawconfig["command"][current_vars][key].replace(key0, config["environ"]['path+'][key1])
+                    rawconfig["command"][current_vars][key] = rawconfig["command"][current_vars][key].replace(key0, rawconfig["environ"]['path+'][key1])
                     # print ("%s:%s" % (key, rawconfig["env-variables"][key]))
                 else:
                     ''
 
             # self
-            for (key2, value2) in config["command"][current_vars].items():
+            for (key2, value2) in rawconfig["command"][current_vars].items():
 
                 if (key2 == key1):
                     rawconfig["command"][current_vars][key] = rawconfig["command"][current_vars][key].replace(key0, rawconfig["command"][current_vars][key1])
@@ -925,7 +974,7 @@ def main_function():
                     ''
 
             # env comm
-            for (key2, value2) in config["environ"].items():
+            for (key2, value2) in rawconfig["environ"].items():
 
                 if (not isinstance(value2, basestring)):
                     continue
@@ -939,22 +988,22 @@ def main_function():
 
             # current path+
             current_path_vars = rawconfig["environ"]['path+']['current']
-            for (key2, value2) in config["environ"]['path+'][current_path_vars].items():
+            for (key2, value2) in rawconfig["environ"]['path+'][current_path_vars].items():
 
                 if (key2 == key1):
-                    rawconfig["store-named-variable"][key] = rawconfig["store-named-variable"][key].replace(key0, config["environ"]['path+'][current_path_vars][key1])
+                    rawconfig["store-named-variable"][key] = rawconfig["store-named-variable"][key].replace(key0, rawconfig["environ"]['path+'][current_path_vars][key1])
                     # print ("%s:%s" % (key, rawconfig["env-variables"][key]))
                 else:
                     ''
 
             # comm path+
-            for (key2, value2) in config["environ"]['path+'].items():
+            for (key2, value2) in rawconfig["environ"]['path+'].items():
 
                 if(not isinstance(value2, basestring)):
                     continue
 
                 if (key2 == key1):
-                    rawconfig["store-named-variable"][key] = rawconfig["store-named-variable"][key].replace(key0, config["environ"]['path+'][key1])
+                    rawconfig["store-named-variable"][key] = rawconfig["store-named-variable"][key].replace(key0, rawconfig["environ"]['path+'][key1])
                     # print ("%s:%s" % (key, rawconfig["env-variables"][key]))
                 else:
                     ''
@@ -980,7 +1029,7 @@ def main_function():
                     ''
 
             # self
-            for (key2, value2) in config["store-named-variable"].items():
+            for (key2, value2) in rawconfig["store-named-variable"].items():
 
                 if (key2 == key1):
                     rawconfig["store-named-variable"][key] = rawconfig["store-named-variable"][key].replace(key0, rawconfig["store-named-variable"][key1])
@@ -1017,24 +1066,31 @@ def main_function():
             current_vars = rawconfig["environ"]['current']
             if(rawconfig["environ"][current_vars].has_key(key1)):
                 rawconfig["store-named-command"][key] = rawconfig["store-named-command"][key].replace(key0, rawconfig["environ"][current_vars][key1])
+
             # env comm
             if(rawconfig["environ"].has_key(key1)):
                 if( isinstance(rawconfig["environ"][key1], basestring) ):
                     rawconfig["store-named-command"][key] = rawconfig["store-named-command"][key].replace(key0, rawconfig["environ"][key1])
+
             # path+ current
             current_vars = rawconfig["environ"]['path+']['current']
             if(rawconfig["environ"]['path+'][current_vars].has_key(key1)):
                 rawconfig["store-named-command"][key] = rawconfig["store-named-command"][key].replace(key0, rawconfig["environ"]['path+'][current_vars][key1])
+
             # path+ comm
             if(rawconfig["environ"]['path+'].has_key(key1)):
                 if( isinstance(rawconfig["environ"]['path+'][key1], basestring) ):
                     rawconfig["store-named-command"][key] = rawconfig["store-named-command"][key].replace(key0, rawconfig["environ"]['path+'][key1])
+
             # project
-            if(rawconfig["project"].has_key(key1)):
-                rawconfig["store-named-command"][key] = rawconfig["store-named-command"][key].replace(key0, rawconfig["project"][key1])
+            current_vars = rawconfig["project"]['current']
+            if(rawconfig["project"][current_vars].has_key(key1)):
+                rawconfig["store-named-command"][key] = rawconfig["store-named-command"][key].replace(key0, rawconfig["project"][current_vars][key1])
+
             # command
-            if(rawconfig["command"].has_key(key1)):
-                rawconfig["store-named-command"][key] = rawconfig["store-named-command"][key].replace(key0, rawconfig["command"][key1])
+            current_vars = rawconfig["command"]['current']
+            if(rawconfig["command"][current_vars].has_key(key1)):
+                rawconfig["store-named-command"][key] = rawconfig["store-named-command"][key].replace(key0, rawconfig["command"][current_vars][key1])
 
             # store-named-variable
             if(rawconfig["store-named-variable"].has_key(key1)):
@@ -1056,6 +1112,7 @@ def main_function():
             startpos = 0
             while (True):
                 # print (startpos)
+                # print (value)
 
                 index = value.find('${', startpos)
                 if (index == -1):
@@ -1090,11 +1147,14 @@ def main_function():
                     if( isinstance(rawconfig["environ"]['path+'][key1], basestring) ):
                         rawconfig['execute-stream'][cmd][step] = rawconfig['execute-stream'][cmd][step].replace(key0, rawconfig["environ"]['path+'][key1])
                 # project
-                if(rawconfig["project"].has_key(key1)):
-                    rawconfig['execute-stream'][cmd][step] = rawconfig['execute-stream'][cmd][step].replace(key0, rawconfig["project"][key1])
+                current_vars = rawconfig["project"]['current']
+                if(rawconfig["project"][current_vars].has_key(key1)):
+                    rawconfig['execute-stream'][cmd][step] = rawconfig['execute-stream'][cmd][step].replace(key0, rawconfig["project"][current_vars][key1])
+
                 # command
-                if(rawconfig["command"].has_key(key1)):
-                    rawconfig['execute-stream'][cmd][step] = rawconfig['execute-stream'][cmd][step].replace(key0, rawconfig["command"][key1])
+                current_vars = rawconfig["command"]['current']
+                if(rawconfig["command"][current_vars].has_key(key1)):
+                    rawconfig['execute-stream'][cmd][step] = rawconfig['execute-stream'][cmd][step].replace(key0, rawconfig["command"][current_vars][key1])
 
                 # store-named-variable
                 if(rawconfig["store-named-variable"].has_key(key1)):
@@ -1154,10 +1214,33 @@ def main_function():
                 dict0 = copy.deepcopy(list_config['environ']['path+'][current_vars])
                 for (k, v) in list_config['environ']['path+'].items():
                     if(isinstance(v, basestring)):
+                        if(k == "current"):
+                            continue
                         dict0[k] = v
 
                 for (k, v) in dict0.items():
                     print("%-24s %s" % (k, v) )
+
+            elif( args['--project'] == True):
+                current_project_vars = list_config['project']['current']
+                dict0 = copy.deepcopy(list_config['project'][current_project_vars])
+                print ("current %s" % current_project_vars)
+                for (k, v) in dict0.items():
+                    print("%-24s %s" % (k, v) )
+
+
+            elif( args['--command'] == True):
+                current_command_vars = list_config['command']['current']
+                dict0 = copy.deepcopy(list_config['command'][current_command_vars])
+                print ("current %s" % current_command_vars)
+                for (k, v) in dict0.items():
+                    print("%-24s %s" % (k, v) )
+
+            elif( args['--value'] == True):
+                dict0 = copy.deepcopy(list_config['store-named-variable'])
+                for (k, v) in dict0.items():
+                    print("%-24s %s" % (k, v) )
+
 
             elif( args['--cmd'] == True):
                 dict0 = copy.deepcopy(list_config['store-named-command'])
