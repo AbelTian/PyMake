@@ -6,6 +6,7 @@ Usage:
   pymake3.py source [ --show | --restore ]
   pymake3.py set ( env-var | env-path | proj | cmd ) ( --add | --del | --mod ) <name> [ <value> ]
   pymake3.py set stream (--add | --del | --mod ) <name> [ <values> ... ]
+  pymake3.py set comm ( env-var | env-path ) ( --add | --del | --mod ) <name> [ <value> ]
   pymake3.py switch [ --env | --path | --cmd | --proj | --stream ] <name>
   pymake3.py list [ --var | --path | --cmd | --stream ] [--raw]
   pymake3.py exec [ <stream-names> ... ]
@@ -45,6 +46,7 @@ import pwd
 import shutil
 import time
 import json
+import copy
 import types
 import locale
 import codecs
@@ -271,7 +273,93 @@ def main_function():
 
     while (True):
         if (args['set'] == True):
-            if (args['env-var'] is True):
+            if( args['comm'] is True):
+                if (args['env-var'] is True):
+                    if (args['--add'] == True):
+                        if (args['<name>'] and args["<value>"] is not None):
+
+                            config["environ"][args['<name>']] = args["<value>"]
+                            print ("successed %s:%s" % (args['<name>'], args["<value>"]))
+                        else:
+                            ''
+                    elif (args['--del'] == True):
+                        if (args["<name>"] is not None):
+
+                            if (config['environ'].__contains__(args['<name>'])):
+                                config['environ'].__delitem__(args['<name>'])
+                                print ("successed %s" % (args['<name>']))
+                            else:
+                                ''
+                        else:
+                            ''
+                    elif (args['--mod'] == True):
+                        if (args['<name>'] and args["<value>"] is not None):
+
+                            if (config['environ'].__contains__(args['<name>'])):
+                                config['environ'][args['<name>']] = args["<value>"]
+                                print ("successed %s:%s" % (args['<name>'], args["<value>"]))
+                            else:
+                                ''
+                        else:
+                            ''
+                    else:
+                        ''
+                elif (args['env-path'] is True):
+                    if (args['--add'] == True):
+                        if (args['<name>'] and args["<value>"] is not None):
+
+                            config['environ']['path+'][args['<name>']] = args["<value>"]
+                            print ("successed %s:%s" % (args['<name>'], args["<value>"]))
+                        else:
+                            ''
+                    elif (args['--del'] == True):
+                        if (args["<name>"] is not None):
+
+                            if (config['environ']['path+'].__contains__(args['<name>'])):
+                                config['environ']['path+'].__delitem__(args['<name>'])
+                                print ("successed %s" % (args['<name>']))
+                            else:
+                                ''
+                        else:
+                            ''
+                    elif (args['--mod'] == True):
+                        if (args['<name>'] and args["<value>"] is not None):
+
+                            if (config['environ']['path+'].__contains__(args['<name>'])):
+                                config['environ']['path+'][args['<name>']] = args["<value>"]
+                                print ("successed %s:%s" % (args['<name>'], args["<value>"]))
+                            else:
+                                ''
+                        else:
+                            ''
+                    else:
+                        ''
+            elif (args['stream'] is True):
+                if (args['--add'] == True):
+                    if (args['<name>'] and args["<values>"] is not None):
+                        config["execute-stream"][args['<name>']] = args["<values>"]
+                        print ("successed %s:%s" % (args['<name>'],args["<values>"]))
+                    else:
+                        ''
+                elif (args['--del'] == True):
+                    if (args["<name>"] is not None):
+                        if (config['execute-stream'].__contains__(args['<name>'])):
+                            config["execute-stream"].__delitem__(args['<name>'])
+                            print ("successed %s" % (args['<name>']))
+                        else:
+                            ''
+                    else:
+                        ''
+                elif (args['--mod'] == True):
+                    if (args['<name>'] and args["<values>"] is not None):
+                        config["execute-stream"][args['<name>']] = args["<values>"]
+                        print ("successed %s:%s" % (args['<name>'],args["<values>"]))
+                    else:
+                        ''
+                else:
+                    ''
+
+            elif (args['env-var'] is True):
                 if (args['--add'] == True):
                     if (args['<name>'] and args["<value>"] is not None):
 
@@ -310,7 +398,7 @@ def main_function():
 
                         current_vars = config['environ']['path+']['current']
 
-                        config['environ']['path+'][args['<name>']] = args["<value>"]
+                        config['environ']['path+'][current_vars][args['<name>']] = args["<value>"]
                         print ( "successed %s:%s" % (args['<name>'],args[ "<value>"]))
                     else:
                         ''
@@ -319,8 +407,8 @@ def main_function():
 
                         current_vars = config['environ']['path+']['current']
 
-                        if (config['environ']['path+'].__contains__(args['<name>'])):
-                            config['environ']['path+'].__delitem__(args['<name>'])
+                        if (config['environ']['path+'][current_vars].__contains__(args['<name>'])):
+                            config['environ']['path+'][current_vars].__delitem__(args['<name>'])
                             print ("successed %s" % (args['<name>']))
                         else:
                             ''
@@ -331,8 +419,8 @@ def main_function():
 
                         current_vars = config['environ']['path+']['current']
 
-                        if (config['environ']['path+'].__contains__(args['<name>'])):
-                            config['environ']['path+'][args['<name>']] = args["<value>"]
+                        if (config['environ']['path+'][current_vars].__contains__(args['<name>'])):
+                            config['environ']['path+'][current_vars][args['<name>']] = args["<value>"]
                             print ("successed %s:%s" % (args['<name>'],args["<value>"]))
                         else:
                             ''
@@ -363,30 +451,6 @@ def main_function():
                             print ("successed %s:%s" % (args['<name>'],args["<value>"]))
                         else:
                             ''
-                    else:
-                        ''
-                else:
-                    ''
-            elif (args['stream'] is True):
-                if (args['--add'] == True):
-                    if (args['<name>'] and args["<values>"] is not None):
-                        config["execute-stream"][args['<name>']] = args["<values>"]
-                        print ("successed %s:%s" % (args['<name>'],args["<values>"]))
-                    else:
-                        ''
-                elif (args['--del'] == True):
-                    if (args["<name>"] is not None):
-                        if (config['execute-stream'].__contains__(args['<name>'])):
-                            config["execute-stream"].__delitem__(args['<name>'])
-                            print ("successed %s" % (args['<name>']))
-                        else:
-                            ''
-                    else:
-                        ''
-                elif (args['--mod'] == True):
-                    if (args['<name>'] and args["<values>"] is not None):
-                        config["execute-stream"][args['<name>']] = args["<values>"]
-                        print ("successed %s:%s" % (args['<name>'],args["<values>"]))
                     else:
                         ''
                 else:
@@ -440,10 +504,13 @@ def main_function():
         break
 
     ### config -> raw config
-    rawconfig = config.copy()
+    rawconfig = copy.deepcopy(config)
+    #print ( config )
     #print ( rawconfig )
 
     # maybe not env, it is env's variable dict
+    # yeah, it is env, env is a dict, not a platform based variable
+    # ${...} is ok to use, it will find variable in env
     env = os.environ
 
     # replace env-variables current's ${...}
@@ -485,7 +552,7 @@ def main_function():
     # env env-current env-comm
     for (key, value) in rawconfig["environ"].items():
         # print (key) #...
-        if (not isinstance(value, str)):
+        if (not isinstance(value, basestring)):
             continue
 
         startpos = 0
@@ -512,7 +579,7 @@ def main_function():
             current_env_vars = rawconfig["environ"]["current"]
             for (key2, value2) in config["environ"][current_env_vars].items():
 
-                if (not isinstance(value2, str)):
+                if (not isinstance(value2, basestring)):
                     continue
                 if (key2 == key1):
                     rawconfig["environ"][key] = rawconfig["environ"][key].replace(key0, rawconfig["environ"][current_env_vars][key1])
@@ -523,7 +590,7 @@ def main_function():
             # env comm
             for (key2, value2) in config["environ"].items():
 
-                if (not isinstance(value2, str)):
+                if (not isinstance(value2, basestring)):
                     continue
 
                 if (key2 == key1):
@@ -571,7 +638,7 @@ def main_function():
             # env comm
             for (key2, value2) in config["environ"].items():
 
-                if (not isinstance(value2, str)):
+                if (not isinstance(value2, basestring)):
                     continue
 
                 if (key2 == key1):
@@ -593,6 +660,9 @@ def main_function():
     # env env-comm env-current path-current path-comm
     for (key, value) in rawconfig["environ"]['path+'].items():
         #print (key) #...
+
+        if(not isinstance(value, basestring)):
+            continue
 
         startpos = 0
         while (True):
@@ -627,7 +697,7 @@ def main_function():
             # env comm
             for (key2, value2) in config["environ"].items():
 
-                if (not isinstance(value2, str)):
+                if (not isinstance(value2, basestring)):
                     continue
 
                 if (key2 == key1):
@@ -648,6 +718,9 @@ def main_function():
 
             # comm path
             for (key2, value2) in rawconfig["environ"]["path+"].items():
+
+                if (not isinstance(value2, basestring)):
+                    continue
 
                 if (key2 == key1):
                     rawconfig["environ"]['path+'][key] = rawconfig["environ"]['path+'][key].replace(key0, rawconfig["environ"]["path+"][key1])
@@ -694,7 +767,7 @@ def main_function():
             # env comm
             for (key2, value2) in config["environ"].items():
 
-                if (not isinstance(value2, str)):
+                if (not isinstance(value2, basestring)):
                     continue
 
                 if (key2 == key1):
@@ -716,6 +789,9 @@ def main_function():
 
             # comm path+
             for (key2, value2) in config["environ"]['path+'].items():
+
+                if (not isinstance(value2, basestring)):
+                    continue
 
                 if (key2 == key1):
                     rawconfig["project"][current_vars][key] = rawconfig["project"][current_vars][key].replace(key0,config["environ"]['path+'][key1])
@@ -772,7 +848,7 @@ def main_function():
             # env comm
             for (key2, value2) in config["environ"].items():
 
-                if (not isinstance(value2, str)):
+                if (not isinstance(value2, basestring)):
                     continue
 
                 if (key2 == key1):
@@ -793,6 +869,10 @@ def main_function():
 
             # comm path+
             for (key2, value2) in config["environ"]['path+'].items():
+
+                if (not isinstance(value2, basestring)):
+                    continue
+
 
                 if (key2 == key1):
                     rawconfig["command"][current_vars][key] = rawconfig["command"][current_vars][key].replace(key0, config["environ"]['path+'][key1])
@@ -847,7 +927,7 @@ def main_function():
             # env comm
             for (key2, value2) in config["environ"].items():
 
-                if (not isinstance(value2, str)):
+                if (not isinstance(value2, basestring)):
                     continue
 
                 if (key2 == key1):
@@ -869,6 +949,9 @@ def main_function():
 
             # comm path+
             for (key2, value2) in config["environ"]['path+'].items():
+
+                if(not isinstance(value2, basestring)):
+                    continue
 
                 if (key2 == key1):
                     rawconfig["store-named-variable"][key] = rawconfig["store-named-variable"][key].replace(key0, config["environ"]['path+'][key1])
@@ -906,7 +989,7 @@ def main_function():
                     ''
 
     # replace store-named-command's ${...}
-    # store-named-variable
+    # env env-current env-comm path+-current path+comm project command store-named-variable
     for (key, value) in rawconfig["store-named-command"].items():
         #print (key) #...
 
@@ -930,58 +1013,166 @@ def main_function():
             if (env.has_key(key1)):
                 rawconfig["store-named-command"][key] = rawconfig["store-named-command"][key].replace(key0, env[key1])
 
-            # env
-            for (key2, value2) in rawconfig["store-named-variable"].items():
-                if (key2 == key1):
-                    rawconfig["store-named-command"][key] = rawconfig["store-named-command"][key].replace(key0, rawconfig["store-named-variable"][key1])
-                    #print ("%s:%s" % (key, rawconfig["store-named-command"][key]))
-                else:
-                    ''
+            # env current
+            current_vars = rawconfig["environ"]['current']
+            if(rawconfig["environ"][current_vars].has_key(key1)):
+                rawconfig["store-named-command"][key] = rawconfig["store-named-command"][key].replace(key0, rawconfig["environ"][current_vars][key1])
+            # env comm
+            if(rawconfig["environ"].has_key(key1)):
+                if( isinstance(rawconfig["environ"][key1], basestring) ):
+                    rawconfig["store-named-command"][key] = rawconfig["store-named-command"][key].replace(key0, rawconfig["environ"][key1])
+            # path+ current
+            current_vars = rawconfig["environ"]['path+']['current']
+            if(rawconfig["environ"]['path+'][current_vars].has_key(key1)):
+                rawconfig["store-named-command"][key] = rawconfig["store-named-command"][key].replace(key0, rawconfig["environ"]['path+'][current_vars][key1])
+            # path+ comm
+            if(rawconfig["environ"]['path+'].has_key(key1)):
+                if( isinstance(rawconfig["environ"]['path+'][key1], basestring) ):
+                    rawconfig["store-named-command"][key] = rawconfig["store-named-command"][key].replace(key0, rawconfig["environ"]['path+'][key1])
+            # project
+            if(rawconfig["project"].has_key(key1)):
+                rawconfig["store-named-command"][key] = rawconfig["store-named-command"][key].replace(key0, rawconfig["project"][key1])
+            # command
+            if(rawconfig["command"].has_key(key1)):
+                rawconfig["store-named-command"][key] = rawconfig["store-named-command"][key].replace(key0, rawconfig["command"][key1])
+
+            # store-named-variable
+            if(rawconfig["store-named-variable"].has_key(key1)):
+                rawconfig["store-named-command"][key] = rawconfig["store-named-command"][key].replace(key0, rawconfig["store-named-variable"][key1])
 
             # self
-            for (key2, value2) in config["store-named-command"].items():
+            if(rawconfig["store-named-command"].has_key(key1)):
+                rawconfig["store-named-command"][key] = rawconfig["store-named-command"][key].replace(key0, rawconfig["store-named-command"][key1])
 
-                if (key2 == key1):
-                    rawconfig["store-named-command"][key] = rawconfig["store-named-command"][key].replace(key0, rawconfig["store-named-command"][key1])
-                    # print ("%s:%s" % (key, rawconfig["env-variables"][key]))
-                else:
-                    ''
+    # replace execute-stream's ${}
+    # env env-current env-comm path-current path-comm project command store-named-variable store-named-command
+    for (cmd, stream) in rawconfig["execute-stream"].items():
+        #print (key) #...
+        if (isinstance(stream, basestring)):
+            continue
+
+        step = 0
+        for value in stream:
+            startpos = 0
+            while (True):
+                # print (startpos)
+
+                index = value.find('${', startpos)
+                if (index == -1):
+                    break
+
+                index2 = value.find('}', index)
+                startpos = index2
+
+                key0 = value[index:index2 + 1]
+                # print ( key0 ) #${...}
+                key1 = key0.split('{')[1].split('}')[0].strip()
+                # print ( key1 ) #...
+
+                # env
+                if (env.has_key(key1)):
+                    rawconfig['execute-stream'][cmd][step] = rawconfig['execute-stream'][cmd][step].replace(key0, env[key1])
+
+                # env current
+                current_vars = rawconfig["environ"]['current']
+                if(rawconfig["environ"][current_vars].has_key(key1)):
+                    rawconfig['execute-stream'][cmd][step] = rawconfig['execute-stream'][cmd][step].replace(key0, rawconfig["environ"][current_vars][key1])
+                # env comm
+                if(rawconfig["environ"].has_key(key1)):
+                    if( isinstance(rawconfig["environ"][key1], basestring) ):
+                        rawconfig['execute-stream'][cmd][step] = rawconfig['execute-stream'][cmd][step].replace(key0, rawconfig["environ"][key1])
+                # path+ current
+                current_vars = rawconfig["environ"]['path+']['current']
+                if(rawconfig["environ"]['path+'][current_vars].has_key(key1)):
+                    rawconfig['execute-stream'][cmd][step] = rawconfig['execute-stream'][cmd][step].replace(key0, rawconfig["environ"]['path+'][current_vars][key1])
+                # path+ comm
+                if(rawconfig["environ"]['path+'].has_key(key1)):
+                    if( isinstance(rawconfig["environ"]['path+'][key1], basestring) ):
+                        rawconfig['execute-stream'][cmd][step] = rawconfig['execute-stream'][cmd][step].replace(key0, rawconfig["environ"]['path+'][key1])
+                # project
+                if(rawconfig["project"].has_key(key1)):
+                    rawconfig['execute-stream'][cmd][step] = rawconfig['execute-stream'][cmd][step].replace(key0, rawconfig["project"][key1])
+                # command
+                if(rawconfig["command"].has_key(key1)):
+                    rawconfig['execute-stream'][cmd][step] = rawconfig['execute-stream'][cmd][step].replace(key0, rawconfig["command"][key1])
+
+                # store-named-variable
+                if(rawconfig["store-named-variable"].has_key(key1)):
+                    rawconfig['execute-stream'][cmd][step] = rawconfig['execute-stream'][cmd][step].replace(key0, rawconfig["store-named-variable"][key1])
+
+                # store-named-command
+                if(rawconfig["store-named-command"].has_key(key1)):
+                    rawconfig['execute-stream'][cmd][step] = rawconfig['execute-stream'][cmd][step].replace(key0, rawconfig["store-named-command"][key1])
+
+                # stream current
+                key_pos = 0
+                for key2 in stream:
+                    if ( key2 == key1 ):
+                        rawconfig['execute-stream'][cmd][step] = rawconfig['execute-stream'][cmd][step].replace(key0, rawconfig['execute-stream'][cmd][key_pos])
+                    key_pos+=1
+
+            step += 1
+
+    # expand execute-stream's command
+    # store-named-command
+    for (cmd, stream) in rawconfig["execute-stream"].items():
+        #print (key) #...
+        if (isinstance(stream, basestring)):
+            continue
+        step = 0
+        for command in stream:
+            if (rawconfig["store-named-command"].has_key(command)):
+                rawconfig['execute-stream'][cmd][step] = rawconfig['execute-stream'][cmd][step].replace(command, rawconfig["store-named-command"][command])
+            else:
+                ''
+                #print ("can't find command %s:%s" % ( cmd, command ))
+            step += 1
 
     #list command
     while (True):
         if (args['list'] == True):
+
             if ( args['--raw'] == True ):
                 list_config = rawconfig
             else:
                 list_config = config
 
+
             if( args['--var'] == True):
 
                 current_vars = list_config['environ']['current']
-                dict0 = list_config['environ'][current_vars].copy()
+                dict0 = copy.deepcopy(list_config['environ'][current_vars])
                 for (k, v) in list_config['environ'].items():
-                    if(isinstance(v, str)):
-                        dict0.update((k, v))
+                    if(isinstance(v, basestring)):
+                        dict0[k] = v
 
                 for (k, v) in dict0.items():
                     print("%-24s %s" % (k, v) )
 
             elif( args['--path'] == True):
                 current_vars = list_config['environ']['path+']['current']
-                dict0 = list_config['environ']['path+'][current_vars].copy()
+                dict0 = copy.deepcopy(list_config['environ']['path+'][current_vars])
+                for (k, v) in list_config['environ']['path+'].items():
+                    if(isinstance(v, basestring)):
+                        dict0[k] = v
 
                 for (k, v) in dict0.items():
                     print("%-24s %s" % (k, v) )
 
             elif( args['--cmd'] == True):
-                dict0 = list_config['store-named-command'].copy()
+                dict0 = copy.deepcopy(list_config['store-named-command'])
                 for (k, v) in dict0.items():
                     print("%-24s %s" % (k, v) )
 
             elif( args['--stream'] == True):
-                dict0 = list_config['execute-stream'].copy()
-                for (k,v) in dict0.items():
-                    print("%-24s %s" % (k,v) )
+                current_cmd_vars = list_config['execute-stream']['current']
+                list0 = copy.deepcopy(list_config['execute-stream'][current_cmd_vars])
+                print ("current %s" % current_cmd_vars)
+                step = 1
+                for v1 in list0:
+                    print("%s: %s" % (step, v1))
+                    step += 1
+
             return
         else:
             ''
@@ -992,27 +1183,31 @@ def main_function():
     current_env_vars = rawconfig["environ"]['current']
     for (key, value) in rawconfig["environ"][current_env_vars].items():
         env[key] = value
+
     # env-varible
     for (key, value) in config["environ"].items():
-        if (not isinstance(value, str)):
+        if (not isinstance(value, basestring)):
             continue
         if (key == "current"):
             continue
         env[key] = value
 
     for (key, value) in env.items():
-        print ("%-24s %s" % (key, value) )
+        #print ("%-24s %s" % (key, value) )
         ''
 
     # current path
     current_vars = rawconfig["environ"]['path+']['current']
     for (key, value) in rawconfig["environ"]["path+"][current_vars].items():
-        env["PATH"] = path + os.path.pathsep + env["PATH"]
+        env["PATH"] = value + os.path.pathsep + env["PATH"]
+
     # comm path
     for (key, value) in rawconfig["environ"]["path+"].items():
-        env["PATH"] = path + os.path.pathsep + env["PATH"]
+        if (not isinstance(value, basestring)):
+            continue
+        env["PATH"] = value + os.path.pathsep + env["PATH"]
 
-    print(env["PATH"].replace(os.path.pathsep, '\n'))
+    #print(env["PATH"].replace(os.path.pathsep, '\n'))
 
     def read_thread_function(p):
         ''
@@ -1061,11 +1256,7 @@ def main_function():
                 for stream in args['<stream-names>']:
                     if (rawconfig["execute-stream"].__contains__(stream)):
                         for cmd in rawconfig["execute-stream"][stream]:
-                            if (rawconfig['store-named-command'].__contains__(cmd)):
-                                # print("execute %s %s %s" % (stream, cmd, rawconfig['store-named-command'][cmd]))
-                                list0.append( rawconfig['store-named-command'][cmd] )
-                            else:
-                                print ("can't find command %s" % cmd)
+                            list0.append(cmd)
                     else:
                         print ("can't find stream %s" % stream)
                 list0.append("exit 0")
@@ -1081,9 +1272,9 @@ def main_function():
                 read_thread.start()
                 read_err_thread = threading.Thread(target=read_stderr_thread_function, args=(p,))
                 read_err_thread.start()
-                write_thread = threading.Thread(target=write_thread_function, args=(list0,))
+                #write_thread = threading.Thread(target=write_thread_function, args=(list0,))
                 #write_thread.start()
-                time.sleep(1)
+                #time.sleep(1)
 
                 for cmd in list0:
                     #print  ("command:%s" % cmd)
@@ -1094,7 +1285,7 @@ def main_function():
 
                 p.wait()
                 #read_thread.close()
-                time.sleep(1)
+                #time.sleep(1)
 
                 #return
 
