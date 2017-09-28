@@ -1,4 +1,4 @@
-"""PyMake 3.0.
+"""PyMake 3.1.
 
 Usage:
   pymake3.py source [ --add | --del | --switch ] [ <config-file-name> ]
@@ -8,7 +8,7 @@ Usage:
   pymake3.py set stream (--add | --del | --mod ) <name> [ <values> ... ]
   pymake3.py set comm ( env-var | env-path ) ( --add | --del | --mod ) <name> [ <value> ]
   pymake3.py switch [ --env | --path | --cmd | --proj | --stream ] <name>
-  pymake3.py list [ --var | --path | --project | --command | --value | --cmd | --stream ] [--raw]
+  pymake3.py list [--raw] [ --var | --path | --project | --command | --value | --cmd | --stream ] [<name>]
   pymake3.py exec [ <stream-names> ... ]
   pymake3.py (-h | --help)
   pymake3.py --version
@@ -42,16 +42,11 @@ Options:
 import os
 import re
 import sys
-import pwd
 import shutil
 import time
 import json
 import copy
 import types
-import locale
-import codecs
-import threading
-import subprocess
 from pycore.pycore import *
 from pycore.docopt import docopt
 from collections import OrderedDict
@@ -254,7 +249,7 @@ def main_function():
         conf.write(open('pymake.ini', 'w'))
         print ( 'initial pymake.ini')
 
-    args = docopt(__doc__, version='pymake3.py v3.0')
+    args = docopt(__doc__, version='pymake3.py v3.1')
     #print(args)
 
     exceptFile = ( 'pymake.ini', 'pymake.py', '.gitignore', '.git', 'pycore', 'README.md', '.idea')
@@ -1201,6 +1196,8 @@ def main_function():
             if( args['--var'] == True):
 
                 current_vars = list_config['environ']['current']
+                if( args['<name>'] is not None ):
+                    current_vars = args['<name>']
                 dict0 = copy.deepcopy(list_config['environ'][current_vars])
                 for (k, v) in list_config['environ'].items():
                     if(isinstance(v, basestring)):
@@ -1211,6 +1208,8 @@ def main_function():
 
             elif( args['--path'] == True):
                 current_vars = list_config['environ']['path+']['current']
+                if( args['<name>'] is not None ):
+                    current_vars = args['<name>']
                 dict0 = copy.deepcopy(list_config['environ']['path+'][current_vars])
                 for (k, v) in list_config['environ']['path+'].items():
                     if(isinstance(v, basestring)):
@@ -1223,6 +1222,8 @@ def main_function():
 
             elif( args['--project'] == True):
                 current_project_vars = list_config['project']['current']
+                if( args['<name>'] is not None ):
+                    current_vars = args['<name>']
                 dict0 = copy.deepcopy(list_config['project'][current_project_vars])
                 print ("current %s" % current_project_vars)
                 for (k, v) in dict0.items():
@@ -1230,9 +1231,11 @@ def main_function():
 
 
             elif( args['--command'] == True):
-                current_command_vars = list_config['command']['current']
-                dict0 = copy.deepcopy(list_config['command'][current_command_vars])
-                print ("current %s" % current_command_vars)
+                current_vars = list_config['command']['current']
+                if( args['<name>'] is not None ):
+                    current_vars = args['<name>']
+                dict0 = copy.deepcopy(list_config['command'][current_vars])
+                print ("current %s" % current_vars)
                 for (k, v) in dict0.items():
                     print("%-24s %s" % (k, v) )
 
@@ -1248,9 +1251,11 @@ def main_function():
                     print("%-24s %s" % (k, v) )
 
             elif( args['--stream'] == True):
-                current_cmd_vars = list_config['execute-stream']['current']
-                list0 = copy.deepcopy(list_config['execute-stream'][current_cmd_vars])
-                print ("current %s" % current_cmd_vars)
+                current_vars = list_config['execute-stream']['current']
+                if( args['<name>'] is not None ):
+                    current_vars = args['<name>']
+                list0 = copy.deepcopy(list_config['execute-stream'][current_vars])
+                print ("current %s" % current_vars)
                 step = 1
                 for v1 in list0:
                     print("%s: %s" % (step, v1))
@@ -1292,45 +1297,6 @@ def main_function():
 
     #print(env["PATH"].replace(os.path.pathsep, '\n'))
 
-    def read_thread_function(p):
-        ''
-        code = (codecs.lookup(locale.getpreferredencoding()).name)
-        while (True):
-            l = p.stdout.readline().rstrip().decode(code)
-
-            if (l is None):
-                # print ('ddd')
-                break
-
-            if (p.poll() is not None):
-                # print("eee")
-                break
-
-            print (l)
-            # print (l)
-            # stdout.flush()
-
-    def read_stderr_thread_function(p):
-        ''
-        code = (codecs.lookup(locale.getpreferredencoding()).name)
-        while (True):
-            l = p.stderr.readline().rstrip().decode(code)
-
-            if (l is None):
-                # print ('ddd')
-                break
-
-            if (p.poll() is not None):
-                # print("eee")
-                break
-
-            print (l)
-            # print (l)
-            # stdout.flush()
-
-    def write_thread_function(list0):
-        ''
-
     while ( True ):
 
         if( args['exec'] == True):
@@ -1342,35 +1308,12 @@ def main_function():
                             list0.append(cmd)
                     else:
                         print ("can't find stream %s" % stream)
-                list0.append("exit 0")
                 #print (list0)
 
-                shell = pwd.getpwuid(os.getuid()).pw_shell
-                if shell is None: shell = os.environ.get( 'SHELL'   )
-                if shell is None: shell = os.environ.get( 'COMSPEC' )
-                #print ( 'Running under', shell )
+                communicateWithCommandLine(list0)
+                os._exit(0)
 
-                p = subprocess.Popen(shell, shell = True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-                read_thread = threading.Thread(target=read_thread_function, args=(p,))
-                read_thread.start()
-                read_err_thread = threading.Thread(target=read_stderr_thread_function, args=(p,))
-                read_err_thread.start()
-                #write_thread = threading.Thread(target=write_thread_function, args=(list0,))
-                #write_thread.start()
-                #time.sleep(1)
-
-                for cmd in list0:
-                    #print  ("command:%s" % cmd)
-                    p.stdin.write(cmd + '\n')
-                    p.stdin.flush()
-                    #p.stdin.write("ping 127.0.0.1 -c 2 \n")
-                    #p.stdin.flush()
-
-                p.wait()
-                #read_thread.close()
-                #time.sleep(1)
-
-                #return
+                return
 
 
             else:
