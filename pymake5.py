@@ -1039,9 +1039,9 @@ def main_function():
     while ( True ):
 
         if( args['exec'] == True):
-            if(args['<stream-names>'] is not None):
+            if(args['<names>'] is not None):
                 list0 = []
-                for stream in args['<stream-names>']:
+                for stream in args['<names>']:
                     if (rawconfig["exec-stream"].__contains__(stream)):
                         for cmd in rawconfig["exec-stream"][stream]:
                             list0.append(cmd)
@@ -1056,7 +1056,7 @@ def main_function():
 
 
             else:
-                print ("stream-names is none")
+                print ("names is none")
         else:
             ''
 

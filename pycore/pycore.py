@@ -191,12 +191,13 @@ def communicateWithCommandLine(list0):
         cmd_sep = '&'
     else:
         cmd_test = "echo pymake-command-status: $?"
-        cmd_sep = '&&'
+        cmd_sep = ';'
 
     global  cmd_list
     cmd_list = []
     for cmd in list0:
         cmd_list.append(cmd + ' ' + cmd_sep + ' ' + cmd_test)
+        #cmd_list.append(cmd_test)
     # append exit 0
     cmd_list.append ('exit 0')
 
