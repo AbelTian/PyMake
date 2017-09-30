@@ -128,7 +128,12 @@ def read_thread_function(p):
             break
 
         if ("pymake-command-status:" in l):
-            ''
+            ret = int(l.split(':')[1].strip())
+            if( ret != 0 ):
+                #print ("exit %d" % (ret))
+                p.stdin.write(("exit %d \n" % (ret)))
+                p.stdin.flush()
+                return
             cmd_event.set()
             continue
 
@@ -187,10 +192,10 @@ def communicateWithCommandLine(list0):
 
     sysstr = platform.system()
     if( sysstr == "Windows"):
-        cmd_test = "echo pymake-command-status: %ERRORLEVEL%"
+        cmd_test = "echo pymake-command-status:%ERRORLEVEL%"
         cmd_sep = '&'
     else:
-        cmd_test = "echo pymake-command-status: $?"
+        cmd_test = "echo pymake-command-status:$?"
         cmd_sep = ';'
 
     global  cmd_list

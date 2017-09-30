@@ -5,12 +5,12 @@ Usage:
   pymake5.py source --mod <config-file-name> <new-config-file-name>
   pymake5.py source [ --show | --restore ]
   pymake5.py set value ( path | cmd | var | proj ) ( --add | --del | --mod ) <group> <name> [ <value> ]
-  pymake5.py set current ( path | cmd | var | proj ) ( --add | --del | --mod ) <name> [ <values> ... ]
-  pymake5.py set working ( path | cmd | var | proj | stream ) <name>
-  pymake5.py set stored (--add | --del | --mod ) <name> [ <value> ]
+  pymake5.py set current ( path | cmd | var | proj | exe ) ( --add | --del | --mod ) <name> [ <values> ... ]
+  pymake5.py set working ( path | cmd | var | proj | exe ) <name>
+  pymake5.py set store (--add | --del | --mod ) <name> [ <value> ]
   pymake5.py set stream (--add | --del | --mod ) <name> [ <values> ... ]
-  pymake5.py list ( path | cmd | var | proj | store | stream ) [--raw] [<name>]
-  pymake5.py exec [ <names> ... ]
+  pymake5.py list ( path | cmd | var | proj | store | exe ) [--raw] [<name>]
+  pymake5.py exe [ <name> ]
   pymake5.py (-h | --help)
   pymake5.py --version
 
@@ -261,7 +261,7 @@ def main_function():
             "msg": "echo 'work complete!'"
         },
 
-        "exec-stream":{
+        "store-stream":{
             "t": [
                   "pwd",
                 "pwd",
@@ -636,6 +636,33 @@ def main_function():
                             ''
                     else:
                         ''
+                elif (args['exe'] is True):
+                    if (args['--add'] == True):
+                        if (args['<name>'] and args["<values>"] is not None):
+                            config["store-current"]["execute"][args['<name>']] = args["<values>"]
+                            print ( "successed %s:%s" % (args['<name>'],args[ "<values>"]))
+                        else:
+                            ''
+                    elif (args['--del'] == True):
+                        if (args["<name>"] is not None):
+                            if (config["store-current"]["execute"].__contains__(args['<name>'])):
+                                config["store-current"]["execute"].__delitem__(args['<name>'])
+                                print ("successed %s" % (args['<name>']))
+                            else:
+                                ''
+                        else:
+                            ''
+                    elif (args['--mod'] == True):
+                        if (args['<name>'] and args["<values>"] is not None):
+                            if (config["store-current"]["execute"].__contains__(args['<name>'])):
+                                config["store-current"]["execute"][args['<name>']] = args["<values>"]
+                                print ("successed %s:%s" % (args['<name>'],args["<values>"]))
+                            else:
+                                ''
+                        else:
+                            ''
+                    else:
+                        ''
                 else:
                     ''
             elif ( args['working'] is True ):
@@ -651,9 +678,12 @@ def main_function():
                 elif (args['proj'] is True):
                     config["store-current"]["project"]['current'] = args["<name>"]
                     print ("successed %s" % (args['<name>']))
+                elif (args['exe'] is True):
+                    config["store-current"]["execute"]['current'] = args["<name>"]
+                    print ("successed %s" % (args['<name>']))
                 else:
                     ''
-            elif (args['stored'] is True):
+            elif (args['store'] is True):
                 if (args['--add'] == True):
                     if (args['<name>'] and args["<value>"] is not None):
                         config['store-command'][args['<name>']] = args["<value>"]
@@ -683,14 +713,14 @@ def main_function():
             elif (args['stream'] is True):
                 if (args['--add'] == True):
                     if (args['<name>'] and args["<values>"] is not None):
-                        config["exec-stream"][args['<name>']] = args["<values>"]
+                        config["store-stream"][args['<name>']] = args["<values>"]
                         print ("successed %s:%s" % (args['<name>'],args["<values>"]))
                     else:
                         ''
                 elif (args['--del'] == True):
                     if (args["<name>"] is not None):
-                        if (config['exec-stream'].__contains__(args['<name>'])):
-                            config["exec-stream"].__delitem__(args['<name>'])
+                        if (config['store-stream'].__contains__(args['<name>'])):
+                            config["store-stream"].__delitem__(args['<name>'])
                             print ("successed %s" % (args['<name>']))
                         else:
                             ''
@@ -698,7 +728,7 @@ def main_function():
                         ''
                 elif (args['--mod'] == True):
                     if (args['<name>'] and args["<values>"] is not None):
-                        config["exec-stream"][args['<name>']] = args["<values>"]
+                        config["store-stream"][args['<name>']] = args["<values>"]
                         print ("successed %s:%s" % (args['<name>'],args["<values>"]))
                     else:
                         ''
@@ -887,9 +917,9 @@ def main_function():
             if(rawconfig["store-command"].has_key(key_from)):
                 rawconfig["store-command"][key] = rawconfig["store-command"][key].replace(key_replace, rawconfig["store-command"][key_from])
 
-    # replace exec-stream's ${}
+    # replace store-stream's ${}
     # path+ command variable project command
-    for (cmd, stream) in rawconfig["exec-stream"].items():
+    for (cmd, stream) in rawconfig["store-stream"].items():
         #print (key) #...
         if (isinstance(stream, basestring)):
             continue
@@ -917,38 +947,38 @@ def main_function():
                 current_vars = rawconfig["store-current"]['path+']["current"]
                 for ( finding ) in rawconfig['store-current']['path+'][current_vars]:
                     if(rawconfig["path+"][finding].has_key(key_from)):
-                        rawconfig['exec-stream'][cmd][step] = rawconfig['exec-stream'][cmd][step].replace(key_replace, rawconfig["path+"][finding][key_from])
+                        rawconfig['store-stream'][cmd][step] = rawconfig['store-stream'][cmd][step].replace(key_replace, rawconfig["path+"][finding][key_from])
 
                 # find in command
                 current_vars = rawconfig["store-current"]['command']["current"]
                 for ( finding ) in rawconfig['store-current']['command'][current_vars]:
                     if(rawconfig["command"][finding].has_key(key_from)):
-                        rawconfig['exec-stream'][cmd][step] = rawconfig['exec-stream'][cmd][step].replace(key_replace, rawconfig["command"][finding][key_from])
+                        rawconfig['store-stream'][cmd][step] = rawconfig['store-stream'][cmd][step].replace(key_replace, rawconfig["command"][finding][key_from])
 
                 # find in variable
                 current_vars = rawconfig["store-current"]['variable']["current"]
                 for ( finding ) in rawconfig['store-current']['variable'][current_vars]:
                     if(rawconfig["variable"][finding].has_key(key_from)):
-                        rawconfig['exec-stream'][cmd][step] = rawconfig['exec-stream'][cmd][step].replace(key_replace, rawconfig["variable"][finding][key_from])
+                        rawconfig['store-stream'][cmd][step] = rawconfig['store-stream'][cmd][step].replace(key_replace, rawconfig["variable"][finding][key_from])
 
                 # find in project
                 current_vars = rawconfig["store-current"]['project']["current"]
                 for ( finding ) in rawconfig['store-current']['project'][current_vars]:
                     if(rawconfig["project"][finding].has_key(key_from)):
-                        rawconfig['exec-stream'][cmd][step] = rawconfig['exec-stream'][cmd][step].replace(key_replace, rawconfig["project"][finding][key_from])
+                        rawconfig['store-stream'][cmd][step] = rawconfig['store-stream'][cmd][step].replace(key_replace, rawconfig["project"][finding][key_from])
 
             step += 1
 
-    # expand exec-stream's command
+    # expand store-stream's command
     # store-command
-    for (cmd, stream) in rawconfig["exec-stream"].items():
+    for (cmd, stream) in rawconfig["store-stream"].items():
         #print (key) #...
         if (isinstance(stream, basestring)):
             continue
         step = 0
         for command in stream:
             if (rawconfig["store-command"].has_key(command)):
-                rawconfig['exec-stream'][cmd][step] = rawconfig['exec-stream'][cmd][step].replace(command, rawconfig["store-command"][command])
+                rawconfig['store-stream'][cmd][step] = rawconfig['store-stream'][cmd][step].replace(command, rawconfig["store-command"][command])
             else:
                 ''
                 #print ("can't find command %s:%s" % ( cmd, command ))
@@ -1000,15 +1030,17 @@ def main_function():
                 for (k, v) in dict0.items():
                     print("%-24s %s" % (k, v) )
 
-            elif( args['stream'] == True):
-                current_vars = list_config['exec-stream']['current']
-                if( args['<name>'] is not None ):
+            elif( args['exe'] == True):
+                current_vars = list_config['store-current']["execute"]['current']
+                if(args['<name>'] is not None):
                     current_vars = args['<name>']
                 print ("group %s" % current_vars)
-                list0 = copy.deepcopy(list_config['exec-stream'][current_vars])
+                list0 = []
+                for current_group in list_config['store-current']['execute'][current_vars]:
+                    list0.extend(copy.deepcopy(list_config['store-stream'][current_group]))
                 step = 1
                 for v1 in list0:
-                    print("%s: %s" % (step, v1))
+                    print("%-3s %s" % (step, v1))
                     step += 1
 
             return
@@ -1037,29 +1069,20 @@ def main_function():
     #print(env["PATH"].replace(os.path.pathsep, '\n'))
 
     while ( True ):
+        if( args['exe'] == True):
+            current_vars = rawconfig['store-current']["execute"]['current']
+            if(args['<name>'] is not None):
+                current_vars = args['<name>']
+            #print ("group %s" % current_vars)
+            list0 = []
+            for current_group in rawconfig['store-current']['execute'][current_vars]:
+                list0.extend(copy.deepcopy(rawconfig['store-stream'][current_group]))
 
-        if( args['exec'] == True):
-            if(args['<names>'] is not None):
-                list0 = []
-                for stream in args['<names>']:
-                    if (rawconfig["exec-stream"].__contains__(stream)):
-                        for cmd in rawconfig["exec-stream"][stream]:
-                            list0.append(cmd)
-                    else:
-                        print ("can't find stream %s" % stream)
-                #print (list0)
-
-                communicateWithCommandLine(list0)
-                os._exit(0)
-
-                return
-
-
-            else:
-                print ("names is none")
+            communicateWithCommandLine(list0)
+            os._exit(0)
+            return
         else:
             ''
-
         break
 
     return
