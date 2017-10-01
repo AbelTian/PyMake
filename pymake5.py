@@ -425,14 +425,14 @@ def main_function():
                             config['path+'][args['<group>']][args['<name>']] = args["<value>"]
                             print ("successed %s:%s:%s" % (args['<group>'], args['<name>'], args["<value>"]))
                         else:
-                            ''
+                            print ("failed %s:%s:%s" % (args['<group>'], args['<name>'], args["<value>"]))
                     elif (args['--del'] == True):
                         if (args['<group>'] and args["<name>"] is not None):
                             if (config['path+'][args['<group>']].__contains__(args['<name>'])):
                                 config['path+'][args['<group>']].__delitem__(args['<name>'])
-                                print ("successed %s" % (args['<name>']))
-                            else:
-                                ''
+                                print ("successed %s:%s" % (args['<group>'], args['<name>']))
+                            else :
+                                print ("failed %s:%s" % (args['<group>'], args['<name>']))
                         else:
                             ''
                     elif (args['--mod'] == True):
@@ -441,7 +441,7 @@ def main_function():
                                 config['path+'][args['<group>']][args['<name>']] = args["<value>"]
                                 print ("successed %s:%s:%s" % (args['<group>'], args['<name>'], args["<value>"]))
                             else:
-                                ''
+                                print ("failed %s:%s:%s" % (args['<group>'], args['<name>'], args["<value>"]))
                         else:
                             ''
                     else:
@@ -452,14 +452,14 @@ def main_function():
                             config['command'][args['<group>']][args['<name>']] = args["<value>"]
                             print ("successed %s:%s:%s" % (args['<group>'], args['<name>'], args["<value>"]))
                         else:
-                            ''
+                            print ("failed %s:%s:%s" % (args['<group>'], args['<name>'], args["<value>"]))
                     elif (args['--del'] == True):
                         if (args['<group>'] and args["<name>"] is not None):
                             if (config['command'][args['<group>']].__contains__(args['<name>'])):
                                 config['command'][args['<group>']].__delitem__(args['<name>'])
-                                print ("successed %s" % (args['<name>']))
+                                print ("successed %s:%s" % (args['<group>'], args['<name>']))
                             else:
-                                ''
+                                print ("failed %s:%s" % (args['<group>'], args['<name>']))
                         else:
                             ''
                     elif (args['--mod'] == True):
@@ -468,7 +468,7 @@ def main_function():
                                 config['command'][args['<group>']][args['<name>']] = args["<value>"]
                                 print ("successed %s:%s:%s" % (args['<group>'], args['<name>'], args["<value>"]))
                             else:
-                                ''
+                                print ("failed %s:%s:%s" % (args['<group>'], args['<name>'], args["<value>"]))
                         else:
                             ''
                     else:
@@ -479,14 +479,14 @@ def main_function():
                             config['variable'][args['<group>']][args['<name>']] = args["<value>"]
                             print ("successed %s:%s:%s" % (args['<group>'], args['<name>'], args["<value>"]))
                         else:
-                            ''
+                            print ("failed %s:%s:%s" % (args['<group>'], args['<name>'], args["<value>"]))
                     elif (args['--del'] == True):
                         if (args['<group>'] and args["<name>"] is not None):
                             if (config['variable'][args['<group>']].__contains__(args['<name>'])):
                                 config['variable'][args['<group>']].__delitem__(args['<name>'])
-                                print ("successed %s" % (args['<name>']))
+                                print ("successed %s:%s" % (args['<group>'], args['<name>']))
                             else:
-                                ''
+                                print ("failed %s:%s" % (args['<group>'], args['<name>']))
                         else:
                             ''
                     elif (args['--mod'] == True):
@@ -495,7 +495,7 @@ def main_function():
                                 config['variable'][args['<group>']][args['<name>']] = args["<value>"]
                                 print ("successed %s:%s:%s" % (args['<group>'], args['<name>'], args["<value>"]))
                             else:
-                                ''
+                                print ("failed %s:%s:%s" % (args['<group>'], args['<name>'], args["<value>"]))
                         else:
                             ''
                     else:
@@ -506,14 +506,14 @@ def main_function():
                             config['project'][args['<group>']][args['<name>']] = args["<value>"]
                             print ("successed %s:%s:%s" % (args['<group>'], args['<name>'], args["<value>"]))
                         else:
-                            ''
+                            print ("failed %s:%s:%s" % (args['<group>'], args['<name>'], args["<value>"]))
                     elif (args['--del'] == True):
                         if (args['<group>'] and args["<name>"] is not None):
                             if (config['project'][args['<group>']].__contains__(args['<name>'])):
                                 config['project'][args['<group>']].__delitem__(args['<name>'])
-                                print ("successed %s" % (args['<name>']))
+                                print ("successed %s:%s" % (args['<group>'], args['<name>']))
                             else:
-                                ''
+                                print ("failed %s:%s" % (args['<group>'], args['<name>']))
                         else:
                             ''
                     elif (args['--mod'] == True):
@@ -522,7 +522,7 @@ def main_function():
                                 config['project'][args['<group>']][args['<name>']] = args["<value>"]
                                 print ("successed %s:%s:%s" % (args['<group>'], args['<name>'], args["<value>"]))
                             else:
-                                ''
+                                print ("failed %s:%s:%s" % (args['<group>'], args['<name>'], args["<value>"]))
                         else:
                             ''
                     else:
@@ -534,14 +534,14 @@ def main_function():
                             config["store-current"]["path+"][args['<name>']] = args["<values>"]
                             print ( "successed %s:%s" % (args['<name>'],args[ "<values>"]))
                         else:
-                            ''
+                            print ( "failed %s:%s" % (args['<name>'],args[ "<values>"]))
                     elif (args['--del'] == True):
                         if (args["<name>"] is not None):
                             if (config["store-current"]["path+"].__contains__(args['<name>'])):
                                 config["store-current"]["path+"].__delitem__(args['<name>'])
                                 print ("successed %s" % (args['<name>']))
                             else:
-                                ''
+                                print ("failed %s" % (args['<name>']))
                         else:
                             ''
                     elif (args['--mod'] == True):
@@ -550,7 +550,7 @@ def main_function():
                                 config["store-current"]["path+"][args['<name>']] = args["<values>"]
                                 print ("successed %s:%s" % (args['<name>'],args["<values>"]))
                             else:
-                                ''
+                                print ("failed %s:%s" % (args['<name>'],args["<values>"]))
                         else:
                             ''
                     else:
@@ -561,14 +561,14 @@ def main_function():
                             config["store-current"]["command"][args['<name>']] = args["<values>"]
                             print ( "successed %s:%s" % (args['<name>'],args[ "<values>"]))
                         else:
-                            ''
+                            print ( "failed %s:%s" % (args['<name>'],args[ "<values>"]))
                     elif (args['--del'] == True):
                         if (args["<name>"] is not None):
                             if (config["store-current"]["command"].__contains__(args['<name>'])):
                                 config["store-current"]["command"].__delitem__(args['<name>'])
                                 print ("successed %s" % (args['<name>']))
                             else:
-                                ''
+                                print ("failed %s" % (args['<name>']))
                         else:
                             ''
                     elif (args['--mod'] == True):
@@ -577,7 +577,7 @@ def main_function():
                                 config["store-current"]["command"][args['<name>']] = args["<values>"]
                                 print ("successed %s:%s" % (args['<name>'],args["<values>"]))
                             else:
-                                ''
+                                print ("failed %s:%s" % (args['<name>'],args["<values>"]))
                         else:
                             ''
                     else:
@@ -588,14 +588,14 @@ def main_function():
                             config["store-current"]["variable"][args['<name>']] = args["<values>"]
                             print ( "successed %s:%s" % (args['<name>'],args[ "<values>"]))
                         else:
-                            ''
+                            print ( "failed %s:%s" % (args['<name>'],args[ "<values>"]))
                     elif (args['--del'] == True):
                         if (args["<name>"] is not None):
                             if (config["store-current"]["variable"].__contains__(args['<name>'])):
                                 config["store-current"]["variable"].__delitem__(args['<name>'])
                                 print ("successed %s" % (args['<name>']))
                             else:
-                                ''
+                                print ("failed %s" % (args['<name>']))
                         else:
                             ''
                     elif (args['--mod'] == True):
@@ -604,7 +604,7 @@ def main_function():
                                 config["store-current"]["variable"][args['<name>']] = args["<values>"]
                                 print ("successed %s:%s" % (args['<name>'],args["<values>"]))
                             else:
-                                ''
+                                print ("failed %s:%s" % (args['<name>'],args["<values>"]))
                         else:
                             ''
                     else:
@@ -615,14 +615,14 @@ def main_function():
                             config["store-current"]["project"][args['<name>']] = args["<values>"]
                             print ( "successed %s:%s" % (args['<name>'],args[ "<values>"]))
                         else:
-                            ''
+                            print ( "failed %s:%s" % (args['<name>'],args[ "<values>"]))
                     elif (args['--del'] == True):
                         if (args["<name>"] is not None):
                             if (config["store-current"]["project"].__contains__(args['<name>'])):
                                 config["store-current"]["project"].__delitem__(args['<name>'])
                                 print ("successed %s" % (args['<name>']))
                             else:
-                                ''
+                                print ("failed %s" % (args['<name>']))
                         else:
                             ''
                     elif (args['--mod'] == True):
@@ -631,7 +631,7 @@ def main_function():
                                 config["store-current"]["project"][args['<name>']] = args["<values>"]
                                 print ("successed %s:%s" % (args['<name>'],args["<values>"]))
                             else:
-                                ''
+                                print ("failed %s:%s" % (args['<name>'],args["<values>"]))
                         else:
                             ''
                     else:
@@ -642,14 +642,14 @@ def main_function():
                             config["store-current"]["execute"][args['<name>']] = args["<values>"]
                             print ( "successed %s:%s" % (args['<name>'],args[ "<values>"]))
                         else:
-                            ''
+                            print ( "failed %s:%s" % (args['<name>'],args[ "<values>"]))
                     elif (args['--del'] == True):
                         if (args["<name>"] is not None):
                             if (config["store-current"]["execute"].__contains__(args['<name>'])):
                                 config["store-current"]["execute"].__delitem__(args['<name>'])
                                 print ("successed %s" % (args['<name>']))
                             else:
-                                ''
+                                print ("failed %s" % (args['<name>']))
                         else:
                             ''
                     elif (args['--mod'] == True):
@@ -658,7 +658,7 @@ def main_function():
                                 config["store-current"]["execute"][args['<name>']] = args["<values>"]
                                 print ("successed %s:%s" % (args['<name>'],args["<values>"]))
                             else:
-                                ''
+                                print ("failed %s:%s" % (args['<name>'],args["<values>"]))
                         else:
                             ''
                     else:
@@ -667,20 +667,35 @@ def main_function():
                     ''
             elif ( args['working'] is True ):
                 if (args['path'] is True):
-                    config["store-current"]["path+"]['current'] = args["<name>"]
-                    print ("successed %s" % (args['<name>']))
+                    if(config["store-current"]["path+"].__contains__(args['<name>'])):
+                        config["store-current"]["path+"]['current'] = args["<name>"]
+                        print ("successed %s" % (args['<name>']))
+                    else :
+                        print ("failed %s" % (args['<name>']))
                 elif (args['cmd'] is True):
-                    config["store-current"]["command"]['current'] = args["<name>"]
-                    print ("successed %s" % (args['<name>']))
+                    if(config["store-current"]["command"].__contains__(args['<name>'])):
+                        config["store-current"]["command"]['current'] = args["<name>"]
+                        print ("successed %s" % (args['<name>']))
+                    else :
+                        print ("failed %s" % (args['<name>']))
                 elif (args['var'] is True):
-                    config["store-current"]["variable"]['current'] = args["<name>"]
-                    print ("successed %s" % (args['<name>']))
+                    if(config["store-current"]["variable"].__contains__(args['<name>'])):
+                        config["store-current"]["variable"]['current'] = args["<name>"]
+                        print ("successed %s" % (args['<name>']))
+                    else :
+                        print ("failed %s" % (args['<name>']))
                 elif (args['proj'] is True):
-                    config["store-current"]["project"]['current'] = args["<name>"]
-                    print ("successed %s" % (args['<name>']))
+                    if(config["store-current"]["project"].__contains__(args['<name>'])):
+                        config["store-current"]["project"]['current'] = args["<name>"]
+                        print ("successed %s" % (args['<name>']))
+                    else :
+                        print ("failed %s" % (args['<name>']))
                 elif (args['exe'] is True):
-                    config["store-current"]["execute"]['current'] = args["<name>"]
-                    print ("successed %s" % (args['<name>']))
+                    if(config["store-current"]["execute"].__contains__(args['<name>'])):
+                        config["store-current"]["execute"]['current'] = args["<name>"]
+                        print ("successed %s" % (args['<name>']))
+                    else :
+                        print ("failed %s" % (args['<name>']))
                 else:
                     ''
             elif (args['store'] is True):
@@ -689,14 +704,14 @@ def main_function():
                         config['store-command'][args['<name>']] = args["<value>"]
                         print ("successed %s:%s" % (args['<name>'], args["<value>"]))
                     else:
-                        ''
+                        print ("failed %s:%s" % (args['<name>'], args["<value>"]))
                 elif (args['--del'] == True):
                     if (args["<name>"] is not None):
                         if (config['store-command'].__contains__(args['<name>'])):
                             config['store-command'].__delitem__(args['<name>'])
                             print ("successed %s" % (args['<name>']))
                         else:
-                            ''
+                            print ("failed %s" % (args['<name>']))
                     else:
                         ''
                 elif (args['--mod'] == True):
@@ -705,7 +720,7 @@ def main_function():
                             config['store-command'][args['<name>']] = args["<value>"]
                             print ("successed %s:%s" % (args['<name>'], args["<value>"]))
                         else:
-                            ''
+                            print ("failed %s:%s" % (args['<name>'], args["<value>"]))
                     else:
                         ''
                 else:
@@ -716,14 +731,14 @@ def main_function():
                         config["store-stream"][args['<name>']] = args["<values>"]
                         print ("successed %s:%s" % (args['<name>'],args["<values>"]))
                     else:
-                        ''
+                        print ("failed %s:%s" % (args['<name>'],args["<values>"]))
                 elif (args['--del'] == True):
                     if (args["<name>"] is not None):
                         if (config['store-stream'].__contains__(args['<name>'])):
                             config["store-stream"].__delitem__(args['<name>'])
                             print ("successed %s" % (args['<name>']))
                         else:
-                            ''
+                            print ("failed %s" % (args['<name>']))
                     else:
                         ''
                 elif (args['--mod'] == True):
@@ -731,7 +746,7 @@ def main_function():
                         config["store-stream"][args['<name>']] = args["<values>"]
                         print ("successed %s:%s" % (args['<name>'],args["<values>"]))
                     else:
-                        ''
+                        print ("failed %s:%s" % (args['<name>'],args["<values>"]))
                 else:
                     ''
             else:
