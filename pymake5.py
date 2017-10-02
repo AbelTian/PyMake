@@ -3,8 +3,8 @@
 """PyMake 5.0.
 
 Usage:
-  pymake5.py source info
-  pymake5.py source root <source-root-path>
+  pymake5.py source
+  pymake5.py source root [ <source-root-path> ]
   pymake5.py source config [ --add | --del | --mod | --switch | --restore | --show ] [ <config-file-name> ] [<new-config-file-name>]
   pymake5.py set value ( path | cmd | var | proj ) ( --add | --del | --mod ) <group> <name> [ <value> ]
   pymake5.py set current ( path | cmd | var | proj | exe ) ( --add | --del | --mod ) <name> [ <values> ... ]
@@ -551,20 +551,13 @@ def main_function():
     pymakesuffix = '.json'
     while (True):
         if(args['source'] is True):
-            if (args['info'] is True):
-                r = conf.get('source', 'root', args['<source-root-path>'])
-                f = conf.get('source', 'config', args['<source-root-path>'])
-                print ("root: %s" % (r))
-                print ("config: %s" % (f))
-                return
-            elif(args['root'] is True):
+            if(args['root'] is True):
                 if ( args['<source-root-path>'] is not None):
                     conf.set('source', 'root', args['<source-root-path>'])
                     conf.write(open(pymakeini, 'w'))
                     print ("success root: %s" % args['<source-root-path>'])
-                    return
                 else:
-                    ''
+                    print ("root: %s" % sourceroot)
             elif(args['config'] is True):
                 if(args['--del'] is True):
                     if (args['<config-file-name>'] is not None and args['<config-file-name>'] == 'pymake.json'):
@@ -618,14 +611,20 @@ def main_function():
                     else:
                         print ('You can\'t switch pymake.json and un.json\'s file...')
                 else:
-                    print("please use a option")
+                    print ("conf: %s" % conf.get("source", "config"))
+            else:
+                r = conf.get('source', 'root', args['<source-root-path>'])
+                f = conf.get('source', 'config', args['<source-root-path>'])
+                print ("root: %s" % (r))
+                print ("conf: %s" % (f))
             return
         else:
             ''
         break
 
     file = conf.get('source', 'config')
-    print("use source config: %s" % file)
+    #print ("root: %s config: %s" % (sourceroot, file))
+    print("use source config: %s/%s" % (sourceroot, file) )
 
     if (os.path.abspath(sourceroot) != os.path.abspath(pymakeroot)):
         if (not os.path.exists('pymake.json')):
