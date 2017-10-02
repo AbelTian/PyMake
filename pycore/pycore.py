@@ -70,6 +70,15 @@ def UsePlatform( ):
     else:
         print ("Other System tasks")
 
+def getuserroot():
+    root = ""
+    sysstr = platform.system()
+    if(sysstr =="Windows"):
+        root = os.environ["HOMEPATH"]
+    else:
+        root = os.environ["HOME"]
+    return root
+
 
 def readJsonData(file):
 
@@ -130,7 +139,7 @@ def read_thread_function(p):
         if ("pymake-command-status:" in l):
             ret = int(l.split(':')[1].strip())
             if( ret != 0 ):
-                #print ("exit %d" % (ret))
+                print ("exit %d" % (ret))
                 p.stdin.write(("exit %d \n" % (ret)))
                 p.stdin.flush()
                 return

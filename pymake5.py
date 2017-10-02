@@ -1,9 +1,9 @@
 """PyMake 5.0.
 
 Usage:
-  pymake5.py source [ --add | --del | --switch ] [ <config-file-name> ]
-  pymake5.py source --mod <config-file-name> <new-config-file-name>
-  pymake5.py source [ --show | --restore ]
+  pymake5.py source info
+  pymake5.py source root <source-root-path>
+  pymake5.py source config [ --add | --del | --mod | --switch | --restore | --show ] [ <config-file-name> ] [<new-config-file-name>]
   pymake5.py set value ( path | cmd | var | proj ) ( --add | --del | --mod ) <group> <name> [ <value> ]
   pymake5.py set current ( path | cmd | var | proj | exe ) ( --add | --del | --mod ) <name> [ <values> ... ]
   pymake5.py set working ( path | cmd | var | proj | exe ) <name>
@@ -321,96 +321,128 @@ def main_function():
             "current": "build"
         }
     }
-    if (not os.path.exists('pymake.json')):
-        writeJsonData('pymake.json', d)
+
 
     """
     [pymake]
+    [source]
+    root = ~/.pymake
     config = pymake.json
     """
-    file = 'pymake.json'
+    userroot = getuserroot()
+    pymakeroot = userroot + os.path.sep + '.pymake'
+    if (not os.path.exists(pymakeroot)):
+        os.makedirs(pymakeroot)
+
+    #initial pymake.ini
+    pymakeini = pymakeroot + os.path.sep + 'pymake.ini'
     conf = MyConfigParser()
-    conf.read('pymake.ini')
-    if(conf.has_section('pymake') ):
-        if(conf.has_option('pymake', 'config')):
-            if(conf.get('pymake', 'config')):
-                file = conf.get('pymake', 'config')
-                print("use source config: %s" % file)
-            else:
-                conf.set('pymake', 'config', 'pymake.json')
-                conf.write(open('pymake.ini', 'w'))
-                print('initial pymake.ini')
-        else:
-            conf.set('pymake', 'config', 'pymake.json')
-            conf.write(open('pymake.ini', 'w'))
-            print('initial pymake.ini')
-    else:
+    conf.read(pymakeini)
+    if( not conf.has_section('pymake') ):
         conf.add_section('pymake')
-        conf.set('pymake', 'config', 'pymake.json')
-        conf.write(open('pymake.ini', 'w'))
-        print ( 'initial pymake.ini')
+        conf.write(open(pymakeini, 'w'))
+    if( not conf.has_section('source') ):
+        conf.add_section('source')
+        conf.write(open(pymakeini, 'w'))
+    if( not conf.has_option('source', 'root') ):
+        conf.set('source', 'root', pymakeroot)
+        conf.write(open(pymakeini, 'w'))
+    if(not conf.has_option('source', 'config')):
+        conf.set('source', 'config', 'pymake.json')
+        conf.write(open(pymakeini, 'w'))
+
+    sourceroot = conf.get('source', 'root')
+    os.chdir(sourceroot)
+    if (os.path.abspath(sourceroot) == os.path.abspath(pymakeroot)):
+        print("I checked you use pymakeroot to be sourceroot, suggest you use source command changing one.")
 
     args = docopt(__doc__, version='pymake5.py v5.0')
     #print(args)
 
-    exceptFile = ( 'pymake.ini', 'pymake.py', '.gitignore', '.git', 'pycore', 'README.md', '.idea')
+    pymakesuffix = '.json'
     while (True):
         if(args['source'] is True):
-            if(args['--del'] is True):
-                if (args['<config-file-name>'] is not None and args['<config-file-name>'] == 'pymake.json'):
-                    print('You can\'t remove pymake\'s file...')
-                elif (args['<config-file-name>'] is not None and not exceptFile.__contains__(args['<config-file-name>']) ):
-                    os.remove(args['<config-file-name>'])
-                    conf.set('pymake', 'config', 'pymake.json')
-                    conf.write(open('pymake.ini', 'w'))
+            if (args['info'] is True):
+                r = conf.get('source', 'root', args['<source-root-path>'])
+                f = conf.get('source', 'config', args['<source-root-path>'])
+                print ("root: %s" % (r))
+                print ("config: %s" % (f))
+                return
+            elif(args['root'] is True):
+                if ( args['<source-root-path>'] is not None):
+                    conf.set('source', 'root', args['<source-root-path>'])
+                    conf.write(open(pymakeini, 'w'))
+                    print ("success root: %s" % args['<source-root-path>'])
+                    return
                 else:
-                    print ( 'You can\'t remove pymake\'s file...')
-            elif(args['--add'] is True):
-                if (args['<config-file-name>'] is not None and not exceptFile.__contains__(args['<config-file-name>']) ):
-                    if(file != args['<config-file-name>']):
-                        shutil.copyfile(file, args['<config-file-name>'])
-                        conf.set('pymake', 'config', args['<config-file-name>'])
-                        conf.write(open('pymake.ini', 'w'))
+                    ''
+            elif(args['config'] is True):
+                if(args['--del'] is True):
+                    if (args['<config-file-name>'] is not None and args['<config-file-name>'] == 'pymake.json'):
+                        print('You can\'t remove pymake\'s file...')
+                    elif (args['<config-file-name>'] is not None and args['<config-file-name>'].endswith(pymakesuffix)):
+                        os.remove(args['<config-file-name>'])
+                        conf.set('source', 'config', 'pymake.json')
+                        conf.write(open(pymakeini, 'w'))
+                        print ("success: %s" % args['<config-file-name>'])
                     else:
-                        print('You can\'t add same named file...')
-                else:
-                    print ( 'You can\'t add pymake\'s file...')
-            elif (args['--mod'] is True):
-                if ( ( args['<config-file-name>'] and args['<new-config-file-name>']) is not None and not exceptFile.__contains__(args['<config-file-name>'])):
-
-                    os.rename(args['<config-file-name>'],args['<new-config-file-name>'])
-
-                    if (file == args['<config-file-name>']):
-                        conf.set('pymake', 'config',args['<new-config-file-name>'])
-                        conf.write(open('pymake.ini', 'w'))
-
-                else:
-                    print ('You can\'t mod pymake\'s file...')
-            elif(args['--show'] is True):
-                files = os.listdir(os.getcwd())
-                for f in files:
-                    if (not exceptFile.__contains__(f)):
-                        print(f)
-            elif(args['--restore'] is True):
-                conf.set('pymake', 'config', 'pymake.json')
-                conf.write(open('pymake.ini', 'w'))
-            elif (args['--switch'] is True
-                  or ( args['<config-file-name>'] is not None and args['<config-file-name>'] != '' )):
-                if (args['<config-file-name>'] is not None and not exceptFile.__contains__(args['<config-file-name>']) ):
-                    if (os.path.exists(args['<config-file-name>'])):
-                        conf.set('pymake', 'config', args['<config-file-name>'])
-                        conf.write(open('pymake.ini', 'w'))
-                        print("switch to source config: %s" % args['<config-file-name>'])
+                        print ('You can\'t remove pymake.json and un.json\'s file...')
+                elif(args['--add'] is True):
+                    if (args['<config-file-name>'] is not None and args['<config-file-name>'].endswith(pymakesuffix) and args['<config-file-name>'] != 'pymake.json'):
+                        f = conf.get('source', 'config')
+                        if( f != args['<config-file-name>']):
+                            shutil.copyfile(f, args['<config-file-name>'])
+                            conf.set('source', 'config', args['<config-file-name>'])
+                            conf.write(open(pymakeini, 'w'))
+                            print ("success: %s" % args['<config-file-name>'])
+                        else:
+                            print('You can\'t add same named file...')
                     else:
-                        print("source file %s isn't exists" % args['<config-file-name>'])
+                        print ('You can\'t add pymake.json and un.json\'s file...')
+                elif (args['--mod'] is True):
+                    if ( ( args['<config-file-name>'] and args['<new-config-file-name>']) is not None and args['<config-file-name>'].endswith(pymakesuffix)):
+                        os.rename(args['<config-file-name>'],args['<new-config-file-name>'])
+                        f = config.get('source', 'config')
+                        if (f == args['<config-file-name>']):
+                            conf.set('source', 'config',args['<new-config-file-name>'])
+                            conf.write(open(pymakeini, 'w'))
+                        print ("success: %s" % args['<new-config-file-name>'])
+                    else:
+                        print ('You can\'t mod pymake.json and un.json\'s file...')
+                elif(args['--show'] is True):
+                    files = os.listdir(os.getcwd())
+                    for f in files:
+                        if (f.endswith(pymakesuffix)):
+                            print(f)
+                elif(args['--restore'] is True):
+                    conf.set('source', 'config', 'pymake.json')
+                    conf.write(open(pymakeini, 'w'))
+                    print ("success: %s" % 'pymake.json')
+                elif (args['--switch'] is True or ( args['<config-file-name>'] is not None )):
+                    if (args['<config-file-name>'] is not None and args['<config-file-name>'].endswith(pymakesuffix) ):
+                        if (os.path.exists(args['<config-file-name>'])):
+                            conf.set('source', 'config', args['<config-file-name>'])
+                            conf.write(open(pymakeini, 'w'))
+                            print("switch to source config: %s" % args['<config-file-name>'])
+                        else:
+                            print("source file %s isn't exists, please --add it" % args['<config-file-name>'])
+                    else:
+                        print ('You can\'t switch pymake.json and un.json\'s file...')
                 else:
-                    print('You can\'t switch pymake\'s file...')
-            else:
-                print(file)
+                    print("please use a option")
             return
         else:
             ''
         break
+
+    file = conf.get('source', 'config')
+    print("use source config: %s" % file)
+
+    if (os.path.abspath(sourceroot) != os.path.abspath(pymakeroot)):
+        if (not os.path.exists('pymake.json')):
+            writeJsonData('pymake.json', d)
+        if(not os.path.exists(file)):
+            return
 
     config = readJsonData(file)
     #print(config)
@@ -1057,6 +1089,8 @@ def main_function():
                 for v1 in list0:
                     print("%-3s %s" % (step, v1))
                     step += 1
+            else:
+				''
 
             return
         else:
@@ -1084,15 +1118,24 @@ def main_function():
     #print(env["PATH"].replace(os.path.pathsep, '\n'))
 
     while ( True ):
-        if( args['exe'] == True):
+        if( args['exe'] == True ):
             current_vars = rawconfig['store-current']["execute"]['current']
             if(args['<name>'] is not None):
                 current_vars = args['<name>']
+            else:
+				''
             #print ("group %s" % current_vars)
             list0 = []
-            for current_group in rawconfig['store-current']['execute'][current_vars]:
-                list0.extend(copy.deepcopy(rawconfig['store-stream'][current_group]))
-
+            if( rawconfig['store-current']['execute'].__contains__(current_vars) ):
+                for current_group in rawconfig['store-current']['execute'][current_vars]:
+                    list0.extend(copy.deepcopy(rawconfig['store-stream'][current_group]))
+            elif( rawconfig['store-stream'].__contains__ (current_vars) ):
+                for current_group in rawconfig['store-stream'][current_vars]:
+                    list0.append(copy.deepcopy(rawconfig['store-command'][current_group]))
+            elif( rawconfig['store-command'].__contains__ (current_vars) ):
+                list0.append(copy.deepcopy(rawconfig['store-command'][current_vars]))
+            else:
+                list0.append(current_vars)
             communicateWithCommandLine(list0)
             os._exit(0)
             return
