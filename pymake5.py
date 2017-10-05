@@ -584,7 +584,7 @@ def main_function():
                 elif (args['--mod'] is True):
                     if ( ( args['<config-file-name>'] and args['<new-config-file-name>']) is not None and args['<config-file-name>'].endswith(pymakesuffix)):
                         os.rename(args['<config-file-name>'],args['<new-config-file-name>'])
-                        f = config.get('source', 'config')
+                        f = conf.get('source', 'config')
                         if (f == args['<config-file-name>']):
                             conf.set('source', 'config',args['<new-config-file-name>'])
                             conf.write(open(pymakeini, 'w'))
@@ -613,8 +613,8 @@ def main_function():
                 else:
                     print ("conf: %s" % conf.get("source", "config"))
             else:
-                r = conf.get('source', 'root', args['<source-root-path>'])
-                f = conf.get('source', 'config', args['<source-root-path>'])
+                r = conf.get('source', 'root')
+                f = conf.get('source', 'config')
                 print ("root: %s" % (r))
                 print ("conf: %s" % (f))
             return
@@ -1008,8 +1008,12 @@ def main_function():
 
                 # find in up of this name and self
                 for ( finding ) in rawconfig['store-current']["path+"][current_vars]:
-                    if(rawconfig["path+"][finding].has_key(key_from)):
-                        rawconfig["path+"][name][key] = rawconfig["path+"][name][key].replace(key_replace, rawconfig["path+"][finding][key_from])
+                    for (find_key, find_value) in rawconfig["path+"][finding].items():
+                        if(find_key == key_from):
+                            rawconfig["path+"][name][key] = rawconfig["path+"][name][key].replace(key_replace,
+                                                                                                  rawconfig["path+"][finding][
+                                                                                                      key_from])
+                            break
                     if( finding == name ):
                         break;
 
@@ -1068,8 +1072,11 @@ def main_function():
 
                 # find in up of this name and self
                 for ( finding ) in rawconfig['store-current']["variable"][current_vars]:
-                    if(rawconfig["variable"][finding].has_key(key_from)):
-                        rawconfig["variable"][name][key] = rawconfig["variable"][name][key].replace(key_replace, rawconfig["variable"][finding][key_from])
+                    for (find_key, find_value) in rawconfig["variable"][finding].items():
+                        if(find_key == key_from):
+                            rawconfig["variable"][name][key] = rawconfig["variable"][name][key].replace(
+                                key_replace,rawconfig["variable"][finding][key_from])
+                            break
                     if( finding == name ):
                         break;
 
@@ -1098,8 +1105,12 @@ def main_function():
 
                 # find in up of this name and self
                 for ( finding ) in rawconfig['store-current']['project'][current_vars]:
-                    if(rawconfig["project"][finding].has_key(key_from)):
-                        rawconfig["project"][name][key] = rawconfig["project"][name][key].replace(key_replace, rawconfig["project"][finding][key_from])
+                    for (find_key, find_value) in rawconfig["project"][finding].items():
+                        if(find_key == key_from):
+                            rawconfig["project"][name][key] = rawconfig["project"][name][key].replace(key_replace,
+                                                                                                  rawconfig["project"][finding][
+                                                                                                      key_from])
+                            break
                     if( finding == name ):
                         break;
 
@@ -1127,36 +1138,56 @@ def main_function():
             # find in path+
             current_vars = rawconfig["store-current"]['path+']["current"]
             for ( finding ) in rawconfig['store-current']['path+'][current_vars]:
-                if(rawconfig["path+"][finding].has_key(key_from)):
-                    rawconfig["store-command"][key] = rawconfig['store-command'][key].replace(key_replace, rawconfig["path+"][finding][key_from])
+                for (find_key, find_value) in rawconfig["path+"][finding].items():
+                    if (find_key == key_from):
+                        rawconfig["store-command"][key] = rawconfig["store-command"][key].replace(
+                            key_replace,rawconfig["path+"][finding][key_from])
+                        break
 
             # find in command
             current_vars = rawconfig["store-current"]['command']["current"]
             for ( finding ) in rawconfig['store-current']['command'][current_vars]:
-                if(rawconfig["command"][finding].has_key(key_from)):
-                    rawconfig["store-command"][key] = rawconfig['store-command'][key].replace(key_replace, rawconfig["command"][finding][key_from])
+                for (find_key, find_value) in rawconfig["command"][finding].items():
+                    if (find_key == key_from):
+                        rawconfig["store-command"][key] = rawconfig["store-command"][key].replace(key_replace,rawconfig["command"][finding][key_from])
+                        break
 
             # find in variable
             current_vars = rawconfig["store-current"]['variable']["current"]
             for ( finding ) in rawconfig['store-current']['variable'][current_vars]:
-                if(rawconfig["variable"][finding].has_key(key_from)):
-                    rawconfig["store-command"][key] = rawconfig['store-command'][key].replace(key_replace, rawconfig["variable"][finding][key_from])
+                for (find_key, find_value) in rawconfig["variable"][finding].items():
+                    if (find_key == key_from):
+                        rawconfig["store-command"][key] = rawconfig["store-command"][key].replace(
+                            key_replace,rawconfig["variable"][finding][key_from])
+                        break
 
             # find in project
             current_vars = rawconfig["store-current"]['project']["current"]
             for ( finding ) in rawconfig['store-current']['project'][current_vars]:
-                if(rawconfig["project"][finding].has_key(key_from)):
-                    rawconfig["store-command"][key] = rawconfig['store-command'][key].replace(key_replace, rawconfig["project"][finding][key_from])
+                for (find_key, find_value) in rawconfig["project"][finding].items():
+                    if (find_key == key_from):
+                        rawconfig["store-command"][key] = rawconfig["store-command"][key].replace(
+                            key_replace,rawconfig["project"][finding][key_from])
+                        break
 
             # self
-            if(rawconfig["store-command"].has_key(key_from)):
-                rawconfig["store-command"][key] = rawconfig["store-command"][key].replace(key_replace, rawconfig["store-command"][key_from])
+            for (find_key) in rawconfig["store-command"].items():
+                if (find_key == key_from):
+                    rawconfig["store-command"][key] = rawconfig["store-command"][key].replace(
+                        key_replace, rawconfig["store-command"][key_from])
+                    break
+
+    def has_key(dict0, key_from):
+        for (find_key, find_value) in dict0.items():
+            if (find_key == key_from):
+                return True
+        return False
 
     # replace store-stream's ${}
     # path+ command variable project command
     for (cmd, stream) in rawconfig["store-stream"].items():
         #print (key) #...
-        if (isinstance(stream, basestring)):
+        if (isinstance(stream, type("str"))):
             continue
 
         step = 0
@@ -1181,25 +1212,25 @@ def main_function():
                 # find in path+
                 current_vars = rawconfig["store-current"]['path+']["current"]
                 for ( finding ) in rawconfig['store-current']['path+'][current_vars]:
-                    if(rawconfig["path+"][finding].has_key(key_from)):
+                    if( has_key(rawconfig["path+"][finding], key_from) ):
                         rawconfig['store-stream'][cmd][step] = rawconfig['store-stream'][cmd][step].replace(key_replace, rawconfig["path+"][finding][key_from])
 
                 # find in command
                 current_vars = rawconfig["store-current"]['command']["current"]
                 for ( finding ) in rawconfig['store-current']['command'][current_vars]:
-                    if(rawconfig["command"][finding].has_key(key_from)):
+                    if(has_key(rawconfig["command"][finding], key_from)):
                         rawconfig['store-stream'][cmd][step] = rawconfig['store-stream'][cmd][step].replace(key_replace, rawconfig["command"][finding][key_from])
 
                 # find in variable
                 current_vars = rawconfig["store-current"]['variable']["current"]
                 for ( finding ) in rawconfig['store-current']['variable'][current_vars]:
-                    if(rawconfig["variable"][finding].has_key(key_from)):
+                    if(has_key(rawconfig["variable"][finding], key_from)):
                         rawconfig['store-stream'][cmd][step] = rawconfig['store-stream'][cmd][step].replace(key_replace, rawconfig["variable"][finding][key_from])
 
                 # find in project
                 current_vars = rawconfig["store-current"]['project']["current"]
                 for ( finding ) in rawconfig['store-current']['project'][current_vars]:
-                    if(rawconfig["project"][finding].has_key(key_from)):
+                    if(has_key(rawconfig["project"][finding], key_from)):
                         rawconfig['store-stream'][cmd][step] = rawconfig['store-stream'][cmd][step].replace(key_replace, rawconfig["project"][finding][key_from])
 
             step += 1
@@ -1208,11 +1239,11 @@ def main_function():
     # store-command
     for (cmd, stream) in rawconfig["store-stream"].items():
         #print (key) #...
-        if (isinstance(stream, basestring)):
+        if (isinstance(stream, type("str"))):
             continue
         step = 0
         for command in stream:
-            if (rawconfig["store-command"].has_key(command)):
+            if(has_key(rawconfig["store-command"], command)):
                 rawconfig['store-stream'][cmd][step] = rawconfig['store-stream'][cmd][step].replace(command, rawconfig["store-command"][command])
             else:
                 ''
@@ -1278,8 +1309,7 @@ def main_function():
                     print("%-3s %s" % (step, v1))
                     step += 1
             else:
-				''
-
+                print("")
             return
         else:
             ''
@@ -1311,7 +1341,7 @@ def main_function():
             if(args['<name>'] is not None):
                 current_vars = args['<name>']
             else:
-				''
+                print("")
             #print ("group %s" % current_vars)
             list0 = []
 
