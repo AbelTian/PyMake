@@ -123,6 +123,7 @@ def _async_raise(tid, exctype):
 def stopThread(thread):
     _async_raise(thread.ident, SystemExit)
 
+# read stdout pipe
 def read_thread_function(p):
     ''
     code = (codecs.lookup(locale.getpreferredencoding()).name)
@@ -156,9 +157,11 @@ def read_thread_function(p):
             continue
 
         print (l)
+        #print (cmd_exit_flag)
         #print ("ccccccccc")
         #stdout.flush()
 
+# read stderr pipe
 def read_stderr_thread_function(p):
     ''
     code = (codecs.lookup(locale.getpreferredencoding()).name)
@@ -179,9 +182,11 @@ def read_stderr_thread_function(p):
             continue
 
         print (l)
+        #print (cmd_exit_flag)
         #print ("dddddddddddddd")
         #stdout.flush()
 
+# auto command execute
 def write_command_thread_function(p):
     ''
     code = (codecs.lookup(locale.getpreferredencoding()).name)
@@ -190,18 +195,22 @@ def write_command_thread_function(p):
         cmd_event.clear()
         cmd = cmd_list.pop(0) + '\n'
         #print  ("command:%s" % cmd)
+
+        if(cmd.lstrip().startswith("exit")):
+            cmd_exit_flag = 1
+
         p.stdin.write(cmd.encode(code))
         p.stdin.flush()
 
-        if ( cmd_list.__len__() == 0):
+        if ( cmd_exit_flag == 1 ):
             #print ("write: i go")
-            cmd_exit_flag = 1
             break;
 
         # p.stdin.write("ping 127.0.0.1 -c 2 \n")
         # p.stdin.flush()
         cmd_event.wait()
 
+# user input
 def write_thread_function(p):
     ''
     code = (codecs.lookup(locale.getpreferredencoding()).name)
