@@ -46,8 +46,10 @@ import types
 from pycore.pycore import *
 from pycore.docopt import docopt
 from collections import OrderedDict
+from colorama import init, Fore, Back, Style
 
 def main_function():
+    init(autoreset=True)
 
     d = {
         "path-assemblage":{
@@ -784,10 +786,13 @@ def main_function():
         env[key] = value
     print("env %s" % current_var)
     print("path+:")
-    print("  %s" % env["PATH"].replace(os.path.pathsep, '\n'))
+    for path in env["PATH"].split(os.path.pathsep):
+        print("  %s" % path)
     print("variable:")
     for (key, value) in env.items():
-        print("  %-24s %s" % (key, value))
+        if(key == 'PATH'):
+            continue
+        print("  %-30s %s" % (key, value))
 
     while ( True ):
         if( args['j'] == True ):
@@ -803,6 +808,7 @@ def main_function():
                 list0 = dict0[current_var]
             else:
                 list0.append(current_var)
+            #print (list0)
             communicateWithCommandLine(list0)
             os._exit(0)
             return

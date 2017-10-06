@@ -111,6 +111,7 @@ def _async_raise(tid, exctype):
     if not inspect.isclass(exctype):
         exctype = type(exctype)
     res = ctypes.pythonapi.PyThreadState_SetAsyncExc(tid, ctypes.py_object(exctype))
+    #print ("xxdfdf %s" % res)
     if res == 0:
         raise ValueError("invalid thread id")
     elif res != 1:
@@ -129,25 +130,31 @@ def read_thread_function(p):
         l = p.stdout.readline().rstrip().decode(code)
 
         if (l is None):
-            # print ('ddd')
+            #print ('cccc')
             break
 
         if (p.poll() is not None):
-            # print("eee")
+            #print("bbbb")
             break
+
+        if (cmd_list.__len__() == 0 and l is ''):
+            #print ("read thread: l is empty")
+            continue
 
         if ("pymake-command-status:" in l):
             ret = int(l.split(':')[1].strip())
+            #print("exit %d" % (ret))
             if( ret != 0 ):
-                print ("exit %d" % (ret))
                 p.stdin.write(("exit %d \n" % (ret)))
                 p.stdin.flush()
-                return
+                print ("exit %d" % (ret))
+                #print ("read thread exit fail %d, i go" % (ret))
+                break
             cmd_event.set()
             continue
 
         print (l)
-        # print (l)
+        #print ("ccccccccc")
         # stdout.flush()
 
 def read_stderr_thread_function(p):
@@ -157,39 +164,53 @@ def read_stderr_thread_function(p):
         l = p.stderr.readline().rstrip().decode(code)
 
         if (l is None):
-            # print ('ddd')
+            #print ('ddd')
             break
 
+        #print("read err: %s" % p.poll())
         if (p.poll() is not None):
-            # print("eee")
+            #print("eee")
             break
+
+        if (cmd_list.__len__() == 0 and l is ''):
+            #print ("read err: l is empty")
+            continue
 
         print (l)
-        # print (l)
+        #print ("dddddddddddddd")
         # stdout.flush()
 
 def write_command_thread_function(p):
     ''
+    code = (codecs.lookup(locale.getpreferredencoding()).name)
     while (True):
         cmd_event.clear()
         cmd = cmd_list.pop(0) + '\n'
         #print  ("command:%s" % cmd)
-        p.stdin.write(cmd)
+        p.stdin.write(cmd.encode(code))
         p.stdin.flush()
+
+        if ( cmd_list.__len__() == 0):
+            #print ("write: i go")
+            break;
+
         # p.stdin.write("ping 127.0.0.1 -c 2 \n")
         # p.stdin.flush()
         cmd_event.wait()
 
 def write_thread_function(p):
     ''
+    code = (codecs.lookup(locale.getpreferredencoding()).name)
     while (True):
         line = sys.stdin.readline()
         if (line is None):
+            #print ("write thread: i go, line is none")
             break
 
         if (p.poll() is not None):
+            #print ("write thread: i go, p is done")
             break
-        p.stdin.write(line)
+        p.stdin.write(line.encode(code))
         p.stdin.flush()
 
 def communicateWithCommandLine(list0):
@@ -236,9 +257,9 @@ def communicateWithCommandLine(list0):
         stopThread(read_thread)
     if (read_err_thread.isAlive()):
         stopThread(read_err_thread)
-    if (write_thread.isAlive()):
-        stopThread(write_thread)
     if (write_command_thread.isAlive()):
         stopThread(write_command_thread)
+    if (write_thread.isAlive()):
+        stopThread(write_thread)
 
     # time.sleep(1)
