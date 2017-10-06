@@ -12,6 +12,8 @@ import threading
 import subprocess
 import platform
 from collections import OrderedDict
+from colorama import init, Fore, Back, Style
+init(autoreset=True)
 
 if ( sys.version_info[0] == 2 ):
     import ConfigParser as PyConfigParser
