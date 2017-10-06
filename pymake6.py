@@ -46,10 +46,9 @@ import types
 from pycore.pycore import *
 from pycore.docopt import docopt
 from collections import OrderedDict
-from colorama import init, Fore, Back, Style
+
 
 def main_function():
-    init(autoreset=True)
 
     d = {
         "path-assemblage":{
@@ -371,7 +370,7 @@ def main_function():
 
     file = conf.get('source', 'config')
     #print ("root: %s config: %s" % (sourceroot, file))
-    print("use source config: %s/%s" % (sourceroot, file) )
+    print(Fore.LIGHTBLACK_EX + "use source config: %s/%s" % (sourceroot, file) )
 
     if (os.path.abspath(sourceroot) != os.path.abspath(pymakeroot)):
         if (not os.path.exists('pymake.json')):
@@ -735,36 +734,36 @@ def main_function():
             if( args['path'] == True):
                 dict0 = copy.deepcopy(list_config['path-assemblage'])
                 for (k, v) in dict0.items():
-                    print("%-24s %s" % (k, v) )
+                    print(Fore.BLUE+ "%-24s %s" % (k, v) )
 
             elif( args['var'] == True):
                 dict0 = copy.deepcopy(list_config['variable-assemblage'])
                 for (k, v) in dict0.items():
-                    print("%-24s %s" % (k, v) )
+                    print(Fore.GREEN+ "%-24s %s" % (k, v) )
 
 
             elif( args['env'] == True):
                 current_var = list_config['environ']['current']
-                print ("env %s" % current_var)
+                print (Fore.CYAN+ "env %s" % current_var)
                 dict0 = copy.deepcopy(list_config['environ'][current_var])
 
-                print ("path+:")
+                print (Fore.MAGENTA+ "path+:")
                 for (key) in dict0["path+"]:
-                    print ("  %s" % key)
+                    print (Fore.BLUE+ "  %s" % key)
 
-                print ("variable:")
+                print (Fore.MAGENTA+ "variable:")
                 for (key, value) in dict0.items():
                     if ( key == 'path+' ):
                         continue
-                    print("  %-24s %s" % (key, value) )
+                    print(Fore.GREEN+ "  %-24s %s" % (key, value) )
 
             elif( args['cmd'] == True):
                 dict0 = copy.deepcopy(list_config['command'])
                 for (key, value) in dict0.items():
-                    print("group: %s" % key)
+                    print(Fore.CYAN+ "group: %s" % key)
                     step = 1
                     for cmd in value:
-                        print("%-3s %s" % (step, cmd))
+                        print(Fore.RED+ "%-3s %s" % (step, cmd))
                         step += 1
 
             else:
@@ -784,15 +783,17 @@ def main_function():
         if (key == 'path+'):
             continue
         env[key] = value
-    print("env %s" % current_var)
-    print("path+:")
+
+
+    print(Fore.CYAN + "env %s" % current_var)
+    print(Fore.MAGENTA + "path+:")
     for path in env["PATH"].split(os.path.pathsep):
-        print("  %s" % path)
-    print("variable:")
+        print(Fore.BLUE + "  %s" % path)
+    print(Fore.MAGENTA + "variable:")
     for (key, value) in env.items():
         if(key == 'PATH'):
             continue
-        print("  %-30s %s" % (key, value))
+        print(Fore.GREEN + "  %-30s %s" % (key, value))
 
     while ( True ):
         if( args['j'] == True ):
