@@ -45,7 +45,6 @@ import copy
 import types
 from pycore.pycore import *
 from pycore.docopt import docopt
-from collections import OrderedDict
 
 
 def main_function():
@@ -265,7 +264,13 @@ def main_function():
     config = pymake.json
     """
     userroot = getuserroot()
-    pymakeroot = userroot + os.path.sep + '.pymake'
+    configroot = getconfigroot()
+    plat = getplatform()
+    if( plat == "Windows"):
+        pymakeroot = configroot + os.path.sep + 'pymake'
+    else:
+        pymakeroot = userroot + os.path.sep + '.pymake'
+
     if (not os.path.exists(pymakeroot)):
         os.makedirs(pymakeroot)
 

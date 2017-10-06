@@ -2,17 +2,20 @@ from __future__ import unicode_literals
 # -*- coding: utf-8 -*-
 import os
 import sys
-import pwd
+#import pwd
 import json
 import ctypes
 import inspect
 import codecs
 import locale
+import time
 import threading
 import subprocess
 import platform
 from collections import OrderedDict
-from colorama import init, Fore, Back, Style
+from .colorama import init, Fore, Back, Style
+
+
 init(autoreset=True)
 
 if ( sys.version_info[0] == 2 ):
@@ -62,15 +65,16 @@ def TestPlatform( ):
     #  all of up
     print (platform.uname())
 
-def UsePlatform( ):
+def getplatform( ):
     sysstr = platform.system()
-    print ( sysstr )
-    if(sysstr =="Windows"):
-        print ("Call Windows tasks")
-    elif(sysstr == "Linux"):
-        print ("Call Linux tasks")
-    else:
-        print ("Other System tasks")
+    #print ( sysstr )
+    #if(sysstr =="Windows"):
+    #    print ("Call Windows tasks")
+    #elif(sysstr == "Linux"):
+    #    print ("Call Linux tasks")
+    #else:
+    #    print ("Other System tasks")
+    return sysstr
 
 def getuserroot():
     root = ""
@@ -81,6 +85,14 @@ def getuserroot():
         root = os.environ["HOME"]
     return root
 
+def getconfigroot():
+    root = ""
+    sysstr = platform.system()
+    if(sysstr =="Windows"):
+        root = os.environ["APPDATA"]
+    else:
+        root = os.environ["HOME"]
+    return root
 
 def readJsonData(file):
 
@@ -128,6 +140,12 @@ def stopThread(thread):
 # read stdout pipe
 def read_thread_function(p):
     ''
+    plat = getplatform()
+    if (plat == "Windows"):
+        p.stdout.readline()
+        p.stdout.readline()
+        p.stdout.readline()
+
     code = (codecs.lookup(locale.getpreferredencoding()).name)
     global cmd_exit_flag
     while (True):
@@ -146,7 +164,7 @@ def read_thread_function(p):
             continue
 
         if ("pymake-command-status:" in l):
-            ret = int(l.split(':')[1].strip())
+            ret = int(l.split(':')[-1].strip())
             #print("exit %d" % (ret))
             if( ret != 0 ):
                 cmd_exit_flag = 1
@@ -162,6 +180,7 @@ def read_thread_function(p):
         #print (cmd_exit_flag)
         #print ("ccccccccc")
         #stdout.flush()
+
 
 # read stderr pipe
 def read_stderr_thread_function(p):
@@ -230,34 +249,53 @@ def write_thread_function(p):
 
 def communicateWithCommandLine(list0):
 
-    shell = pwd.getpwuid(os.getuid()).pw_shell
-    if shell is None: shell = os.environ.get('SHELL')
-    if shell is None: shell = os.environ.get('COMSPEC')
-    # print ( 'Running under', shell )
+    #shell = pwd.getpwuid(os.getuid()).pw_shell
+    #if shell is None: shell = os.environ.get('SHELL')
+    #if shell is None: shell = os.environ.get('COMSPEC')
+    shell = ""
+    plat = getplatform()
+    if(plat == "Windows"):
+        shell = os.environ.get('COMSPEC') + ' ' + "/s /q /d /v:on /e:on /f:on"
+    else:
+        shell = os.environ.get('SHELL')
+    #print ( 'Running under', shell )
 
-    sysstr = platform.system()
-    if( sysstr == "Windows"):
-        cmd_test = "echo pymake-command-status:%ERRORLEVEL%"
+
+    if( plat == "Windows"):
+        cmd_status = "echo pymake-command-status:%ERRORLEVEL%"
         cmd_sep = '&'
     else:
-        cmd_test = "echo pymake-command-status:$?"
+        cmd_status = "echo pymake-command-status:$?"
         cmd_sep = ';'
 
-    global  cmd_list
+    global cmd_list
     global cmd_exit_flag
     cmd_exit_flag = 0
     cmd_list = []
+    if( plat == "Windows"):
+        cmd_list.append("echo off" + ' ' + cmd_sep + ' ' + cmd_status)
+
     for cmd in list0:
-        cmd_list.append(cmd + ' ' + cmd_sep + ' ' + cmd_test)
+        cmd_list.append(cmd + ' ' + cmd_sep + ' ' + cmd_status)
         #cmd_list.append(cmd_test)
     # append exit 0
     cmd_list.append ('exit 0')
-
+    #print( cmd_list )
     global  cmd_event
     cmd_event = threading.Event()
 
-    p = subprocess.Popen(shell, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    startupinfo = None
+    createflags = 0
+    if (plat == 'Windows' ):
+        startupinfo = subprocess.STARTUPINFO()
+        startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+        startupinfo.dwFlags |= subprocess.STARTF_USESTDHANDLES
+        startupinfo.wShowWindow = subprocess.SW_HIDE
+        #createflags = subprocess.CREATE_NEW_CONSOLE
 
+    p = subprocess.Popen(shell, shell=True,
+                         stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                         startupinfo=startupinfo, creationflags=createflags)
     read_thread = threading.Thread(target=read_thread_function, args=(p, ))
     read_thread.start()
     read_err_thread = threading.Thread(target=read_stderr_thread_function, args=(p,))
