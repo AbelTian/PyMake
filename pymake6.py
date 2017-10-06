@@ -6,10 +6,10 @@ Usage:
   pymake6.py source
   pymake6.py source root [ <source-root-path> ]
   pymake6.py source config [ --add | --del | --mod | --switch | --restore | --show ] [ <config-file-name> ] [<new-config-file-name>]
-  pymake6.py set ( path | var ) ( --add | --del | --mod ) <name> [ <value> ]
-  pymake6.py set env [ path ] ( --add | --del | --mod ) <group> <name> <value>
   pymake6.py set env cur <name>
+  pymake6.py set env [ path ] ( --add | --del | --mod ) <group> <name> [ <value> ]
   pymake6.py set cmd (--add | --del | --mod ) <name> [ <values> ... ]
+  pymake6.py set ( path | var ) ( --add | --del | --mod ) <name> [ <value> ]
   pymake6.py list ( path | var | env | cmd ) [--raw]
   pymake6.py j <name>
   pymake6.py (-h | --help)
@@ -385,85 +385,7 @@ def main_function():
     #set
     while (True):
         if (args['set'] == True):
-            if (args['path'] is True):
-                if (args['--add'] == True):
-                    if (args['<name>'] and args["<value>"] is not None):
-                        config['path-assemblage'][args['<name>']] = args["<value>"]
-                        print ("successed %s:%s" % (args['<name>'], args["<value>"]))
-                    else:
-                        print ("failed %s:%s" % (args['<name>'], args["<value>"]))
-                elif (args['--del'] == True):
-                    if (args["<name>"] is not None):
-                        if (config['path-assemblage'].__contains__(args['<name>'])):
-                            config['path-assemblage'].__delitem__(args['<name>'])
-                            print ("successed %s" % (args['<name>']))
-                        else:
-                            print ("failed %s" % (args['<name>']))
-                    else:
-                        ''
-                elif (args['--mod'] == True):
-                    if (args['<name>'] and args["<value>"] is not None):
-                        if (config['path-assemblage'].__contains__(args['<name>'])):
-                            config['path-assemblage'][args['<name>']] = args["<value>"]
-                            print ("successed %s:%s" % (args['<name>'], args["<value>"]))
-                        else:
-                            print ("failed %s:%s" % (args['<name>'], args["<value>"]))
-                    else:
-                        ''
-                else:
-                    ''
-            elif (args['var'] is True):
-                if (args['--add'] == True):
-                    if (args['<name>'] and args["<value>"] is not None):
-                        config['variable-assemblage'][args['<name>']] = args["<value>"]
-                        print ("successed %s:%s" % (args['<name>'], args["<value>"]))
-                    else:
-                        print ("failed %s:%s" % (args['<name>'], args["<value>"]))
-                elif (args['--del'] == True):
-                    if (args["<name>"] is not None):
-                        if (config['variable-assemblage'].__contains__(args['<name>'])):
-                            config['variable-assemblage'].__delitem__(args['<name>'])
-                            print ("successed %s" % (args['<name>']))
-                        else:
-                            print ("failed %s" % (args['<name>']))
-                    else:
-                        ''
-                elif (args['--mod'] == True):
-                    if (args['<name>'] and args["<value>"] is not None):
-                        if (config['variable-assemblage'].__contains__(args['<name>'])):
-                            config['variable-assemblage'][args['<name>']] = args["<value>"]
-                            print ("successed %s:%s" % (args['<name>'], args["<value>"]))
-                        else:
-                            print ("failed %s:%s" % (args['<name>'], args["<value>"]))
-                    else:
-                        ''
-                else:
-                    ''
-            elif (args['cmd'] is True):
-                if (args['--add'] == True):
-                    if (args['<name>'] and args["<values>"] is not None):
-                        config["command"][args['<name>']] = args["<values>"]
-                        print("successed %s:%s" % (args['<name>'], args["<values>"]))
-                    else:
-                        print("failed %s:%s" % (args['<name>'], args["<values>"]))
-                elif (args['--del'] == True):
-                    if (args["<name>"] is not None):
-                        if (config['command'].__contains__(args['<name>'])):
-                            config["command"].__delitem__(args['<name>'])
-                            print("successed %s" % (args['<name>']))
-                        else:
-                            print("failed %s" % (args['<name>']))
-                    else:
-                        ''
-                elif (args['--mod'] == True):
-                    if (args['<name>'] and args["<values>"] is not None):
-                        config["command"][args['<name>']] = args["<values>"]
-                        print("successed %s:%s" % (args['<name>'], args["<values>"]))
-                    else:
-                        print("failed %s:%s" % (args['<name>'], args["<values>"]))
-                else:
-                    ''
-            elif (args['env'] is True):
+            if (args['env'] is True):
                 if (args['cur'] == True):
                     if (args["<name>"] is not None):
                         config["environ"]["current"] = args["<name>"]
@@ -522,6 +444,84 @@ def main_function():
                             ''
                     else:
                         ''
+            elif (args['cmd'] is True):
+                if (args['--add'] == True):
+                    if (args['<name>'] and args["<values>"] is not None):
+                        config["command"][args['<name>']] = args["<values>"]
+                        print("successed %s:%s" % (args['<name>'], args["<values>"]))
+                    else:
+                        print("failed %s:%s" % (args['<name>'], args["<values>"]))
+                elif (args['--del'] == True):
+                    if (args["<name>"] is not None):
+                        if (config['command'].__contains__(args['<name>'])):
+                            config["command"].__delitem__(args['<name>'])
+                            print("successed %s" % (args['<name>']))
+                        else:
+                            print("failed %s" % (args['<name>']))
+                    else:
+                        ''
+                elif (args['--mod'] == True):
+                    if (args['<name>'] and args["<values>"] is not None):
+                        config["command"][args['<name>']] = args["<values>"]
+                        print("successed %s:%s" % (args['<name>'], args["<values>"]))
+                    else:
+                        print("failed %s:%s" % (args['<name>'], args["<values>"]))
+                else:
+                    ''
+            elif (args['path'] is True):
+                if (args['--add'] == True):
+                    if (args['<name>'] and args["<value>"] is not None):
+                        config['path-assemblage'][args['<name>']] = args["<value>"]
+                        print ("successed %s:%s" % (args['<name>'], args["<value>"]))
+                    else:
+                        print ("failed %s:%s" % (args['<name>'], args["<value>"]))
+                elif (args['--del'] == True):
+                    if (args["<name>"] is not None):
+                        if (config['path-assemblage'].__contains__(args['<name>'])):
+                            config['path-assemblage'].__delitem__(args['<name>'])
+                            print ("successed %s" % (args['<name>']))
+                        else:
+                            print ("failed %s" % (args['<name>']))
+                    else:
+                        ''
+                elif (args['--mod'] == True):
+                    if (args['<name>'] and args["<value>"] is not None):
+                        if (config['path-assemblage'].__contains__(args['<name>'])):
+                            config['path-assemblage'][args['<name>']] = args["<value>"]
+                            print ("successed %s:%s" % (args['<name>'], args["<value>"]))
+                        else:
+                            print ("failed %s:%s" % (args['<name>'], args["<value>"]))
+                    else:
+                        ''
+                else:
+                    ''
+            elif (args['var'] is True):
+                if (args['--add'] == True):
+                    if (args['<name>'] and args["<value>"] is not None):
+                        config['variable-assemblage'][args['<name>']] = args["<value>"]
+                        print ("successed %s:%s" % (args['<name>'], args["<value>"]))
+                    else:
+                        print ("failed %s:%s" % (args['<name>'], args["<value>"]))
+                elif (args['--del'] == True):
+                    if (args["<name>"] is not None):
+                        if (config['variable-assemblage'].__contains__(args['<name>'])):
+                            config['variable-assemblage'].__delitem__(args['<name>'])
+                            print ("successed %s" % (args['<name>']))
+                        else:
+                            print ("failed %s" % (args['<name>']))
+                    else:
+                        ''
+                elif (args['--mod'] == True):
+                    if (args['<name>'] and args["<value>"] is not None):
+                        if (config['variable-assemblage'].__contains__(args['<name>'])):
+                            config['variable-assemblage'][args['<name>']] = args["<value>"]
+                            print ("successed %s:%s" % (args['<name>'], args["<value>"]))
+                        else:
+                            print ("failed %s:%s" % (args['<name>'], args["<value>"]))
+                    else:
+                        ''
+                else:
+                    ''
             else:
                 ''
             # print(config)

@@ -126,6 +126,7 @@ def stopThread(thread):
 def read_thread_function(p):
     ''
     code = (codecs.lookup(locale.getpreferredencoding()).name)
+    global cmd_exit_flag
     while (True):
         l = p.stdout.readline().rstrip().decode(code)
 
@@ -137,7 +138,7 @@ def read_thread_function(p):
             #print("bbbb")
             break
 
-        if (cmd_list.__len__() == 0 and l is ''):
+        if (cmd_exit_flag == 1 and l is ''):
             #print ("read thread: l is empty")
             continue
 
@@ -145,7 +146,8 @@ def read_thread_function(p):
             ret = int(l.split(':')[1].strip())
             #print("exit %d" % (ret))
             if( ret != 0 ):
-                p.stdin.write(("exit %d \n" % (ret)))
+                cmd_exit_flag = 1
+                p.stdin.write(("exit %d \n".encode(code) % (ret)))
                 p.stdin.flush()
                 print ("exit %d" % (ret))
                 #print ("read thread exit fail %d, i go" % (ret))
@@ -155,7 +157,7 @@ def read_thread_function(p):
 
         print (l)
         #print ("ccccccccc")
-        # stdout.flush()
+        #stdout.flush()
 
 def read_stderr_thread_function(p):
     ''
@@ -172,17 +174,18 @@ def read_stderr_thread_function(p):
             #print("eee")
             break
 
-        if (cmd_list.__len__() == 0 and l is ''):
+        if (cmd_exit_flag == 1 and l is ''):
             #print ("read err: l is empty")
             continue
 
         print (l)
         #print ("dddddddddddddd")
-        # stdout.flush()
+        #stdout.flush()
 
 def write_command_thread_function(p):
     ''
     code = (codecs.lookup(locale.getpreferredencoding()).name)
+    global cmd_exit_flag
     while (True):
         cmd_event.clear()
         cmd = cmd_list.pop(0) + '\n'
@@ -192,6 +195,7 @@ def write_command_thread_function(p):
 
         if ( cmd_list.__len__() == 0):
             #print ("write: i go")
+            cmd_exit_flag = 1
             break;
 
         # p.stdin.write("ping 127.0.0.1 -c 2 \n")
@@ -229,6 +233,8 @@ def communicateWithCommandLine(list0):
         cmd_sep = ';'
 
     global  cmd_list
+    global cmd_exit_flag
+    cmd_exit_flag = 0
     cmd_list = []
     for cmd in list0:
         cmd_list.append(cmd + ' ' + cmd_sep + ' ' + cmd_test)
