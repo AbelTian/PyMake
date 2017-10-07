@@ -159,14 +159,18 @@ def read_thread_function(p):
             #print("bbbb")
             break
 
+        #windows when p is closing, pipe write some blank line to parent
         if (cmd_exit_flag == 1 and l is ''):
             #print ("read thread: l is empty")
-            continue
+            break
 
         if ("pymake-command-status:" in l):
             ret = int(l.split(':')[-1].strip())
-            #print("exit %d" % (ret))
+            # java windows return 0 or 1
+            #print (l)
+            #print("command status %d" % (ret))
             if( ret != 0 ):
+                # cmd running fail, child process exit
                 cmd_exit_flag = 1
                 p.stdin.write(("exit %d \n".encode(code) % (ret)))
                 p.stdin.flush()
@@ -179,7 +183,7 @@ def read_thread_function(p):
         print (l)
         #print (cmd_exit_flag)
         #print ("ccccccccc")
-        #stdout.flush()
+        #p.stdout.flush()
 
 
 # read stderr pipe
@@ -198,9 +202,10 @@ def read_stderr_thread_function(p):
             #print("eee")
             break
 
+        #windows when p is closing, pipe write some blank line to parent
         if (cmd_exit_flag == 1 and l is ''):
             #print ("read err: l is empty")
-            continue
+            break
 
         print (l)
         #print (cmd_exit_flag)
@@ -217,7 +222,9 @@ def write_command_thread_function(p):
         cmd = cmd_list.pop(0) + '\n'
         #print  ("command:%s" % cmd)
 
-        if(cmd.lstrip().startswith("exit")):
+        # the last or the mid exit exit flag = 1
+        if ("exit" in cmd):
+        #if(cmd.lstrip().startswith("exit")):
             cmd_exit_flag = 1
 
         p.stdin.write(cmd.encode(code))
@@ -225,7 +232,8 @@ def write_command_thread_function(p):
 
         if ( cmd_exit_flag == 1 ):
             #print ("write: i go")
-            break;
+            ""
+            break
 
         # p.stdin.write("ping 127.0.0.1 -c 2 \n")
         # p.stdin.flush()
@@ -255,34 +263,37 @@ def communicateWithCommandLine(list0):
     shell = ""
     plat = getplatform()
     if(plat == "Windows"):
-        shell = os.environ.get('COMSPEC') + ' ' + "/s /q /d /v:on /e:on /f:on"
+        shell = os.environ.get('COMSPEC') + ' ' + "/q /d /s /a /v:on /e:on /f:on"
     else:
         shell = os.environ.get('SHELL')
     #print ( 'Running under', shell )
 
 
+    global  cmd_event
+    cmd_event = threading.Event()
+    global cmd_exit_flag
+    cmd_exit_flag = 0
+    global cmd_list
+    cmd_list = []
+
     if( plat == "Windows"):
         cmd_status = "echo pymake-command-status:%ERRORLEVEL%"
         cmd_sep = '&'
+        cmd_exit = 'exit /b 0'
+        # window close echo, close promot
+        cmd_list.append("echo off" + ' ' + cmd_sep + ' ' + cmd_status )
     else:
         cmd_status = "echo pymake-command-status:$?"
         cmd_sep = ';'
-
-    global cmd_list
-    global cmd_exit_flag
-    cmd_exit_flag = 0
-    cmd_list = []
-    if( plat == "Windows"):
-        cmd_list.append("echo off" + ' ' + cmd_sep + ' ' + cmd_status)
+        cmd_exit = 'exit 0'
 
     for cmd in list0:
-        cmd_list.append(cmd + ' ' + cmd_sep + ' ' + cmd_status)
-        #cmd_list.append(cmd_test)
+        cmd_list.append(cmd + ' ' + cmd_sep + ' ' + cmd_status )
+
     # append exit 0
-    cmd_list.append ('exit 0')
+    cmd_list.append (cmd_exit)
     #print( cmd_list )
-    global  cmd_event
-    cmd_event = threading.Event()
+
 
     startupinfo = None
     createflags = 0
@@ -294,12 +305,16 @@ def communicateWithCommandLine(list0):
         #createflags = subprocess.CREATE_NEW_CONSOLE
 
     p = subprocess.Popen(shell, shell=True,
-                         stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                         bufsize=-1,
+                         stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+                         #if dont do this, windows stdout piory is high, stderr cant output full message
+                         #when split stdout and stderr, lots of app wont manager the output order
+                         stderr=subprocess.STDOUT,
                          startupinfo=startupinfo, creationflags=createflags)
     read_thread = threading.Thread(target=read_thread_function, args=(p, ))
     read_thread.start()
     read_err_thread = threading.Thread(target=read_stderr_thread_function, args=(p,))
-    read_err_thread.start()
+    #read_err_thread.start()
     write_command_thread = threading.Thread(target=write_command_thread_function, args=(p,))
     write_command_thread.start()
     write_thread = threading.Thread(target=write_thread_function, args=(p,))
