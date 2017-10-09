@@ -10,7 +10,7 @@ Usage:
   pymake6.py set env cur <name>
   pymake6.py set env [ path ] ( --add | --del | --mod ) <group> <name> [ <value> ]
   pymake6.py set cmd (--add | --del | --mod ) <name> [ <values> ... ]
-  pymake6.py list [ -r | --raw ] ( path | env | cmd )
+  pymake6.py list ( path | env | cmd ) [-r | --raw]
   pymake6.py j <name>
   pymake6.py (-h | --help)
   pymake6.py --version
@@ -18,7 +18,6 @@ Usage:
 Command:
   source           switch to another source file
   set path         path assessblage
-  set var          var assessblage
   set env          env set
   set cmd          set cmd stream
   list             list configed values
@@ -675,7 +674,7 @@ def main_function():
         if (args['list'] == True):
 
             list_config = config
-            if ( args["--raw"] is True ):
+            if ( args['--raw'] is True ):
                 list_config = rawconfig
 
             if( args['path'] == True):
