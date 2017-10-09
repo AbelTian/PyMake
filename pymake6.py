@@ -10,7 +10,7 @@ Usage:
   pymake6.py set env [ path ] ( --add | --del | --mod ) <group> <name> [ <value> ]
   pymake6.py set cmd (--add | --del | --mod ) <name> [ <values> ... ]
   pymake6.py set ( path | var ) ( --add | --del | --mod ) <name> [ <value> ]
-  pymake6.py list ( path | var | env | cmd ) [--raw]
+  pymake6.py list [ -r | --raw ] ( path | var | env | cmd )
   pymake6.py j <name>
   pymake6.py (-h | --help)
   pymake6.py --version
@@ -32,7 +32,7 @@ Options:
   --switch      switch to another source
   --show        display haved stream config files
   --restore     reset to pymake.json stream config file
-  --raw         absolute the config values
+  -r, --raw     expand editing config values
 """
 
 import os
@@ -731,10 +731,9 @@ def main_function():
     while (True):
         if (args['list'] == True):
 
-            if ( args['--raw'] == True ):
+            list_config = config
+            if ( args["--raw"] is True ):
                 list_config = rawconfig
-            else:
-                list_config = config
 
             if( args['path'] == True):
                 dict0 = copy.deepcopy(list_config['path-assemblage'])
@@ -801,7 +800,7 @@ def main_function():
         print(Fore.GREEN + "  %-30s %s" % (key, value))
 
     while ( True ):
-        if( args['j'] == True ):
+        if (args['j'] is True):
             if(args['<name>'] is None):
                 print("please appoint a command")
                 return
@@ -817,9 +816,7 @@ def main_function():
             #print (list0)
             communicateWithCommandLine(list0)
             os._exit(0)
-            return
-        else:
-            ''
+        else:""
         break
 
     return
