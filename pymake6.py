@@ -11,7 +11,7 @@ Usage:
   pymake6.py set env [ path ] ( --add | --del | --mod ) <group> <name> [ <value> ]
   pymake6.py set cmd (--add | --del | --mod ) <name> [ <values> ... ]
   pymake6.py list ( path | env | cmd ) [-r | --raw]
-  pymake6.py k <name>
+  pymake6.py k [ <name> ]
   pymake6.py (-h | --help)
   pymake6.py --version
 
