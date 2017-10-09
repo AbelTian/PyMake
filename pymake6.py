@@ -11,16 +11,19 @@ Usage:
   pymake6.py set env [ path ] ( --add | --del | --mod ) <group> <name> [ <value> ]
   pymake6.py set cmd (--add | --del | --mod ) <name> [ <values> ... ]
   pymake6.py list ( path | env | cmd ) [-r | --raw]
-  pymake6.py j <name>
+  pymake6.py k <name>
   pymake6.py (-h | --help)
   pymake6.py --version
 
 Command:
   source           switch to another source file
+  source root      config root directory
+  source config    config source conf file
   set path         path assessblage
   set env          env set
   set cmd          set cmd stream
   list             list configed values
+  k                exec command
 
 Options:
   -h --help     Show this screen.
@@ -736,7 +739,7 @@ def main_function():
         print(Fore.GREEN + "  %-30s %s" % (key, value))
 
     while ( True ):
-        if (args['j'] is True):
+        if (args['k'] is True):
             if(args['<name>'] is None):
                 print("please appoint a command")
                 return
