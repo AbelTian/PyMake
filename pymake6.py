@@ -321,8 +321,6 @@ def main_function():
 
     sourceroot = conf.get('source', 'root')
     os.chdir(sourceroot)
-    if (os.path.abspath(sourceroot) == os.path.abspath(pymakeroot)):
-        print("I checked you use pymakeroot to be sourceroot, suggest you use source command changing one.")
 
     args = docopt(__doc__, version='pymake6.py v6.0')
     #print(args)
@@ -405,10 +403,18 @@ def main_function():
     #print ("root: %s config: %s" % (sourceroot, file))
     print(Fore.LIGHTBLACK_EX + "use source config: %s/%s" % (sourceroot, file) )
 
-    if (os.path.abspath(sourceroot) != os.path.abspath(pymakeroot)):
+    pymakefilepath = os.path.split(os.path.realpath(__file__))[0]
+    if (os.path.abspath(sourceroot) == os.path.abspath(pymakeroot) or
+            os.path.abspath(sourceroot) == os.path.abspath(pymakefilepath)):
+        print ("I checked you use pymakeroot or pymakefileroot to be sourceroot, suggestting you use source command changing one.")
+        print ("this progrom can store building env and building command forever, please repleace source root then using me.")
+        return
+    elif (os.path.abspath(sourceroot) != os.path.abspath(pymakeroot)):
         if (not os.path.exists('pymake.json')):
             writeJsonData('pymake.json', d)
+            print ("initial pymake.json in source root.")
         if(not os.path.exists(file)):
+            print ("source config file is not exist.")
             return
 
     config = readJsonData(file)
