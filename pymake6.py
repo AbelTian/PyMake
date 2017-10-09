@@ -6,11 +6,11 @@ Usage:
   pymake6.py source
   pymake6.py source root [ <source-root-path> ]
   pymake6.py source config [ --add | --del | --mod | --switch | --restore | --show ] [ <config-file-name> ] [<new-config-file-name>]
+  pymake6.py set path ( --add | --del | --mod ) <name> [ <value> ]
   pymake6.py set env cur <name>
   pymake6.py set env [ path ] ( --add | --del | --mod ) <group> <name> [ <value> ]
   pymake6.py set cmd (--add | --del | --mod ) <name> [ <values> ... ]
-  pymake6.py set ( path | var ) ( --add | --del | --mod ) <name> [ <value> ]
-  pymake6.py list [ -r | --raw ] ( path | var | env | cmd )
+  pymake6.py list [ -r | --raw ] ( path | env | cmd )
   pymake6.py j <name>
   pymake6.py (-h | --help)
   pymake6.py --version
@@ -50,92 +50,178 @@ from pycore.docopt import docopt
 def main_function():
 
     d = {
-        "path-assemblage":{
-            "root":"/Users/abel/Develop",
+        "path-assemblage": {
+            "root": "/Users/abel/Develop",
             "root.src": "${root}/a0-develop",
             "root.prod": "${root}/b1-product",
             "root.tool": "${root}/b0-toolskits",
             "root.build": "${root}/c0-buildstation",
-            "root.test": "${root}/c1-test",
-            "root.webrc": "${root}/c2-webrc",
-            "root.c":"${root.tool}/compiler",
-            "root.qt":"${root.tool}/macLibraries/Qt",
-            "root.android": "${root.tool}/macAndroidLibraries",
-            "root.android.sdk": "${root.android}/android-sdk-macosx/platform-tools",
-            "root.android.ndk": "${root.android}/android-ndk-r13b",
-            "root.android.ant": "${root.android}/apache-ant-1.10.1",
-            "root.android.java": "${root.android}/java-macosx/Java/JavaVirtualMachines",
-            "cmake": "${root.c}/CMake.app/Contents",
-
-            "qt5.9.clang": "${root.qt}/5.9.1/clang_64",
-            "qt5.8.android_x86": "${root.qt}/5.8/android_x86",
-            "qt5.8.android_arm": "${root.qt}/5.8/android_armv7",
-            "qt5.8.clang": "${root.qt}/5.8/clang_64",
-            "qt5.8.ios": "${root.qt}/5.8/ios",
-            "qt4.8.clang": "${root.qt}/4.8.7/clang_64",
-
-            "qt5.9.clang.bin":"${qt5.9.clang}/bin",
-            "qt5.8.android_x86.bin": "${qt5.8.android_x86}/bin",
-            "qt5.8.android_arm.bin": "${qt5.8.android_arm}/bin",
-            "qt5.8.clang.bin": "${qt5.8.clang}/bin",
-            "qt5.8.ios.bin": "${qt5.8.ios}/bin",
-            "qt4.8.clang.bin": "${qt4.8.clang}/bin",
-
-            "java1.7.home": "${root.android.java}/jdk1.7.0_79.jdk/Contents/Home",
-            "java1.8.home": "${root.android.java}/jdk1.8.0_111.jdk/Contents/Home",
-            "java1.9.home": "${root.android.java}/jdk9.jdk/Contents/Home",
+            "root.test": "${root}/c2-test",
+            "root.webrc": "${root}/c1-webrc",
+            "cc": "${root.tool}/compiler",
+            "cmake.bin": "${cc}/CMake.app/Contents/bin",
+            "qt": "${root.tool}/macLibraries/Qt",
+            "qt5.9.clang": "${qt}/5.9.1/clang_64",
+            "qt5.8.android_x86": "${qt}/5.8/android_x86",
+            "qt5.8.android_arm": "${qt}/5.8/android_armv7",
+            "qt5.8.clang": "${qt}/5.8/clang_64",
+            "qt5.8.ios": "${qt}/5.8/ios",
+            "qt4.8.clang": "${qt}/4.8.7/clang_64",
+            "qt5.9.clang.bin": "${qt}/5.9.1/clang_64/bin",
+            "qt5.8.android_x86.bin": "${qt}/5.8/android_x86/bin",
+            "qt5.8.android_arm.bin": "${qt}/5.8/android_armv7/bin",
+            "qt5.8.clang.bin": "${qt}/5.8/clang_64/bin",
+            "qt5.8.ios.bin": "${qt}/5.8/ios/bin",
+            "qt4.8.clang.bin": "${qt}/4.8.7/clang_64/bin",
+            "android": "${root.tool}/macAndroidLibraries",
+            "android.sdk": "${android}/android-sdk-macosx",
+            "android.ndk": "${android}/android-ndk-r13b",
+            "android.ant": "${android}/apache-ant-1.10.1",
+            "android.java": "${android}/java-macosx/Java/JavaVirtualMachines",
+            "sdk.plat.tool": "${android.sdk}/platform-tools",
+            "sdk.build.tool": "${android.sdk}/build-tools",
+            "sdk.tool": "${android.sdk}/tools",
+            "java1.7.home": "${android.java}/jdk1.7.0_79.jdk/Contents/Home",
+            "java1.8.home": "${android.java}/jdk1.8.0_111.jdk/Contents/Home",
+            "java1.9.home": "${android.java}/jdk9.jdk/Contents/Home",
             "java1.7.bin": "${java1.7.home}/bin",
             "java1.8.bin": "${java1.8.home}/bin",
             "java1.9.bin": "${java1.9.home}/bin",
-            "ant.bin": "${root.android.ant}/bin",
-            "ndk.arm": "${root.android.ndk}/toolchains/arm-linux-androideabi-4.9/prebuilt/darwin-x86_64",
-            "ndk.x86": "${root.android.ndk}/toolchains/x86-4.9/prebuilt/darwin-x86_64",
-            "ndk.x86_64": "${root.android.ndk}/toolchains/x86_64-4.9/prebuilt/darwin-x86_64",
+            "ant.bin": "${android.ant}/bin",
+            "ndk.arm": "${android.ndk}/toolchains/arm-linux-androideabi-4.9/prebuilt/darwin-x86_64",
+            "ndk.x86": "${android.ndk}/toolchains/x86-4.9/prebuilt/darwin-x86_64",
+            "ndk.x86_64": "${android.ndk}/toolchains/x86_64-4.9/prebuilt/darwin-x86_64",
             "ndk.arm.bin": "${ndk.arm}/bin",
             "ndk.x86.bin": "${ndk.x86}/bin",
             "ndk.x86_64.bin": "${ndk.x86_64}/bin",
-            "mac.sdk.lib": "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks"
+            "mac.sdk": "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks"
         },
-        "variable-assemblage":{
-            "qt.sys.mac":"MacOS",
-            "qt.sys.android.x86_64":"Android-x86_64",
-            "qt.sys.android.x86":"Android",
-            "qt.sys.android.arm":"Android-arm",
-            "build.debug":"Debug",
-            "build.release":"Release",
-
-            "qqt.prod.name": "QQt",
-            "qqt.proj.name": "a0-qqtfoundation",
-            "qqt.build.path": "${root.build}/${qqt.proj.name}/${qt.sys.mac}/${build.release}",
-            "qqt.source.path": "${root.src}/${qqt.proj.name}",
-            "qqt.proj.qmake": "${qqt.proj.name}.pro",
-            "qqt.prod.path": "${qqt.build.path}/src/bin",
-            "qqt.install.path": "${root.prod}/QQt",
-
-            "qqtframe.prod.name":"qqtframe",
-            "qqtframe.bin.path": "${qqt.build.path}/examples/${qqtframe.prod.name}/bin",
-            "qqtframe.dep1": "${qqt.build.path}/src/bin/QQt.framework",
-            "qqtframe.dep1.name": "QQt.framework/Versions/1/QQt",
-
-            "qt5.source": "${root.tool}/Source/qt5",
-
-            "mac.app": "${prod.name}.app",
-            "mac.app.content": "${mac.app}/Contents",
-            "mac.app.macos": "${mac.app.content}/MacOS",
-            "mac.app.framework": "${mac.app.content}/Frameworks",
-            "mac.app.res": "${mac.app.content}/Resources",
-            "mac.app.plugin": "${mac.app.content}/PlugIns",
-            "mac.framework": "${prod.name}.framework",
-            "mac.framework.ver": "${prod.name}.framework/Versions",
-            "mac.framework.res": "${prod.name}.framework/Resources",
-            "qt.deploy.android":"androiddeployqt",
-            "qt.deploy.mac":"macdeployqt"
+        "environ": {
+            "android.mobile": {
+                "path+": [
+                    "${cmake.bin}",
+                    "${qt5.8.android_arm.bin}",
+                    "${java1.8.bin}",
+                    "${android.sdk}",
+                    "${sdk.plat.tool}",
+                    "${sdk.build.tool}",
+                    "${sdk.tool}",
+                    "${ant.bin}",
+                    "${ndk.arm.bin}"
+                ],
+                "ANDROID_API_VERSION": "android-23",
+                "ANDROID_SDK_ROOT": "${android.sdk}",
+                "ANDROID_NDK_ROOT": "${android.ndk}",
+                "ANDROID_NDK_HOST": "darwin-x86_64",
+                "ANDROID_NDK_TOOLCHAIN_PREFIX": "arm-linux-androideabi",
+                "ANDROID_NDK_TOOLCHAIN_VERSION": "4.9",
+                "ANDROID_NDK_PLATFORM": "android-23",
+                "NDK_TOOLCHAIN_PATH": "${ndk.arm.bin}",
+                "NDK_TOOLS_PREFIX": "arm-linux-androideabi",
+                "PYMAKE_MYNAME": "T.D.R",
+                "a_special_var_const": "hello world",
+                "QKIT": "Android",
+                "QTDIR": "${qt5.8.android_arm}",
+                "QTSPEC": "android-g++",
+                "QTCONFIG": "arm",
+                "JAVA_HOME": "${java1.8.home}",
+                "CLASSPATH": ".:${JAVA_HOME}/lib/dt/jar:${JAVA_HOME}/lib/tools.jar"
+            },
+            "android.x86": {
+                "path+": [
+                    "${cmake.bin}",
+                    "${qt5.8.android_x86.bin}",
+                    "${java1.8.bin}",
+                    "${android.sdk}",
+                    "${sdk.plat.tool}",
+                    "${sdk.build.tool}",
+                    "${sdk.tool}",
+                    "${ant.bin}",
+                    "${ndk.x86.bin}"
+                ],
+                "CLICOLOR": "1",
+                "ANDROID_API_VERSION": "android-23",
+                "ANDROID_SDK_ROOT": "${android.sdk}",
+                "ANDROID_NDK_ROOT": "${android.ndk}",
+                "ANDROID_NDK_HOST": "darwin-x86_64",
+                "ANDROID_NDK_TOOLCHAIN_PREFIX": "x86",
+                "ANDROID_NDK_TOOLCHAIN_VERSION": "4.9",
+                "ANDROID_NDK_PLATFORM": "android-23",
+                "NDK_TOOLCHAIN_PATH": "${ndk.x86.bin}",
+                "NDK_TOOLS_PREFIX": "i686-linux-android",
+                "QKIT": "Android",
+                "QTDIR": "${qt5.8.android_x86}",
+                "QTSPEC": "android-g++",
+                "QTCONFIG": "arm",
+                "JAVA_HOME": "${java1.8.home}",
+                "CLASSPATH": ".:${JAVA_HOME}/lib/dt/jar:${JAVA_HOME}/lib/tools.jar"
+            },
+            "qt.mac": {
+                "path+": [
+                    "${cmake.bin}",
+                    "${qt5.9.clang.bin}",
+                    "${java1.8.bin}",
+                    "${android.sdk}",
+                    "${sdk.plat.tool}",
+                    "${sdk.build.tool}",
+                    "${sdk.tool}",
+                    "${ant.bin}",
+                    "${ndk.arm.bin}"
+                ],
+                "ANDROID_API_VERSION": "android-23",
+                "ANDROID_SDK_ROOT": "${android.sdk}",
+                "ANDROID_NDK_ROOT": "${android.ndk}",
+                "ANDROID_NDK_HOST": "darwin-x86_64",
+                "ANDROID_NDK_TOOLCHAIN_PREFIX": "i686-linux-android",
+                "ANDROID_NDK_TOOLCHAIN_VERSION": "4.9",
+                "ANDROID_NDK_PLATFORM": "android-23",
+                "NDK_TOOLCHAIN_PATH": "${ndk.arm.bin}",
+                "NDK_TOOLS_PREFIX": "i686-linux-android",
+                "QKIT": "macOS",
+                "QTDIR": "${qt5.9.clang}",
+                "QTSPEC": "macx-clang",
+                "QTCONFIG": "x86_64",
+                "JAVA_HOME": "${java1.8.home}",
+                "CLASSPATH": ".:${JAVA_HOME}/lib/dt/jar:${JAVA_HOME}/lib/tools.jar"
+            },
+            "current": "qt.mac"
         },
+        "variable-assemblage": [
+            "QQt",
+            "a0-qqtfoundation",
+            "${root.build}/${qqt.proj.name}/${qt.sys.mac}/${build.release}",
+            "${root.src}/${qqt.proj.name}",
+            "${qqt.proj.name}.pro",
+            "${qqt.build.path}/src/bin",
+            "${root.prod}/QQt",
+            "qqtframe",
+            "${qqt.build.path}/examples/${qqtframe.prod.name}/bin",
+            "${qqt.build.path}/src/bin/QQt.framework",
+            "QQt.framework/Versions/1/QQt",
+            "${root.tool}/Source/qt5",
+            "${root.build}/qt5",
+            "androiddeployqt",
+            "macdeployqt",
+            "DownloadQueue",
+            "/Users/abel/Develop/c1-webrc/DownloadQueue/DownloadQueue.pro",
+            "${root.build}/${app.name}",
+            "macdeployqt ${app.path.build}/${app.name}.app",
+            "${prod.name}.app",
+            "${mac.app}/Contents",
+            "${mac.app.content}/MacOS",
+            "${mac.app.content}/Frameworks",
+            "${mac.app.content}/Resources",
+            "${mac.app.content}/PlugIns",
+            "${prod.name}.framework",
+            "${prod.name}.framework/Versions",
+            "${prod.name}.framework/Resources",
+            "macdeployqt ${}"
+        ],
         "command-assemblage": [
             "I'm not similar to these command, so list them here, rather than forgotten them",
             "cl-command, sys-command",
             "replace? no, append? easy!",
-            "help you to remeber these command."
+            "help you to remeber these command.",
             "mkdir -p ${qqt.build.path}",
             "cd ${build-path}",
             "cmake -G\"Unix Makefiles\" -DCMAKE_INSTALL_PREFIX=${prod-root} ${source-path}",
@@ -153,105 +239,45 @@ def main_function():
             "install_name_tool -change $LibDep @rpath/$LibDep ${app-native}/${prod-name} ",
             "${source-path}/configure -prefix ${install-path} -hostprefix ${install-path} -xplatform android-g++ -release -nomake tests -nomake examples -android-ndk $ANDROID_NDK_ROOT -android-sdk $ANDROID_SDK_ROOT -android-ndk-host $ANDROID_NDK_HOST -android-toolchain-version $ANDROID_NDK_TOOLCHAIN_VERSION -skip qtwebkit-examples -no-warnings-are-errors"
         ],
-        "environ": {
-            "qt.android.mobile":{
-                "path+": [
-                    "${cmake.bin}",
-                    "${qt5.8.android_arm.bin}",
-                    "$(mac.java1.8.bin)",
-                    "${mac.android.sdk}",
-                    "${mac.ant.bin}",
-                    "${mac.ndk.arm.bin}"
-                ],
-                "ANDROID_API_VERSION": "android-23",
-                "ANDROID_SDK_ROOT": "${mac.android.sdk}",
-                "ANDROID_NDK_ROOT": "${mac.ndk.root}",
-                "ANDROID_NDK_HOST": "darwin-x86_64",
-                "ANDROID_NDK_TOOLCHAIN_PREFIX": "arm-linux-androideabi",
-                "ANDROID_NDK_TOOLCHAIN_VERSION": "4.9",
-                "ANDROID_NDK_PLATFORM": "android-23",
-                "NDK_TOOLCHAIN_PATH": "${mac.ndk.arm.bin}",
-                "NDK_TOOLS_PREFIX": "arm-linux-androideabi",
-
-                "PYCMD_MYNAME": "T.D.R",
-                "a_special_var_const": "hello world",
-                "QKIT": "Android",
-                "QTDIR": "${qt5.8.android_arm}",
-                "QTSPEC": "android-g++",
-                "QTCONFIG": "arm",
-                "JAVA_HOME": "${java1.8.home}",
-                "CLASSPATH": ".:${JAVA_HOME}/lib/dt/jar:${JAVA_HOME}/lib/tools.jar"
-
-            },
-            "qt.android":{
-                "path+": [
-                    "${cmake.bin}",
-                    "${qt5.8.android_x86.bin}",
-                    "$(mac.java1.8.bin)",
-                    "${mac.android.sdk}",
-                    "${mac.ant.bin}",
-                    "${mac.ndk.arm.bin}"
-                ],
-                "ANDROID_API_VERSION": "android-23",
-                "ANDROID_SDK_ROOT": "${mac.android.sdk}",
-                "ANDROID_NDK_ROOT": "${mac.ndk.root}",
-                "ANDROID_NDK_HOST": "darwin-x86_64",
-                "ANDROID_NDK_TOOLCHAIN_PREFIX": "arm-linux-androideabi",
-                "ANDROID_NDK_TOOLCHAIN_VERSION": "4.9",
-                "ANDROID_NDK_PLATFORM": "android-23",
-                "NDK_TOOLCHAIN_PATH": "${mac.ndk.arm.bin}",
-                "NDK_TOOLS_PREFIX": "arm-linux-androideabi",
-
-                "PYCMD_MYNAME": "T.D.R",
-                "a_special_var_const": "hello world",
-                "QKIT": "Android",
-                "QTDIR": "${qt5.8.android_arm}",
-                "QTSPEC": "android-g++",
-                "QTCONFIG": "arm",
-                "JAVA_HOME": "${java1.8.home}",
-                "CLASSPATH": ".:${JAVA_HOME}/lib/dt/jar:${JAVA_HOME}/lib/tools.jar"
-
-            },
-            "current":"qt.android.mobile"
-        },
-        "command":{
-            "qqt.build":[
-                "mkdir -p ${qqt.path.build}",
-                "cd ${qqt.path.build}",
-                "qmake ${qqt.path.source}/${qqt.qmake} -spec ${QTSPEC} CONFIG+=${QTCONFIG} && make qmake_all",
+        "command": {
+            "qqt.build": [
+                "mkdir -p ${app.path.build}",
+                "cd ${app.path.build}",
+                "qmake ${app.path.qmake} -spec ${QTSPEC} CONFIG+=${QTCONFIG} && make qmake_all",
                 "make -j4"
             ],
-            "qqt.rebuild":[
-                "cd ${qqt.path.build}",
+            "qqt.rebuild": [
+                "cd ${app.path.build}",
                 "make clean",
-                "${build.qqt}"
+                "qmake ${app.path.qmake} -spec ${QTSPEC} CONFIG+=${QTCONFIG} && make qmake_all",
+                "make -j4"
             ],
-            "qqt.clean":[
-                "cd ${qqt.path.build}",
-                "make clean",
-                "echo success"
+            "qqt.clean": [
+                "cd ${app.path.build}",
+                "make clean"
             ],
-            "qqt.install":[
-                "cd ${qqt.path.build}",
-                "make install",
-                "echo success"
-            ],
-            "qqtframe.deploy":[
-                "cd-build-path",
-                "deployqt",
-                "cp-dep",
-                "install_name_tool",
-                "msg"
-            ],
-            "qt-creator": [
-                "\"/Applications/Qt Creator.app/Contents/MacOS/Qt Creator\""
-            ],
-            "build-qt5-android": [
-                "mk-build-path",
-                "cd-build-path",
-                "configure-qt5-android",
-                "make",
+            "qqt.install": [
+                "cd ${app.path.build}",
                 "make install"
+            ],
+            "qqt.deploy": [
+                "cd ${app.path.build}",
+                "${app.deploy}"
+            ],
+            "buildqt5android": [
+                "mkdir -p ${qt5.path.build}",
+                "cd ${qt5.path.build}",
+                "${qt5.path.source}/configure -prefix ${qt5.path.install} -hostprefix ${qt5.path.install} -xplatform android-g++ -release -nomake tests -nomake examples -android-ndk $ANDROID_NDK_ROOT -android-sdk $ANDROID_SDK_ROOT -android-ndk-host $ANDROID_NDK_HOST -android-toolchain-version $ANDROID_NDK_TOOLCHAIN_VERSION -skip qtwebkit-examples -no-warnings-are-errors"
+            ],
+            "qt": [
+                "cd ${root.build}",
+                "open \"/Applications/Qt Creator.app\""
+            ],
+            "adb": [
+                "adb devices"
+            ],
+            "android": [
+                "/Users/abel/Develop/b0-toolskits/macAndroidLibraries/android-sdk-macosx/tools/android"
             ]
         }
     }
@@ -415,8 +441,8 @@ def main_function():
                         if (args['<group>'] and args['<name>'] and args["<value>"] is not None):
                             if (config['variable'][args['<group>']]["path+"].__contains__(args['<name>'])):
                                 index = config['variable'][args['<group>']]["path+"].index(args['<name>'])
-                                config['variable'][args['<group>']]["path+"][index] = [args['<name>']]
-                                print("successed %s:%s" % (args['<group>'], args['<name>']))
+                                config['variable'][args['<group>']]["path+"][index] = [args['<value>']]
+                                print ("successed %s:%s:%s" % (args['<group>'], args['<name>'], args["<value>"]))
                             else:
                                 print("failed %s:%s" % (args['<group>'], args['<name>']))
                         else:
@@ -499,33 +525,6 @@ def main_function():
                         ''
                 else:
                     ''
-            elif (args['var'] is True):
-                if (args['--add'] == True):
-                    if (args['<name>'] and args["<value>"] is not None):
-                        config['variable-assemblage'][args['<name>']] = args["<value>"]
-                        print ("successed %s:%s" % (args['<name>'], args["<value>"]))
-                    else:
-                        print ("failed %s:%s" % (args['<name>'], args["<value>"]))
-                elif (args['--del'] == True):
-                    if (args["<name>"] is not None):
-                        if (config['variable-assemblage'].__contains__(args['<name>'])):
-                            config['variable-assemblage'].__delitem__(args['<name>'])
-                            print ("successed %s" % (args['<name>']))
-                        else:
-                            print ("failed %s" % (args['<name>']))
-                    else:
-                        ''
-                elif (args['--mod'] == True):
-                    if (args['<name>'] and args["<value>"] is not None):
-                        if (config['variable-assemblage'].__contains__(args['<name>'])):
-                            config['variable-assemblage'][args['<name>']] = args["<value>"]
-                            print ("successed %s:%s" % (args['<name>'], args["<value>"]))
-                        else:
-                            print ("failed %s:%s" % (args['<name>'], args["<value>"]))
-                    else:
-                        ''
-                else:
-                    ''
             else:
                 ''
             # print(config)
@@ -569,41 +568,6 @@ def main_function():
                     #print("xxx %s" % rawconfig["path-assemblage"][key])
                     break
 
-    #replace var
-    #from path var
-    for (key, value) in rawconfig["variable-assemblage"].items():
-        #print (key) #...
-
-        startpos = 0
-        while (True):
-            #print (startpos)
-
-            index = value.find('${', startpos)
-            if (index == -1):
-                break
-
-            index2 = value.find('}', index)
-            startpos = index2
-
-            key_replace = value[index:index2 + 1]
-            #print ( key0 ) #${...}
-            key_from = key_replace.split('{')[1].split('}')[0].strip()
-            #print ( key1 ) #...
-
-            for (find_key, find_value) in rawconfig["path-assemblage"].items():
-                if (find_key == key_from):
-                    rawconfig["variable-assemblage"][key] = rawconfig["variable-assemblage"][key].replace(
-                        key_replace, rawconfig["path-assemblage"][key_from])
-                    break
-
-            for (find_key, find_value) in rawconfig["variable-assemblage"].items():
-                if (key == find_key):
-                    break
-                if (find_key == key_from):
-                    rawconfig["variable-assemblage"][key] = rawconfig["variable-assemblage"][key].replace(
-                        key_replace, rawconfig["variable-assemblage"][key_from])
-                    break
-
     #replace env
     #from path var env
     current_var = rawconfig["environ"]["current"]
@@ -632,14 +596,7 @@ def main_function():
                     rawconfig["environ"][current_var]['path+'][step] = rawconfig["environ"][current_var]['path+'][step].replace(
                         key_replace, rawconfig["path-assemblage"][key_from])
                     break
-
-            for (find_key, find_value) in rawconfig["variable-assemblage"].items():
-                if (find_key == key_from):
-                    rawconfig["environ"][current_var]['path+'][step] = rawconfig["environ"][current_var]['path+'][step].replace(
-                        key_replace, rawconfig["variable-assemblage"][key_from])
-                    break
         step += 1
-
     for (key, value) in rawconfig["environ"][current_var].items():
         #print (key) #...
         if(key == "path+"):
@@ -667,12 +624,6 @@ def main_function():
                         key_replace, rawconfig["path-assemblage"][key_from])
                     break
 
-            for (find_key, find_value) in rawconfig["variable-assemblage"].items():
-                if (find_key == key_from):
-                    rawconfig["environ"][current_var][key] = rawconfig["environ"][current_var][key].replace(
-                        key_replace, rawconfig["variable-assemblage"][key_from])
-                    break
-
             for (find_key, find_value) in rawconfig["environ"][current_var].items():
                 if (key == find_key):
                     break
@@ -681,10 +632,8 @@ def main_function():
                         key_replace, rawconfig["environ"][current_var][key_from])
                     break
 
-
-
     #replace cmd
-    #from path var env cmd
+    #from path env
     for (cmd, stream) in rawconfig["command"].items():
         #print (key) #...
 
@@ -713,12 +662,6 @@ def main_function():
                             key_replace, rawconfig["path-assemblage"][key_from])
                         break
 
-                for (find_key, find_value) in rawconfig["variable-assemblage"].items():
-                    if (find_key == key_from):
-                        rawconfig['command'][cmd][step] = rawconfig['command'][cmd][step].replace(
-                            key_replace, rawconfig["variable-assemblage"][key_from])
-                        break
-
                 current_env_var = rawconfig["environ"]["current"]
                 for (find_key, find_value) in rawconfig["environ"][current_env_var].items():
                     if (find_key == key_from):
@@ -739,12 +682,6 @@ def main_function():
                 dict0 = copy.deepcopy(list_config['path-assemblage'])
                 for (k, v) in dict0.items():
                     print(Fore.BLUE+ "%-24s %s" % (k, v) )
-
-            elif( args['var'] == True):
-                dict0 = copy.deepcopy(list_config['variable-assemblage'])
-                for (k, v) in dict0.items():
-                    print(Fore.GREEN+ "%-24s %s" % (k, v) )
-
 
             elif( args['env'] == True):
                 current_var = list_config['environ']['current']
