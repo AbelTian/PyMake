@@ -10,6 +10,7 @@ Usage:
   pymake6.py set env cur <name>
   pymake6.py set env [ path ] ( --add | --del | --mod ) <group> <name> [ <value> ]
   pymake6.py set cmd (--add | --del | --mod ) <name> [ <values> ... ]
+  pymake6.py export [ <name> ]
   pymake6.py list ( path | env | cmd ) [-r | --raw]
   pymake6.py k [ <name> ]
   pymake6.py (-h | --help)
@@ -22,6 +23,7 @@ Command:
   set path         path assessblage
   set env          env set
   set cmd          set cmd stream
+  export           output env variable to a bat file or sh file [default:env+effect,unset]
   list             list configed values
   k                exec command
 
@@ -320,6 +322,7 @@ def main_function():
         conf.write(open(pymakeini, 'w'))
 
     sourceroot = conf.get('source', 'root')
+    # chdir to source root
     os.chdir(sourceroot)
 
     args = docopt(__doc__, version='pymake6.py v6.0')
@@ -334,7 +337,7 @@ def main_function():
                     conf.write(open(pymakeini, 'w'))
                     print ("success root: %s" % args['<source-root-path>'])
                 else:
-                    print ("root: %s" % sourceroot)
+                    print ("%s" % sourceroot)
             elif(args['config'] is True):
                 if(args['--del'] is True):
                     if (args['<config-file-name>'] is not None and args['<config-file-name>'] == 'pymake.json'):
@@ -388,12 +391,11 @@ def main_function():
                     else:
                         print ('You can\'t switch pymake.json and un.json\'s file...')
                 else:
-                    print ("conf: %s" % conf.get("source", "config"))
+                    print ("%s" % conf.get("source", "config"))
             else:
                 r = conf.get('source', 'root')
                 f = conf.get('source', 'config')
-                print ("root: %s" % (r))
-                print ("conf: %s" % (f))
+                print ("%s%s%s" % (r, os.path.sep, f))
             return
         else:
             ''
@@ -678,6 +680,73 @@ def main_function():
                         break
             step += 1
 
+    # export
+    def env_warp(name):
+        plat = getplatform()
+        if (plat == "Windows"):
+            return '%'+name+'%'
+        else:
+            return '$'+name
+
+    while (True):
+        if (args['export'] == True):
+            plat = getplatform()
+
+            if (plat == "Windows"):
+                cmd_suffix = ".bat"
+                cmd_header = "@echo off\n"
+                env_set = 'set '
+            else:
+                cmd_suffix = ".sh"
+                cmd_header = "#!/usr/bin/env bash\n"
+                env_set = 'export '
+
+            current_var = rawconfig['environ']['current']
+            dict0 = copy.deepcopy(rawconfig['environ'][current_var])
+
+            cmd_effect = 'env'
+            if( args['<name>'] == True):
+                cmd_effect = args['<name>']
+            cmd_effect += '_effect' + cmd_suffix
+
+            lines = ""
+            for (key) in dict0["path+"]:
+                lines += (env_set + 'PATH=' + key + os.path.pathsep + env_warp("PATH") + '\n')
+            for (key, value) in dict0.items():
+                if (key == 'path+'):
+                    continue
+                lines += (env_set + key + '=' + value + '\n')
+            with open(cmd_effect, 'w') as f:
+                f.write(cmd_header)
+                f.write(lines)
+
+            cmd_unset = 'env'
+            if( args['<name>'] == True):
+                cmd_unset = args['<name>']
+            cmd_unset += '_unset' + cmd_suffix
+
+            lines = ""
+            for (key) in dict0["path+"]:
+                if (plat == "Windows"):
+                    lines += (env_set + 'PATH=%PATH:' + key + ';=%' + '\n')
+                else:
+                    lines += (env_set + 'PATH=$(' + 'echo ${PATH//' + key.replace('/', '\/') + ':/})' + '\n')
+            for (key, value) in dict0.items():
+                if (key == 'path+'):
+                    continue
+                if (plat == "Windows"):
+                    lines += ('set ' + key + '=' + '\n')
+                else:
+                    lines += ('unset ' + key + '\n')
+            with open(cmd_unset, 'w') as f:
+                f.write(cmd_header)
+                f.write(lines)
+
+            print ("success:%s %s" % (cmd_effect, cmd_unset) )
+            return
+        else:""
+        break
+
     #list
     while (True):
         if (args['list'] == True):
@@ -714,7 +783,6 @@ def main_function():
                     for cmd in value:
                         print(Fore.RED+ "%-3s %s" % (step, cmd))
                         step += 1
-
             else:
                 ""
             return
@@ -732,7 +800,6 @@ def main_function():
         if (key == 'path+'):
             continue
         env[key] = value
-
 
     print(Fore.CYAN + "env %s" % current_var)
     print(Fore.MAGENTA + "path+:")
@@ -767,5 +834,4 @@ def main_function():
     return
 
 if __name__ == '__main__':
-
     main_function()
