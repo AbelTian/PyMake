@@ -12,7 +12,7 @@ Usage:
   pymake6.py set cmd (--add | --del | --mod ) <name> [ <values> ... ]
   pymake6.py export [ <name> ]
   pymake6.py list ( path | env | cmd ) [-r | --raw]
-  pymake6.py k [ <name> ]
+  pymake6.py k [ <names> ... ]
   pymake6.py (-h | --help)
   pymake6.py --version
 
@@ -25,7 +25,7 @@ Command:
   set cmd          set cmd stream
   export           output env variable to a bat file or sh file [default:env+effect,unset]
   list             list configed values
-  k                exec command
+  k                exec commands list
 
 Options:
   -h --help     Show this screen.
@@ -37,6 +37,7 @@ Options:
   --show        display haved stream config files
   --restore     reset to pymake.json stream config file
   -r, --raw     expand editing config values
+  -q, --quiet   quiet to execute command, program will not show path\env tip
 """
 
 import os
@@ -813,19 +814,20 @@ def main_function():
 
     while ( True ):
         if (args['k'] is True):
-            if(args['<name>'] is None):
+            if(args['<names>'] is None):
                 print("please appoint a command")
                 return
-            current_var = args['<name>']
 
             #print ("group %s" % current_vars)
             dict0 = copy.deepcopy(rawconfig['command'])
             list0 = []
-            if( current_var in dict0 ):
-                list0 = dict0[current_var]
-            else:
-                list0.append(current_var)
-            #print (list0)
+
+            for current_var in args['<names>']:
+                if (current_var in dict0):
+                    list0.extend(dict0[current_var])
+                else:
+                    list0.append(current_var)
+
             communicateWithCommandLine(list0)
             os._exit(0)
         else:""

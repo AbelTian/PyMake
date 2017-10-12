@@ -1,6 +1,8 @@
 ::!bat cmd
 ::create mm link
-::sudo ln -s xxx/pymake6.sh /usr/local/bin/mm
+::c:\windows\mm.bat
+::@echo off
+::call xxx\pymake.bat %*
 
 ::env effect
 call mm set env cur qt.android
