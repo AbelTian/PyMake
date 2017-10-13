@@ -172,7 +172,7 @@ def read_thread_function(p):
             if( ret != 0 ):
                 # cmd running fail, child process exit
                 cmd_exit_flag = 1
-                p.stdin.write(("exit %d \n".encode(code) % (ret)))
+                p.stdin.write(("exit %d\n".encode(code) % (ret)))
                 p.stdin.flush()
                 print ("exit %d" % (ret))
                 #print ("read thread exit fail %d, i go" % (ret))
@@ -255,7 +255,7 @@ def write_thread_function(p):
         p.stdin.write(line.encode(code))
         p.stdin.flush()
 
-def communicateWithCommandLine(list0):
+def communicateWithCommandLine2(list0):
 
     #shell = pwd.getpwuid(os.getuid()).pw_shell
     #if shell is None: shell = os.environ.get('SHELL')
@@ -279,21 +279,50 @@ def communicateWithCommandLine(list0):
     if( plat == "Windows"):
         cmd_status = "echo pymake-command-status:%ERRORLEVEL%"
         cmd_sep = '&'
+        cmd_return="\r\n"
         cmd_exit = 'exit /b 0'
+        cmd_suffix = ".bat"
+        cmd_header = "@echo off"
         # window close echo, close promot
-        cmd_list.append("echo off" + ' ' + cmd_sep + ' ' + cmd_status )
+        cmd_list.append(cmd_header)
+        #os.system("type env_effect.bat > cmd_exec.bat")
+        cmd_list.append("call env_effect.bat")
     else:
         cmd_status = "echo pymake-command-status:$?"
         cmd_sep = ';'
+        cmd_suffix=".sh"
         cmd_exit = 'exit 0'
+        cmd_return="\n"
+        cmd_header = "#!/usr/bin/env bash"
+        cmd_list.append(cmd_header)
 
     for cmd in list0:
-        cmd_list.append(cmd + ' ' + cmd_sep + ' ' + cmd_status )
+        if(plat == "Windows"):
+            ""#cmd = cmd.replace('/', '\\')
+        cmd_list.append(cmd)
 
     # append exit 0
     cmd_list.append (cmd_exit)
     #print( cmd_list )
 
+    cmd_execute="cmd_exec"+cmd_suffix
+    with open(cmd_execute, "w") as f:
+        for line in cmd_list:
+            f.write(line + "\n")
+    if( plat == "Windows"):""
+    else:
+        os.system("chmod +x " + cmd_execute)
+
+
+    cmd_list.clear()
+    if( plat == "Windows"):
+        cmd_list.append(cmd_header + ' ' + cmd_sep + ' ' + cmd_status)
+        cmd_list.append("call " + cmd_execute + cmd_sep + ' ' + cmd_status)
+    else:
+        #cmd_list.append(cmd_header + ' ' + cmd_sep + ' ' + cmd_status)
+        cmd_list.append("./" + cmd_execute + cmd_sep + ' ' + cmd_status)
+    cmd_list.append(cmd_exit)
+    #print (cmd_list)
 
     startupinfo = None
     createflags = 0
@@ -333,3 +362,86 @@ def communicateWithCommandLine(list0):
         stopThread(write_thread)
 
     # time.sleep(1)
+    return p.returncode
+
+#only support unix
+def communicateWithCommandLine(list0):
+
+    #shell = pwd.getpwuid(os.getuid()).pw_shell
+    #if shell is None: shell = os.environ.get('SHELL')
+    #if shell is None: shell = os.environ.get('COMSPEC')
+    shell = ""
+    plat = getplatform()
+    if(plat == "Windows"):
+        shell = os.environ.get('COMSPEC') + ' ' + "/q /d /s /a /v:on /e:on /f:on"
+    else:
+        shell = os.environ.get('SHELL')
+    #print ( 'Running under', shell )
+
+
+    global  cmd_event
+    cmd_event = threading.Event()
+    global cmd_exit_flag
+    cmd_exit_flag = 0
+    global cmd_list
+    cmd_list = []
+
+    if( plat == "Windows"):
+        cmd_status = "echo pymake-command-status:%errorlevel%"
+        cmd_sep = '&'
+        cmd_header = "@echo off"
+        cmd_exit = 'exit /b 0'
+        # window close echo, close promot
+        cmd_list.append(cmd_header + ' ' + cmd_sep + ' ' + cmd_status )
+    else:
+        cmd_status = "echo pymake-command-status:$?"
+        cmd_sep = ';'
+        cmd_exit = 'exit 0'
+        cmd_header = "#!/usr/bin/env bash"
+
+    for cmd in list0:
+        cmd_list.append(cmd + ' ' + cmd_sep + ' ' + cmd_status )
+
+    # append exit 0
+    cmd_list.append (cmd_exit)
+    #print( cmd_list )
+
+    startupinfo = None
+    createflags = 0
+    if (plat == 'Windows' ):
+        startupinfo = subprocess.STARTUPINFO()
+        startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+        startupinfo.dwFlags |= subprocess.STARTF_USESTDHANDLES
+        startupinfo.wShowWindow = subprocess.SW_HIDE
+        #createflags = subprocess.CREATE_NEW_CONSOLE
+
+    p = subprocess.Popen(shell, shell=True,
+                         bufsize=-1,
+                         stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+                         #if dont do this, windows stdout piory is high, stderr cant output full message
+                         #when split stdout and stderr, lots of app wont manager the output order
+                         stderr=subprocess.STDOUT,
+                         startupinfo=startupinfo, creationflags=createflags)
+    read_thread = threading.Thread(target=read_thread_function, args=(p, ))
+    read_thread.start()
+    read_err_thread = threading.Thread(target=read_stderr_thread_function, args=(p,))
+    #read_err_thread.start()
+    write_command_thread = threading.Thread(target=write_command_thread_function, args=(p,))
+    write_command_thread.start()
+    write_thread = threading.Thread(target=write_thread_function, args=(p,))
+    write_thread.start()
+    # time.sleep(1)
+
+    p.wait()
+
+    if (read_thread.isAlive()):
+        stopThread(read_thread)
+    if (read_err_thread.isAlive()):
+        stopThread(read_err_thread)
+    if (write_command_thread.isAlive()):
+        stopThread(write_command_thread)
+    if (write_thread.isAlive()):
+        stopThread(write_thread)
+
+    # time.sleep(1)
+    return p.returncode

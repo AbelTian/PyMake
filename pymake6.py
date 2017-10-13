@@ -689,61 +689,66 @@ def main_function():
         else:
             return '$'+name
 
+    def env_export():
+        plat = getplatform()
+
+        if (plat == "Windows"):
+            cmd_suffix = ".bat"
+            cmd_header = "@echo off\n"
+            env_set = 'set '
+        else:
+            cmd_suffix = ".sh"
+            cmd_header = "#!/usr/bin/env bash\n"
+            env_set = 'export '
+
+        current_var = rawconfig['environ']['current']
+        dict0 = copy.deepcopy(rawconfig['environ'][current_var])
+
+        cmd_effect = 'env'
+        if (args['<name>'] == True):
+            cmd_effect = args['<name>']
+        cmd_effect += '_effect' + cmd_suffix
+
+        lines = ""
+        for (key) in dict0["path+"]:
+            lines += (env_set + 'PATH=' + key + os.path.pathsep + env_warp("PATH") + '\n')
+        for (key, value) in dict0.items():
+            if (key == 'path+'):
+                continue
+            lines += (env_set + key + '=' + value + '\n')
+        with open(cmd_effect, 'w') as f:
+            f.write(cmd_header)
+            f.write(lines)
+
+        cmd_unset = 'env'
+        if (args['<name>'] == True):
+            cmd_unset = args['<name>']
+        cmd_unset += '_unset' + cmd_suffix
+
+        lines = ""
+        for (key) in dict0["path+"]:
+            if (plat == "Windows"):
+                lines += (env_set + 'PATH=%PATH:' + key + ';=%' + '\n')
+            else:
+                lines += (env_set + 'PATH=$(' + 'echo ${PATH//' + key.replace('/', '\/') + ':/})' + '\n')
+        for (key, value) in dict0.items():
+            if (key == 'path+'):
+                continue
+            if (plat == "Windows"):
+                lines += ('set ' + key + '=' + '\n')
+            else:
+                lines += ('unset ' + key + '\n')
+        with open(cmd_unset, 'w') as f:
+            f.write(cmd_header)
+            f.write(lines)
+
+        if (args['export'] == True):
+            print("successed: %s %s" % (cmd_effect, cmd_unset))
+
+
     while (True):
         if (args['export'] == True):
-            plat = getplatform()
-
-            if (plat == "Windows"):
-                cmd_suffix = ".bat"
-                cmd_header = "@echo off\n"
-                env_set = 'set '
-            else:
-                cmd_suffix = ".sh"
-                cmd_header = "#!/usr/bin/env bash\n"
-                env_set = 'export '
-
-            current_var = rawconfig['environ']['current']
-            dict0 = copy.deepcopy(rawconfig['environ'][current_var])
-
-            cmd_effect = 'env'
-            if( args['<name>'] == True):
-                cmd_effect = args['<name>']
-            cmd_effect += '_effect' + cmd_suffix
-
-            lines = ""
-            for (key) in dict0["path+"]:
-                lines += (env_set + 'PATH=' + key + os.path.pathsep + env_warp("PATH") + '\n')
-            for (key, value) in dict0.items():
-                if (key == 'path+'):
-                    continue
-                lines += (env_set + key + '=' + value + '\n')
-            with open(cmd_effect, 'w') as f:
-                f.write(cmd_header)
-                f.write(lines)
-
-            cmd_unset = 'env'
-            if( args['<name>'] == True):
-                cmd_unset = args['<name>']
-            cmd_unset += '_unset' + cmd_suffix
-
-            lines = ""
-            for (key) in dict0["path+"]:
-                if (plat == "Windows"):
-                    lines += (env_set + 'PATH=%PATH:' + key + ';=%' + '\n')
-                else:
-                    lines += (env_set + 'PATH=$(' + 'echo ${PATH//' + key.replace('/', '\/') + ':/})' + '\n')
-            for (key, value) in dict0.items():
-                if (key == 'path+'):
-                    continue
-                if (plat == "Windows"):
-                    lines += ('set ' + key + '=' + '\n')
-                else:
-                    lines += ('unset ' + key + '\n')
-            with open(cmd_unset, 'w') as f:
-                f.write(cmd_header)
-                f.write(lines)
-
-            print ("success:%s %s" % (cmd_effect, cmd_unset) )
+            env_export()
             return
         else:""
         break
@@ -827,9 +832,12 @@ def main_function():
                     list0.extend(dict0[current_var])
                 else:
                     list0.append(current_var)
-
-            communicateWithCommandLine(list0)
-            os._exit(0)
+            if(getplatform() == "Windows"):
+                env_export()
+                ret = communicateWithCommandLine2(list0)
+            else:
+                ret = communicateWithCommandLine(list0)
+            os._exit(ret)
         else:""
         break
 
