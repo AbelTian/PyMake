@@ -7,12 +7,13 @@ Usage:
   pymake6.py source root [ <source-root-path> ]
   pymake6.py source config [ --add | --del | --mod | --switch | --restore | --show ] [ <config-file-name> ] [<new-config-file-name>]
   pymake6.py set path ( --add | --del | --mod ) <name> [ <value> ]
-  pymake6.py set env cur <name>
+  pymake6.py set cur env <name>
   pymake6.py set env [ path ] ( --add | --del | --mod ) <group> <name> [ <value> ]
   pymake6.py set cmd (--add | --del | --mod ) <name> [ <values> ... ]
   pymake6.py export [ <name> ]
-  pymake6.py list ( path | env | cmd ) [-r | --raw]
-  pymake6.py k [ <names> ... ]
+  pymake6.py list
+  pymake6.py list ( path | env | cmd ) [-r | --raw] [-a | --all]
+  pymake6.py exec [ <names> ... ]
   pymake6.py (-h | --help)
   pymake6.py --version
 
@@ -25,7 +26,7 @@ Command:
   set cmd          set cmd stream
   export           output env variable to a bat file or sh file [default:env+effect,unset]
   list             list configed values
-  k                exec commands list
+  exec             exec commands list
 
 Options:
   -h --help     Show this screen.
@@ -37,7 +38,6 @@ Options:
   --show        display haved stream config files
   --restore     reset to pymake.json stream config file
   -r, --raw     expand editing config values
-  -q, --quiet   quiet to execute command, program will not show path\env tip
 """
 
 import os
@@ -403,7 +403,7 @@ def main_function():
     sourceroot = conf.get('source', 'root')
     file = conf.get('source', 'config')
     #print ("root: %s config: %s" % (sourceroot, file))
-    print(Fore.LIGHTBLACK_EX + "use source config: %s/%s" % (sourceroot, file) )
+    #print(Fore.LIGHTBLACK_EX + "use source config: %s/%s" % (sourceroot, file) )
 
     if (os.path.exists(sourceroot)):
         # chdir to source root
@@ -688,14 +688,7 @@ def main_function():
             step += 1
 
     # export
-    def env_warp(name):
-        plat = getplatform()
-        if (plat == "Windows"):
-            return '%'+name+'%'
-        else:
-            return '$'+name
-
-    def env_export():
+    def env_export ():
         plat = getplatform()
 
         if (plat == "Windows"):
@@ -711,13 +704,16 @@ def main_function():
         dict0 = copy.deepcopy(rawconfig['environ'][current_var])
 
         cmd_effect = 'env'
-        if (args['<name>'] == True):
+        if (args['<name>'] is not None):
             cmd_effect = args['<name>']
         cmd_effect += '_effect' + cmd_suffix
 
         lines = ""
         for (key) in dict0["path+"]:
-            lines += (env_set + 'PATH=' + key + os.path.pathsep + env_warp("PATH") + '\n')
+            if (plat == "Windows"):
+                lines += (env_set + 'PATH=' + key + os.path.pathsep + '%PATH%' + '\n')
+            else:
+                lines += (env_set + 'PATH=' + key + os.path.pathsep + '$PATH' + '\n')
         for (key, value) in dict0.items():
             if (key == 'path+'):
                 continue
@@ -727,7 +723,7 @@ def main_function():
             f.write(lines)
 
         cmd_unset = 'env'
-        if (args['<name>'] == True):
+        if (args['<name>'] is not None):
             cmd_unset = args['<name>']
         cmd_unset += '_unset' + cmd_suffix
 
@@ -747,14 +743,13 @@ def main_function():
         with open(cmd_unset, 'w') as f:
             f.write(cmd_header)
             f.write(lines)
-
-        if (args['export'] == True):
-            print("successed: %s %s" % (cmd_effect, cmd_unset))
-
+        return cmd_effect, cmd_unset
 
     while (True):
         if (args['export'] == True):
-            env_export()
+            cmd_effect, cmd_unset = env_export()
+
+            print("successed: %s %s" % (cmd_effect, cmd_unset))
             return
         else:""
         break
@@ -773,19 +768,27 @@ def main_function():
                     print(Fore.BLUE+ "%-24s %s" % (k, v) )
 
             elif( args['env'] == True):
+                env = os.environ
                 current_var = list_config['environ']['current']
-                print (Fore.CYAN+ "env %s" % current_var)
                 dict0 = copy.deepcopy(list_config['environ'][current_var])
 
-                print (Fore.MAGENTA+ "path+:")
+                print (Fore.CYAN+ "env %s" % current_var)
+                print(Fore.MAGENTA + "path+:")
                 for (key) in dict0["path+"]:
-                    print (Fore.BLUE+ "  %s" % key)
-
-                print (Fore.MAGENTA+ "variable:")
+                    print(Fore.BLUE + "  %s" % key)
+                if(args['-a'] or args['--all'] is True):
+                    for path in env["PATH"].split(os.path.pathsep):
+                        print(Fore.BLUE + "  %s" % path)
+                print(Fore.MAGENTA + "variable:")
                 for (key, value) in dict0.items():
-                    if ( key == 'path+' ):
+                    if (key == 'path+'):
                         continue
-                    print(Fore.GREEN+ "  %-24s %s" % (key, value) )
+                    print(Fore.GREEN + "  %-30s %s" % (key, value))
+                if (args['-a'] or args['--all'] is True):
+                    for (key, value) in env.items():
+                        if (key == 'PATH'):
+                            continue
+                        print(Fore.GREEN + "  %-30s %s" % (key, value))
 
             elif( args['cmd'] == True):
                 dict0 = copy.deepcopy(list_config['command'])
@@ -796,7 +799,8 @@ def main_function():
                         print(Fore.RED+ "%-3s %s" % (step, cmd))
                         step += 1
             else:
-                ""
+                current_var = rawconfig['environ']['current']
+                print(Fore.CYAN + "env %s" % current_var)
             return
         else:
             ''
@@ -813,18 +817,8 @@ def main_function():
             continue
         env[key] = value
 
-    print(Fore.CYAN + "env %s" % current_var)
-    print(Fore.MAGENTA + "path+:")
-    for path in env["PATH"].split(os.path.pathsep):
-        print(Fore.BLUE + "  %s" % path)
-    print(Fore.MAGENTA + "variable:")
-    for (key, value) in env.items():
-        if(key == 'PATH'):
-            continue
-        print(Fore.GREEN + "  %-30s %s" % (key, value))
-
     while ( True ):
-        if (args['k'] is True):
+        if (args['exec'] is True):
             if(args['<names>'] is None):
                 print("please appoint a command")
                 return
