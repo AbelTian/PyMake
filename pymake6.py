@@ -322,10 +322,6 @@ def main_function():
         conf.set('source', 'config', 'pymake.json')
         conf.write(open(pymakeini, 'w'))
 
-    sourceroot = conf.get('source', 'root')
-    # chdir to source root
-    os.chdir(sourceroot)
-
     args = docopt(__doc__, version='pymake6.py v6.0')
     #print(args)
 
@@ -338,8 +334,10 @@ def main_function():
                     conf.write(open(pymakeini, 'w'))
                     print ("success root: %s" % args['<source-root-path>'])
                 else:
-                    print ("%s" % sourceroot)
+                    print ("%s" % conf.get('source', 'root'))
             elif(args['config'] is True):
+                sourceroot = conf.get('source', 'root')
+                os.chdir(sourceroot)
                 if(args['--del'] is True):
                     if (args['<config-file-name>'] is not None and args['<config-file-name>'] == 'pymake.json'):
                         print('You can\'t remove pymake\'s file...')
@@ -402,9 +400,17 @@ def main_function():
             ''
         break
 
+    sourceroot = conf.get('source', 'root')
     file = conf.get('source', 'config')
     #print ("root: %s config: %s" % (sourceroot, file))
     print(Fore.LIGHTBLACK_EX + "use source config: %s/%s" % (sourceroot, file) )
+
+    if (os.path.exists(sourceroot)):
+        # chdir to source root
+        os.chdir(sourceroot)
+    else:
+        print("You have changed sourceroot manual, please change it using source command")
+        return
 
     pymakefilepath = os.path.split(os.path.realpath(__file__))[0]
     if (os.path.abspath(sourceroot) == os.path.abspath(pymakeroot) or
