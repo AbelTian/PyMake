@@ -7,12 +7,12 @@ Usage:
   pymake6.py source root [ <source-root-path> ]
   pymake6.py source config [ --add | --del | --mod | --switch | --restore | --show ] [ <config-file-name> ] [<new-config-file-name>]
   pymake6.py set path ( --add | --del | --mod ) <name> [ <value> ]
-  pymake6.py set cur env <name>
   pymake6.py set env [ path ] ( --add | --del | --mod ) <group> <name> [ <value> ]
   pymake6.py set cmd (--add | --del | --mod ) <name> [ <values> ... ]
-  pymake6.py export [ <name> ]
+  pymake6.py export [ <env-name> ] [ <file-name> ]
   pymake6.py list
   pymake6.py list ( path | env | cmd ) [-r | --raw] [-a | --all]
+  pymake6.py set cur env <name>
   pymake6.py exec [ <names> ... ]
   pymake6.py (-h | --help)
   pymake6.py --version
@@ -24,7 +24,7 @@ Command:
   set path         path assessblage
   set env          env set
   set cmd          set cmd stream
-  export           output env variable to a bat file or sh file [default:env+effect,unset]
+  export           output private env variable to a bat file or sh file [default:current, env]
   list             list configed values
   exec             exec commands list
 
@@ -587,67 +587,69 @@ def main_function():
 
     #replace env
     #from path var env
-    current_var = rawconfig["environ"]["current"]
-    #replace path+
-    step = 0
-    for value in rawconfig["environ"][current_var]['path+']:
-        startpos = 0
-        while (True):
-            # print (startpos)
-            # print (value)
-
-            index = value.find('${', startpos)
-            if (index == -1):
-                break
-
-            index2 = value.find('}', index)
-            startpos = index2
-
-            key_replace = value[index:index2 + 1]
-            # print ( key0 ) #${...}
-            key_from = key_replace.split('{')[1].split('}')[0].strip()
-            # print ( key1 ) #...
-
-            for (find_key, find_value) in rawconfig["path-assemblage"].items():
-                if (find_key == key_from):
-                    rawconfig["environ"][current_var]['path+'][step] = rawconfig["environ"][current_var]['path+'][step].replace(
-                        key_replace, rawconfig["path-assemblage"][key_from])
-                    break
-        step += 1
-    for (key, value) in rawconfig["environ"][current_var].items():
-        #print (key) #...
-        if(key == "path+"):
+    for current_var in rawconfig["environ"].keys():
+        if( current_var == "current"):
             continue
+        #replace path+
+        step = 0
+        for value in rawconfig["environ"][current_var]['path+']:
+            startpos = 0
+            while (True):
+                # print (startpos)
+                # print (value)
 
-        startpos = 0
-        while (True):
-            #print (startpos)
-
-            index = value.find('${', startpos)
-            if (index == -1):
-                break
-
-            index2 = value.find('}', index)
-            startpos = index2
-
-            key_replace = value[index:index2 + 1]
-            #print ( key0 ) #${...}
-            key_from = key_replace.split('{')[1].split('}')[0].strip()
-            #print ( key1 ) #...
-
-            for (find_key, find_value) in rawconfig["path-assemblage"].items():
-                if (find_key == key_from):
-                    rawconfig["environ"][current_var][key] = rawconfig["environ"][current_var][key].replace(
-                        key_replace, rawconfig["path-assemblage"][key_from])
+                index = value.find('${', startpos)
+                if (index == -1):
                     break
 
-            for (find_key, find_value) in rawconfig["environ"][current_var].items():
-                if (key == find_key):
+                index2 = value.find('}', index)
+                startpos = index2
+
+                key_replace = value[index:index2 + 1]
+                # print ( key0 ) #${...}
+                key_from = key_replace.split('{')[1].split('}')[0].strip()
+                # print ( key1 ) #...
+
+                for (find_key, find_value) in rawconfig["path-assemblage"].items():
+                    if (find_key == key_from):
+                        rawconfig["environ"][current_var]['path+'][step] = rawconfig["environ"][current_var]['path+'][step].replace(
+                            key_replace, rawconfig["path-assemblage"][key_from])
+                        break
+            step += 1
+        for (key, value) in rawconfig["environ"][current_var].items():
+            #print (key) #...
+            if(key == "path+"):
+                continue
+
+            startpos = 0
+            while (True):
+                #print (startpos)
+
+                index = value.find('${', startpos)
+                if (index == -1):
                     break
-                if (find_key == key_from):
-                    rawconfig["environ"][current_var][key] = rawconfig["environ"][current_var][key].replace(
-                        key_replace, rawconfig["environ"][current_var][key_from])
-                    break
+
+                index2 = value.find('}', index)
+                startpos = index2
+
+                key_replace = value[index:index2 + 1]
+                #print ( key0 ) #${...}
+                key_from = key_replace.split('{')[1].split('}')[0].strip()
+                #print ( key1 ) #...
+
+                for (find_key, find_value) in rawconfig["path-assemblage"].items():
+                    if (find_key == key_from):
+                        rawconfig["environ"][current_var][key] = rawconfig["environ"][current_var][key].replace(
+                            key_replace, rawconfig["path-assemblage"][key_from])
+                        break
+
+                for (find_key, find_value) in rawconfig["environ"][current_var].items():
+                    if (key == find_key):
+                        break
+                    if (find_key == key_from):
+                        rawconfig["environ"][current_var][key] = rawconfig["environ"][current_var][key].replace(
+                            key_replace, rawconfig["environ"][current_var][key_from])
+                        break
 
     #replace cmd
     #from path env
@@ -688,9 +690,14 @@ def main_function():
             step += 1
 
     # export
-    def env_export ():
-        plat = getplatform()
+    def env_export (env_name = None, file_name = None):
+        #select env
+        current_var = rawconfig['environ']['current']
+        if( env_name is not None ):
+            current_var = env_name
+        dict0 = copy.deepcopy(rawconfig['environ'][current_var])
 
+        plat = getplatform()
         if (plat == "Windows"):
             cmd_suffix = ".bat"
             cmd_header = "@echo off\n"
@@ -699,15 +706,11 @@ def main_function():
             cmd_suffix = ".sh"
             cmd_header = "#!/usr/bin/env bash\n"
             env_set = 'export '
-
-        current_var = rawconfig['environ']['current']
-        dict0 = copy.deepcopy(rawconfig['environ'][current_var])
-
+        #export effect env
         cmd_effect = 'env'
-        if (args['<name>'] is not None):
-            cmd_effect = args['<name>']
+        if (file_name is not None):
+            cmd_effect = file_name
         cmd_effect += '_effect' + cmd_suffix
-
         lines = ""
         for (key) in dict0["path+"]:
             if (plat == "Windows"):
@@ -721,12 +724,11 @@ def main_function():
         with open(cmd_effect, 'w') as f:
             f.write(cmd_header)
             f.write(lines)
-
+        #export unset env
         cmd_unset = 'env'
-        if (args['<name>'] is not None):
-            cmd_unset = args['<name>']
+        if (file_name is not None):
+            cmd_unset = file_name
         cmd_unset += '_unset' + cmd_suffix
-
         lines = ""
         for (key) in dict0["path+"]:
             if (plat == "Windows"):
@@ -743,13 +745,13 @@ def main_function():
         with open(cmd_unset, 'w') as f:
             f.write(cmd_header)
             f.write(lines)
-        return cmd_effect, cmd_unset
+        #return file name
+        return current_var, cmd_effect, cmd_unset
 
     while (True):
         if (args['export'] == True):
-            cmd_effect, cmd_unset = env_export()
-
-            print("successed: %s %s" % (cmd_effect, cmd_unset))
+            current_var, cmd_effect, cmd_unset = env_export(args['<env-name>'], args['<file-name>'])
+            print("successed: export %s to %s %s" % (current_var, cmd_effect, cmd_unset))
             return
         else:""
         break
