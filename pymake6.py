@@ -802,7 +802,13 @@ def main_function():
                         step += 1
             else:
                 current_var = rawconfig['environ']['current']
-                print(Fore.CYAN + "env %s" % current_var)
+                print(Fore.CYAN + "%s" % current_var)
+                for key in rawconfig['environ'].keys() :
+                    if(key == 'current'):
+                        continue
+                    if(key == current_var):
+                        continue
+                    print("%s" % key)
             return
         else:
             ''
