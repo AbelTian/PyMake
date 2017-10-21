@@ -815,15 +815,98 @@ def main_function():
         break
 
     # set into env
-    env = os.environ
-    current_var = rawconfig['environ']['current']
-    dict0 = copy.deepcopy(rawconfig['environ'][current_var])
-    for (key) in dict0["path+"]:
-        env["PATH"] = key + os.path.pathsep + env["PATH"]
-    for (key, value) in dict0.items():
-        if (key == 'path+'):
-            continue
-        env[key] = value
+    while(False):
+        env = os.environ
+        current_var = rawconfig['environ']['current']
+        dict0 = copy.deepcopy(rawconfig['environ'][current_var])
+        for (key) in dict0["path+"]:
+            env["PATH"] = key + os.path.pathsep + env["PATH"]
+        for (key, value) in dict0.items():
+            if (key == 'path+'):
+                continue
+            env[key] = value
+        break
+
+    def createCmdList0(list0):
+        cmd_list = []
+
+        plat = getplatform()
+        if (plat == "Windows"):
+            cmd_status = "echo pymake-command-status:%ERRORLEVEL%"
+            cmd_sep = '&'
+            cmd_return = "\r\n"
+            cmd_exit = 'exit /b 0'
+            cmd_suffix = ".bat"
+            cmd_header = "@echo off"
+            # window close echo, close promot
+            cmd_list.append(cmd_header)
+            # os.system("type env_effect.bat > cmd_exec.bat")
+            cmd_list.append("call cmd_effect.bat")
+        else:
+            cmd_status = "echo pymake-command-status:$?"
+            cmd_sep = ';'
+            cmd_suffix = ".sh"
+            cmd_exit = 'exit 0'
+            cmd_return = "\n"
+            cmd_header = "#!/usr/bin/env bash"
+            cmd_list.append(cmd_header)
+            cmd_list.append("source cmd_effect.sh")
+
+        for cmd in list0:
+            if (plat == "Windows"):
+                ""  # cmd = cmd.replace('/', '\\')
+            cmd_list.append(cmd)
+
+        # append exit 0
+        cmd_list.append(cmd_exit)
+        # print( cmd_list )
+
+        cmd_execute = "cmd_exec" + cmd_suffix
+        with open(cmd_execute, "w") as f:
+            for line in cmd_list:
+                f.write(line + "\n")
+        if (plat == "Windows"):
+            ""
+        else:
+            os.system("chmod +x " + cmd_execute)
+
+        cmd_list.clear()
+        if (plat == "Windows"):
+            cmd_list.append(cmd_header + ' ' + cmd_sep + ' ' + cmd_status)
+            cmd_list.append("call " + cmd_execute + cmd_sep + ' ' + cmd_status)
+        else:
+            # cmd_list.append(cmd_header + ' ' + cmd_sep + ' ' + cmd_status)
+            cmd_list.append("./" + cmd_execute + cmd_sep + ' ' + cmd_status)
+        cmd_list.append(cmd_exit)
+        # print (cmd_list)
+        return cmd_list
+
+    def createCmdList01(list0):
+        cmd_list = []
+
+        plat = getplatform()
+        if (plat == "Windows"):
+            cmd_status = "echo pymake-command-status:%errorlevel%"
+            cmd_sep = '&'
+            cmd_header = "@echo off"
+            cmd_exit = 'exit /b 0'
+            # window close echo, close promot
+            cmd_list.append(cmd_header + ' ' + cmd_sep + ' ' + cmd_status)
+            cmd_list.append("call cmd_effect.bat" + ' ' + cmd_sep + ' ' + cmd_status)
+        else:
+            cmd_status = "echo pymake-command-status:$?"
+            cmd_sep = ';'
+            cmd_exit = 'exit 0'
+            cmd_header = "#!/usr/bin/env bash"
+            cmd_list.append("source cmd_effect.sh" + ' ' + cmd_sep + ' ' + cmd_status)
+
+        for cmd in list0:
+            cmd_list.append(cmd + ' ' + cmd_sep + ' ' + cmd_status)
+
+        # append exit 0
+        cmd_list.append(cmd_exit)
+        # print( cmd_list )
+        return cmd_list
 
     while ( True ):
         if (args['exec'] is True):
@@ -833,18 +916,28 @@ def main_function():
 
             #print ("group %s" % current_vars)
             dict0 = copy.deepcopy(rawconfig['command'])
-            list0 = []
 
+            list0 = []
             for current_var in args['<names>']:
                 if (current_var in dict0):
                     list0.extend(dict0[current_var])
                 else:
                     list0.append(current_var)
-            if(getplatform() == "Windows"):
-                env_export()
-                ret = communicateWithCommandLine2(list0)
+
+            current_var = rawconfig['environ']['current']
+            env_export(current_var, "cmd")
+
+            cmd_list = []
+            if(getplatform()=="Windows"):
+                cmd_list = createCmdList0(list0)
             else:
-                ret = communicateWithCommandLine(list0)
+                cmd_list = createCmdList01(list0)
+
+            #good compatibility
+            #cmd_list = createCmdList0(list0)
+
+            ret = communicateWithCommandLine(cmd_list)
+
             os._exit(ret)
         else:""
         break
