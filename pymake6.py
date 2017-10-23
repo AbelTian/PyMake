@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #!/usr/bin/env python
-"""PyMake 6.0.
+"""PyMake 6.1.
 
 Usage:
   pymake6.py source
@@ -322,7 +322,7 @@ def main_function():
         conf.set('source', 'config', 'pymake.json')
         conf.write(open(pymakeini, 'w'))
 
-    args = docopt(__doc__, version='pymake6.py v6.0')
+    args = docopt(__doc__, version='pymake6.py v6.1')
     #print(args)
 
     pymakesuffix = '.json'
