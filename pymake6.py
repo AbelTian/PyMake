@@ -10,9 +10,9 @@ Usage:
   pymake6.py set env [ path ] ( --add | --del | --mod ) <group> <name> [ <value> ]
   pymake6.py set cmd (--add | --del | --mod ) <name> [ <values> ... ]
   pymake6.py set cur env <name>
-  pymake6.py export [ <env-name> ] [ <file-name> ]
-  pymake6.py type [ <cmd-name> ]  [ to <file-name> ]
   pymake6.py list [ path | env | cmd ] [<name>] [-r | --raw] [-a | --all]
+  pymake6.py export [ <env-name> ] [ to <file-name> ]
+  pymake6.py type [ <cmd-name> ]  [ to <file-name> ]
   pymake6.py use <env-name> exec <command-names> ...
   pymake6.py exec [ <command-names> ... ]
   pymake6.py (-h | --help)
@@ -693,6 +693,78 @@ def main_function():
                         break
             step += 1
 
+    #list
+    while (True):
+        if (args['list'] == True):
+
+            list_config = config
+            if ( args['--raw'] is True ):
+                list_config = rawconfig
+
+            if( args['path'] == True):
+                dict0 = copy.deepcopy(list_config['path-assemblage'])
+                for (k, v) in dict0.items():
+                    print(Fore.BLUE+ "%-24s %s" % (k, v) )
+
+            elif( args['env'] == True):
+                env = os.environ
+                current_var = list_config['environ']['current']
+                if(args['<name>'] is not None):
+                    current_var = args['<name>']
+
+                dict0 = copy.deepcopy(list_config['environ'][current_var])
+
+                print (Fore.CYAN+ "env %s" % current_var)
+                print(Fore.MAGENTA + "path+:")
+                for (key) in dict0["path+"]:
+                    print(Fore.BLUE + "  %s" % key)
+                if(args['-a'] or args['--all'] is True):
+                    for path in env["PATH"].split(os.path.pathsep):
+                        print(Fore.BLUE + "  %s" % path)
+                print(Fore.MAGENTA + "variable:")
+                for (key, value) in dict0.items():
+                    if (key == 'path+'):
+                        continue
+                    print(Fore.GREEN + "  %-30s %s" % (key, value))
+                if (args['-a'] or args['--all'] is True):
+                    for (key, value) in env.items():
+                        if (key == 'PATH'):
+                            continue
+                        print(Fore.GREEN + "  %-30s %s" % (key, value))
+
+            elif( args['cmd'] == True):
+                dict0 = copy.deepcopy(list_config['command'])
+                if (args['<name>'] is not None):
+                    #print(Fore.CYAN + "group: %s" % args['<name>'])
+                    value = dict0[args['<name>']]
+                    step = 1
+                    for cmd in value:
+                        print(Fore.RED + "%-3s %s" % (step, cmd))
+                        step += 1
+                else:
+                    for (key, value) in dict0.items():
+                        if (args['-a'] is not True and args['--all'] is not True):
+                            print(Fore.CYAN + "%s" % key)
+                            continue
+                        print(Fore.CYAN + "group: %s" % key)
+                        step = 1
+                        for cmd in value:
+                            print(Fore.RED + "%-3s %s" % (step, cmd))
+                            step += 1
+            else:
+                current_var = rawconfig['environ']['current']
+                print(Fore.CYAN + "%s" % current_var)
+                for key in rawconfig['environ'].keys() :
+                    if(key == 'current'):
+                        continue
+                    if(key == current_var):
+                        continue
+                    print("%s" % key)
+            return
+        else:
+            ''
+        break
+
     # export
     def env_export (env_name = None, file_name = None):
         #select env
@@ -813,78 +885,6 @@ def main_function():
             return
 
         else:""
-        break
-
-    #list
-    while (True):
-        if (args['list'] == True):
-
-            list_config = config
-            if ( args['--raw'] is True ):
-                list_config = rawconfig
-
-            if( args['path'] == True):
-                dict0 = copy.deepcopy(list_config['path-assemblage'])
-                for (k, v) in dict0.items():
-                    print(Fore.BLUE+ "%-24s %s" % (k, v) )
-
-            elif( args['env'] == True):
-                env = os.environ
-                current_var = list_config['environ']['current']
-                if(args['<name>'] is not None):
-                    current_var = args['<name>']
-
-                dict0 = copy.deepcopy(list_config['environ'][current_var])
-
-                print (Fore.CYAN+ "env %s" % current_var)
-                print(Fore.MAGENTA + "path+:")
-                for (key) in dict0["path+"]:
-                    print(Fore.BLUE + "  %s" % key)
-                if(args['-a'] or args['--all'] is True):
-                    for path in env["PATH"].split(os.path.pathsep):
-                        print(Fore.BLUE + "  %s" % path)
-                print(Fore.MAGENTA + "variable:")
-                for (key, value) in dict0.items():
-                    if (key == 'path+'):
-                        continue
-                    print(Fore.GREEN + "  %-30s %s" % (key, value))
-                if (args['-a'] or args['--all'] is True):
-                    for (key, value) in env.items():
-                        if (key == 'PATH'):
-                            continue
-                        print(Fore.GREEN + "  %-30s %s" % (key, value))
-
-            elif( args['cmd'] == True):
-                dict0 = copy.deepcopy(list_config['command'])
-                if (args['<name>'] is not None):
-                    #print(Fore.CYAN + "group: %s" % args['<name>'])
-                    value = dict0[args['<name>']]
-                    step = 1
-                    for cmd in value:
-                        print(Fore.RED + "%-3s %s" % (step, cmd))
-                        step += 1
-                else:
-                    for (key, value) in dict0.items():
-                        if (args['-a'] is not True and args['--all'] is not True):
-                            print(Fore.CYAN + "%s" % key)
-                            continue
-                        print(Fore.CYAN + "group: %s" % key)
-                        step = 1
-                        for cmd in value:
-                            print(Fore.RED + "%-3s %s" % (step, cmd))
-                            step += 1
-            else:
-                current_var = rawconfig['environ']['current']
-                print(Fore.CYAN + "%s" % current_var)
-                for key in rawconfig['environ'].keys() :
-                    if(key == 'current'):
-                        continue
-                    if(key == current_var):
-                        continue
-                    print("%s" % key)
-            return
-        else:
-            ''
         break
 
     # set into env
