@@ -11,6 +11,7 @@ Usage:
   pymake6.py set cmd (--add | --del | --mod ) <name> [ <values> ... ]
   pymake6.py set cur env <name>
   pymake6.py list [ path | env | cmd ] [<name>] [-r | --raw] [-a | --all]
+  pymake6.py clean
   pymake6.py export [ <env-name> ] [ to <file-name> ]
   pymake6.py type [ <cmd-name> ]  [ to <file-name> ]
   pymake6.py use <env-name> exec <command-names> ...
@@ -30,6 +31,7 @@ Command:
   exec             exec commands list
   set cur env      set default env
   use              use selected env to exec commands
+  clean            clean *_effect.sh *_unset.sh
 
 Options:
   -h --help     Show this screen.
@@ -763,6 +765,19 @@ def main_function():
             return
         else:
             ''
+        break
+
+    # clean
+    while (True):
+        if (args['clean'] == True):
+            plat = getplatform()
+            if(plat == "Windows"):
+                os.system("@del /s /q *_effect.bat *_unset.bat")
+            else:
+                os.system("rm -f *_effect.sh *_unset.sh")
+            return
+        else:
+            ""
         break
 
     # export
