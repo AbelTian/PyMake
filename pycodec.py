@@ -16,7 +16,7 @@ import chardet
 #chardet
 
 def ReadFile(filePath, encoding="utf-8"):
-    with codecs.open(filePath, "r", encoding) as f:
+    with codecs.open(filePath, "rb", encoding) as f:
         return f.read()
 
 def WriteFile(filePath, u, encoding="utf-8"):
@@ -25,27 +25,49 @@ def WriteFile(filePath, u, encoding="utf-8"):
 
 
 def utf(path, recursive=False):
-    print(path)
-    if os.path.isfile(path):
-        content = ""
-        with open(path, 'r') as f:
-            content = f.read()
-        encoding = chardet.detect(content)['encoding']
+    #print(path, os.path.isfile(path))
+    if os.path.isfile(path) is True:
 
         content = ""
-        content = ReadFile(path, encoding)
-        print(content)
-        return
-        newContent = codecs.decode(content, "unicode")
-        WriteFile(path, newContent, "utf-8")
+        with open(path, 'rb') as f:
+            content = f.read()
+        encodeName = chardet.detect(content)["encoding"]
+
+        content = ""
+        content = ReadFile(path, encodeName)
+        b1 = bytes(content, encoding=encodeName)
+        newContent = codecs.decode(b1, encodeName)
+
+        newEncodeName = "utf-8"
+        WriteFile(path, newContent, newEncodeName)
+
+        print(path, encodeName, newEncodeName)
 
     else:
         for i in os.listdir(path):
             now_path = os.path.join(path, i)
-            if os.path.isdir(now_path) and recursive:
+            #print(path, now_path, os.path.splitext(i)[1], os.path.isdir(now_path) )
+            if os.path.isdir(now_path) and recursive is True:
                 utf(now_path, recursive)
-            elif os.path.splitext(i)[1] is '.cpp' or '.h':
+            elif os.path.splitext(i)[1] == ".cpp" \
+                    or os.path.splitext(i)[1] == ".cc"\
+                    or os.path.splitext(i)[1] == ".hh"\
+                    or os.path.splitext(i)[1] == ".sh"\
+                    or os.path.splitext(i)[1] == ".c"\
+                    or os.path.splitext(i)[1] == ".ui"\
+                    or os.path.splitext(i)[1] == ".qrc"\
+                    or os.path.splitext(i)[1] == ".rc"\
+                    or os.path.splitext(i)[1] == ".in"\
+                    or os.path.splitext(i)[1] == ".h"\
+                    or os.path.splitext(i)[1] == ".pro"\
+                    or os.path.splitext(i)[1] == ".pri"\
+                    or os.path.splitext(i)[1] == ".c"\
+                    or os.path.splitext(i)[1] == ".ui":
+                #print ("inside", now_path)
                 utf(now_path)
+            else:
+                continue;
+                #print ("excide", now_path)
 
 
 usage = """
@@ -71,37 +93,3 @@ if __name__ == '__main__':
     recursive = (len(sys.argv) == 3 and sys.argv[2] == 'recursive')
     utf(path, recursive)
 
-
-
-
-
-
-
-
-
-def convert(file,in_enc="GBK",out_enc="UTF-8"):
-    try:
-        print ("convert " +file)
-        f=codecs.open(file,'r',in_enc)
-        new_content=f.read()
-        codecs.open(file,'w',out_enc).write(new_content)
-        #print (f.read())
-    except IOError as err:
-        print ("I/O error: {0}".format(err))
-
-
-def explore(dir):
-    for root,dirs,files in os.walk(dir):
-        for file in files:
-            path=os.path.join(root,file)
-            convert(path)
-
-def main():
-    for path in sys.argv[1:]:
-        if(os.path.isfile(path)):
-            convert(path)
-        elif os.path.isdir(path):
-                explore(path)
-
-if __name__=="__main__":
-    main()
