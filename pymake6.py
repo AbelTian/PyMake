@@ -816,8 +816,11 @@ def main_function():
         for (key, value) in dict0.items():
             if (key == 'path+'):
                 continue
-            lines += (env_set + key + '=' + value + '\n')
-            #lines += (env_set + key + '=\"' + value + '\"\n')
+            if (plat == "Windows"):
+                lines += (env_set + key + '=' + value + '\n')
+            else:
+                lines += (env_set + key + '=\"' + value + '\"\n')
+
         with open(cmd_effect, 'w') as f:
             f.write(cmd_header)
             f.write(lines)
