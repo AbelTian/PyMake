@@ -3,4 +3,4 @@
 filepath=$(cd `dirname $0`; pwd)
 
 #create mm link
-sudo ln -s $filepath/pymake.sh /usr/local/bin/mm
+sudo ln -sf $filepath/pymake.sh /usr/local/bin/mm
