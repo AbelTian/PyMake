@@ -355,6 +355,11 @@ config = pymake6-mac.json
 *You need config path-esseblage, and environ, command. Others are stored for memeory*
 *You can follow example.sh in bash file use this pymake, and you can follow example2.sh in command-line use this program*
 
+# Version 6.2  
+Only update the command-line.  
+![命令行更新的截图](./screenshot/a0.PNG)
+
+
 
 # Dependencies  
 
