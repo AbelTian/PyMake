@@ -772,9 +772,9 @@ def main_function():
         if (args['clean'] == True):
             plat = getplatform()
             if(plat == "Windows"):
-                os.system("@del /s /q *_effect.bat *_unset.bat")
+                os.system("@del /s /q *_effect.bat *_unset.bat *_exec.bat")
             else:
-                os.system("rm -f *_effect.sh *_unset.sh")
+                os.system("rm -f *_effect.sh *_unset.sh *_exec.sh")
             return
         else:
             ""

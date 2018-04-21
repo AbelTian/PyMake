@@ -10,6 +10,7 @@ Usage:
   pymake7.py set env [ path ] ( --add | --del | --mod ) <group> <name> [ <value> ]
   pymake7.py set cmd (--add | --del | --mod ) <name> [ <values> ... ]
   pymake7.py set cur env <name>
+  pymake7.py show
   pymake7.py path [-r | --raw]
   pymake7.py env [ export ] [ <env-name> ] [ to <file-name> ] [-r | --raw] [-a | --all]
   pymake7.py cmd [ <cmd-name> ]  [ to <file-name> ]
