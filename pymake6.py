@@ -15,6 +15,7 @@ Usage:
   pymake6.py export [ <env-name> ] [ to <file-name> ]
   pymake6.py type [ <cmd-name> ]  [ to <file-name> ]
   pymake6.py use <env-name> exec <command-names> ...
+  pymake6.py here exec <command-names> ...
   pymake6.py exec [ <command-names> ... ]
   pymake6.py (-h | --help)
   pymake6.py --version
@@ -31,6 +32,7 @@ Command:
   exec             exec commands list
   set cur env      set default env
   use              use selected env to exec commands
+  here             at here exec commands
   clean            clean *_effect.sh *_unset.sh
 
 Options:
@@ -410,6 +412,9 @@ def main_function():
     file = conf.get('source', 'config')
     #print ("root: %s config: %s" % (sourceroot, file))
     #print(Fore.LIGHTBLACK_EX + "use source config: %s/%s" % (sourceroot, file) )
+
+    #record current directory
+    initpath = os.getcwd()
 
     if (os.path.exists(sourceroot)):
         # chdir to source root
@@ -1075,6 +1080,65 @@ def main_function():
             os._exit(ret)
             return
         else :""
+        break
+
+    #here exec command
+    while ( True ):
+        if (args['here'] is True):
+            os.chdir(initpath)
+
+            if(args['<command-names>'] is None):
+                print("please appoint your commands")
+                return
+
+            #print ("group %s" % current_vars)
+            dict0 = copy.deepcopy(rawconfig['command'])
+
+            list0 = []
+            for current_var in args['<command-names>']:
+                if (current_var in dict0):
+                    list0.extend(dict0[current_var])
+                else:
+                    list0.append(current_var)
+            cmd_list = []
+            temp_file_name = ""
+            if(getplatform()=="Windows"):
+                cmd_list, temp_file_name = createCmdList0(list0)
+            else:
+                cmd_list, temp_file_name = createCmdList01(list0)
+            #good compatibility
+            #cmd_list = createCmdList0(list0)
+
+            current_var = rawconfig['environ']['current']
+            env_export(current_var, temp_file_name)
+
+            ret = communicateWithCommandLine(cmd_list)
+
+            # delete env file and cmd file
+            if(getplatform()=="Windows"):
+                temp_file = temp_file_name + "_exec.bat"
+                if(os.path.exists(temp_file)):
+                    os.remove(temp_file)
+                temp_file = temp_file_name + "_effect.bat"
+                if(os.path.exists(temp_file)):
+                    os.remove(temp_file)
+                temp_file = temp_file_name + "_unset.bat"
+                if(os.path.exists(temp_file)):
+                    os.remove(temp_file)
+            else :
+                temp_file = temp_file_name + "_exec.sh"
+                if(os.path.exists(temp_file)):
+                    os.remove(temp_file)
+                temp_file = temp_file_name + "_effect.sh"
+                if(os.path.exists(temp_file)):
+                    os.remove(temp_file)
+                temp_file = temp_file_name + "_unset.sh"
+                if(os.path.exists(temp_file)):
+                    os.remove(temp_file)
+
+            os._exit(ret)
+            return
+        else:""
         break
 
     while ( True ):
