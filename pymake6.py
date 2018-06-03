@@ -11,11 +11,14 @@ Usage:
   pymake6.py set cmd (--add | --del | --mod ) <name> [ <values> ... ]
   pymake6.py set cur env <name>
   pymake6.py list [ path | env | cmd ] [<name>] [-r | --raw] [-a | --all]
-  pymake6.py clean
+  pymake6.py here clean
+  pymake6.py here exec [ <command-names> ... ]
+  pymake6.py here use <env-name> exec [ <command-names> ... ]
   pymake6.py export [ <env-name> ] [ to <file-name> ]
   pymake6.py type [ <cmd-name> ]  [ to <file-name> ]
-  pymake6.py exec [ here ] [ <command-names> ... ]
+  pymake6.py clean [here]
   pymake6.py use <env-name> exec [ here ] [ <command-names> ... ]
+  pymake6.py exec [ here ] [ <command-names> ... ]
   pymake6.py (-h | --help)
   pymake6.py --version
 
@@ -771,17 +774,17 @@ def main_function():
             ''
         break
 
-    # clean
-    while (True):
-        if (args['clean'] == True):
-            plat = getplatform()
-            if(plat == "Windows"):
-                os.system("@del /s /q *_effect.bat *_unset.bat *_exec.bat")
-            else:
-                os.system("rm -f *_effect.sh *_unset.sh *_exec.sh")
-            return
-        else:
-            ""
+    # set into env
+    while(False):
+        env = os.environ
+        current_var = rawconfig['environ']['current']
+        dict0 = copy.deepcopy(rawconfig['environ'][current_var])
+        for (key) in dict0["path+"]:
+            env["PATH"] = key + os.path.pathsep + env["PATH"]
+        for (key, value) in dict0.items():
+            if (key == 'path+'):
+                continue
+            env[key] = value
         break
 
     # export
@@ -910,19 +913,6 @@ def main_function():
         else:""
         break
 
-    # set into env
-    while(False):
-        env = os.environ
-        current_var = rawconfig['environ']['current']
-        dict0 = copy.deepcopy(rawconfig['environ'][current_var])
-        for (key) in dict0["path+"]:
-            env["PATH"] = key + os.path.pathsep + env["PATH"]
-        for (key, value) in dict0.items():
-            if (key == 'path+'):
-                continue
-            env[key] = value
-        break
-
     def createCmdList0(list0):
 
         cmd_list = []
@@ -1015,6 +1005,167 @@ def main_function():
         # print( cmd_list )
         return cmd_list, name
 
+    while ( True ):
+        if (args['here'] is True):
+            os.chdir(initpath)
+
+            if (args['clean'] == True):
+                plat = getplatform()
+                if (plat == "Windows"):
+                    os.system("@del /s /q *_effect.bat *_unset.bat *_exec.bat")
+                else:
+                    os.system("rm -f *_effect.sh *_unset.sh *_exec.sh")
+                return
+
+            current_env = ""
+            if (args['use'] is True):
+                if (args['<env-name>'] is None):
+                    print("please appoint a environ")
+                    return
+                if (rawconfig['environ'].__contains__(args['<env-name>']) is False
+                    or args['<env-name>'] == "current"):
+                    print("please ensure the environ is right")
+                    return
+                current_env = args['<env-name>']
+
+            if (args['<command-names>'] is None):
+                print("please appoint your commands")
+                return
+
+            #print ("group %s" % current_vars)
+            dict0 = copy.deepcopy(rawconfig['command'])
+
+            list0 = []
+            for current_var in args['<command-names>']:
+                if (current_var in dict0):
+                    list0.extend(dict0[current_var])
+                else:
+                    list0.append(current_var)
+
+            cmd_list = []
+            temp_file_name = ""
+            if(getplatform()=="Windows"):
+                cmd_list, temp_file_name = createCmdList0(list0)
+            else:
+                cmd_list, temp_file_name = createCmdList01(list0)
+            #good compatibility
+            #cmd_list = createCmdList0(list0)
+
+            current_var = rawconfig['environ']['current']
+            if(current_env is not ""):
+                current_var = current_env
+            env_export(current_var, temp_file_name)
+
+            ret = communicateWithCommandLine(cmd_list)
+
+            # delete env file and cmd file
+            if(getplatform()=="Windows"):
+                temp_file = temp_file_name + "_exec.bat"
+                if(os.path.exists(temp_file)):
+                    os.remove(temp_file)
+                temp_file = temp_file_name + "_effect.bat"
+                if(os.path.exists(temp_file)):
+                    os.remove(temp_file)
+                temp_file = temp_file_name + "_unset.bat"
+                if(os.path.exists(temp_file)):
+                    os.remove(temp_file)
+            else :
+                temp_file = temp_file_name + "_exec.sh"
+                if(os.path.exists(temp_file)):
+                    os.remove(temp_file)
+                temp_file = temp_file_name + "_effect.sh"
+                if(os.path.exists(temp_file)):
+                    os.remove(temp_file)
+                temp_file = temp_file_name + "_unset.sh"
+                if(os.path.exists(temp_file)):
+                    os.remove(temp_file)
+
+            os._exit(ret)
+            return
+        else:""
+        break
+
+    # clean
+    while (True):
+        if (args['clean'] == True):
+            if (args['here'] is True):
+                os.chdir(initpath)
+
+            plat = getplatform()
+            if(plat == "Windows"):
+                os.system("@del /s /q *_effect.bat *_unset.bat *_exec.bat")
+            else:
+                os.system("rm -f *_effect.sh *_unset.sh *_exec.sh")
+            return
+        else:
+            ""
+        break
+
+    def exec_command(env_name, cmd_list0):
+        if (args['<env-name>'] is None):
+            print("please appoint a environ")
+            return
+        if (rawconfig['environ'].__contains__(args['<env-name>']) is False
+            or args['<env-name>'] == "current"):
+            print("please ensure the environ is right")
+            return
+
+        if (args['<command-names>'] is None):
+            print("please appoint your commands")
+            return
+
+        if (args['here'] is True):
+            os.chdir(initpath)
+
+        # create cmd_list
+        dict0 = copy.deepcopy(rawconfig['command'])
+        list0 = []
+        for current_var in args['<command-names>']:
+            if (current_var in dict0):
+                list0.extend(dict0[current_var])
+            else:
+                list0.append(current_var)
+        cmd_list = []
+        temp_file_name = ""
+        if (getplatform() == "Windows"):
+            cmd_list, temp_file_name = createCmdList0(list0)
+        else:
+            cmd_list, temp_file_name = createCmdList01(list0)
+        # good compatibility
+        # cmd_list = createCmdList0(list0)
+
+        # export env
+        current_var = args['<env-name>']
+        # print (current_var, temp_file_name)
+        env_export(current_var, temp_file_name)
+
+        ret = communicateWithCommandLine(cmd_list)
+
+        # delete env file and cmd file
+        if (getplatform() == "Windows"):
+            temp_file = temp_file_name + "_exec.bat"
+            if (os.path.exists(temp_file)):
+                os.remove(temp_file)
+            temp_file = temp_file_name + "_effect.bat"
+            if (os.path.exists(temp_file)):
+                os.remove(temp_file)
+            temp_file = temp_file_name + "_unset.bat"
+            if (os.path.exists(temp_file)):
+                os.remove(temp_file)
+        else:
+            temp_file = temp_file_name + "_exec.sh"
+            if (os.path.exists(temp_file)):
+                os.remove(temp_file)
+            temp_file = temp_file_name + "_effect.sh"
+            if (os.path.exists(temp_file)):
+                os.remove(temp_file)
+            temp_file = temp_file_name + "_unset.sh"
+            if (os.path.exists(temp_file)):
+                os.remove(temp_file)
+
+        os._exit(ret)
+        return
+
     #use env exec command
     while(True):
         if (args['use'] is True):
@@ -1083,7 +1234,6 @@ def main_function():
             return
         else :""
         break
-
 
     while ( True ):
         if (args['exec'] is True):
