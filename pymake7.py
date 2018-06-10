@@ -1,21 +1,39 @@
 # -*- coding: utf-8 -*-
 #!/usr/bin/env python
-"""PyMake 7.
+"""PyMake 7.0.
 
 Usage:
   pymake7.py source
   pymake7.py source root [ <source-root-path> ]
   pymake7.py source config [ --add | --del | --mod | --switch | --restore | --show ] [ <config-file-name> ] [<new-config-file-name>]
+  pymake7.py -------------------------------------------------------------
   pymake7.py set path ( --add | --del | --mod ) <name> [ <value> ]
   pymake7.py set env [ path ] ( --add | --del | --mod ) <group> <name> [ <value> ]
   pymake7.py set cmd (--add | --del | --mod ) <name> [ <values> ... ]
   pymake7.py set cur env <name>
-  pymake7.py show
-  pymake7.py path [-r | --raw]
-  pymake7.py env [ export ] [ <env-name> ] [ to <file-name> ] [-r | --raw] [-a | --all]
-  pymake7.py cmd [ <cmd-name> ]  [ to <file-name> ]
-  pymake7.py use <env-name> exec <command-names> ...
-  pymake7.py exec [ <command-names> ... ]
+  pymake7.py list [ path | env | cmd ] [<name>] [-r | --raw] [-a | --all]
+  pymake7.py env [<name>] [-p | --path] [-v | --var] [-r | --raw] [-a | --all]
+  pymake7.py -------------------------------------------------------------
+  pymake7.py here clean
+  pymake7.py here exec [ <command-names> ... ]
+  pymake7.py here use <env-name> exec [ <command-names> ... ]
+  pymake7.py here export [ <env-name> ] [ to <file-name> ]
+  pymake7.py here type [ <cmd-name> ]  [ to <file-name> ]
+  pymake7.py export [here] [ <env-name> ] [ to <file-name> ]
+  pymake7.py type [here] [ <cmd-name> ]  [ to <file-name> ]
+  pymake7.py clean [here]
+  pymake7.py use <env-name> exec [ here ] [ <command-names> ... ]
+  pymake7.py exec [ here ] [ <command-names> ... ]
+  pymake7.py -------------------------------------------------------------
+  pymake7.py set current env <name>
+  pymake7.py set default env <name>
+  pymake7.py show [ path | env | cmd ] [<name>] [-r | --raw] [-a | --all]
+  pymake7.py environ [<name>] [-p | --path] [-v | --var] [-r | --raw] [-a | --all]
+  pymake7.py here cc [ <command-names> ... ]
+  pymake7.py here use <env-name> cc [ <command-names> ... ]
+  pymake7.py use <env-name> cc [ here ] [ <command-names> ... ]
+  pymake7.py cc [ here ] [ <command-names> ... ]
+  pymake7.py -------------------------------------------------------------
   pymake7.py (-h | --help)
   pymake7.py --version
 
@@ -27,10 +45,12 @@ Command:
   set env          set env variable
   set cmd          set cmd stream
   export           output private env variable to a bat file or sh file [default:current, env]
-  list             list configed values
-  exec             exec commands list
+  list             list configed values, show command also too.
   set cur env      set default env
-  use              use selected env to exec commands
+  use              use selected env exec commands
+  here             at here do exec commands e.g.
+  exec             exec commands list, cc also.
+  clean            clean *_effect.sh *_unset.sh
 
 Options:
   -h --help     Show this screen.
@@ -302,10 +322,8 @@ def main_function():
     userroot = getuserroot()
     configroot = getconfigroot()
     plat = getplatform()
-    if( plat == "Windows"):
-        pymakeroot = configroot + os.path.sep + 'pymake'
-    else:
-        pymakeroot = userroot + os.path.sep + '.pymake'
+    #record pymake configure directory. in user config path
+    pymakeroot = userroot + os.path.sep + '.pymake'
 
     if (not os.path.exists(pymakeroot)):
         os.makedirs(pymakeroot)
@@ -327,7 +345,7 @@ def main_function():
         conf.set('source', 'config', 'pymake.json')
         conf.write(open(pymakeini, 'w'))
 
-    args = docopt(__doc__, version='pymake7.py v7')
+    args = docopt(__doc__, version='pymake7.py v7.0')
     #print(args)
 
     pymakesuffix = '.json'
@@ -405,11 +423,20 @@ def main_function():
             ''
         break
 
+    #record source root directory
     sourceroot = conf.get('source', 'root')
+    #record source config file name
     file = conf.get('source', 'config')
     #print ("root: %s config: %s" % (sourceroot, file))
     #print(Fore.LIGHTBLACK_EX + "use source config: %s/%s" % (sourceroot, file) )
 
+    # record current directory
+    pymakeworkpath = os.getcwd()
+    # record pymake file directory
+    pymakefilepath = os.path.split(os.path.realpath(__file__))[0]
+    #print( "pymake file path" + pymakefilepath )
+
+    # cd source root directory
     if (os.path.exists(sourceroot)):
         # chdir to source root
         os.chdir(sourceroot)
@@ -417,7 +444,6 @@ def main_function():
         print("You have changed sourceroot manual, please change it using source command")
         return
 
-    pymakefilepath = os.path.split(os.path.realpath(__file__))[0]
     if (os.path.abspath(sourceroot) == os.path.abspath(pymakeroot) or
             os.path.abspath(sourceroot) == os.path.abspath(pymakefilepath)):
         print ("I checked you use pymakeroot or pymakefileroot to be sourceroot, suggestting you use source command changing one.")
@@ -438,7 +464,7 @@ def main_function():
     while (True):
         if (args['set'] == True):
             if (args['env'] is True):
-                if (args['cur'] == True):
+                if (args['default'] or args['current'] or args['cur'] is True):
                     if (args["<name>"] is not None):
                         config["environ"]["current"] = args["<name>"]
                         print("successed %s" % (args['<name>']))
@@ -590,6 +616,13 @@ def main_function():
                     #print("xxx %s" % rawconfig["path-assemblage"][key])
                     break
 
+        #fix windows platform path sep
+        #but no nessesary
+        plat = getplatform()
+        if (plat == "Windows"):
+            ""
+            #rawconfig["path-assemblage"][key] = rawconfig["path-assemblage"][key].replace('/', os.path.sep)
+
     #replace env
     #from path var env
     for current_var in rawconfig["environ"].keys():
@@ -696,7 +729,7 @@ def main_function():
 
     #list
     while (True):
-        if (args['list'] == True):
+        if (args['show'] or args['list'] is True):
 
             list_config = config
             if ( args['--raw'] is True ):
@@ -766,6 +799,89 @@ def main_function():
             ''
         break
 
+    #env command
+    while (True):
+        if (args['environ'] or args['env'] is True):
+
+            list_config = config
+            if ( args['--raw'] is True ):
+                list_config = rawconfig
+
+            env = os.environ
+            current_var = list_config['environ']['current']
+            if (args['<name>'] is not None):
+                current_var = args['<name>']
+
+            dict0 = copy.deepcopy(list_config['environ'][current_var])
+
+            if( args['-p'] or args['--path'] is True):
+                print (Fore.CYAN+ "env %s" % current_var)
+                print(Fore.MAGENTA + "path+:")
+                for (key) in dict0["path+"]:
+                    print(Fore.BLUE + "  %s" % key)
+                if(args['-a'] or args['--all'] is True):
+                    for path in env["PATH"].split(os.path.pathsep):
+                        print(Fore.BLUE + "  %s" % path)
+
+            elif (args['-v'] or args['--var'] is True):
+                print (Fore.CYAN+ "env %s" % current_var)
+                print(Fore.MAGENTA + "variable:")
+                for (key, value) in dict0.items():
+                    if (key == 'path+'):
+                        continue
+                    print(Fore.GREEN + "  %-30s %s" % (key, value))
+                if (args['-a'] or args['--all'] is True):
+                    for (key, value) in env.items():
+                        if (key == 'PATH'):
+                            continue
+                        print(Fore.GREEN + "  %-30s %s" % (key, value))
+
+            elif (args['<name>'] is not None):
+                print (Fore.CYAN+ "env %s" % current_var)
+                print(Fore.MAGENTA + "path+:")
+                for (key) in dict0["path+"]:
+                    print(Fore.BLUE + "  %s" % key)
+                if(args['-a'] or args['--all'] is True):
+                    for path in env["PATH"].split(os.path.pathsep):
+                        print(Fore.BLUE + "  %s" % path)
+                print(Fore.MAGENTA + "variable:")
+                for (key, value) in dict0.items():
+                    if (key == 'path+'):
+                        continue
+                    print(Fore.GREEN + "  %-30s %s" % (key, value))
+                if (args['-a'] or args['--all'] is True):
+                    for (key, value) in env.items():
+                        if (key == 'PATH'):
+                            continue
+                        print(Fore.GREEN + "  %-30s %s" % (key, value))
+
+            else:
+                current_var = rawconfig['environ']['current']
+                print(Fore.CYAN + "%s" % current_var)
+                for key in rawconfig['environ'].keys() :
+                    if(key == 'current'):
+                        continue
+                    if(key == current_var):
+                        continue
+                    print("%s" % key)
+            return
+        else:
+            ''
+        break
+
+    # set into env
+    while(False):
+        env = os.environ
+        current_var = rawconfig['environ']['current']
+        dict0 = copy.deepcopy(rawconfig['environ'][current_var])
+        for (key) in dict0["path+"]:
+            env["PATH"] = key + os.path.pathsep + env["PATH"]
+        for (key, value) in dict0.items():
+            if (key == 'path+'):
+                continue
+            env[key] = value
+        break
+
     # export
     def env_export (env_name = None, file_name = None):
         #select env
@@ -802,7 +918,11 @@ def main_function():
         for (key, value) in dict0.items():
             if (key == 'path+'):
                 continue
-            lines += (env_set + key + '=\"' + value + '\"\n')
+            if (plat == "Windows"):
+                lines += (env_set + key + '=' + value + '\n')
+            else:
+                lines += (env_set + key + '=\"' + value + '\"\n')
+
         with open(cmd_effect, 'w') as f:
             f.write(cmd_header)
             f.write(lines)
@@ -836,70 +956,45 @@ def main_function():
         #return file name
         return current_var, cmd_effect, cmd_unset
 
-    while (True):
-        if (args['export'] == True):
-            current_var, cmd_effect, cmd_unset = env_export(args['<env-name>'], args['<file-name>'])
-            print("successed: export %s to %s %s" % (current_var, cmd_effect, cmd_unset))
-            return
-        else:""
-        break
+    def cmd_type (cmd_name = None, file_name = None):
+        if (cmd_name is None):
+            for (key, value) in rawconfig['command'].items():
+                print(Fore.CYAN + "%s" % key)
+            return ""
 
-    while (True):
-        if (args['type'] == True):
-            if (args['<cmd-name>'] is None):
-                for (key, value) in rawconfig['command'].items():
-                    print(Fore.CYAN + "%s" % key)
-                return
+        if (rawconfig['command'].__contains__(cmd_name) is False):
+            print("please check your command name")
+            return ""
 
-            if (rawconfig['command'].__contains__(args['<cmd-name>']) is False):
-                print ("please check your command name")
-                return
+        list0 = copy.deepcopy(rawconfig['command'][cmd_name])
+        for cmd in list0:
+            print(Fore.RED + "%s" % (cmd))
 
-            list0 = copy.deepcopy(rawconfig['command'][args['<cmd-name>']])
+        temp_file_name = ""
+        if (file_name is None):
+            temp_file_name = "cmd"
+        else:
+            temp_file_name = file_name
+
+        if (getplatform() == "Windows"):
+            cmd_header = "@echo off"
+            cmd_suffix = "_exec.bat"
+        else:
+            cmd_header = "#!/usr/bin/env bash"
+            cmd_suffix = "_exec.sh"
+
+        cmd_exec = temp_file_name + cmd_suffix
+        with open(cmd_exec, 'w') as f:
+            f.write(cmd_header + '\n')
             for cmd in list0:
-                print(Fore.RED + "%s" % (cmd))
+                f.write(cmd + '\n')
 
-            if (args['<file-name>'] is None):
-                return
+        if (plat == "Windows"):
+            ""
+        else:
+            os.system("chmod +x " + cmd_exec)
 
-            temp_file_name = args['<file-name>']
-
-            if(getplatform() == "Windows"):
-                cmd_header = "@echo off"
-                cmd_suffix = "_exec.bat"
-            else:
-                cmd_header = "#!/usr/bin/env bash"
-                cmd_suffix = "_exec.sh"
-
-            cmd_exec = temp_file_name + cmd_suffix
-            with open(cmd_exec, 'w') as f:
-                f.write(cmd_header+'\n')
-                for cmd in list0:
-                    f.write(cmd + '\n')
-
-            if (plat == "Windows"):
-                ""
-            else:
-                os.system("chmod +x " + cmd_exec)
-
-            print("success type %s to %s" % (args['<cmd-name>'], cmd_exec))
-            return
-
-        else:""
-        break
-
-    # set into env
-    while(False):
-        env = os.environ
-        current_var = rawconfig['environ']['current']
-        dict0 = copy.deepcopy(rawconfig['environ'][current_var])
-        for (key) in dict0["path+"]:
-            env["PATH"] = key + os.path.pathsep + env["PATH"]
-        for (key, value) in dict0.items():
-            if (key == 'path+'):
-                continue
-            env[key] = value
-        break
+        return cmd_exec
 
     def createCmdList0(list0):
 
@@ -993,6 +1088,220 @@ def main_function():
         # print( cmd_list )
         return cmd_list, name
 
+    while ( True ):
+        if (args['here'] is True):
+            os.chdir(pymakeworkpath)
+
+            if (args['clean'] == True):
+                plat = getplatform()
+                if (plat == "Windows"):
+                    os.system("@del /s /q *_effect.bat *_unset.bat *_exec.bat")
+                else:
+                    os.system("rm -f *_effect.sh *_unset.sh *_exec.sh")
+                return
+
+            if (args['export'] == True):
+                current_var, cmd_effect, cmd_unset = env_export(args['<env-name>'], args['<file-name>'])
+                print("successed: export %s to %s %s" % (current_var, cmd_effect, cmd_unset))
+                return
+
+            if (args['type'] == True):
+                if (args['<cmd-name>'] is None):
+                    for (key, value) in rawconfig['command'].items():
+                        print(Fore.CYAN + "%s" % key)
+                    return
+
+                if (rawconfig['command'].__contains__(args['<cmd-name>']) is False):
+                    print("please check your command name")
+                    return
+
+                cmd_exec = cmd_type(args['<cmd-name>'], args['<file-name>'])
+
+                print("success type %s to %s" % (args['<cmd-name>'], cmd_exec))
+                return
+
+            current_env = ""
+            if (args['use'] is True):
+                if (args['<env-name>'] is None):
+                    print("please appoint a environ")
+                    return
+                if (rawconfig['environ'].__contains__(args['<env-name>']) is False
+                    or args['<env-name>'] == "current"):
+                    print("please ensure the environ is right")
+                    return
+                current_env = args['<env-name>']
+
+            if (args['<command-names>'] is None):
+                print("please appoint your commands")
+                return
+
+            #print ("group %s" % current_vars)
+            dict0 = copy.deepcopy(rawconfig['command'])
+
+            list0 = []
+            for current_var in args['<command-names>']:
+                if (current_var in dict0):
+                    list0.extend(dict0[current_var])
+                else:
+                    list0.append(current_var)
+
+            cmd_list = []
+            temp_file_name = ""
+            if(getplatform()=="Windows"):
+                cmd_list, temp_file_name = createCmdList0(list0)
+            else:
+                cmd_list, temp_file_name = createCmdList01(list0)
+            #good compatibility
+            #cmd_list = createCmdList0(list0)
+
+            current_var = rawconfig['environ']['current']
+            if(current_env is not ""):
+                current_var = current_env
+            env_export(current_var, temp_file_name)
+
+            ret = communicateWithCommandLine(cmd_list)
+
+            # delete env file and cmd file
+            if(getplatform()=="Windows"):
+                temp_file = temp_file_name + "_exec.bat"
+                if(os.path.exists(temp_file)):
+                    os.remove(temp_file)
+                temp_file = temp_file_name + "_effect.bat"
+                if(os.path.exists(temp_file)):
+                    os.remove(temp_file)
+                temp_file = temp_file_name + "_unset.bat"
+                if(os.path.exists(temp_file)):
+                    os.remove(temp_file)
+            else :
+                temp_file = temp_file_name + "_exec.sh"
+                if(os.path.exists(temp_file)):
+                    os.remove(temp_file)
+                temp_file = temp_file_name + "_effect.sh"
+                if(os.path.exists(temp_file)):
+                    os.remove(temp_file)
+                temp_file = temp_file_name + "_unset.sh"
+                if(os.path.exists(temp_file)):
+                    os.remove(temp_file)
+
+            os._exit(ret)
+            return
+        else:""
+        break
+
+    while (True):
+        if (args['export'] == True):
+            if (args['here'] is True):
+                os.chdir(pymakeworkpath)
+
+            current_var, cmd_effect, cmd_unset = env_export(args['<env-name>'], args['<file-name>'])
+            print("successed: export %s to %s %s" % (current_var, cmd_effect, cmd_unset))
+            return
+        else:""
+        break
+
+    while (True):
+        if (args['type'] == True):
+            if (args['here'] is True):
+                os.chdir(pymakeworkpath)
+
+            if (args['<cmd-name>'] is None):
+                for (key, value) in rawconfig['command'].items():
+                    print(Fore.CYAN + "%s" % key)
+                return
+
+            if (rawconfig['command'].__contains__(args['<cmd-name>']) is False):
+                print("please check your command name")
+                return
+
+            cmd_exec = cmd_type(args['<cmd-name>'], args['<file-name>'] )
+
+            print("success type %s to %s" % (args['<cmd-name>'], cmd_exec))
+            return
+
+        else:""
+        break
+
+    # clean
+    while (True):
+        if (args['clean'] == True):
+            if (args['here'] is True):
+                os.chdir(pymakeworkpath)
+
+            plat = getplatform()
+            if(plat == "Windows"):
+                os.system("@del /s /q *_effect.bat *_unset.bat *_exec.bat")
+            else:
+                os.system("rm -f *_effect.sh *_unset.sh *_exec.sh")
+            return
+        else:
+            ""
+        break
+
+    def exec_command(env_name, cmd_list0):
+        if (args['<env-name>'] is None):
+            print("please appoint a environ")
+            return
+        if (rawconfig['environ'].__contains__(args['<env-name>']) is False
+            or args['<env-name>'] == "current"):
+            print("please ensure the environ is right")
+            return
+
+        if (args['<command-names>'] is None):
+            print("please appoint your commands")
+            return
+
+        if (args['here'] is True):
+            os.chdir(pymakeworkpath)
+
+        # create cmd_list
+        dict0 = copy.deepcopy(rawconfig['command'])
+        list0 = []
+        for current_var in args['<command-names>']:
+            if (current_var in dict0):
+                list0.extend(dict0[current_var])
+            else:
+                list0.append(current_var)
+        cmd_list = []
+        temp_file_name = ""
+        if (getplatform() == "Windows"):
+            cmd_list, temp_file_name = createCmdList0(list0)
+        else:
+            cmd_list, temp_file_name = createCmdList01(list0)
+        # good compatibility
+        # cmd_list = createCmdList0(list0)
+
+        # export env
+        current_var = args['<env-name>']
+        # print (current_var, temp_file_name)
+        env_export(current_var, temp_file_name)
+
+        ret = communicateWithCommandLine(cmd_list)
+
+        # delete env file and cmd file
+        if (getplatform() == "Windows"):
+            temp_file = temp_file_name + "_exec.bat"
+            if (os.path.exists(temp_file)):
+                os.remove(temp_file)
+            temp_file = temp_file_name + "_effect.bat"
+            if (os.path.exists(temp_file)):
+                os.remove(temp_file)
+            temp_file = temp_file_name + "_unset.bat"
+            if (os.path.exists(temp_file)):
+                os.remove(temp_file)
+        else:
+            temp_file = temp_file_name + "_exec.sh"
+            if (os.path.exists(temp_file)):
+                os.remove(temp_file)
+            temp_file = temp_file_name + "_effect.sh"
+            if (os.path.exists(temp_file)):
+                os.remove(temp_file)
+            temp_file = temp_file_name + "_unset.sh"
+            if (os.path.exists(temp_file)):
+                os.remove(temp_file)
+
+        os._exit(ret)
+        return
+
     #use env exec command
     while(True):
         if (args['use'] is True):
@@ -1007,6 +1316,9 @@ def main_function():
             if(args['<command-names>'] is None):
                 print("please appoint your commands")
                 return
+
+            if (args['here'] is True):
+                os.chdir(pymakeworkpath)
 
             #create cmd_list
             dict0 = copy.deepcopy(rawconfig['command'])
@@ -1060,10 +1372,13 @@ def main_function():
         break
 
     while ( True ):
-        if (args['exec'] is True):
-            if(args['<command-names>'] is None):
+        if (args['cc'] or args['exec'] is True):
+            if (args['<command-names>'] is None):
                 print("please appoint your commands")
                 return
+
+            if (args['here'] is True):
+                os.chdir(pymakeworkpath)
 
             #print ("group %s" % current_vars)
             dict0 = copy.deepcopy(rawconfig['command'])
@@ -1074,6 +1389,7 @@ def main_function():
                     list0.extend(dict0[current_var])
                 else:
                     list0.append(current_var)
+
             cmd_list = []
             temp_file_name = ""
             if(getplatform()=="Windows"):
