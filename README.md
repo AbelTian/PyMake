@@ -359,6 +359,9 @@ config = pymake6-mac.json
 Only update the command-line.  
 ![命令行更新的截图](./screenshot/a0.PNG)
 
+# Version 7.0  
+Update the command-line.  
+![命令行截图](./screenshot/a1.PNG)
 
 
 # Dependencies  
