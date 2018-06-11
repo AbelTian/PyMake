@@ -2,4 +2,4 @@
 file=$(readlink -n "$0")
 filepath=${file%/*}
 py=$(which python3)
-${py} $filepath/pymake6.py "$@"
+${py} $filepath/pymake7.py "$@"

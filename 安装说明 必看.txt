@@ -1,12 +1,11 @@
 依赖python，请在路径中加入python路径（安装python的时候会提示是否加入path，选择加入），2.7或者3.6均可。
+程序是兼容2.7和3.6的，但是请查看pymake.bat pymake.sh两个运行文件，里边的调用者py被限定了使用python3，so please install python 3 or mod 这两个运行文件.
 
 Windows
-
 使用 install %* 来安装。
 
 *Unix
-
-使用 install.sh 来看装。
+使用 install.sh 来安装。
 
 使用：
 我把程序安装为mm命令，所以终端里用mm命令调用。
