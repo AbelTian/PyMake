@@ -29,6 +29,12 @@ Usage:
   pymake7.py set default env <name>
   pymake7.py show [ path | env | cmd ] [<name>] [-r | --raw] [-a | --all]
   pymake7.py environ [<name>] [-p | --path] [-v | --var] [-r | --raw] [-a | --all]
+  pymake7.py see [ <cmd-name> ] [-r | --raw] [-a | --all]
+  pymake7.py use <env-name> see [ <cmd-name> ] [-r | --raw] [-a | --all]
+  pymake7.py ss [ <cmd-name> ] [-r | --raw] [-a | --all]
+  pymake7.py use <env-name> ss [ <cmd-name> ] [-r | --raw] [-a | --all]
+  pymake7.py cmd [ <cmd-name> ] [-r | --raw] [-a | --all]
+  pymake7.py use <env-name> cmd [ <cmd-name> ] [-r | --raw] [-a | --all]
   pymake7.py here cc [ <command-names> ... ]
   pymake7.py here use <env-name> cc [ <command-names> ... ]
   pymake7.py use <env-name> cc [ here ] [ <command-names> ... ]
@@ -45,6 +51,9 @@ Command:
   set env          set env variable
   set cmd          set cmd stream
   export           output private env variable to a bat file or sh file [default:current, env]
+  type             output command to a bat file or sh file [default:cmd]
+  see              check command stream
+  ss               check command stream
   list             list configed values, show command also too.
   set cur env      set default env
   use              use selected env exec commands
@@ -460,12 +469,16 @@ def main_function():
     config = readJsonData(file)
     #print(config)
 
-    #set
+    # set
     while (True):
         if (args['set'] == True):
             if (args['env'] is True):
                 if (args['default'] or args['current'] or args['cur'] is True):
                     if (args["<name>"] is not None):
+                        if (config['environ'].__contains__(args['<name>']) is False
+                            or args['<name>'] == "current"):
+                            print("please ensure the environ is right")
+                            return
                         config["environ"]["current"] = args["<name>"]
                         print("successed %s" % (args['<name>']))
                     else:
@@ -689,8 +702,8 @@ def main_function():
                             key_replace, rawconfig["environ"][current_var][key_from])
                         break
 
-    #replace cmd
-    #from path env
+    # replace cmd
+    # from path env
     for (cmd, stream) in rawconfig["command"].items():
         #print (key) #...
 
@@ -727,7 +740,7 @@ def main_function():
                         break
             step += 1
 
-    #list
+    # list show
     while (True):
         if (args['show'] or args['list'] is True):
 
@@ -745,6 +758,11 @@ def main_function():
                 current_var = list_config['environ']['current']
                 if(args['<name>'] is not None):
                     current_var = args['<name>']
+
+                if (list_config['environ'].__contains__(current_var) is False
+                    or current_var == "current"):
+                    print("please ensure the environ is right")
+                    return
 
                 dict0 = copy.deepcopy(list_config['environ'][current_var])
 
@@ -799,7 +817,7 @@ def main_function():
             ''
         break
 
-    #env command
+    # env environ
     while (True):
         if (args['environ'] or args['env'] is True):
 
@@ -811,6 +829,11 @@ def main_function():
             current_var = list_config['environ']['current']
             if (args['<name>'] is not None):
                 current_var = args['<name>']
+
+            if (list_config['environ'].__contains__(current_var) is False
+                or current_var == "current"):
+                print("please ensure the environ is right")
+                return
 
             dict0 = copy.deepcopy(list_config['environ'][current_var])
 
@@ -1088,6 +1111,7 @@ def main_function():
         # print( cmd_list )
         return cmd_list, name
 
+    # here
     while ( True ):
         if (args['here'] is True):
             os.chdir(pymakeworkpath)
@@ -1101,6 +1125,11 @@ def main_function():
                 return
 
             if (args['export'] == True):
+                if (rawconfig['environ'].__contains__(args['<env-name>']) is False
+                    or args['<env-name>'] == "current"):
+                    print("please ensure the environ is right")
+                    return
+
                 current_var, cmd_effect, cmd_unset = env_export(args['<env-name>'], args['<file-name>'])
                 print("successed: export %s to %s %s" % (current_var, cmd_effect, cmd_unset))
                 return
@@ -1131,7 +1160,7 @@ def main_function():
                     return
                 current_env = args['<env-name>']
 
-            if (args['<command-names>'] is None):
+            if (args['<command-names>'] == []):
                 print("please appoint your commands")
                 return
 
@@ -1188,17 +1217,146 @@ def main_function():
         else:""
         break
 
+    # custom command stream from rawconfig and custom environ
+    def raw_command( env_name = None ):
+        command_dict = copy.deepcopy(config['command'])
+
+        # replace cmd
+        # from path env
+        for (cmd, stream) in command_dict.items():
+            # print (key) #...
+
+            step = 0
+            for value in stream:
+                startpos = 0
+                while (True):
+                    # print (startpos)
+                    # print (value)
+
+                    index = value.find('${', startpos)
+                    if (index == -1):
+                        break
+
+                    index2 = value.find('}', index)
+                    startpos = index2
+
+                    key_replace = value[index:index2 + 1]
+                    # print ( key0 ) #${...}
+                    key_from = key_replace.split('{')[1].split('}')[0].strip()
+                    # print ( key1 ) #...
+
+                    for (find_key, find_value) in rawconfig["path-assemblage"].items():
+                        if (find_key == key_from):
+                            command_dict[cmd][step] = command_dict[cmd][step].replace(
+                                key_replace, rawconfig["path-assemblage"][key_from])
+                            break
+
+                    current_env_var = env_name
+                    if (env_name is None):
+                        current_env_var = config["environ"]["current"]
+                    for (find_key, find_value) in rawconfig["environ"][current_env_var].items():
+                        if (find_key == key_from):
+                            command_dict[cmd][step] = command_dict[cmd][step].replace(
+                                key_replace, rawconfig["environ"][current_env_var][key_from])
+                            break
+                step += 1
+        return command_dict
+
+    # use - see/ss/cmd
+    while (True):
+        if (args['use'] is True):
+            if(args['<env-name>'] is None):
+                print("please appoint a environ")
+                return
+
+            if(config['environ'].__contains__(args['<env-name>']) is False
+               or args['<env-name>'] == "current"):
+                print("please ensure the environ is right")
+                return
+
+            if (args['ss'] or args['see'] or args['cmd'] is True):
+                local_command = config['command']
+                if ( args['--raw'] is True ):
+                    local_command = raw_command(args['<env-name>'])
+
+                if (args['<cmd-name>'] is None):
+                    for (key, value) in local_command.items():
+                        if (args['-a'] is not True and args['--all'] is not True):
+                            print(Fore.CYAN + "%s" % key)
+                            continue
+                        print(Fore.CYAN + "group: %s" % key)
+                        step = 1
+                        for cmd in value:
+                            print(Fore.RED + "%-3s %s" % (step, cmd))
+                            step += 1
+                    return
+
+                if (args['<cmd-name>'] is not None):
+                    if (local_command.__contains__(args['<cmd-name>']) is False):
+                        print("please check your command name")
+                        return
+                    value = local_command[args['<cmd-name>']]
+                    step = 1
+                    for cmd in value:
+                        print(Fore.RED + "%-3s %s" % (step, cmd))
+                        step += 1
+                    return
+        else:
+            ""
+        break
+
+    # see ss cmd
+    while (True):
+        if (args['ss'] or args['see'] or args['cmd'] is True):
+            list_config = config
+            if ( args['--raw'] is True ):
+                list_config = rawconfig
+
+            if (args['<cmd-name>'] is None):
+                for (key, value) in list_config['command'].items():
+                    if (args['-a'] is not True and args['--all'] is not True):
+                        print(Fore.CYAN + "%s" % key)
+                        continue
+                    print(Fore.CYAN + "group: %s" % key)
+                    step = 1
+                    for cmd in value:
+                        print(Fore.RED + "%-3s %s" % (step, cmd))
+                        step += 1
+                return
+
+            if (args['<cmd-name>'] is not None):
+                if (list_config['command'].__contains__(args['<cmd-name>']) is False):
+                    print("please check your command name")
+                    return
+                value = list_config['command'][args['<cmd-name>']]
+                step = 1
+                for cmd in value:
+                    print(Fore.RED + "%-3s %s" % (step, cmd))
+                    step += 1
+                return
+        else:
+            ""
+        break
+
+    # export
     while (True):
         if (args['export'] == True):
+            if(config['environ'].__contains__(args['<env-name>']) is False
+               or args['<env-name>'] == "current"):
+                print("please ensure the environ is right")
+                return
+
             if (args['here'] is True):
                 os.chdir(pymakeworkpath)
 
             current_var, cmd_effect, cmd_unset = env_export(args['<env-name>'], args['<file-name>'])
             print("successed: export %s to %s %s" % (current_var, cmd_effect, cmd_unset))
             return
-        else:""
+        else:
+            ""
         break
 
+    # type
     while (True):
         if (args['type'] == True):
             if (args['here'] is True):
@@ -1246,7 +1404,7 @@ def main_function():
             print("please ensure the environ is right")
             return
 
-        if (args['<command-names>'] is None):
+        if (args['<command-names>'] == []):
             print("please appoint your commands")
             return
 
@@ -1302,78 +1460,82 @@ def main_function():
         os._exit(ret)
         return
 
-    #use env exec command
+    # use env exec command
     while(True):
         if (args['use'] is True):
             if(args['<env-name>'] is None):
                 print("please appoint a environ")
                 return
+
             if(rawconfig['environ'].__contains__(args['<env-name>']) is False
                or args['<env-name>'] == "current"):
                 print("please ensure the environ is right")
                 return
 
-            if(args['<command-names>'] is None):
-                print("please appoint your commands")
+            if (args['cc'] or args['exec'] is True):
+                if(args['<command-names>'] == []):
+                    print("please appoint your commands")
+                    return
+
+                if (args['here'] is True):
+                    os.chdir(pymakeworkpath)
+
+                # create cmd_list
+                dict0 = copy.deepcopy(rawconfig['command'])
+                list0 = []
+                for current_var in args['<command-names>']:
+                    if (current_var in dict0):
+                        list0.extend(dict0[current_var])
+                    else:
+                        list0.append(current_var)
+                cmd_list = []
+                temp_file_name = ""
+                if(getplatform()=="Windows"):
+                    cmd_list, temp_file_name = createCmdList0(list0)
+                else:
+                    cmd_list, temp_file_name = createCmdList01(list0)
+                # good compatibility
+                #cmd_list = createCmdList0(list0)
+
+                # export env
+                current_var = args['<env-name>']
+                #print (current_var, temp_file_name)
+                env_export(current_var, temp_file_name)
+
+                ret = communicateWithCommandLine(cmd_list)
+
+                # delete env file and cmd file
+                if(getplatform()=="Windows"):
+                    temp_file = temp_file_name + "_exec.bat"
+                    if(os.path.exists(temp_file)):
+                        os.remove(temp_file)
+                    temp_file = temp_file_name + "_effect.bat"
+                    if(os.path.exists(temp_file)):
+                        os.remove(temp_file)
+                    temp_file = temp_file_name + "_unset.bat"
+                    if(os.path.exists(temp_file)):
+                        os.remove(temp_file)
+                else :
+                    temp_file = temp_file_name + "_exec.sh"
+                    if(os.path.exists(temp_file)):
+                        os.remove(temp_file)
+                    temp_file = temp_file_name + "_effect.sh"
+                    if(os.path.exists(temp_file)):
+                        os.remove(temp_file)
+                    temp_file = temp_file_name + "_unset.sh"
+                    if(os.path.exists(temp_file)):
+                        os.remove(temp_file)
+
+                os._exit(ret)
                 return
 
-            if (args['here'] is True):
-                os.chdir(pymakeworkpath)
-
-            #create cmd_list
-            dict0 = copy.deepcopy(rawconfig['command'])
-            list0 = []
-            for current_var in args['<command-names>']:
-                if (current_var in dict0):
-                    list0.extend(dict0[current_var])
-                else:
-                    list0.append(current_var)
-            cmd_list = []
-            temp_file_name = ""
-            if(getplatform()=="Windows"):
-                cmd_list, temp_file_name = createCmdList0(list0)
-            else:
-                cmd_list, temp_file_name = createCmdList01(list0)
-            #good compatibility
-            #cmd_list = createCmdList0(list0)
-
-            #export env
-            current_var = args['<env-name>']
-            #print (current_var, temp_file_name)
-            env_export(current_var, temp_file_name)
-
-            ret = communicateWithCommandLine(cmd_list)
-
-            # delete env file and cmd file
-            if(getplatform()=="Windows"):
-                temp_file = temp_file_name + "_exec.bat"
-                if(os.path.exists(temp_file)):
-                    os.remove(temp_file)
-                temp_file = temp_file_name + "_effect.bat"
-                if(os.path.exists(temp_file)):
-                    os.remove(temp_file)
-                temp_file = temp_file_name + "_unset.bat"
-                if(os.path.exists(temp_file)):
-                    os.remove(temp_file)
-            else :
-                temp_file = temp_file_name + "_exec.sh"
-                if(os.path.exists(temp_file)):
-                    os.remove(temp_file)
-                temp_file = temp_file_name + "_effect.sh"
-                if(os.path.exists(temp_file)):
-                    os.remove(temp_file)
-                temp_file = temp_file_name + "_unset.sh"
-                if(os.path.exists(temp_file)):
-                    os.remove(temp_file)
-
-            os._exit(ret)
-            return
         else :""
         break
 
+    # cc exec
     while ( True ):
         if (args['cc'] or args['exec'] is True):
-            if (args['<command-names>'] is None):
+            if (args['<command-names>'] == []):
                 print("please appoint your commands")
                 return
 
