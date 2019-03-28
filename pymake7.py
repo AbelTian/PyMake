@@ -54,6 +54,7 @@ Command:
   type             output command to a bat file or sh file [default:cmd]
   see              check command stream
   ss               check command stream
+  cmd              check command stream
   list             list configed values, show command also too.
   set cur env      set default env
   use              use selected env exec commands
