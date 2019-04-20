@@ -15,19 +15,19 @@ Usage:
   pymake8.py env [<name>] [-p | --path] [-v | --var] [-r | --raw] [-a | --all]
   pymake8.py -------------------------------------------------------------
   pymake8.py here clean
-  pymake8.py here exec [ <command-names> ... ]
-  pymake8.py here use <env-name> exec [ <command-names> ... ]
   pymake8.py here export [ <env-name> ] [ to <file-name> ]
   pymake8.py here type [ <cmd-name> ]  [ to <file-name> ]
+  pymake8.py here use <env-name> exec [ <command-names> ... ]
+  pymake8.py here exec [ <command-names> ... ]
   pymake8.py here use <env-name> cc [ <command-names> ... ]
   pymake8.py here cc [ <command-names> ... ]
-  pymake8.py export [here] [ <env-name> ] [ to <file-name> ]
-  pymake8.py type [here] [ <cmd-name> ]  [ to <file-name> ]
-  pymake8.py clean [here]
-  pymake8.py use <env-name> exec [ here ] [ <command-names> ... ]
-  pymake8.py exec [ here ] [ <command-names> ... ]
-  pymake8.py use <env-name> cc [ here ] [ <command-names> ... ]
-  pymake8.py cc [ here ] [ <command-names> ... ]
+  pymake8.py export [ here | hh ] [ <env-name> ] [ to <file-name> ]
+  pymake8.py type [ here | hh ] [ <cmd-name> ]  [ to <file-name> ]
+  pymake8.py clean [ here | hh ]
+  pymake8.py use <env-name> exec [ here | hh ] [ <command-names> ... ]
+  pymake8.py exec [ here | hh ] [ <command-names> ... ]
+  pymake8.py use <env-name> cc [ here | hh ] [ <command-names> ... ]
+  pymake8.py cc [ here | hh ] [ <command-names> ... ]
   pymake8.py -------------------------------------------------------------
   pymake8.py set current env <name>
   pymake8.py set default env <name>
@@ -47,13 +47,6 @@ Usage:
   pymake8.py hh exec [ <command-names> ... ]
   pymake8.py hh use <env-name> cc [ <command-names> ... ]
   pymake8.py hh cc [ <command-names> ... ]
-  pymake8.py export [hh] [ <env-name> ] [ to <file-name> ]
-  pymake8.py type [hh] [ <cmd-name> ]  [ to <file-name> ]
-  pymake8.py clean [hh]
-  pymake8.py use <env-name> exec [ hh ] [ <command-names> ... ]
-  pymake8.py exec [ hh ] [ <command-names> ... ]
-  pymake8.py use <env-name> cc [ hh ] [ <command-names> ... ]
-  pymake8.py cc [ hh ] [ <command-names> ... ]
   pymake8.py -------------------------------------------------------------
   pymake8.py (-h | --help)
   pymake8.py --version
