@@ -35,10 +35,25 @@ Usage:
   pymake7.py use <env-name> ss [ <cmd-name> ] [-r | --raw] [-a | --all]
   pymake7.py cmd [ <cmd-name> ] [-r | --raw] [-a | --all]
   pymake7.py use <env-name> cmd [ <cmd-name> ] [-r | --raw] [-a | --all]
-  pymake7.py here cc [ <command-names> ... ]
   pymake7.py here use <env-name> cc [ <command-names> ... ]
+  pymake7.py here cc [ <command-names> ... ]
   pymake7.py use <env-name> cc [ here ] [ <command-names> ... ]
   pymake7.py cc [ here ] [ <command-names> ... ]
+  pymake7.py -------------------------------------------------------------
+  pymake7.py hh clean
+  pymake7.py hh export [ <env-name> ] [ to <file-name> ]
+  pymake7.py hh type [ <cmd-name> ]  [ to <file-name> ]
+  pymake7.py hh use <env-name> exec [ <command-names> ... ]
+  pymake7.py hh exec [ <command-names> ... ]
+  pymake7.py hh use <env-name> cc [ <command-names> ... ]
+  pymake7.py hh cc [ <command-names> ... ]
+  pymake7.py export [hh] [ <env-name> ] [ to <file-name> ]
+  pymake7.py type [hh] [ <cmd-name> ]  [ to <file-name> ]
+  pymake7.py clean [hh]
+  pymake7.py use <env-name> exec [ hh ] [ <command-names> ... ]
+  pymake7.py exec [ hh ] [ <command-names> ... ]
+  pymake7.py use <env-name> cc [ hh ] [ <command-names> ... ]
+  pymake7.py cc [ hh ] [ <command-names> ... ]
   pymake7.py -------------------------------------------------------------
   pymake7.py (-h | --help)
   pymake7.py --version
@@ -59,6 +74,7 @@ Command:
   set cur env      set default env
   use              use selected env exec commands
   here             at here do exec commands e.g.
+  hh               at here do exec commands e.g.
   exec             exec commands list, cc also.
   clean            clean *_effect.sh *_unset.sh
 
@@ -1114,7 +1130,7 @@ def main_function():
 
     # here
     while ( True ):
-        if (args['here'] is True):
+        if (args['here'] or args['hh'] is True):
             os.chdir(pymakeworkpath)
 
             if (args['clean'] == True):
@@ -1347,7 +1363,7 @@ def main_function():
                 print("please ensure the environ is right")
                 return
 
-            if (args['here'] is True):
+            if (args['here'] or args['hh'] is True):
                 os.chdir(pymakeworkpath)
 
             current_var, cmd_effect, cmd_unset = env_export(args['<env-name>'], args['<file-name>'])
@@ -1360,7 +1376,7 @@ def main_function():
     # type
     while (True):
         if (args['type'] == True):
-            if (args['here'] is True):
+            if (args['here'] or args['hh'] is True):
                 os.chdir(pymakeworkpath)
 
             if (args['<cmd-name>'] is None):
@@ -1383,7 +1399,7 @@ def main_function():
     # clean
     while (True):
         if (args['clean'] == True):
-            if (args['here'] is True):
+            if (args['here'] or args['hh'] is True):
                 os.chdir(pymakeworkpath)
 
             plat = getplatform()
@@ -1409,7 +1425,7 @@ def main_function():
             print("please appoint your commands")
             return
 
-        if (args['here'] is True):
+        if (args['here'] or args['hh'] is True):
             os.chdir(pymakeworkpath)
 
         # create cmd_list
@@ -1478,7 +1494,7 @@ def main_function():
                     print("please appoint your commands")
                     return
 
-                if (args['here'] is True):
+                if (args['here'] or args['hh'] is True):
                     os.chdir(pymakeworkpath)
 
                 # create cmd_list
@@ -1540,7 +1556,7 @@ def main_function():
                 print("please appoint your commands")
                 return
 
-            if (args['here'] is True):
+            if (args['here'] or args['hh'] is True):
                 os.chdir(pymakeworkpath)
 
             #print ("group %s" % current_vars)
