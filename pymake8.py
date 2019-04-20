@@ -68,7 +68,8 @@ Command:
   use              use selected env exec commands
   here             at here do exec commands e.g.
   hh               at here do exec commands e.g.
-  exec             exec commands list, cc also.
+  exec             exec commands list.
+  cc               exec commands list.
   clean            clean *_effect.sh *_unset.sh
 
 Options:
@@ -914,6 +915,51 @@ def main_function():
             env[key] = value
         break
 
+    # custom command stream from rawconfig and custom environ
+    def raw_command( env_name = None ):
+        command_dict = copy.deepcopy(config['command'])
+
+        # replace cmd
+        # from path env
+        for (cmd, stream) in command_dict.items():
+            # print (key) #...
+
+            step = 0
+            for value in stream:
+                startpos = 0
+                while (True):
+                    # print (startpos)
+                    # print (value)
+
+                    index = value.find('${', startpos)
+                    if (index == -1):
+                        break
+
+                    index2 = value.find('}', index)
+                    startpos = index2
+
+                    key_replace = value[index:index2 + 1]
+                    # print ( key0 ) #${...}
+                    key_from = key_replace.split('{')[1].split('}')[0].strip()
+                    # print ( key1 ) #...
+
+                    for (find_key, find_value) in rawconfig["path-assemblage"].items():
+                        if (find_key == key_from):
+                            command_dict[cmd][step] = command_dict[cmd][step].replace(
+                                key_replace, rawconfig["path-assemblage"][key_from])
+                            break
+
+                    current_env_var = env_name
+                    if (env_name is None):
+                        current_env_var = config["environ"]["current"]
+                    for (find_key, find_value) in rawconfig["environ"][current_env_var].items():
+                        if (find_key == key_from):
+                            command_dict[cmd][step] = command_dict[cmd][step].replace(
+                                key_replace, rawconfig["environ"][current_env_var][key_from])
+                            break
+                step += 1
+        return command_dict
+
     # export
     def env_export (env_name = None, file_name = None):
         #select env
@@ -1175,7 +1221,12 @@ def main_function():
                 return
 
             #print ("group %s" % current_vars)
-            dict0 = copy.deepcopy(rawconfig['command'])
+            current_var = rawconfig['environ']['current']
+            if(current_env is not ""):
+                current_var = current_env
+            local_command = raw_command(current_var)
+
+            dict0 = copy.deepcopy(local_command)
 
             list0 = []
             for current_var in args['<command-names>']:
@@ -1183,6 +1234,7 @@ def main_function():
                     list0.extend(dict0[current_var])
                 else:
                     list0.append(current_var)
+            #print(list0)
 
             cmd_list = []
             temp_file_name = ""
@@ -1204,51 +1256,6 @@ def main_function():
             return
         else:""
         break
-
-    # custom command stream from rawconfig and custom environ
-    def raw_command( env_name = None ):
-        command_dict = copy.deepcopy(config['command'])
-
-        # replace cmd
-        # from path env
-        for (cmd, stream) in command_dict.items():
-            # print (key) #...
-
-            step = 0
-            for value in stream:
-                startpos = 0
-                while (True):
-                    # print (startpos)
-                    # print (value)
-
-                    index = value.find('${', startpos)
-                    if (index == -1):
-                        break
-
-                    index2 = value.find('}', index)
-                    startpos = index2
-
-                    key_replace = value[index:index2 + 1]
-                    # print ( key0 ) #${...}
-                    key_from = key_replace.split('{')[1].split('}')[0].strip()
-                    # print ( key1 ) #...
-
-                    for (find_key, find_value) in rawconfig["path-assemblage"].items():
-                        if (find_key == key_from):
-                            command_dict[cmd][step] = command_dict[cmd][step].replace(
-                                key_replace, rawconfig["path-assemblage"][key_from])
-                            break
-
-                    current_env_var = env_name
-                    if (env_name is None):
-                        current_env_var = config["environ"]["current"]
-                    for (find_key, find_value) in rawconfig["environ"][current_env_var].items():
-                        if (find_key == key_from):
-                            command_dict[cmd][step] = command_dict[cmd][step].replace(
-                                key_replace, rawconfig["environ"][current_env_var][key_from])
-                            break
-                step += 1
-        return command_dict
 
     # use - see/ss/cmd
     while (True):
@@ -1447,7 +1454,13 @@ def main_function():
                     os.chdir(pymakeworkpath)
 
                 # create cmd_list
-                dict0 = copy.deepcopy(rawconfig['command'])
+                current_env = args['<env-name>']
+                current_var = rawconfig['environ']['current']
+                if (current_env is not ""):
+                    current_var = current_env
+                local_command = raw_command(current_var)
+
+                dict0 = copy.deepcopy(local_command)
                 list0 = []
                 for current_var in args['<command-names>']:
                     if (current_var in dict0):
