@@ -1127,11 +1127,13 @@ def main_function():
         if (plat == "Windows"):
             #cmd_list.append(cmd_header + ' ' + cmd_sep + ' ' + cmd_status)
             cmd_list.append("call " + cmd_execute)
+            # exit
+            # cmd_list.append(cmd_exit)
         else:
             # cmd_list.append(cmd_header + ' ' + cmd_sep + ' ' + cmd_status)
-            cmd_list.append("./" + cmd_execute)
-        # exit
-        #cmd_list.append(cmd_exit)
+            cmd_list.append("./" + cmd_execute + ' ' + cmd_sep + ' ' + cmd_status)
+            # exit
+            cmd_list.append(cmd_exit)
 
         # print (cmd_list)
         return cmd_list, name

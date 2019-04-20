@@ -19,7 +19,7 @@ def communicateWithCommandLine2(list0):
     if(plat == "Windows"):
         shell = os.environ.get('COMSPEC') + ' ' + "/k"
     else:
-        shell = os.environ.get('SHELL')
+        return communicateWithCommandLine(list0)
     #print ( 'Running under', shell )
 
     shell += ' ' + list0[0]
