@@ -1056,7 +1056,7 @@ def main_function():
 
         # append exit 0
         cmd_list.append(cmd_exit)
-        # print( cmd_list )
+        #print( cmd_list )
 
         cmd_execute = name + "_exec" + cmd_suffix
         with open(cmd_execute, "w") as f:
@@ -1070,12 +1070,13 @@ def main_function():
 
         cmd_list.clear()
         if (plat == "Windows"):
-            cmd_list.append(cmd_header + ' ' + cmd_sep + ' ' + cmd_status)
-            cmd_list.append("call " + cmd_execute + cmd_sep + ' ' + cmd_status)
+            #cmd_list.append(cmd_header + ' ' + cmd_sep + ' ' + cmd_status)
+            cmd_list.append("call " + cmd_execute)
         else:
             # cmd_list.append(cmd_header + ' ' + cmd_sep + ' ' + cmd_status)
-            cmd_list.append("./" + cmd_execute + cmd_sep + ' ' + cmd_status)
-        cmd_list.append(cmd_exit)
+            cmd_list.append("./" + cmd_execute)
+        # exit
+        #cmd_list.append(cmd_exit)
 
         # print (cmd_list)
         return cmd_list, name
@@ -1179,7 +1180,7 @@ def main_function():
             if(getplatform()=="Windows"):
                 cmd_list, temp_file_name = createCmdList0(list0)
             else:
-                cmd_list, temp_file_name = createCmdList01(list0)
+                cmd_list, temp_file_name = createCmdList0(list0)
             #good compatibility
             #cmd_list = createCmdList0(list0)
 
@@ -1188,29 +1189,7 @@ def main_function():
                 current_var = current_env
             env_export(current_var, temp_file_name)
 
-            ret = communicateWithCommandLine(cmd_list)
-
-            # delete env file and cmd file
-            if(getplatform()=="Windows"):
-                temp_file = temp_file_name + "_exec.bat"
-                if(os.path.exists(temp_file)):
-                    os.remove(temp_file)
-                temp_file = temp_file_name + "_effect.bat"
-                if(os.path.exists(temp_file)):
-                    os.remove(temp_file)
-                temp_file = temp_file_name + "_unset.bat"
-                if(os.path.exists(temp_file)):
-                    os.remove(temp_file)
-            else :
-                temp_file = temp_file_name + "_exec.sh"
-                if(os.path.exists(temp_file)):
-                    os.remove(temp_file)
-                temp_file = temp_file_name + "_effect.sh"
-                if(os.path.exists(temp_file)):
-                    os.remove(temp_file)
-                temp_file = temp_file_name + "_unset.sh"
-                if(os.path.exists(temp_file)):
-                    os.remove(temp_file)
+            ret = communicateWithCommandLine2(cmd_list)
 
             os._exit(ret)
             return
@@ -1424,7 +1403,7 @@ def main_function():
         if (getplatform() == "Windows"):
             cmd_list, temp_file_name = createCmdList0(list0)
         else:
-            cmd_list, temp_file_name = createCmdList01(list0)
+            cmd_list, temp_file_name = createCmdList0(list0)
         # good compatibility
         # cmd_list = createCmdList0(list0)
 
@@ -1433,29 +1412,7 @@ def main_function():
         # print (current_var, temp_file_name)
         env_export(current_var, temp_file_name)
 
-        ret = communicateWithCommandLine(cmd_list)
-
-        # delete env file and cmd file
-        if (getplatform() == "Windows"):
-            temp_file = temp_file_name + "_exec.bat"
-            if (os.path.exists(temp_file)):
-                os.remove(temp_file)
-            temp_file = temp_file_name + "_effect.bat"
-            if (os.path.exists(temp_file)):
-                os.remove(temp_file)
-            temp_file = temp_file_name + "_unset.bat"
-            if (os.path.exists(temp_file)):
-                os.remove(temp_file)
-        else:
-            temp_file = temp_file_name + "_exec.sh"
-            if (os.path.exists(temp_file)):
-                os.remove(temp_file)
-            temp_file = temp_file_name + "_effect.sh"
-            if (os.path.exists(temp_file)):
-                os.remove(temp_file)
-            temp_file = temp_file_name + "_unset.sh"
-            if (os.path.exists(temp_file)):
-                os.remove(temp_file)
+        ret = communicateWithCommandLine2(cmd_list)
 
         os._exit(ret)
         return
@@ -1493,7 +1450,7 @@ def main_function():
                 if(getplatform()=="Windows"):
                     cmd_list, temp_file_name = createCmdList0(list0)
                 else:
-                    cmd_list, temp_file_name = createCmdList01(list0)
+                    cmd_list, temp_file_name = createCmdList0(list0)
                 # good compatibility
                 #cmd_list = createCmdList0(list0)
 
@@ -1502,29 +1459,7 @@ def main_function():
                 #print (current_var, temp_file_name)
                 env_export(current_var, temp_file_name)
 
-                ret = communicateWithCommandLine(cmd_list)
-
-                # delete env file and cmd file
-                if(getplatform()=="Windows"):
-                    temp_file = temp_file_name + "_exec.bat"
-                    if(os.path.exists(temp_file)):
-                        os.remove(temp_file)
-                    temp_file = temp_file_name + "_effect.bat"
-                    if(os.path.exists(temp_file)):
-                        os.remove(temp_file)
-                    temp_file = temp_file_name + "_unset.bat"
-                    if(os.path.exists(temp_file)):
-                        os.remove(temp_file)
-                else :
-                    temp_file = temp_file_name + "_exec.sh"
-                    if(os.path.exists(temp_file)):
-                        os.remove(temp_file)
-                    temp_file = temp_file_name + "_effect.sh"
-                    if(os.path.exists(temp_file)):
-                        os.remove(temp_file)
-                    temp_file = temp_file_name + "_unset.sh"
-                    if(os.path.exists(temp_file)):
-                        os.remove(temp_file)
+                ret = communicateWithCommandLine2(cmd_list)
 
                 os._exit(ret)
                 return
@@ -1557,36 +1492,14 @@ def main_function():
             if(getplatform()=="Windows"):
                 cmd_list, temp_file_name = createCmdList0(list0)
             else:
-                cmd_list, temp_file_name = createCmdList01(list0)
+                cmd_list, temp_file_name = createCmdList0(list0)
             #good compatibility
             #cmd_list = createCmdList0(list0)
 
             current_var = rawconfig['environ']['current']
             env_export(current_var, temp_file_name)
 
-            ret = communicateWithCommandLine(cmd_list)
-
-            # delete env file and cmd file
-            if(getplatform()=="Windows"):
-                temp_file = temp_file_name + "_exec.bat"
-                if(os.path.exists(temp_file)):
-                    os.remove(temp_file)
-                temp_file = temp_file_name + "_effect.bat"
-                if(os.path.exists(temp_file)):
-                    os.remove(temp_file)
-                temp_file = temp_file_name + "_unset.bat"
-                if(os.path.exists(temp_file)):
-                    os.remove(temp_file)
-            else :
-                temp_file = temp_file_name + "_exec.sh"
-                if(os.path.exists(temp_file)):
-                    os.remove(temp_file)
-                temp_file = temp_file_name + "_effect.sh"
-                if(os.path.exists(temp_file)):
-                    os.remove(temp_file)
-                temp_file = temp_file_name + "_unset.sh"
-                if(os.path.exists(temp_file)):
-                    os.remove(temp_file)
+            ret = communicateWithCommandLine2(cmd_list)
 
             os._exit(ret)
             return

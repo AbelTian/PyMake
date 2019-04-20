@@ -149,7 +149,7 @@ def write_thread_function(p):
         p.stdin.write(line.encode(code))
         p.stdin.flush()
 
-#only support unix
+# windows *unix
 def communicateWithCommandLine(list0):
 
     #shell = pwd.getpwuid(os.getuid()).pw_shell

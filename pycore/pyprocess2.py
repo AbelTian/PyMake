@@ -13,24 +13,17 @@ import subprocess
 from .pybase import *
 from .pyprocess import *
 
-
 def communicateWithCommandLine2(list0):
-
-    #shell = pwd.getpwuid(os.getuid()).pw_shell
-    #if shell is None: shell = os.environ.get('SHELL')
-    #if shell is None: shell = os.environ.get('COMSPEC')
     shell = ""
     plat = getplatform()
     if(plat == "Windows"):
-        shell = os.environ.get('COMSPEC') + ' ' + "/q /d /s /a /v:on /e:on /f:on"
+        shell = os.environ.get('COMSPEC') + ' ' + "/k"
     else:
         shell = os.environ.get('SHELL')
     #print ( 'Running under', shell )
 
-    global  cmd_event
-    cmd_event = threading.Event()
-    global cmd_exit_flag
-    cmd_exit_flag = 0
+    shell += ' ' + list0[0]
+    #print(shell)
 
     startupinfo = None
     createflags = 0
@@ -43,31 +36,10 @@ def communicateWithCommandLine2(list0):
 
     p = subprocess.Popen(shell, shell=False,
                          bufsize=-1,
-                         stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+                         stdin=None, stdout=None,
                          #if dont do this, windows stdout piory is high, stderr cant output full message
                          #when split stdout and stderr, lots of app wont manager the output order
-                         stderr=subprocess.STDOUT,
+                         stderr=None,
                          startupinfo=startupinfo, creationflags=createflags)
-    read_thread = threading.Thread(target=read_thread_function, args=(p,))
-    read_thread.start()
-    read_err_thread = threading.Thread(target=read_stderr_thread_function, args=(p,))
-    #read_err_thread.start()
-    write_command_thread = threading.Thread(target=write_command_thread_function, args=(p, list0))
-    write_command_thread.start()
-    write_thread = threading.Thread(target=write_thread_function, args=(p,))
-    write_thread.start()
-    # time.sleep(1)
 
-    p.wait()
-
-    if (read_thread.isAlive()):
-        stopThread(read_thread)
-    if (read_err_thread.isAlive()):
-        stopThread(read_err_thread)
-    if (write_command_thread.isAlive()):
-        stopThread(write_command_thread)
-    if (write_thread.isAlive()):
-        stopThread(write_thread)
-
-    # time.sleep(1)
-    return p.returncode
+    return 0
