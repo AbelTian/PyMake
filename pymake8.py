@@ -1,47 +1,47 @@
 # -*- coding: utf-8 -*-
 #!/usr/bin/env python
-"""PyMake 7.0.
+"""PyMake 8.0.
 
 Usage:
-  pymake7.py source
-  pymake7.py source root [ <source-root-path> ]
-  pymake7.py source config [ --add | --del | --mod | --switch | --restore | --show ] [ <config-file-name> ] [<new-config-file-name>]
-  pymake7.py -------------------------------------------------------------
-  pymake7.py set path ( --add | --del | --mod ) <name> [ <value> ]
-  pymake7.py set env [ path ] ( --add | --del | --mod ) <group> <name> [ <value> ]
-  pymake7.py set cmd (--add | --del | --mod ) <name> [ <values> ... ]
-  pymake7.py set cur env <name>
-  pymake7.py list [ path | env | cmd ] [<name>] [-r | --raw] [-a | --all]
-  pymake7.py env [<name>] [-p | --path] [-v | --var] [-r | --raw] [-a | --all]
-  pymake7.py -------------------------------------------------------------
-  pymake7.py here clean
-  pymake7.py here exec [ <command-names> ... ]
-  pymake7.py here use <env-name> exec [ <command-names> ... ]
-  pymake7.py here export [ <env-name> ] [ to <file-name> ]
-  pymake7.py here type [ <cmd-name> ]  [ to <file-name> ]
-  pymake7.py export [here] [ <env-name> ] [ to <file-name> ]
-  pymake7.py type [here] [ <cmd-name> ]  [ to <file-name> ]
-  pymake7.py clean [here]
-  pymake7.py use <env-name> exec [ here ] [ <command-names> ... ]
-  pymake7.py exec [ here ] [ <command-names> ... ]
-  pymake7.py -------------------------------------------------------------
-  pymake7.py set current env <name>
-  pymake7.py set default env <name>
-  pymake7.py show [ path | env | cmd ] [<name>] [-r | --raw] [-a | --all]
-  pymake7.py environ [<name>] [-p | --path] [-v | --var] [-r | --raw] [-a | --all]
-  pymake7.py see [ <cmd-name> ] [-r | --raw] [-a | --all]
-  pymake7.py use <env-name> see [ <cmd-name> ] [-r | --raw] [-a | --all]
-  pymake7.py ss [ <cmd-name> ] [-r | --raw] [-a | --all]
-  pymake7.py use <env-name> ss [ <cmd-name> ] [-r | --raw] [-a | --all]
-  pymake7.py cmd [ <cmd-name> ] [-r | --raw] [-a | --all]
-  pymake7.py use <env-name> cmd [ <cmd-name> ] [-r | --raw] [-a | --all]
-  pymake7.py here cc [ <command-names> ... ]
-  pymake7.py here use <env-name> cc [ <command-names> ... ]
-  pymake7.py use <env-name> cc [ here ] [ <command-names> ... ]
-  pymake7.py cc [ here ] [ <command-names> ... ]
-  pymake7.py -------------------------------------------------------------
-  pymake7.py (-h | --help)
-  pymake7.py --version
+  pymake8.py source
+  pymake8.py source root [ <source-root-path> ]
+  pymake8.py source config [ --add | --del | --mod | --switch | --restore | --show ] [ <config-file-name> ] [<new-config-file-name>]
+  pymake8.py -------------------------------------------------------------
+  pymake8.py set path ( --add | --del | --mod ) <name> [ <value> ]
+  pymake8.py set env [ path ] ( --add | --del | --mod ) <group> <name> [ <value> ]
+  pymake8.py set cmd (--add | --del | --mod ) <name> [ <values> ... ]
+  pymake8.py set cur env <name>
+  pymake8.py list [ path | env | cmd ] [<name>] [-r | --raw] [-a | --all]
+  pymake8.py env [<name>] [-p | --path] [-v | --var] [-r | --raw] [-a | --all]
+  pymake8.py -------------------------------------------------------------
+  pymake8.py here clean
+  pymake8.py here exec [ <command-names> ... ]
+  pymake8.py here use <env-name> exec [ <command-names> ... ]
+  pymake8.py here export [ <env-name> ] [ to <file-name> ]
+  pymake8.py here type [ <cmd-name> ]  [ to <file-name> ]
+  pymake8.py export [here] [ <env-name> ] [ to <file-name> ]
+  pymake8.py type [here] [ <cmd-name> ]  [ to <file-name> ]
+  pymake8.py clean [here]
+  pymake8.py use <env-name> exec [ here ] [ <command-names> ... ]
+  pymake8.py exec [ here ] [ <command-names> ... ]
+  pymake8.py -------------------------------------------------------------
+  pymake8.py set current env <name>
+  pymake8.py set default env <name>
+  pymake8.py show [ path | env | cmd ] [<name>] [-r | --raw] [-a | --all]
+  pymake8.py environ [<name>] [-p | --path] [-v | --var] [-r | --raw] [-a | --all]
+  pymake8.py see [ <cmd-name> ] [-r | --raw] [-a | --all]
+  pymake8.py use <env-name> see [ <cmd-name> ] [-r | --raw] [-a | --all]
+  pymake8.py ss [ <cmd-name> ] [-r | --raw] [-a | --all]
+  pymake8.py use <env-name> ss [ <cmd-name> ] [-r | --raw] [-a | --all]
+  pymake8.py cmd [ <cmd-name> ] [-r | --raw] [-a | --all]
+  pymake8.py use <env-name> cmd [ <cmd-name> ] [-r | --raw] [-a | --all]
+  pymake8.py here cc [ <command-names> ... ]
+  pymake8.py here use <env-name> cc [ <command-names> ... ]
+  pymake8.py use <env-name> cc [ here ] [ <command-names> ... ]
+  pymake8.py cc [ here ] [ <command-names> ... ]
+  pymake8.py -------------------------------------------------------------
+  pymake8.py (-h | --help)
+  pymake8.py --version
 
 Command:
   source           switch to another source file
@@ -84,7 +84,7 @@ import json
 import copy
 import types
 from pycore.pycore import *
-from pycore.pyprocess import *
+from pycore.pyprocess2 import *
 from pycore.docopt import docopt
 
 
@@ -356,7 +356,7 @@ def main_function():
         conf.set('source', 'config', 'pymake.json')
         conf.write(open(pymakeini, 'w'))
 
-    args = docopt(__doc__, version='pymake7.py v7.0')
+    args = docopt(__doc__, version='pymake8.py v8.0')
     #print(args)
 
     pymakesuffix = '.json'
