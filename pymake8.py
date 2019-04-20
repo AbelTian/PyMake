@@ -84,7 +84,6 @@ import json
 import copy
 import types
 from pycore.pycore import *
-from pycore.pyprocess2 import *
 from pycore.docopt import docopt
 
 

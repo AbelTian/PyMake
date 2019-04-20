@@ -10,7 +10,7 @@ import locale
 import threading
 import subprocess
 
-from .pycore import *
+from .pybase import *
 
 
 def _async_raise(tid, exctype):
