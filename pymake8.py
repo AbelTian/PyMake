@@ -83,7 +83,7 @@ import time
 import json
 import copy
 import types
-from pycore.pycore2 import *
+from pycore.pycore import *
 
 
 def main_function():
