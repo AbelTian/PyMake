@@ -48,6 +48,13 @@ Usage:
   pymake7.py hh use <env-name> cc [ <command-names> ... ]
   pymake7.py hh cc [ <command-names> ... ]
   pymake7.py -------------------------------------------------------------
+  pymake7.py have path <name> [-r | --raw]
+  pymake7.py have env [ path ] [ <group> ] [ <name> ] [-r | --raw]
+  pymake7.py have cmd <name> [-r | --raw]
+  pymake7.py has path <name> [-r | --raw]
+  pymake7.py has env [ path ] [ <group> ] [ <name> ] [-r | --raw]
+  pymake7.py has cmd <name> [-r | --raw]
+  pymake7.py -------------------------------------------------------------
   pymake7.py (-h | --help)
   pymake7.py --version
 
@@ -70,6 +77,8 @@ Command:
   hh               at here do exec commands e.g.
   exec             exec commands list.
   cc               exec commands list.
+  have             check env or path or cmd item whether user has configured.
+  has              check env or path or cmd item whether user has configured.
   clean            clean *_effect.sh *_unset.sh
 
 Options:
@@ -824,6 +833,99 @@ def main_function():
                         continue
                     print("%s" % key)
             return
+        else:
+            ''
+        break
+
+    # have has
+    while (True):
+        if (args['have'] or args['has'] is True):
+
+            list_config = config
+            if ( args['--raw'] is True ):
+                list_config = rawconfig
+
+            if( args['env'] == True):
+                if ( args['path'] == True):
+                    #print(args['<group>'], args['<name>'])
+                    if (args['<group>'] is None):
+                        print ("please input your env name.")
+                        return
+
+                    current_env = args['<group>']
+                    if (current_env == "current"):
+                        current_env = list_config['environ']['current']
+
+                    if (args['<name>'] is None):
+                        print ("please input your path value.")
+                        return
+                    current_name = args['<name>']
+
+                    if (list_config['environ'][current_env]['path+'].__contains__(current_name) is True):
+                        print("True")
+                    else:
+                        print("False")
+                    return
+
+                #env name is empty
+                if ( args['<group>'] is None ):
+                    current_env = list_config['environ']['current']
+                    if (list_config['environ'].__contains__(current_env) is True):
+                        print("True")
+                    else:
+                        print("False")
+                    return
+
+                current_env = args['<group>']
+                if (current_env == "current"):
+                    current_env = list_config['environ']['current']
+
+                # item var name is empty
+                if ( args['<name>'] is None ):
+                    if(list_config['environ'].__contains__(current_env) is True):
+                        print("True")
+                    else:
+                        print("False")
+                    return
+
+                current_name = args['<name>']
+                if( current_name == "path+" ):
+                    print("please ensure your var name is legal.")
+                    return
+
+                #env name is ok
+                #env-var name is ok
+                if (list_config['environ'].__contains__(current_env) is True):
+                    if (list_config['environ'][current_env].__contains__(current_name) is True):
+                        print("True")
+                    else:
+                        print("False")
+                    return
+                else:
+                    print("False")
+                return
+
+            elif( args['path'] == True):
+                dict0 = copy.deepcopy(list_config['path-assemblage'])
+                for (k, v) in dict0.items():
+                    if( k == args['<name>']):
+                        print ("True")
+                        return
+                print ("False")
+                return
+
+            elif( args['cmd'] == True):
+                dict0 = copy.deepcopy(list_config['command'])
+                for (k, v) in dict0.items():
+                    if( k == args['<name>']):
+                        print ("True")
+                        return
+                print ("False")
+                return
+
+            else:
+                print("please ensure your assemblage name.")
+                return
         else:
             ''
         break
