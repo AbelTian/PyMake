@@ -36,7 +36,7 @@ if %PYENVFLAG% == 0 (
     echo user env : [%PYENVNAME%] closed
 ) else (
     call "%PYMMSOURCEROOT%\%PYENVINDEX%_effect.bat"
-    echo user env : [%PYENVNAME%] opend
+    echo user env : [%PYENVNAME%] opened
 )
 
 ::clean

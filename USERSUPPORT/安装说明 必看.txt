@@ -1,3 +1,5 @@
+有的用户口味比较挑剔，对命令的名字有自己的喜好，在USERSUPPORT里，我教给用户如何安装自己的命令。
+
 Windows （需要管理员权限）
 使用 pyinstall %* 来安装。使用 pyuninstall 来卸载。
 
