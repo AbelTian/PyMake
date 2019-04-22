@@ -37,7 +37,7 @@ pyvc为用户设置VC环境提供便利。
 
 2. 注意  
 bat环境变量不区分大小写。  
-建议增加"RUN-VCVARSALL"="${VCVARSALL} ${VCVARSALLPARAM}"。  
+允许增加"RUN-VCVARSALL"="\"${VCVARSALL}\" ${VCVARSALLPARAM}"。  
 用户自行决定配置"CLS-VCVARSALL"和"CLS-VCVARSALLPARAM"。  
 
 #### pyvc 使用注意    
