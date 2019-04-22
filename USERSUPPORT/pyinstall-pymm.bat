@@ -3,5 +3,5 @@ set filepath=%~dp0..
 set mmfile=C:\Windows\pymm.bat
 echo @echo off > %mmfile% 
 echo call "%filepath%\pymake.bat" %* >> %mmfile%
-rem è¯·ä½¿ç”¨ pyinstall-pymm.bat %* è¿›è¡Œå®‰è£…
+rem ÇëÊ¹ÓÃ pyinstall-pymm.bat %* ½øĞĞ°²×°
 

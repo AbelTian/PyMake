@@ -1,6 +1,6 @@
 @echo off
 
-::æœ¬æ–‡ä»¶å˜é‡ï¼Œå±€éƒ¨æœ‰æ•ˆï¼Œä¸å¼€å¯è¿™ä¸ªè®¾ç½®ã€‚
+::±¾ÎÄ¼þ±äÁ¿£¬¾Ö²¿ÓÐÐ§£¬²»¿ªÆôÕâ¸öÉèÖÃ¡£
 ::setlocal enabledelayedexpansion
 
 set PYENVFLAG=1

@@ -3,5 +3,5 @@ set filepath=%~dp0
 set mmfile=C:\Windows\pyenv.bat
 echo @echo off > %mmfile% 
 echo call "%filepath%\pyenv.bat" %* >> %mmfile%
-rem è¯·ä½¿ç”¨ pyinstall-pyenv.bat %* è¿›è¡Œå®‰è£…
+rem ÇëÊ¹ÓÃ pyinstall-pyenv.bat %* ½øĞĞ°²×°
 

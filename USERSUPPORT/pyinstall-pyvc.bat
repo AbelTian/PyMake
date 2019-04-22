@@ -3,5 +3,5 @@ set filepath=%~dp0
 set mmfile=C:\Windows\pyvc.bat
 echo @echo off > %mmfile% 
 echo call "%filepath%\pyvc.bat" %* >> %mmfile%
-rem è¯·ä½¿ç”¨ pyinstall-pyvc.bat %* è¿›è¡Œå®‰è£…
+rem ÇëÊ¹ÓÃ pyinstall-pyvc.bat %* ½øĞĞ°²×°
 
