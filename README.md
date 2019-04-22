@@ -382,20 +382,12 @@ Update the command-line.
 Update the command-line.  
 1. add lots of abb-command.  
 2. add have/has command.  
-3. add user support shell module, user can install them to share their functions.   
-    - pyenv
-    - pyvc
-    - ...  
+3. add user support shell module.  
 
 ![命令行截图](./screenshot/a3.PNG)  
 
-## USERSUPPORT 介绍      
+## USERSUPPORT SHELL MODULE        
 [Readme](./USERSUPPORT/README.md)  
-
-## pyenv 使用截图  
-![命令行截图](./screenshot/b1.png)  
-![命令行截图](./screenshot/b2.png)  
-![命令行截图](./screenshot/b3.png)  
 
 # Dependencies  
 
