@@ -50,6 +50,8 @@ def utf(path, recursive=False):
             if os.path.isdir(now_path) and recursive is True:
                 utf(now_path, recursive)
             elif os.path.splitext(i)[1] == ".cpp" \
+                    or os.path.splitext(i)[1] == ".bat"\
+                    or os.path.splitext(i)[1] == ".sh"\
                     or os.path.splitext(i)[1] == ".cc"\
                     or os.path.splitext(i)[1] == ".hh"\
                     or os.path.splitext(i)[1] == ".sh"\

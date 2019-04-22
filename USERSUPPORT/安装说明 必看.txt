@@ -1,11 +1,11 @@
-�е��û���ζ�Ƚ����ޣ���������������Լ���ϲ�ã���USERSUPPORT��ҽ̸��û���ΰ�װ�Լ������
+有的用户口味比较挑剔，对命令的名字有自己的喜好，在USERSUPPORT里，我教给用户如何安装自己的命令。
 
-Windows ����Ҫ����ԱȨ�ޣ�
-ʹ�� pyinstall %* ����װ��ʹ�� pyuninstall ��ж�ء�
+Windows （需要管理员权限）
+使用 pyinstall %* 来安装。使用 pyuninstall 来卸载。
 
-*Unix ����Ҫsudo��
-ʹ�� pyinstall.sh ����װ��ʹ�� pyuninstall.sh ��ж�ء�
+*Unix （需要sudo）
+使用 pyinstall.sh 来安装。使用 pyuninstall.sh 来卸载。
 
-ʹ�ã�
-�Ұѳ���װΪpyenv��������ն�����pyenv������á�
-�������κεط����á�
+使用：
+我把程序安装为pyenv命令，所以终端里用pyenv命令调用。
+可以在任何地方调用。

@@ -1,0 +1,61 @@
+Microsoft Windows [版本 10.0.17134.706]
+(c) 2018 Microsoft Corporation。保留所有权利。
+
+R:\Develop\b0-toolkits\a0-compiler\PyMake>mm
+Usage:
+  pymake7.py source
+  pymake7.py source root [ <source-root-path> ]
+  pymake7.py source config [ --add | --del | --mod | --switch | --restore | --show ] [ <config-file-name> ] [<new-config-file-name>]
+  pymake7.py -------------------------------------------------------------
+  pymake7.py set path ( --add | --del | --mod ) <name> [ <value> ]
+  pymake7.py set env [ path ] ( --add | --del | --mod ) <group> <name> [ <value> ]
+  pymake7.py set cmd (--add | --del | --mod ) <name> [ <values> ... ]
+  pymake7.py set cur env <name>
+  pymake7.py list [ path | env | cmd ] [<name>] [-r | --raw] [-a | --all]
+  pymake7.py env [<name>] [-p | --path] [-v | --var] [-r | --raw] [-a | --all]
+  pymake7.py -------------------------------------------------------------
+  pymake7.py here clean
+  pymake7.py here export [ <env-name> ] [ to <file-name> ]
+  pymake7.py here type [ <cmd-name> ]  [ to <file-name> ]
+  pymake7.py here use <env-name> exec [ <command-names> ... ]
+  pymake7.py here exec [ <command-names> ... ]
+  pymake7.py here use <env-name> cc [ <command-names> ... ]
+  pymake7.py here cc [ <command-names> ... ]
+  pymake7.py export [ here | hh ] [ <env-name> ] [ to <file-name> ]
+  pymake7.py type [ here | hh ] [ <cmd-name> ]  [ to <file-name> ]
+  pymake7.py clean [ here | hh ]
+  pymake7.py use <env-name> exec [ here | hh ] [ <command-names> ... ]
+  pymake7.py exec [ here | hh ] [ <command-names> ... ]
+  pymake7.py use <env-name> cc [ here | hh ] [ <command-names> ... ]
+  pymake7.py cc [ here | hh ] [ <command-names> ... ]
+  pymake7.py -------------------------------------------------------------
+  pymake7.py set current env <name>
+  pymake7.py set default env <name>
+  pymake7.py show [ path | env | cmd ] [<name>] [-r | --raw] [-a | --all]
+  pymake7.py environ [<name>] [-p | --path] [-v | --var] [-r | --raw] [-a | --all]
+  pymake7.py see [ <cmd-name> ] [-r | --raw] [-a | --all]
+  pymake7.py use <env-name> see [ <cmd-name> ] [-r | --raw] [-a | --all]
+  pymake7.py ss [ <cmd-name> ] [-r | --raw] [-a | --all]
+  pymake7.py use <env-name> ss [ <cmd-name> ] [-r | --raw] [-a | --all]
+  pymake7.py cmd [ <cmd-name> ] [-r | --raw] [-a | --all]
+  pymake7.py use <env-name> cmd [ <cmd-name> ] [-r | --raw] [-a | --all]
+  pymake7.py -------------------------------------------------------------
+  pymake7.py hh clean
+  pymake7.py hh export [ <env-name> ] [ to <file-name> ]
+  pymake7.py hh type [ <cmd-name> ]  [ to <file-name> ]
+  pymake7.py hh use <env-name> exec [ <command-names> ... ]
+  pymake7.py hh exec [ <command-names> ... ]
+  pymake7.py hh use <env-name> cc [ <command-names> ... ]
+  pymake7.py hh cc [ <command-names> ... ]
+  pymake7.py -------------------------------------------------------------
+  pymake7.py have path <name> [-r | --raw]
+  pymake7.py have env [ path ] [ <group> ] [ <name> ] [-r | --raw]
+  pymake7.py have cmd <name> [-r | --raw]
+  pymake7.py has path <name> [-r | --raw]
+  pymake7.py has env [ path ] [ <group> ] [ <name> ] [-r | --raw]
+  pymake7.py has cmd <name> [-r | --raw]
+  pymake7.py -------------------------------------------------------------
+  pymake7.py (-h | --help)
+  pymake7.py --version
+
+R:\Develop\b0-toolkits\a0-compiler\PyMake>

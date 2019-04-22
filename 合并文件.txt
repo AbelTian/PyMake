@@ -1,0 +1,1 @@
+find . -name "*.[pr|c|h]*" -type f -exec cat {} \;
