@@ -386,13 +386,11 @@ Update the command-line.
 
 ![命令行截图](./screenshot/a3.PNG)  
 
-## USERSUPPORT SHELL MODULE        
+#### USERSUPPORT SHELL MODULE  
 [Readme](./USERSUPPORT/README.md)  
 
 # Dependencies  
 
-*This program edited by python, support python 2.7 -> 3.6 (tested).You need install python, only python in path. configured.*
-
-
-*At last, it will work itself, I wish you would like it.*
+*This program edited by python, support python 2.7 -> 3.6 (tested).You need install python, only python in path. configured.*  
+*At last, it will work itself, I wish you would like it.*  
 

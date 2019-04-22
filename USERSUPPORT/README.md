@@ -25,15 +25,20 @@ pyenv为用户提供了影响当前运行器的环境！这又是一个创举。
 # pyvc  
 
 pyvc为用户设置VC环境提供便利。  
-用户在自己的环境集.json里面使用MSVC的环境配置一个变量RUN-VCVARSALL就可以使用。
+用户在自己的环境集.json里面使用MSVC的环境配置两个变量 VCVARSALL 和 VCVARSALLPARAM 就可以使用。
 
 #### pyvc 的使用条件
 在 <source-root>/<source-file>.json，即 $(mm source root) 里面添加，  
-在每个使用 MSVC 的 ENV 里必须加入一个环境变量，"RUN-VCVARSALL"="${vcvarsall-201x} amd64 ..."，${vcvarsall-201x} 路径集合保存到 path-assemblage。  
+在每个使用 MSVC 的 ENV 里必须加入两个环境变量，  
+"VCVARSALL"="${vcvarsall-201x}"，${vcvarsall-201x} 路径集合保存到 path-assemblage。  
+"VCVARSALLPARAM"="amd64_x86"，这个环境变量根据用户ENV的目标决定。    
 只有这样，pyvc.bat 才能执行有效。  
 
 #### pyvc 使用注意  
-1. 这里说一下，vcvarsall.bat 是一种更换环境后全覆盖式的，其实没有清理。但是，pyvc支持清理，环境变量 CLS-VCVARSALL就是清理命令，用户配置到环境集.json相应 ENV 中即可。当然，用户自行决定从何处获取清理VC环境的.bat。   
-2. 环境变量 RUN-VCVARSALL 已经被使用者设置进入确定的ENV，随时跟着ENV改变。  
+1. 这里说一下，vcvarsall.bat 是一种更换环境后全覆盖式的，其实没有清理。
+但是，pyvc支持清理，环境变量 CLS-VCVARSALL 就是清理命令，CLS-VCVARSALLPARAM 是参数。
+用户配置到环境集.json相应 ENV 中即可。也是两个环境变量。
+当然，用户自行决定从何处获取清理VC环境的.bat。   
+2. 环境变量 VCVARSALL,VCVARSALLPARAM 已经被使用者设置进入确定的ENV，随时跟着ENV改变。  
 
 
