@@ -1,5 +1,5 @@
-Microsoft Windows [ç‰ˆæœ¬ 10.0.17134.706]
-(c) 2018 Microsoft Corporationã€‚ä¿ç•™æ‰€æœ‰æƒåˆ©ã€‚
+Microsoft Windows [°æ±¾ 10.0.17134.706]
+(c) 2018 Microsoft Corporation¡£±£ÁôËùÓÐÈ¨Àû¡£
 
 R:\Develop\b0-toolkits\a0-compiler\PyMake>mm
 Usage:
