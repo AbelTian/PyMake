@@ -55,6 +55,10 @@ Usage:
   pymake7.py has env [ path ] [ <group> ] [ <name> ] [-r | --raw]
   pymake7.py has cmd <name> [-r | --raw]
   pymake7.py -------------------------------------------------------------
+  pymake7.py program
+  pymake7.py program root
+  pymake7.py program file
+  pymake7.py -------------------------------------------------------------
   pymake7.py (-h | --help)
   pymake7.py --version
 
@@ -80,6 +84,7 @@ Command:
   have             check env or path or cmd item whether user has configured.
   has              check env or path or cmd item whether user has configured.
   clean            clean *_effect.sh *_unset.sh
+  program          get pymake.py program status.
 
 Options:
   -h --help     Show this screen.
@@ -485,6 +490,23 @@ def main_function():
         if(not os.path.exists(file)):
             print ("source config file is not exist.")
             return
+
+    # set this command here .
+    # program
+    while (True):
+        if(args['program'] is True):
+            if(args['root'] is True):
+                print("%s" % os.path.split(os.path.realpath(__file__))[0])
+                return
+            elif (args['file'] is True):
+                print("%s" % os.path.split(os.path.realpath(__file__))[1])
+                return
+            else:
+                print("%s" % os.path.realpath(__file__))
+                return
+        else:
+            ''
+        break
 
     config = readJsonData(file)
     #print(config)

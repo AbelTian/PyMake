@@ -382,6 +382,7 @@ Update the command-line.
 Update the command-line.  
 1. add lots of abb-command.  
 2. add have/has command.  
+2. add program command.  
 3. add user support shell module.  
 
 ![命令行截图](./screenshot/a3.PNG)  
