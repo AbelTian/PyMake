@@ -10,15 +10,23 @@
 :: 建议增加"RUN-VCVARSALL"="${VCVARSALL} ${VCVARSALLPARAM}"。
 :: 用户自行决定配置"CLS-VCVARSALL"和"CLS-VCVARSALLPARAM"。
 
+if "%1" == "" (
+    echo please appoint a env name. & exit /b 0
+) else if "%1" == "open" (
+    if "%2" == "" ( echo please appoint a env name. & exit /b 0 )
+) else if "%1" == "close" (
+    if "%2" == "" ( echo please appoint a env name. & exit /b 0 )
+)
+
 set PYFILEPATH=%~dp0
 call %PYFILEPATH%\pyenv.bat %*
 
 if %PYENVFLAG% == 0 (
-    echo pyvc env : CLS-VCVARSALL="%CLS-VCVARSALL:/=\%"
+    echo pyvc env : CLS-VCVARSALL="%CLS-VCVARSALL:/=\%" %CLS-VCVARSALLPARAM%
     call "%CLS-VCVARSALL:/=\%" %CLS-VCVARSALLPARAM%
     echo pyvc env : [%PYENVNAME%] closed, but you should use new vcvarsall overlap it.
 ) else (
-    echo pyvc env : VCVARSALL="%VCVARSALL:/=\%" "%VCVARSALLPARAM%"
+    echo pyvc env : VCVARSALL="%VCVARSALL:/=\%" %VCVARSALLPARAM%
     call "%VCVARSALL:/=\%" %VCVARSALLPARAM%
     echo pyvc env : [%PYENVNAME%] opened, sure.
 )
