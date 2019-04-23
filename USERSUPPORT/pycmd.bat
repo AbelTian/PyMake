@@ -1,7 +1,9 @@
 @echo off
 
 :: pycmd.bat 会强制使用pymake.bat的默认环境配置。即自带一个默认环境。
-:: pycmd.bat
+:: pycmd.bat 会使用默认环境配置导出命令，
+:: pycmd.bat 却没有导出默认环境使用。
+:: pycmd.bat 所以用户必须谨慎使用，以防导出的不是自己想要的命令，或者命令无法执行。
 
 if "%1" == "" (
     echo please appoint a cmd name. & exit /b 0
