@@ -882,7 +882,7 @@ def main_function():
             ''
         break
 
-    # have has [support raw]
+    # have has
     while (True):
         if (args['have'] or args['has'] is True):
 
@@ -1754,8 +1754,8 @@ def main_function():
             ""
         break
 
-    # here [ignore]
-    while ( True ):
+    # here
+    while ( False ):
         if (args['here'] or args['hh'] is True):
             os.chdir(pymakeworkpath)
 
