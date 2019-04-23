@@ -5,6 +5,7 @@
 
 set PYENVFLAG="True"
 if "%1" == "" (
+    echo "pyenv <env-name>"
     echo please appoint a env name. & exit /b 0
 ) else if "%1" == "open" (
     if "%2" == "" ( echo please appoint a env name. & exit /b 0 )

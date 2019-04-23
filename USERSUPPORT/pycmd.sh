@@ -1,44 +1,21 @@
 #!/usr/bin/env bash
 
+#mail while
 while [ 1 ]
 do
 
 
-export PYENVFLAG=1
-if [ "$1" = "" ]
-then
-    echo "pyenv <env-name>"
-    echo "pyenv open <env-name>"
-    echo "pyenv close <env-name>"
-    echo please appoint a env name.
-    break
-elif [ "$1" = "open" ]
-then
-    if [ "$2" = "" ]
-    then
-        echo "pyenv <env-name>"
-        echo "pyenv open <env-name>"
-        echo "pyenv close <env-name>"
-        echo please appoint a env name.
-        break
-    fi
-    export PYENVNAME=$2
-elif [ "$1" = "close" ]
-then
-    if [ "$2" = "" ]
-    then
-        echo "pyenv <env-name>"
-        echo "pyenv open <env-name>"
-        echo "pyenv close <env-name>"
-        echo please appoint a env name.
-        break
-    fi
-    export PYENVNAME=$2
-    export PYENVFLAG=0
-else
-    export PYENVNAME=$1
-fi
 
+if [ "$1" = "" ]; then
+    echo "pycmd <cmd-name> [ <env-name> ]"
+    echo please appoint a cmd name.
+    break
+fi
+export PYEXECNAME=$1
+
+if [ "$2" != "" ]; then
+    export PYENVNAME=$2
+fi
 
 #if has source[.] call , failed. source default work path is user home.
 #这些都只是获取到了工作路径
@@ -87,9 +64,9 @@ export PYPROGRAMPATHNAME=$PYPROGRAMPATH/$PYPROGRAMNAME
 #echo $(filename "$0")
 #echo $0 | awk -F'\' '{print $NF}'
 
-echo preparing env ...
-export PYENVINDEX=$(echo $RANDOM)
-echo env index: \[$PYENVINDEX\]
+echo starting cmd ...
+export PYEXECINDEX=$(echo $RANDOM)
+echo env index: \[$PYEXECINDEX\]
 
 export PYMMSOURCEROOT=$("${PYPROGRAMPATHNAME}" source root)
 echo location : \[$PYMMSOURCEROOT\]
@@ -98,36 +75,38 @@ export PYMMSOURCECONFIG=$("$PYPROGRAMPATHNAME" source config)
 echo configure: \[$PYMMSOURCECONFIG\] \[1\]
 
 export PYMMDEFAULTENVNAME=$("$PYPROGRAMPATHNAME" get current env)
-echo environme: \[$PYMMDEFAULTENVNAME\] \[default\]
-export PYENVEXISTEDFLAG=$("$PYPROGRAMPATHNAME" have env $PYENVNAME)
-if [ "$PYENVEXISTEDFLAG" = "False" ]; then
+echo environme: \[$PYMMDEFAULTENVNAME\] \[1\]
+if [ "$2" != "" ]; then
+    export PYENVNAME=$2
+else
+    export PYENVNAME=$PYMMDEFAULTENVNAME
+fi
+export PYEXECFLAG=$("$PYPROGRAMPATHNAME" have env $PYENVNAME)
+if [ "$PYEXECFLAG" = "False" ]; then
     echo environme: \[$PYENVNAME\] is not existed.
     break
-fi
-echo environme: \[$PYENVNAME\] \[$PYENVEXISTEDFLAG\] \[USED\]
-
-"$PYPROGRAMPATHNAME" export $PYENVNAME $PYENVINDEX
-
-if [ $PYENVFLAG -eq 0 ]; then
-    if [ -f "${PYMMSOURCEROOT}/${PYENVINDEX}_unset.sh" ]; then
-        chmod +x "${PYMMSOURCEROOT}/${PYENVINDEX}_unset.sh"
-        source "${PYMMSOURCEROOT}/${PYENVINDEX}_unset.sh"
-        echo successed: \[$PYENVNAME\] closed
-    else
-        echo failed\ \ \ : \[$PYENVNAME\] close failed
-    fi
 else
-    if [ -f "${PYMMSOURCEROOT}/${PYENVINDEX}_effect.sh" ]; then
-        chmod +x "${PYMMSOURCEROOT}/${PYENVINDEX}_effect.sh"
-        source "${PYMMSOURCEROOT}/${PYENVINDEX}_effect.sh"
-        echo successed: \[$PYENVNAME\] opened
-    else
-        echo failed\ \ \ : \[$PYENVNAME\] open failed
-    fi
+    export PYENVNAME=$PYMMDEFAULTENVNAME
 fi
+echo environme: \[$PYENVNAME\] \[$PYEXECFLAG\] \[USED\]
+
+export PYEXECFLAG=$("$PYPROGRAMPATHNAME" have cmd $PYEXECNAME)
+if [ "$PYEXECFLAG" = "False" ]; then
+    echo command\ \ : \[$PYEXECNAME\] is not existed.
+    break
+fi
+echo command\ \ : \[$PYEXECNAME\] \[$PYEXECFLAG\] \[EXISTED\]
+
+
+"$PYPROGRAMPATHNAME" export here $PYENVNAME to $PYEXECINDEX
+"$PYPROGRAMPATHNAME" use $PYENVNAME type here $PYEXECNAME to $PYEXECINDEX
+chmod +x "$(pwd)/${PYEXECINDEX}_effect.sh"
+source "$(pwd)/${PYEXECINDEX}_effect.sh"
+"$(pwd)/${PYEXECINDEX}_exec.sh"
 
 #clean
-rm -f "${PYMMSOURCEROOT}/${PYENVINDEX}_effect.sh" "${PYMMSOURCEROOT}/${PYENVINDEX}_unset.sh"
+rm -f "$(pwd)/${PYEXECINDEX}_exec.sh"
+rm -f "$(pwd)/${PYEXECINDEX}_effect.sh" "$(pwd)/${PYEXECINDEX}_unset.sh"
 
 break
 done
