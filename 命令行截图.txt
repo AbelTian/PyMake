@@ -21,9 +21,11 @@ Usage:
   pymake7.py here exec [ <command-names> ... ]
   pymake7.py here use <env-name> cc [ <command-names> ... ]
   pymake7.py here cc [ <command-names> ... ]
-  pymake7.py export [ here | hh ] [ <env-name> ] [ to <file-name> ]
-  pymake7.py type [ here | hh ] [ <cmd-name> ]  [ to <file-name> ]
+  pymake7.py -------------------------------------------------------------
   pymake7.py clean [ here | hh ]
+  pymake7.py export [ here | hh ] [ <env-name> ] [ to <file-name> ]
+  pymake7.py use <env-name> type [ here | hh ] [ <cmd-name> ]  [ to <file-name> ]
+  pymake7.py type [ here | hh ] [ <cmd-name> ]  [ to <file-name> ]
   pymake7.py use <env-name> exec [ here | hh ] [ <command-names> ... ]
   pymake7.py exec [ here | hh ] [ <command-names> ... ]
   pymake7.py use <env-name> cc [ here | hh ] [ <command-names> ... ]
@@ -33,12 +35,12 @@ Usage:
   pymake7.py set default env <name>
   pymake7.py show [ path | env | cmd ] [<name>] [-r | --raw] [-a | --all]
   pymake7.py environ [<name>] [-p | --path] [-v | --var] [-r | --raw] [-a | --all]
-  pymake7.py see [ <cmd-name> ] [-r | --raw] [-a | --all]
   pymake7.py use <env-name> see [ <cmd-name> ] [-r | --raw] [-a | --all]
-  pymake7.py ss [ <cmd-name> ] [-r | --raw] [-a | --all]
+  pymake7.py see [ <cmd-name> ] [-r | --raw] [-a | --all]
   pymake7.py use <env-name> ss [ <cmd-name> ] [-r | --raw] [-a | --all]
-  pymake7.py cmd [ <cmd-name> ] [-r | --raw] [-a | --all]
+  pymake7.py ss [ <cmd-name> ] [-r | --raw] [-a | --all]
   pymake7.py use <env-name> cmd [ <cmd-name> ] [-r | --raw] [-a | --all]
+  pymake7.py cmd [ <cmd-name> ] [-r | --raw] [-a | --all]
   pymake7.py -------------------------------------------------------------
   pymake7.py hh clean
   pymake7.py hh export [ <env-name> ] [ to <file-name> ]
@@ -54,6 +56,14 @@ Usage:
   pymake7.py has path <name> [-r | --raw]
   pymake7.py has env [ path ] [ <group> ] [ <name> ] [-r | --raw]
   pymake7.py has cmd <name> [-r | --raw]
+  pymake7.py -------------------------------------------------------------
+  pymake7.py get cur env
+  pymake7.py get current env
+  pymake7.py get default env
+  pymake7.py -------------------------------------------------------------
+  pymake7.py program
+  pymake7.py program root
+  pymake7.py program file
   pymake7.py -------------------------------------------------------------
   pymake7.py (-h | --help)
   pymake7.py --version
