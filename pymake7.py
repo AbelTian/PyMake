@@ -389,7 +389,7 @@ def main_function():
                 if ( args['<source-root-path>'] is not None):
                     conf.set('source', 'root', args['<source-root-path>'])
                     conf.write(open(pymakeini, 'w'))
-                    print ("success root: %s" % args['<source-root-path>'])
+                    print ("successed: change source root to %s" % args['<source-root-path>'])
                 else:
                     print ("%s" % conf.get('source', 'root'))
             elif(args['config'] is True):
@@ -402,7 +402,7 @@ def main_function():
                         os.remove(args['<config-file-name>'])
                         conf.set('source', 'config', 'pymake.json')
                         conf.write(open(pymakeini, 'w'))
-                        print ("success: %s" % args['<config-file-name>'])
+                        print ("successed: %s" % args['<config-file-name>'])
                     else:
                         print ('You can\'t remove pymake.json and un.json\'s file...')
                 elif(args['--add'] is True):
@@ -412,7 +412,7 @@ def main_function():
                             shutil.copyfile(f, args['<config-file-name>'])
                             conf.set('source', 'config', args['<config-file-name>'])
                             conf.write(open(pymakeini, 'w'))
-                            print ("success: %s" % args['<config-file-name>'])
+                            print ("successed: %s" % args['<config-file-name>'])
                         else:
                             print('You can\'t add same named file...')
                     else:
@@ -424,7 +424,7 @@ def main_function():
                         if (f == args['<config-file-name>']):
                             conf.set('source', 'config',args['<new-config-file-name>'])
                             conf.write(open(pymakeini, 'w'))
-                        print ("success: %s" % args['<new-config-file-name>'])
+                        print ("successed: %s" % args['<new-config-file-name>'])
                     else:
                         print ('You can\'t mod pymake.json and un.json\'s file...')
                 elif(args['--show'] is True):
@@ -435,15 +435,15 @@ def main_function():
                 elif(args['--restore'] is True):
                     conf.set('source', 'config', 'pymake.json')
                     conf.write(open(pymakeini, 'w'))
-                    print ("success: %s" % 'pymake.json')
+                    print ("successed: %s" % 'pymake.json')
                 elif (args['--switch'] is True or ( args['<config-file-name>'] is not None )):
                     if (args['<config-file-name>'] is not None and args['<config-file-name>'].endswith(pymakesuffix) ):
                         if (os.path.exists(args['<config-file-name>'])):
                             conf.set('source', 'config', args['<config-file-name>'])
                             conf.write(open(pymakeini, 'w'))
-                            print("switch to source config: %s" % args['<config-file-name>'])
+                            print("successed: switch to source config %s" % args['<config-file-name>'])
                         else:
-                            print("source file %s isn't exists, please --add it" % args['<config-file-name>'])
+                            print("failed: source file %s isn't exists, please --add it" % args['<config-file-name>'])
                     else:
                         print ('You can\'t switch pymake.json and un.json\'s file...')
                 else:
@@ -522,20 +522,20 @@ def main_function():
                             print("please ensure the environ is right")
                             return
                         config["environ"]["current"] = args["<name>"]
-                        print("successed %s" % (args['<name>']))
+                        print("successed: %s" % (args['<name>']))
                     else:
                         ""
                 elif (args["path"] is True):
                     if (args['--add'] == True):
                         if (args['<group>'] and args['<name>'] is not None):
                             config['environ'][args['<group>']]["path+"].append(args["<name>"])
-                            print ("successed %s:%s" % (args['<group>'], args['<name>']))
+                            print ("successed: %s:%s" % (args['<group>'], args['<name>']))
                         else:""
                     elif (args['--del'] == True):
                         if (args['<group>'] and args["<name>"] is not None):
                             if (config['environ'][args['<group>']]["path+"].__contains__(args['<name>'])):
                                 config['environ'][args['<group>']]["path+"].__delitem__(args['<name>'])
-                                print("successed %s:%s" % (args['<group>'], args['<name>']))
+                                print("successed: %s:%s" % (args['<group>'], args['<name>']))
                             else:
                                 print("failed %s:%s" % (args['<group>'], args['<name>']))
                         else:
@@ -545,7 +545,7 @@ def main_function():
                             if (config['variable'][args['<group>']]["path+"].__contains__(args['<name>'])):
                                 index = config['variable'][args['<group>']]["path+"].index(args['<name>'])
                                 config['variable'][args['<group>']]["path+"][index] = [args['<value>']]
-                                print ("successed %s:%s:%s" % (args['<group>'], args['<name>'], args["<value>"]))
+                                print ("successed: %s:%s:%s" % (args['<group>'], args['<name>'], args["<value>"]))
                             else:
                                 print("failed %s:%s" % (args['<group>'], args['<name>']))
                         else:
@@ -554,14 +554,14 @@ def main_function():
                     if (args['--add'] == True):
                         if (args['<group>'] and args['<name>'] and args["<value>"] is not None):
                             config['environ'][args['<group>']][args['<name>']] = args["<value>"]
-                            print ("successed %s:%s:%s" % (args['<group>'], args['<name>'], args["<value>"]))
+                            print ("successed: %s:%s:%s" % (args['<group>'], args['<name>'], args["<value>"]))
                         else:
                             print ("failed %s:%s:%s" % (args['<group>'], args['<name>'], args["<value>"]))
                     elif (args['--del'] == True):
                         if (args['<group>'] and args["<name>"] is not None):
                             if (config['variable'][args['<group>']].__contains__(args['<name>'])):
                                 config['variable'][args['<group>']].__delitem__(args['<name>'])
-                                print ("successed %s:%s" % (args['<group>'], args['<name>']))
+                                print ("successed: %s:%s" % (args['<group>'], args['<name>']))
                             else:
                                 print ("failed %s:%s" % (args['<group>'], args['<name>']))
                         else:
@@ -570,7 +570,7 @@ def main_function():
                         if (args['<group>'] and args['<name>'] and args["<value>"] is not None):
                             if (config['variable'][args['<group>']].__contains__(args['<name>'])):
                                 config['variable'][args['<group>']][args['<name>']] = args["<value>"]
-                                print ("successed %s:%s:%s" % (args['<group>'], args['<name>'], args["<value>"]))
+                                print ("successed: %s:%s:%s" % (args['<group>'], args['<name>'], args["<value>"]))
                             else:
                                 print ("failed %s:%s:%s" % (args['<group>'], args['<name>'], args["<value>"]))
                         else:
@@ -581,14 +581,14 @@ def main_function():
                 if (args['--add'] == True):
                     if (args['<name>'] and args["<values>"] is not None):
                         config["command"][args['<name>']] = args["<values>"]
-                        print("successed %s:%s" % (args['<name>'], args["<values>"]))
+                        print("successed: %s:%s" % (args['<name>'], args["<values>"]))
                     else:
                         print("failed %s:%s" % (args['<name>'], args["<values>"]))
                 elif (args['--del'] == True):
                     if (args["<name>"] is not None):
                         if (config['command'].__contains__(args['<name>'])):
                             config["command"].__delitem__(args['<name>'])
-                            print("successed %s" % (args['<name>']))
+                            print("successed: %s" % (args['<name>']))
                         else:
                             print("failed %s" % (args['<name>']))
                     else:
@@ -596,7 +596,7 @@ def main_function():
                 elif (args['--mod'] == True):
                     if (args['<name>'] and args["<values>"] is not None):
                         config["command"][args['<name>']] = args["<values>"]
-                        print("successed %s:%s" % (args['<name>'], args["<values>"]))
+                        print("successed: %s:%s" % (args['<name>'], args["<values>"]))
                     else:
                         print("failed %s:%s" % (args['<name>'], args["<values>"]))
                 else:
@@ -605,14 +605,14 @@ def main_function():
                 if (args['--add'] == True):
                     if (args['<name>'] and args["<value>"] is not None):
                         config['path-assemblage'][args['<name>']] = args["<value>"]
-                        print ("successed %s:%s" % (args['<name>'], args["<value>"]))
+                        print ("successed: %s:%s" % (args['<name>'], args["<value>"]))
                     else:
                         print ("failed %s:%s" % (args['<name>'], args["<value>"]))
                 elif (args['--del'] == True):
                     if (args["<name>"] is not None):
                         if (config['path-assemblage'].__contains__(args['<name>'])):
                             config['path-assemblage'].__delitem__(args['<name>'])
-                            print ("successed %s" % (args['<name>']))
+                            print ("successed: %s" % (args['<name>']))
                         else:
                             print ("failed %s" % (args['<name>']))
                     else:
@@ -621,7 +621,7 @@ def main_function():
                     if (args['<name>'] and args["<value>"] is not None):
                         if (config['path-assemblage'].__contains__(args['<name>'])):
                             config['path-assemblage'][args['<name>']] = args["<value>"]
-                            print ("successed %s:%s" % (args['<name>'], args["<value>"]))
+                            print ("successed: %s:%s" % (args['<name>'], args["<value>"]))
                         else:
                             print ("failed %s:%s" % (args['<name>'], args["<value>"]))
                     else:
@@ -1170,8 +1170,8 @@ def main_function():
             return ""
 
         list0 = copy.deepcopy(rawconfig['command'][cmd_name])
-        for cmd in list0:
-            print(Fore.RED + "%s" % (cmd))
+        #for cmd in list0:
+        #    print(Fore.RED + "%s" % (cmd))
 
         temp_file_name = ""
         if (file_name is None):
@@ -1326,7 +1326,7 @@ def main_function():
 
                 cmd_exec = cmd_type(args['<cmd-name>'], args['<file-name>'])
 
-                print("success type %s to %s" % (args['<cmd-name>'], cmd_exec))
+                print("successed: type %s to %s" % (args['<cmd-name>'], cmd_exec))
                 return
 
             current_env = ""
@@ -1514,7 +1514,7 @@ def main_function():
 
             cmd_exec = cmd_type(args['<cmd-name>'], args['<file-name>'] )
 
-            print("success type %s to %s" % (args['<cmd-name>'], cmd_exec))
+            print("successed: type %s to %s" % (args['<cmd-name>'], cmd_exec))
             return
 
         else:""
