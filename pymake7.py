@@ -24,23 +24,23 @@ Usage:
   pymake7.py -------------------------------------------------------------
   pymake7.py clean [ here | hh ]
   pymake7.py export [ here | hh ] [ <env-name> ] [ to <file-name> ]
-  pymake7.py use <env-name> type [ here | hh ] [ <cmd-name> ]  [ to <file-name> ]
-  pymake7.py type [ here | hh ] [ <cmd-name> ]  [ to <file-name> ]
-  pymake7.py use <env-name> exec [ here | hh ] [ <command-names> ... ]
+  pymake7.py type [ here | hh ] [ <cmd-name> ] [ to <file-name> ]
   pymake7.py exec [ here | hh ] [ <command-names> ... ]
-  pymake7.py use <env-name> cc [ here | hh ] [ <command-names> ... ]
   pymake7.py cc [ here | hh ] [ <command-names> ... ]
+  pymake7.py use <env-name> type [ here | hh ] [ <cmd-name> ]  [ to <file-name> ]
+  pymake7.py use <env-name> exec [ here | hh ] [ <command-names> ... ]
+  pymake7.py use <env-name> cc [ here | hh ] [ <command-names> ... ]
   pymake7.py -------------------------------------------------------------
   pymake7.py set current env <name>
   pymake7.py set default env <name>
   pymake7.py show [ path | env | cmd ] [<name>] [-r | --raw] [-a | --all]
   pymake7.py environ [<name>] [-p | --path] [-v | --var] [-r | --raw] [-a | --all]
+  pymake7.py see [ <cmd-name> ] [ use <env-name> ] [-r | --raw] [-a | --all]
+  pymake7.py ss [ <cmd-name> ] [ use <env-name> ] [-r | --raw] [-a | --all]
+  pymake7.py cmd [ <cmd-name> ] [ use <env-name> ] [-r | --raw] [-a | --all]
   pymake7.py use <env-name> see [ <cmd-name> ] [-r | --raw] [-a | --all]
-  pymake7.py see [ <cmd-name> ] [-r | --raw] [-a | --all]
   pymake7.py use <env-name> ss [ <cmd-name> ] [-r | --raw] [-a | --all]
-  pymake7.py ss [ <cmd-name> ] [-r | --raw] [-a | --all]
   pymake7.py use <env-name> cmd [ <cmd-name> ] [-r | --raw] [-a | --all]
-  pymake7.py cmd [ <cmd-name> ] [-r | --raw] [-a | --all]
   pymake7.py -------------------------------------------------------------
   pymake7.py hh clean
   pymake7.py hh export [ <env-name> ] [ to <file-name> ]
