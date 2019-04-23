@@ -26,6 +26,8 @@ for /F %%i in ('"%PYPROGRAMPATHNAME%" source root') do ( set "PYMMSOURCEROOT=%%i
 echo location : [%PYMMSOURCEROOT%]
 for /F %%i in ('"%PYPROGRAMPATHNAME%" source config') do ( set "PYMMSOURCECONFIG=%%i" )
 echo configure: [%PYMMSOURCECONFIG%] [1]
+for /F %%i in ('"%PYPROGRAMPATHNAME%" get current env') do ( set "PYENVNAME=%%i" )
+echo environme: [%PYENVNAME%] [default]
 for /F %%i in ('"%PYPROGRAMPATHNAME%" have cmd %PYEXECNAME%') do ( set "PYEXECFLAG=%%i" )
 if "%PYEXECFLAG%" == 0 (
     echo pycmd env: [%PYEXECNAME%] is not existed. exit 1.

@@ -55,6 +55,10 @@ Usage:
   pymake7.py has env [ path ] [ <group> ] [ <name> ] [-r | --raw]
   pymake7.py has cmd <name> [-r | --raw]
   pymake7.py -------------------------------------------------------------
+  pymake7.py get cur env
+  pymake7.py get current env
+  pymake7.py get default env
+  pymake7.py -------------------------------------------------------------
   pymake7.py program
   pymake7.py program root
   pymake7.py program file
@@ -633,6 +637,23 @@ def main_function():
             # print(config)
             writeJsonData(file, config)
             return
+        else:
+            ''
+        break
+
+    # get
+    while (True):
+        if (args['get'] == True):
+            if (args['env'] is True):
+                if (args['default'] or args['current'] or args['cur'] is True):
+                        if (config['environ'].__contains__("current") is True):
+                            print("%s" % (config["environ"]["current"]))
+                            return
+                        else:
+                            print("failed: bad json file, environ section in json file losts current key.")
+                            return
+                else:
+                    ""
         else:
             ''
         break
