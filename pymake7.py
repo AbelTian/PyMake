@@ -353,6 +353,16 @@ def main_function():
         }
     }
 
+    # record current directory
+    pymakeworkpath = os.getcwd()
+    # record pymake file directory
+    pymakefilepath = os.path.split(os.path.realpath(__file__))[0]
+    #print( "pymake file path" + pymakefilepath )
+
+    # pymake source root [default]
+    pymakesourceroot = pymakefilepath + os.path.sep + 'USERSOURCE'
+    if (not os.path.exists(pymakesourceroot)):
+        os.makedirs(pymakesourceroot)
 
     """
     [pymake]
@@ -380,11 +390,31 @@ def main_function():
         conf.add_section('source')
         conf.write(open(pymakeini, 'w'))
     if( not conf.has_option('source', 'root') ):
-        conf.set('source', 'root', pymakeroot)
+        conf.set('source', 'root', pymakesourceroot)
         conf.write(open(pymakeini, 'w'))
     if(not conf.has_option('source', 'config')):
         conf.set('source', 'config', 'pymake.json')
         conf.write(open(pymakeini, 'w'))
+
+
+    #record source root directory
+    sourceroot = conf.get('source', 'root')
+    #record source config file name
+    file = conf.get('source', 'config')
+    #print ("root: %s config: %s" % (sourceroot, file))
+    #print(Fore.LIGHTBLACK_EX + "use source config: %s/%s" % (sourceroot, file) )
+    # cd source root directory
+    if (os.path.exists(sourceroot)):
+        # chdir to source root
+        os.chdir(sourceroot)
+        if (os.path.abspath(sourceroot) != os.path.abspath(pymakeroot)
+                and os.path.abspath(sourceroot) != os.path.abspath(pymakefilepath)):
+            if (not os.path.exists('pymake.json')):
+                writeJsonData('pymake.json', d)
+                #print ("initial pymake.json in source root.")
+            if(not os.path.exists(file)):
+                print ("source config file is not exist.")
+                return
 
     args = docopt(__doc__, version='pymake7.py v7.1')
     #print(args)
@@ -482,7 +512,7 @@ def main_function():
         # chdir to source root
         os.chdir(sourceroot)
     else:
-        print("You have changed sourceroot manual, please change it using source command")
+        print("You have changed sourceroot manually, please change it using source command")
         return
 
     if (os.path.abspath(sourceroot) == os.path.abspath(pymakeroot) or
