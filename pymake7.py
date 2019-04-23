@@ -60,6 +60,7 @@ Usage:
   pymake7.py get cur env
   pymake7.py get current env
   pymake7.py get default env
+  pymake7.py get all [ information ]
   pymake7.py -------------------------------------------------------------
   pymake7.py program
   pymake7.py program root
@@ -656,6 +657,48 @@ def main_function():
                             return
                 else:
                     ""
+
+            if (args['all'] is True):
+                if (args['information'] is True):
+                    if (config['environ'].__contains__("current") is True):
+                        print("%s" % (config["environ"]["current"]))
+                    else:
+                        print("failed: .json file is broken, environ section lost current key, please use set command fix it.")
+
+                    r = conf.get('source', 'root')
+                    f = conf.get('source', 'config')
+                    print ("%s%s%s" % (r, os.path.sep, f))
+                    print ("%s" % (r))
+                    print ("%s" % (f))
+
+                    print("%s" % os.path.realpath(__file__))
+                    print("%s" % os.path.split(os.path.realpath(__file__))[0])
+                    print("%s" % os.path.split(os.path.realpath(__file__))[1])
+
+                    print("%s" % (pymakeini))
+                    print("%s" % (pymakeroot))
+                    print("%s" % (os.path.split(os.path.realpath(pymakeini))[1]))
+
+                else:
+                    if (config['environ'].__contains__("current") is True):
+                        print("CUR ENVIRON   : %s" % (config["environ"]["current"]))
+                    else:
+                        print("CUR ENVIRON   : failed: .json file is broken, environ section lost current key, please use set command fix it.")
+
+                    r = conf.get('source', 'root')
+                    f = conf.get('source', 'config')
+                    print ("SOURCE        : %s%s%s" % (r, os.path.sep, f))
+                    print ("SOURCE ROOT   : %s" % (r))
+                    print ("SOURCE CONFIG : %s" % (f))
+
+                    print("PROGRAM       : %s" % os.path.realpath(__file__))
+                    print("PROGRAM ROOT  : %s" % os.path.split(os.path.realpath(__file__))[0])
+                    print("PROGRAM FILE  : %s" % os.path.split(os.path.realpath(__file__))[1])
+
+                    print("CONFIGURE     : %s" % (pymakeini))
+                    print("CONFIGURE ROOT: %s" % (pymakeroot))
+                    print("CONFIGURE FILE: %s" % (os.path.split(os.path.realpath(pymakeini))[1]))
+                    return
         else:
             ''
         break
