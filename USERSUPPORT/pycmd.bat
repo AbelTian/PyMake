@@ -29,10 +29,12 @@ for /F %%i in ('"%PYPROGRAMPATHNAME%" source config') do ( set "PYMMSOURCECONFIG
 echo configure: [%PYMMSOURCECONFIG%] [1]
 
 
-for /F %%i in ('"%PYPROGRAMPATHNAME%" get current env') do ( set "PYENVNAME=%%i" )
-echo environme: [%PYENVNAME%] [default]
+for /F %%i in ('"%PYPROGRAMPATHNAME%" get current env') do ( set "PYMMDEFAULTENVNAME=%%i" )
+echo environme: [%PYMMDEFAULTENVNAME%] [default]
 if not "%2" == "" (
     set PYENVNAME=%2
+) else (
+    set PYENVNAME=%PYMMDEFAULTENVNAME%
 )
 for /F %%i in ('"%PYPROGRAMPATHNAME%" have env %PYENVNAME%') do ( set "PYEXECFLAG=%%i" )
 if "%PYEXECFLAG%" == "False" (
