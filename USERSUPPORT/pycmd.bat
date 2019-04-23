@@ -42,7 +42,11 @@ if "%PYEXECFLAG%" == "False" (
 echo environme: [%PYENVNAME%] [%PYEXECFLAG%] [USED]
 
 for /F %%i in ('"%PYPROGRAMPATHNAME%" have cmd %PYEXECNAME%') do ( set "PYEXECFLAG=%%i" )
-echo command  : [%PYEXECNAME%] [%PYEXECFLAG%]
+if "%PYEXECFLAG%" == "False" (
+    echo command  : [%PYEXECNAME%] is not existed.
+    exit /b 0
+)
+echo command  : [%PYEXECNAME%] [%PYEXECFLAG%] [EXISTED]
 
 call "%PYPROGRAMPATHNAME%" export here %PYENVNAME% to %PYEXECINDEX%
 call "%PYPROGRAMPATHNAME%" use %PYENVNAME% type here %PYEXECNAME% to %PYEXECINDEX%
