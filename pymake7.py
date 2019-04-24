@@ -61,11 +61,25 @@ Usage:
   pymake7.py get cur env
   pymake7.py get current env
   pymake7.py get default env
-  pymake7.py get all [ information ]
+  pymake7.py get env
+  pymake7.py get env ( cur | current | default )
+  pymake7.py -------------------------------------------------------------
+  pymake7.py get pc
+  pymake7.py get pc home
+  pymake7.py get pc [ setting ]
+  pymake7.py get pc [ desk ] [ doc ] [ download ] [ music ] [ picture ] [ movie ]
+  pymake7.py get pc [ favorite ] [ search ] [ contact ]
+  pymake7.py get pc [ develop ]
   pymake7.py -------------------------------------------------------------
   pymake7.py program
   pymake7.py program root
   pymake7.py program file
+  pymake7.py program configure
+  pymake7.py program configure root
+  pymake7.py program configure file
+  pymake7.py get all
+  pymake7.py get all ( info | information )
+  pymake7.py get all ( stat | status )
   pymake7.py -------------------------------------------------------------
   pymake7.py (-h | --help)
   pymake7.py --version
@@ -92,7 +106,8 @@ Command:
   have             check env or path or cmd item whether user has configured.
   has              check env or path or cmd item whether user has configured.
   clean            clean *_effect.sh *_unset.sh
-  program          get pymake.py program status.
+  program          pymake.py program status.
+  get              get lots of important information.
 
 Options:
   -h --help     Show this screen.
@@ -354,6 +369,8 @@ def main_function():
         }
     }
 
+    # record initial current directory
+    pymakeinitialpath = os.getcwd()
     # record current directory
     pymakeworkpath = os.getcwd()
     # record pymake file directory
@@ -545,15 +562,27 @@ def main_function():
     # program
     while (True):
         if(args['program'] is True):
-            if(args['root'] is True):
-                print("%s" % os.path.split(os.path.realpath(__file__))[0])
-                return
-            elif (args['file'] is True):
-                print("%s" % os.path.split(os.path.realpath(__file__))[1])
-                return
+            if(args['configure'] is True):
+                if(args['root'] is True):
+                    print("%s" % os.path.split(os.path.realpath(pymakeini))[0])
+                    return
+                elif (args['file'] is True):
+                    print("%s" % os.path.split(os.path.realpath(pymakeini))[1])
+                    return
+                else:
+                    print("%s" % os.path.realpath(pymakeini))
+                    return
             else:
-                print("%s" % os.path.realpath(__file__))
-                return
+                if(args['root'] is True):
+                    print("%s" % os.path.split(os.path.realpath(__file__))[0])
+                    return
+                elif (args['file'] is True):
+                    print("%s" % os.path.split(os.path.realpath(__file__))[1])
+                    return
+                else:
+                    print("%s" % os.path.realpath(__file__))
+                    return
+            return
         else:
             ''
         break
@@ -691,18 +720,26 @@ def main_function():
     while (True):
         if (args['get'] == True):
             if (args['env'] is True):
-                if (args['default'] or args['current'] or args['cur'] is True):
-                    if (config['environ'].__contains__("current") is True):
-                        print("%s" % (config["environ"]["current"]))
-                        return
-                    else:
-                        print("failed: .json file is broken, environ section lost current key, please use set command fix it.")
-                        return
+                #if (args['default'] or args['current'] or args['cur'] is True):
+                #else:
+                #    ""
+                if (config['environ'].__contains__("current") is True):
+                    print("%s" % (config["environ"]["current"]))
+                    return
                 else:
-                    ""
+                    print("failed: .json file is broken, environ section lost current key, please use set command fix it.")
+                    return
                 return
             elif (args['all'] is True):
-                if (args['information'] is True):
+                if (args['stat'] is True):
+                    print("%s" % pymakeinitialpath)
+                    print("%s" % os.getcwd())
+                    return
+                elif (args['status'] is True):
+                    print("EXECUTE ROOT [PWD]: %s" % pymakeinitialpath)
+                    print("WORKING ROOT [VAR]: %s" % os.getcwd())
+                    return
+                elif (args['info'] is True):
                     if(config.__contains__("environ") is True):
                         if (config['environ'].__contains__("current") is True):
                             print("%s" % (config["environ"]["current"]))
@@ -716,11 +753,11 @@ def main_function():
                     print ("%s%s%s" % (r, os.path.sep, f))
                     print ("%s" % (r))
                     print ("%s" % (f))
-
+                    print("-----------------------------------------")
                     print("%s" % os.path.realpath(__file__))
                     print("%s" % os.path.split(os.path.realpath(__file__))[0])
                     print("%s" % os.path.split(os.path.realpath(__file__))[1])
-
+                    print("-----------------------------------------")
                     print("%s" % (pymakeini))
                     print("%s" % (pymakeroot))
                     print("%s" % (os.path.split(os.path.realpath(pymakeini))[1]))
@@ -739,15 +776,68 @@ def main_function():
                     print ("SOURCE        : %s%s%s" % (r, os.path.sep, f))
                     print ("SOURCE ROOT   : %s" % (r))
                     print ("SOURCE CONFIG : %s" % (f))
-
+                    print("-----------------------------------------")
                     print("PROGRAM       : %s" % os.path.realpath(__file__))
                     print("PROGRAM ROOT  : %s" % os.path.split(os.path.realpath(__file__))[0])
                     print("PROGRAM FILE  : %s" % os.path.split(os.path.realpath(__file__))[1])
-
+                    print("-----------------------------------------")
                     print("CONFIGURE     : %s" % (pymakeini))
                     print("CONFIGURE ROOT: %s" % (pymakeroot))
                     print("CONFIGURE FILE: %s" % (os.path.split(os.path.realpath(pymakeini))[1]))
                     return
+                return
+            elif (args['pc'] is True):
+                userroot = getuserroot()
+                #linux path is chinese, why?
+                #windows only
+                userdoc = userroot + os.path.sep + "Documents"
+                userdown = userroot + os.path.sep + "Downloads"
+                userset = getconfigroot()
+                userdesk = userroot + os.path.sep + "Desktop"
+                usermusic = userroot + os.path.sep + "Music"
+                usermovie = userroot + os.path.sep + "Videos" #Movies
+                userfavo = userroot + os.path.sep + "Favorites"
+                usersearch = userroot + os.path.sep + "Searches"
+                usercontact = userroot + os.path.sep + "Contacts"
+                userpictures = userroot + os.path.sep + "Pictures"
+                userdev = userroot + os.path.sep + "Develop"
+                if (args['home']):
+                    print(userroot)
+                elif (args['setting']):
+                    print(userset)
+                elif (args['doc']):
+                    print(userdoc)
+                elif (args['download']):
+                    print(userdown)
+                elif (args['desk']):
+                    print(userdesk)
+                elif (args['music']):
+                    print(usermusic)
+                elif (args['movie']):
+                    print(usermovie)
+                elif (args['favorite']):
+                    print(userfavo)
+                elif (args['search']):
+                    print(usersearch)
+                elif (args['contact']):
+                    print(usercontact)
+                elif (args['picture']):
+                    print(userpictures)
+                elif (args['develop']):
+                    print(userdev)
+                else:
+                    print(userroot)
+                    print(userset)
+                    print(userdesk)
+                    print(userdoc)
+                    print(userdown)
+                    print(usermusic)
+                    print(userpictures)
+                    print(usermovie)
+                    print(usersearch)
+                    print(usercontact)
+                    print(userdev)
+                return
             else:
                 ''
             return
