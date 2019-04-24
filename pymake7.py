@@ -4,6 +4,7 @@
 
 Usage:
   pymake7.py source
+  pymake7.py source file [ <source-path-file> ]
   pymake7.py source root [ <source-root-path> ]
   pymake7.py source config [ --add | --del | --mod | --switch | --restore | --show ] [ <config-file-name> ] [<new-config-file-name>]
   pymake7.py -------------------------------------------------------------
@@ -24,23 +25,23 @@ Usage:
   pymake7.py -------------------------------------------------------------
   pymake7.py clean [ here | hh ]
   pymake7.py export [ here | hh ] [ <env-name> ] [ to <file-name> ]
-  pymake7.py use <env-name> type [ here | hh ] [ <cmd-name> ]  [ to <file-name> ]
-  pymake7.py type [ here | hh ] [ <cmd-name> ]  [ to <file-name> ]
-  pymake7.py use <env-name> exec [ here | hh ] [ <command-names> ... ]
+  pymake7.py type [ here | hh ] [ <cmd-name> ] [ to <file-name> ]
   pymake7.py exec [ here | hh ] [ <command-names> ... ]
-  pymake7.py use <env-name> cc [ here | hh ] [ <command-names> ... ]
   pymake7.py cc [ here | hh ] [ <command-names> ... ]
+  pymake7.py use <env-name> type [ here | hh ] [ <cmd-name> ]  [ to <file-name> ]
+  pymake7.py use <env-name> exec [ here | hh ] [ <command-names> ... ]
+  pymake7.py use <env-name> cc [ here | hh ] [ <command-names> ... ]
   pymake7.py -------------------------------------------------------------
   pymake7.py set current env <name>
   pymake7.py set default env <name>
   pymake7.py show [ path | env | cmd ] [<name>] [-r | --raw] [-a | --all]
   pymake7.py environ [<name>] [-p | --path] [-v | --var] [-r | --raw] [-a | --all]
+  pymake7.py see [ <cmd-name> ] [ use <env-name> ] [-r | --raw] [-a | --all]
+  pymake7.py ss [ <cmd-name> ] [ use <env-name> ] [-r | --raw] [-a | --all]
+  pymake7.py cmd [ <cmd-name> ] [ use <env-name> ] [-r | --raw] [-a | --all]
   pymake7.py use <env-name> see [ <cmd-name> ] [-r | --raw] [-a | --all]
-  pymake7.py see [ <cmd-name> ] [-r | --raw] [-a | --all]
   pymake7.py use <env-name> ss [ <cmd-name> ] [-r | --raw] [-a | --all]
-  pymake7.py ss [ <cmd-name> ] [-r | --raw] [-a | --all]
   pymake7.py use <env-name> cmd [ <cmd-name> ] [-r | --raw] [-a | --all]
-  pymake7.py cmd [ <cmd-name> ] [-r | --raw] [-a | --all]
   pymake7.py -------------------------------------------------------------
   pymake7.py hh clean
   pymake7.py hh export [ <env-name> ] [ to <file-name> ]
@@ -60,6 +61,7 @@ Usage:
   pymake7.py get cur env
   pymake7.py get current env
   pymake7.py get default env
+  pymake7.py get all [ information ]
   pymake7.py -------------------------------------------------------------
   pymake7.py program
   pymake7.py program root
@@ -352,6 +354,16 @@ def main_function():
         }
     }
 
+    # record current directory
+    pymakeworkpath = os.getcwd()
+    # record pymake file directory
+    pymakefilepath = os.path.split(os.path.realpath(__file__))[0]
+    #print( "pymake file path" + pymakefilepath )
+
+    # pymake source root [default]
+    pymakesourceroot = pymakefilepath + os.path.sep + 'USERSOURCE'
+    if (not os.path.exists(pymakesourceroot)):
+        os.makedirs(pymakesourceroot)
 
     """
     [pymake]
@@ -379,11 +391,27 @@ def main_function():
         conf.add_section('source')
         conf.write(open(pymakeini, 'w'))
     if( not conf.has_option('source', 'root') ):
-        conf.set('source', 'root', pymakeroot)
+        conf.set('source', 'root', pymakesourceroot)
         conf.write(open(pymakeini, 'w'))
     if(not conf.has_option('source', 'config')):
         conf.set('source', 'config', 'pymake.json')
         conf.write(open(pymakeini, 'w'))
+
+
+    #record source root directory
+    sourceroot = conf.get('source', 'root')
+    #record source config file name
+    file = conf.get('source', 'config')
+    #print ("root: %s config: %s" % (sourceroot, file))
+    #print(Fore.LIGHTBLACK_EX + "use source config: %s/%s" % (sourceroot, file) )
+    # cd source root directory
+    if (os.path.exists(sourceroot)):
+        # chdir to source root
+        os.chdir(sourceroot)
+        if (os.path.abspath(sourceroot) != os.path.abspath(pymakeroot)
+                and os.path.abspath(sourceroot) != os.path.abspath(pymakefilepath)):
+            if (not os.path.exists('pymake.json')):
+                writeJsonData('pymake.json', d)
 
     args = docopt(__doc__, version='pymake7.py v7.1')
     #print(args)
@@ -454,6 +482,22 @@ def main_function():
                         print ('You can\'t switch pymake.json and un.json\'s file...')
                 else:
                     print ("%s" % conf.get("source", "config"))
+            elif (args['file'] is True):
+                if(args['<source-path-file>'] is None):
+                    print("please input an abspath .json file.")
+                    return
+                if(not args['<source-path-file>'].endswith(pymakesuffix)):
+                    print("you can't set un.json file.")
+                    return
+                r = os.path.split(os.path.realpath(args['<source-path-file>']))[0]
+                f = os.path.split(os.path.realpath(args['<source-path-file>']))[1]
+                conf.set('source', 'root', r)
+                conf.set('source', 'config', f)
+                conf.write(open(pymakeini, 'w'))
+                print ("change source to %s" % os.path.realpath(args['<source-path-file>']))
+                print ("source root    : %s" % r)
+                print ("source config  : %s" % f)
+                return
             else:
                 r = conf.get('source', 'root')
                 f = conf.get('source', 'config')
@@ -481,7 +525,7 @@ def main_function():
         # chdir to source root
         os.chdir(sourceroot)
     else:
-        print("You have changed sourceroot manual, please change it using source command")
+        print("You have changed sourceroot manually, please change it using source command")
         return
 
     if (os.path.abspath(sourceroot) == os.path.abspath(pymakeroot) or
@@ -494,7 +538,7 @@ def main_function():
             writeJsonData('pymake.json', d)
             print ("initial pymake.json in source root.")
         if(not os.path.exists(file)):
-            print ("source config file is not exist.")
+            print ("source config file is not existed.")
             return
 
     # set this command here .
@@ -648,14 +692,65 @@ def main_function():
         if (args['get'] == True):
             if (args['env'] is True):
                 if (args['default'] or args['current'] or args['cur'] is True):
-                        if (config['environ'].__contains__("current") is True):
-                            print("%s" % (config["environ"]["current"]))
-                            return
-                        else:
-                            print("failed: .json file is broken, environ section lost current key, please use set command fix it.")
-                            return
+                    if (config['environ'].__contains__("current") is True):
+                        print("%s" % (config["environ"]["current"]))
+                        return
+                    else:
+                        print("failed: .json file is broken, environ section lost current key, please use set command fix it.")
+                        return
                 else:
                     ""
+                return
+            elif (args['all'] is True):
+                if (args['information'] is True):
+                    if(config.__contains__("environ") is True):
+                        if (config['environ'].__contains__("current") is True):
+                            print("%s" % (config["environ"]["current"]))
+                        else:
+                            print("failed: .json file is broken, environ section lost current key, please use set command fix it.")
+                    else:
+                        print("failed: please check your .json file content, it is not now version .json.")
+
+                    r = conf.get('source', 'root')
+                    f = conf.get('source', 'config')
+                    print ("%s%s%s" % (r, os.path.sep, f))
+                    print ("%s" % (r))
+                    print ("%s" % (f))
+
+                    print("%s" % os.path.realpath(__file__))
+                    print("%s" % os.path.split(os.path.realpath(__file__))[0])
+                    print("%s" % os.path.split(os.path.realpath(__file__))[1])
+
+                    print("%s" % (pymakeini))
+                    print("%s" % (pymakeroot))
+                    print("%s" % (os.path.split(os.path.realpath(pymakeini))[1]))
+                    return
+                else:
+                    if(config.__contains__("environ") is True):
+                        if (config['environ'].__contains__("current") is True):
+                            print("CUR ENVIRON   : %s" % (config["environ"]["current"]))
+                        else:
+                            print("CUR ENVIRON   : failed: .json file is broken, environ section lost current key, please use set command fix it.")
+                    else:
+                        print("CUR ENVIRON   : failed: please check your .json file content, it is not now version .json.")
+
+                    r = conf.get('source', 'root')
+                    f = conf.get('source', 'config')
+                    print ("SOURCE        : %s%s%s" % (r, os.path.sep, f))
+                    print ("SOURCE ROOT   : %s" % (r))
+                    print ("SOURCE CONFIG : %s" % (f))
+
+                    print("PROGRAM       : %s" % os.path.realpath(__file__))
+                    print("PROGRAM ROOT  : %s" % os.path.split(os.path.realpath(__file__))[0])
+                    print("PROGRAM FILE  : %s" % os.path.split(os.path.realpath(__file__))[1])
+
+                    print("CONFIGURE     : %s" % (pymakeini))
+                    print("CONFIGURE ROOT: %s" % (pymakeroot))
+                    print("CONFIGURE FILE: %s" % (os.path.split(os.path.realpath(pymakeini))[1]))
+                    return
+            else:
+                ''
+            return
         else:
             ''
         break
