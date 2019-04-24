@@ -64,13 +64,6 @@ Usage:
   pymake7.py get env
   pymake7.py get env ( cur | current | default )
   pymake7.py -------------------------------------------------------------
-  pymake7.py get pc
-  pymake7.py get pc home
-  pymake7.py get pc [ setting ]
-  pymake7.py get pc [ desk ] [ doc ] [ download ] [ music ] [ picture ] [ movie ]
-  pymake7.py get pc [ favorite ] [ search ] [ contact ]
-  pymake7.py get pc [ develop ]
-  pymake7.py -------------------------------------------------------------
   pymake7.py program
   pymake7.py program root
   pymake7.py program file
@@ -80,6 +73,17 @@ Usage:
   pymake7.py get all
   pymake7.py get all ( info | information )
   pymake7.py get all ( stat | status )
+  pymake7.py -------------------------------------------------------------
+  pymake7.py get pc
+  pymake7.py get pc home
+  pymake7.py get pc [ setting ]
+  pymake7.py get pc [ desk ] [ doc ] [ download ] [ music ] [ picture ] [ movie ]
+  pymake7.py get pc [ favorite ] [ search ] [ contact ]
+  pymake7.py get pc [ develop ]
+  pymake7.py get date [ -y | -m | -d ] [ -f <sep-character> ]
+  pymake7.py get time [ -h | -m | -s ] [ -f <sep-character> ]
+  pymake7.py get datetime [ -f <sep-character> <sep2-character> ]
+  pymake7.py get platform
   pymake7.py -------------------------------------------------------------
   pymake7.py inport
   pymake7.py outport
@@ -372,18 +376,25 @@ def main_function():
         }
     }
 
-    # record initial current directory
-    pymakeinitialpath = os.getcwd()
-    # record current directory
+    # record current directory [pwd, execute path]
     pymakeworkpath = os.getcwd()
-    # record pymake file directory
-    pymakefilepath = os.path.split(os.path.realpath(__file__))[0]
-    #print( "pymake file path" + pymakefilepath )
+    #print( "pymake work path:", pymakeworkpath )
 
-    # pymake source root [default]
+    # record pymake file directory [program file path]
+    pymakefilepath = os.path.split(os.path.realpath(__file__))[0]
+    #print( "pymake file path:", pymakefilepath )
+
+    # record pymake user source root [env, *.json]
     pymakesourceroot = pymakefilepath + os.path.sep + 'USERSOURCE'
     if (not os.path.exists(pymakesourceroot)):
         os.makedirs(pymakesourceroot)
+    #print( "pymake user source path:", pymakesourceroot )
+
+    # record pymake user shell root [ dynamic work path, default ]
+    pymakeshellroot = pymakefilepath + os.path.sep + 'USERSOURCE' + os.path.sep + 'USERSHELL'
+    if (not os.path.exists(pymakeshellroot)):
+        os.makedirs(pymakeshellroot)
+    #print( "pymake user shell path:", pymakeshellroot )
 
     """
     [pymake]
@@ -394,7 +405,7 @@ def main_function():
     userroot = getuserroot()
     configroot = getconfigroot()
     plat = getplatform()
-    #record pymake configure directory. in user config path
+    #record pymake configure directory. [ in user config path ]
     pymakeroot = userroot + os.path.sep + '.pymake'
     if (not os.path.exists(pymakeroot)):
         os.makedirs(pymakeroot)
@@ -416,24 +427,33 @@ def main_function():
         conf.set('source', 'config', 'pymake.json')
         conf.write(open(pymakeini, 'w'))
 
-    #record source root directory
+    #record user source root directory
     sourceroot = conf.get('source', 'root')
     #record source config file name
-    file = conf.get('source', 'config')
-    #print ("root: %s config: %s" % (sourceroot, file))
-    #print(Fore.LIGHTBLACK_EX + "use source config: %s/%s" % (sourceroot, file) )
-    # cd source root directory
+    sourcefile = conf.get('source', 'config')
+    #record source config file
+    sourceconfigfile = sourceroot + os.path.sep + sourcefile
+    #print ("root: %s config: %s" % (sourceroot, sourcefile))
+    #print("use source config: %s" % (sourceconfigfile) )
+
+    #record default source config file name
+    defaultsourcefile = 'pymake.json'
+    #record default source config file
+    defaultsourceconfigfile = sourceroot + os.path.sep + defaultsourcefile
+    #print ("root: %s default config: %s" % (sourceroot, defaultsourcefile))
+    #print("default source config: %s" % (defaultsourceconfigfile) )
+
+    # init pymake.json in sourceroot
     if (os.path.exists(sourceroot)):
-        # chdir to source root
-        os.chdir(sourceroot)
         if (os.path.abspath(sourceroot) != os.path.abspath(pymakeroot)
-                and os.path.abspath(sourceroot) != os.path.abspath(pymakefilepath)):
-            if (not os.path.exists('pymake.json')):
-                writeJsonData('pymake.json', d)
+            and os.path.abspath(sourceroot) != os.path.abspath(pymakefilepath)):
+            if (not os.path.exists(defaultsourceconfigfile)):
+                writeJsonData(defaultsourceconfigfile, d)
 
     args = docopt(__doc__, version='pymake7.py v7.1')
     #print(args)
 
+    #record source config file postfix
     pymakesuffix = '.json'
     while (True):
         if(args['source'] is True):
@@ -444,6 +464,7 @@ def main_function():
                     print ("successed: change source root to %s" % args['<source-root-path>'])
                 else:
                     print ("%s" % conf.get('source', 'root'))
+                return
             elif(args['config'] is True):
                 sourceroot = conf.get('source', 'root')
                 os.chdir(sourceroot)
@@ -500,6 +521,7 @@ def main_function():
                         print ('You can\'t switch pymake.json and un.json\'s file...')
                 else:
                     print ("%s" % conf.get("source", "config"))
+                return
             elif (args['file'] is True):
                 if(args['<source-path-file>'] is None):
                     print("please input an abspath .json file.")
@@ -520,45 +542,34 @@ def main_function():
                 r = conf.get('source', 'root')
                 f = conf.get('source', 'config')
                 print ("%s%s%s" % (r, os.path.sep, f))
+                return
             return
         else:
             ''
         break
 
-    #record source root directory
-    sourceroot = conf.get('source', 'root')
-    #record source config file name
-    file = conf.get('source', 'config')
-    #print ("root: %s config: %s" % (sourceroot, file))
-    #print(Fore.LIGHTBLACK_EX + "use source config: %s/%s" % (sourceroot, file) )
-
-    # record current directory
-    #pymakeworkpath = os.getcwd() #have cd to sourceroot, cant initial here secondly.
-    #print( "pymake work path:", pymakeworkpath )
-    # record pymake file directory
-    #pymakefilepath = os.path.split(os.path.realpath(__file__))[0] #have recorded
-    #print( "pymake file path" + pymakefilepath )
-
-    # cd source root directory
-    if (os.path.exists(sourceroot)):
-        # chdir to source root
-        os.chdir(sourceroot)
-    else:
+    # check source root directory
+    if (os.path.exists(sourceroot) is False):
         print("You have changed sourceroot manually, please change it using source command")
         return
 
+    # check source root .json file
     if (os.path.abspath(sourceroot) == os.path.abspath(pymakeroot) or
             os.path.abspath(sourceroot) == os.path.abspath(pymakefilepath)):
         print ("I checked you use pymakeroot or pymakefileroot to be sourceroot, suggestting you use source command changing one.")
         print ("this progrom can store building env and building command forever, please repleace source root then using me.")
         return
     elif (os.path.abspath(sourceroot) != os.path.abspath(pymakeroot)):
-        if (not os.path.exists('pymake.json')):
-            writeJsonData('pymake.json', d)
-            print ("initial pymake.json in source root.")
-        if(not os.path.exists(file)):
-            print ("source config file is not existed.")
+        if (not os.path.exists(defaultsourceconfigfile)):
+            writeJsonData(defaultsourceconfigfile, d)
+            print ("initial pymake.json in source root %s." % sourceroot)
+        if(not os.path.exists(sourceconfigfile)):
+            print ("source config file %s is not existed." % sourceconfigfile)
+            print ("You can use source command to fix it.")
             return
+
+    # cd user shell root [ default shell execute path ]
+    os.chdir(pymakeshellroot)
 
     # set this command here .
     # program
@@ -606,7 +617,7 @@ def main_function():
             ""
         break
 
-    config = readJsonData(file)
+    config = readJsonData(sourceconfigfile)
     #print(config)
 
     # set
@@ -729,7 +740,7 @@ def main_function():
             else:
                 ''
             # print(config)
-            writeJsonData(file, config)
+            writeJsonData(sourceconfigfile, config)
             return
         else:
             ''
@@ -751,11 +762,11 @@ def main_function():
                 return
             elif (args['all'] is True):
                 if (args['stat'] is True):
-                    print("%s" % pymakeinitialpath)
+                    print("%s" % pymakeworkpath)
                     print("%s" % os.getcwd())
                     return
                 elif (args['status'] is True):
-                    print("EXECUTE ROOT [PWD]: %s" % pymakeinitialpath)
+                    print("EXECUTE ROOT [PWD]: %s" % pymakeworkpath)
                     print("WORKING ROOT [VAR]: %s" % os.getcwd())
                     return
                 elif (args['info'] is True):
