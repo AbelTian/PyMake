@@ -106,20 +106,20 @@ if [ "$PYENVEXISTEDFLAG" = "False" ]; then
 fi
 echo environme: \[$PYENVNAME\] \[$PYENVEXISTEDFLAG\] \[USED\]
 
-"$PYPROGRAMPATHNAME" export $PYENVNAME $PYENVINDEX
+"$PYPROGRAMPATHNAME" export here $PYENVNAME $PYENVINDEX
 
 if [ $PYENVFLAG -eq 0 ]; then
-    if [ -f "${PYMMSOURCEROOT}/${PYENVINDEX}_unset.sh" ]; then
-        chmod +x "${PYMMSOURCEROOT}/${PYENVINDEX}_unset.sh"
-        source "${PYMMSOURCEROOT}/${PYENVINDEX}_unset.sh"
+    if [ -f "$(pwd)/${PYENVINDEX}_unset.sh" ]; then
+        chmod +x "$(pwd)/${PYENVINDEX}_unset.sh"
+        source "$(pwd)/${PYENVINDEX}_unset.sh"
         echo successed: \[$PYENVNAME\] closed
     else
         echo failed\ \ \ : \[$PYENVNAME\] close failed
     fi
 else
-    if [ -f "${PYMMSOURCEROOT}/${PYENVINDEX}_effect.sh" ]; then
-        chmod +x "${PYMMSOURCEROOT}/${PYENVINDEX}_effect.sh"
-        source "${PYMMSOURCEROOT}/${PYENVINDEX}_effect.sh"
+    if [ -f "$(pwd)/${PYENVINDEX}_effect.sh" ]; then
+        chmod +x "$(pwd)/${PYENVINDEX}_effect.sh"
+        source "$(pwd)/${PYENVINDEX}_effect.sh"
         echo successed: \[$PYENVNAME\] opened
     else
         echo failed\ \ \ : \[$PYENVNAME\] open failed
@@ -127,7 +127,7 @@ else
 fi
 
 #clean
-rm -f "${PYMMSOURCEROOT}/${PYENVINDEX}_effect.sh" "${PYMMSOURCEROOT}/${PYENVINDEX}_unset.sh"
+rm -f "$(pwd)/${PYENVINDEX}_effect.sh" "$(pwd)/${PYENVINDEX}_unset.sh"
 
 break
 done

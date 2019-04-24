@@ -38,17 +38,17 @@ if "%PYENVEXISTEDFLAG%" == "False" (
 )
 echo environme: [%PYENVNAME%] [%PYENVEXISTEDFLAG%] [USED]
 
-call "%PYPROGRAMPATHNAME%" export %PYENVNAME% %PYENVINDEX%
+call "%PYPROGRAMPATHNAME%" export here %PYENVNAME% %PYENVINDEX%
 
 if "%PYENVFLAG%" == "False" (
-    call "%PYMMSOURCEROOT%\%PYENVINDEX%_unset.bat"
+    call "%CD%\%PYENVINDEX%_unset.bat"
     echo user env : [%PYENVNAME%] closed
 ) else (
-    call "%PYMMSOURCEROOT%\%PYENVINDEX%_effect.bat"
+    call "%CD%\%PYENVINDEX%_effect.bat"
     echo user env : [%PYENVNAME%] opened
 )
 
 ::clean
-del /q /f "%PYMMSOURCEROOT%\%PYENVINDEX%_effect.bat" "%PYMMSOURCEROOT%\%PYENVINDEX%_unset.bat"
+del /q /f "%CD%\%PYENVINDEX%_effect.bat" "%CD%\%PYENVINDEX%_unset.bat"
 
 exit /b 0
