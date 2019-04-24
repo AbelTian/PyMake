@@ -564,12 +564,15 @@ def main_function():
     elif (os.path.abspath(sourceroot) != os.path.abspath(pymakeroot)):
         if (not os.path.exists(defaultsourceconfigfile)):
             writeJsonData(defaultsourceconfigfile, d)
-            print ("initial pymake.json in source root %s." % sourceroot)
+            print ("initialize pymake.json in source root %s." % sourceroot)
         if(not os.path.exists(sourceconfigfile)):
             print ("source config file %s is not existed." % sourceconfigfile)
             print ("You can use source command to fix it.")
             return
 
+    # I set this,
+    # pymake default execute user bat/sh in pymakeshellroot,
+    # user can use here param to restrict exec action.
     # cd user shell root [ default shell execute path ]
     os.chdir(pymakeshellroot)
 
