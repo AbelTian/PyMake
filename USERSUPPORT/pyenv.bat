@@ -3,7 +3,7 @@
 ::本文件变量，局部有效，不开启这个设置。
 ::setlocal enabledelayedexpansion
 
-set PYENVFLAG="True"
+set PYENVFLAG=True
 if "%1" == "" (
     echo "pyenv <env-name>"
     echo please appoint a env name. & exit /b 0
@@ -13,7 +13,7 @@ if "%1" == "" (
 ) else if "%1" == "close" (
     if "%2" == "" ( echo please appoint a env name. & exit /b 0 )
     set PYENVNAME=%2
-    set PYENVFLAG="False"
+    set PYENVFLAG=False
 ) else (
     set PYENVNAME=%1
 )

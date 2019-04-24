@@ -81,6 +81,9 @@ Usage:
   pymake7.py get all ( info | information )
   pymake7.py get all ( stat | status )
   pymake7.py -------------------------------------------------------------
+  pymake7.py inport
+  pymake7.py outport
+  pymake7.py -------------------------------------------------------------
   pymake7.py (-h | --help)
   pymake7.py --version
 
@@ -532,9 +535,10 @@ def main_function():
     #print(Fore.LIGHTBLACK_EX + "use source config: %s/%s" % (sourceroot, file) )
 
     # record current directory
-    pymakeworkpath = os.getcwd()
+    #pymakeworkpath = os.getcwd() #have cd to sourceroot, cant initial here secondly.
+    #print( "pymake work path:", pymakeworkpath )
     # record pymake file directory
-    pymakefilepath = os.path.split(os.path.realpath(__file__))[0]
+    #pymakefilepath = os.path.split(os.path.realpath(__file__))[0] #have recorded
     #print( "pymake file path" + pymakefilepath )
 
     # cd source root directory
