@@ -86,6 +86,7 @@ Usage:
   pymake7.py port reset
   pymake7.py port root [ <source-config-root> ] [ to <target-config-root> ]
   pymake7.py port config [ <source-config-file> ] [ to <target-config-file> ]
+  pymake7.py port file [ <source-path-file> ] [ to <target-path-file> ]
   pymake7.py translate
   pymake7.py translate all [ -f | --force ]
   pymake7.py translate ( path | env | cmd ) [ -f | --force ]
