@@ -19,7 +19,7 @@
         "qt5.9.gcc_64.bin": "${qt5.9.gcc_64}/bin",
         "qt5.5.armhf32": "${qt}/${qt5.5.version}/arm32/sysroots/cortexa9hf-vfp-neon-poky-linux-gnueabi/usr",
         "qt5.5.armhf32.bin": "${qt5.5.armhf32}/bin",
-	    "gcc-armhf4.9":"${qt}/Tools/armhf-4.9/bin",
+        "gcc-armhf4.9": "${qt}/Tools/armhf-4.9/bin",
         "qt5.9.android_arm": "${qt}/5.9.1/android_armv7",
         "qt5.9.android_arm.bin": "${qt}/5.9.1/android_armv7/bin",
         "qt5.9.android_x86": "${qt}/5.9.1/android_x86",
@@ -233,7 +233,7 @@
         "qt5.armhf32": {
             "path+": [
                 "${cmake.bin}",
-		        "${gcc-armhf4.9}",
+                "${gcc-armhf4.9}",
                 "${qt5.5.armhf32.bin}"
             ],
             "QTVERSION": "${qt5.5.version}",
@@ -267,9 +267,12 @@
             "QKIT": "LINUX64",
             "QSYS": "Linux64"
         },
-        "current": "qt5.armhf32"
+        "current": "qt5"
     },
     "command": {
+        "test": [
+            "echo $(pwd)"
+        ],
         "daily.qqt": [
             "src_path=/home/abel/Develop/a0-develop/LibQt",
             "src=$src_path/QQt.pro",
