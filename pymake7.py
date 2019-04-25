@@ -523,12 +523,23 @@ def main_function():
                 if(args['<source-path-file>'] is None):
                     print("please input an abspath .json file.")
                     return
-                #print ("source config file: %s" % os.path.realpath(args['<source-path-file>']))
+                #path0 = args['<source-path-file>']
+                #path1 = os.path.relpath(args['<source-path-file>'], pymakeworkpath)
+                #path2 = os.path.relpath(args['<source-path-file>'], pymakesourceroot)
+                #path3 = os.path.relpath(args['<source-path-file>'], pymakeshellroot)
+                #print ("source config file: %s" % path0)
+                #print ("rel path: pwd     : %s" % path1)
+                #print ("rel path: src     : %s" % path2)
+                #print ("rel path: exec    : %s" % path3)
+                #print ("source config file: %s" % os.path.realpath(path0))
+                #print ("source config file: %s" % os.path.realpath(path1))
+                #print ("source config file: %s" % os.path.realpath(path2))
+                #print ("source config file: %s" % os.path.realpath(path3))
                 if(not args['<source-path-file>'].endswith(pymakesuffix)):
-                    print("you can't set un.json file.")
+                    print("you can't set an un.json file.")
                     return
                 if(not os.path.isabs(args['<source-path-file>'])):
-                    print("your file path is not abspath.")
+                    print("your file path is not an abspath.")
                     return
                 if(os.path.isdir(args['<source-path-file>'])):
                     print("please input an abspath .json file.")
