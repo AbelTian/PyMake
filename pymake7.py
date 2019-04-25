@@ -531,21 +531,25 @@ def main_function():
                 #print ("rel path: pwd     : %s" % path1)
                 #print ("rel path: src     : %s" % path2)
                 #print ("rel path: exec    : %s" % path3)
-                #print ("source config file: %s" % os.path.realpath(path0))
-                #print ("source config file: %s" % os.path.realpath(path1))
-                #print ("source config file: %s" % os.path.realpath(path2))
-                #print ("source config file: %s" % os.path.realpath(path3))
+                #print ("real path: %s" % os.path.realpath(path0))
+                #print ("real path: %s" % os.path.realpath(path1))
+                #print ("real path: %s" % os.path.realpath(path2))
+                #print ("real path: %s" % os.path.realpath(path3))
+                #print ("abspath: %s" % os.path.abspath(path0))
+                #print ("abspath: %s" % os.path.abspath(path1))
+                #print ("abspath: %s" % os.path.abspath(path2))
+                #print ("abspath: %s" % os.path.abspath(path3))
                 if(not args['<source-path-file>'].endswith(pymakesuffix)):
                     print("you can't set an un.json file.")
-                    return
-                if(not os.path.isabs(args['<source-path-file>'])):
-                    print("your file path is not an abspath.")
                     return
                 if(os.path.isdir(args['<source-path-file>'])):
                     print("please input an abspath .json file.")
                     return
                 if(os.path.islink(args['<source-path-file>'])):
                     print("your file path cant be a link.")
+                    return
+                if(not os.path.isabs(args['<source-path-file>'])):
+                    print("your file path is not an abspath.")
                     return
                 r = os.path.split(os.path.realpath(args['<source-path-file>']))[0]
                 f = os.path.split(os.path.realpath(args['<source-path-file>']))[1]
