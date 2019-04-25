@@ -369,24 +369,29 @@ config = pymake6-mac.json
 
 # Version 6.2  
 Only update the command-line.  
-![command line screenshot 0](./screenshot/a0.PNG)  
+![command line screenshot](./screenshot/a0.PNG)  
 
 # Version 7.0  
 Update the command-line.  
-![command line screenshot 1](./screenshot/a1.PNG)  
+![command line screenshot](./screenshot/a1.PNG)  
 
 ## Screen shot  
-![command line screenshot 2](./screenshot/a2.png)  
+![using screenshot](./screenshot/a2.png)  
 
 # Version 7.1  
 
 Update the command-line.  
-1. add lots of abb-command.  
+1. add lots of abb-command, about hh command.  
+2. update use command to use custom env to do everything.
+3. add see command.
 2. add have/has command.  
 2. add program command.  
+3. add get command.
+4. add port and translate command.
+5. add initialize command.
 3. add user support shell.    
 
-![command line screenshot 3](./screenshot/a3.png)  
+![command line screenshot](./screenshot/a3.png)   
 
 #### User Support   
 [Readme](./SHELL.md)  

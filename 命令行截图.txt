@@ -1,12 +1,19 @@
 Microsoft Windows [版本 10.0.17134.706]
 (c) 2018 Microsoft Corporation。保留所有权利。
 
-R:\Develop\b0-toolkits\a0-compiler\PyMake>mm
+R:\Develop\b0-toolkits\a0-compiler\PyMake>mm -h
+PyMake 7.1.
+
 Usage:
   pymake7.py source
   pymake7.py source file [ <source-path-file> ]
   pymake7.py source root [ <source-root-path> ]
-  pymake7.py source config [ --add | --del | --mod | --switch | --restore | --show ] [ <config-file-name> ] [<new-config-file-name>]
+  pymake7.py source config [ --add  ] [ <config-file-name> ] [<new-config-file-name>]
+  pymake7.py source config [ --del  ] [ <config-file-name> ] [<new-config-file-name>]
+  pymake7.py source config [ --mod  ] [ <config-file-name> ] [<new-config-file-name>]
+  pymake7.py source config [ --switch  ] [ <config-file-name> ] [<new-config-file-name>]
+  pymake7.py source config [ --restore  ] [ <config-file-name> ] [<new-config-file-name>]
+  pymake7.py source config [ --show ] [ <config-file-name> ] [<new-config-file-name>]
   pymake7.py -------------------------------------------------------------
   pymake7.py set path ( --add | --del | --mod ) <name> [ <value> ]
   pymake7.py set env [ path ] ( --add | --del | --mod ) <group> <name> [ <value> ]
@@ -75,11 +82,59 @@ Usage:
   pymake7.py get all ( stat | status )
   pymake7.py get default exec root
   pymake7.py get exec root [ default | here ]
+  pymake7.py initialize
   pymake7.py -------------------------------------------------------------
-  pymake7.py inport
-  pymake7.py outport
+  pymake7.py port
+  pymake7.py port reset
+  pymake7.py port root [ <source-config-root> ] [ to <target-config-root> ]
+  pymake7.py port config [ <source-config-file> ] [ to <target-config-file> ]
+  pymake7.py port file [ <source-path-file> ] [ to <target-path-file> ]
+  pymake7.py translate
+  pymake7.py translate all [ -f | --force ]
+  pymake7.py translate ( path | env | cmd ) [ -f | --force ]
+  pymake7.py translate ( path | env | cmd ) <key-name> [ to <target-key-name> ] [ -f | --force ]
+  pymake7.py translate section <section-name> [ to <target-section-name> ]
   pymake7.py -------------------------------------------------------------
   pymake7.py (-h | --help)
   pymake7.py --version
+
+Command:
+  source           switch to another source file
+  source root      config root directory
+  source config    config source conf file
+  set path         path assemblage
+  set env          set env variable
+  set cmd          set cmd stream
+  export           output private env variable to a bat file or sh file [default:current, env]
+  type             output command to a bat file or sh file [default:cmd]
+  see              check command stream
+  ss               check command stream
+  cmd              check command stream
+  list             list config values, show command also too.
+  set cur env      set default env
+  use              use selected env exec commands
+  here             at here do exec commands e.g.
+  hh               at here do exec commands e.g.
+  exec             exec commands list.
+  cc               exec commands list.
+  have             check env or path or cmd item whether user has configured.
+  has              check env or path or cmd item whether user has configured.
+  clean            clean *_effect.sh *_unset.sh *_exec.sh, or .bat.
+  program          pymake.py program information.
+  get              lots of important information about pymake.py.
+  initialize       if program crashed, user can use this command to reset.
+  port             port from source to target .json file, configure source root and config file.
+  translate        translate section from source to target, and other section.
+
+Options:
+  -h --help     Show this screen.
+  --version     Show version.
+  --add
+  --del
+  --mod         add or delete or modify a config or path
+  --switch      switch to another source
+  --show        display source config files
+  --restore     reset to source config file pymake.json.
+  -r, --raw     expand editing config values
 
 R:\Develop\b0-toolkits\a0-compiler\PyMake>
