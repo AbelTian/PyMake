@@ -6,7 +6,7 @@
 
 # Install  
 
-goto PyMake source directory。  
+PyMake: goto source directory.  
 
 Windows:  
 install.bat %*  
@@ -14,7 +14,7 @@ install.bat %*
 Unix:  
 install.sh  
 
-on console, use mm cc cmd-name to execute command stream。  
+on console, use mm cc cmd-name to execute command stream.  
 
 # Usage:  
 
@@ -369,14 +369,14 @@ config = pymake6-mac.json
 
 # Version 6.2  
 Only update the command-line.  
-![命令行更新的截图](./screenshot/a0.PNG)  
+![command line screenshot](./screenshot/a0.PNG)  
 
 # Version 7.0  
 Update the command-line.  
-![命令行截图](./screenshot/a1.PNG)  
+![command line screenshot](./screenshot/a1.PNG)  
 
-## 使用截图  
-![命令行截图](./screenshot/a2.png)  
+## Screen shot  
+![command line screenshot](./screenshot/a2.png)  
 
 # Version 7.1  
 
@@ -384,12 +384,12 @@ Update the command-line.
 1. add lots of abb-command.  
 2. add have/has command.  
 2. add program command.  
-3. add user support shell module.  
+3. add user support shell.  
 
-![命令行截图](./screenshot/a3.PNG)  
+![command line screenshot](./screenshot/a3.PNG)  
 
-#### USERSUPPORT SHELL MODULE  
-[Readme](./USERSUPPORT/README.md)  
+#### User Support   
+[Readme](./USERSUPPORT.md)  
 
 # Dependencies  
 

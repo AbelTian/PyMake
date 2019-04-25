@@ -1,0 +1,17 @@
+{
+    "add-to-env": {
+        "PYMAKE_TOOLCHAIN_PATH": "/usr/bin", 
+        "PYMAKE_GENMAKE_PATH": "/Users/abel/Develop/b0-toolskits/compliers/CMake.app/Contents/bin", 
+        "PYMAKE_MAKE_PATH": "/usr/bin"
+    }, 
+    "source-to-build": {
+        "PYMAKE_BUILD_PATH": "/Users/abel/Develop/c0-buildstation/mac-qqt", 
+        "PYMAKE_GENMAKE_COMMAND": "cmake -G\"Unix Makefiles\" -DCMAKE_INSTALL_PREFIX=${CMAKE_SOURCE_DIR}../../b1-Product/a0-qqtbased/Application ../../a0-Developworkspace/a0-qqtpruduct-qqtfoundation/", 
+        "PYMAKE_MAKE_COMMAND": "make", 
+        "PYMAKE_INSTALL_COMMAND": "make install"
+    }, 
+    "add-custom-bin-path-to-env": {
+        "qt5.9-clang64": "/Users/abel/Develop/b0-toolskits/Libraries/QtLibraries/5.9.1/clang_64/bin", 
+        "macos10.12-xcode": "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk/System/Library/Frameworks"
+    }
+}

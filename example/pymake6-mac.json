@@ -1,0 +1,358 @@
+{
+    "path-assemblage": {
+        "root": "/Users/abel/Develop",
+        "root.src": "${root}/a0-develop",
+        "root.prod": "${root}/d0-product",
+        "root.sdk": "${root}/d1-sdks",
+        "root.tool": "${root}/b0-toolskits",
+        "root.build": "${root}/c0-buildstation",
+        "root.test": "${root}/f0-test",
+        "root.webrc": "${root}/e0-webrc",
+        "cc": "${root.tool}/a0-compiler",
+        "cmake.bin": "${cc}/CMake.app/Contents/bin",
+        "qt": "${root.tool}/macLibraries/Qt",
+        "qt5.9.version": "5.9.2",
+        "qt5.9.ios": "${qt}/${qt5.9.version}/ios",
+        "qt5.9.ios.bin": "${qt}/${qt5.9.version}/ios/bin",
+        "qt5.9.clang": "${qt}/${qt5.9.version}/clang_64",
+        "qt5.9.clang.bin": "${qt}/${qt5.9.version}/clang_64/bin",
+        "qt5.9.android_arm": "${qt}/${qt5.9.version}/android_armv7",
+        "qt5.9.android_arm.bin": "${qt}/${qt5.9.version}/android_armv7/bin",
+        "qt5.9.android_x86": "${qt}/${qt5.9.version}/android_x86",
+        "qt5.9.android_x86.bin": "${qt}/${qt5.9.version}/android_x86/bin",
+        "qt5.8.android_x86": "${qt}/5.8/android_x86",
+        "qt5.8.android_arm": "${qt}/5.8/android_armv7",
+        "qt5.8.clang": "${qt}/5.8/clang_64",
+        "qt5.8.ios": "${qt}/5.8/ios",
+        "qt5.8.android_x86.bin": "${qt}/5.8/android_x86/bin",
+        "qt5.8.android_arm.bin": "${qt}/5.8/android_armv7/bin",
+        "qt5.8.clang.bin": "${qt}/5.8/clang_64/bin",
+        "qt5.8.ios.bin": "${qt}/5.8/ios/bin",
+        "qt4.version": "4.8.7",
+        "qt4.8.clang": "${qt}/${qt4.version}/clang_64",
+        "qt4.8.clang.bin": "${qt}/${qt4.version}/clang_64/bin",
+        "qt4.8.clang.lib": "${qt}/${qt4.version}/clang_64/lib",
+        "android": "${root.tool}/macAndroidLibraries",
+        "android.sdk": "${android}/android-sdk-macosx",
+        "android.ndk": "${android}/android-ndk-r13b",
+        "android.ant": "${android}/apache-ant-1.10.1",
+        "android.java": "${android}/java-macosx/Java/JavaVirtualMachines",
+        "sdk.plat.tool": "${android.sdk}/platform-tools",
+        "sdk.build.tool": "${android.sdk}/build-tools",
+        "sdk.tool": "${android.sdk}/tools",
+        "java1.7.home": "${android.java}/jdk1.7.0_79.jdk/Contents/Home",
+        "java1.8.home": "${android.java}/jdk1.8.0_111.jdk/Contents/Home",
+        "java1.9.home": "${android.java}/jdk9.jdk/Contents/Home",
+        "java1.7.bin": "${java1.7.home}/bin",
+        "java1.8.bin": "${java1.8.home}/bin",
+        "java1.9.bin": "${java1.9.home}/bin",
+        "ant.bin": "${android.ant}/bin",
+        "ndk.arm": "${android.ndk}/toolchains/arm-linux-androideabi-4.9/prebuilt/darwin-x86_64",
+        "ndk.x86": "${android.ndk}/toolchains/x86-4.9/prebuilt/darwin-x86_64",
+        "ndk.x86_64": "${android.ndk}/toolchains/x86_64-4.9/prebuilt/darwin-x86_64",
+        "ndk.arm.bin": "${ndk.arm}/bin",
+        "ndk.x86.bin": "${ndk.x86}/bin",
+        "ndk.x86_64.bin": "${ndk.x86_64}/bin",
+        "ios.simulator.sysroot": "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk",
+        "xcode.bin": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin",
+        "mac.sysroot": "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk"
+    },
+    "environ": {
+        "android.mobile": {
+            "path+": [
+                "${cmake.bin}",
+                "${qt5.9.android_arm.bin}",
+                "${java1.8.bin}",
+                "${android.sdk}",
+                "${sdk.plat.tool}",
+                "${sdk.build.tool}",
+                "${sdk.tool}",
+                "${ant.bin}",
+                "${ndk.arm.bin}"
+            ],
+            "ANDROID_API_VERSION": "android-23",
+            "ANDROID_SDK_ROOT": "${android.sdk}",
+            "ANDROID_NDK_ROOT": "${android.ndk}",
+            "ANDROID_NDK_HOST": "darwin-x86_64",
+            "ANDROID_NDK_TOOLCHAIN_PREFIX": "arm-linux-androideabi",
+            "ANDROID_NDK_TOOLCHAIN_VERSION": "4.9",
+            "ANDROID_NDK_PLATFORM": "android-23",
+            "NDK_TOOLCHAIN_PATH": "${ndk.arm.bin}",
+            "NDK_TOOLS_PREFIX": "arm-linux-androideabi",
+            "QTVERSION": "${qt5.9.version}",
+            "QTDIR": "${qt5.9.android_arm}",
+            "QTSPEC": "-spec android-g++",
+            "QTCONFIG": "",
+            "JAVA_HOME": "${java1.8.home}",
+            "CLASSPATH": ".:${JAVA_HOME}/lib/dt/jar:${JAVA_HOME}/lib/tools.jar",
+            "PYMAKE_MYNAME": "T.D.R",
+            "a_special_var_const": "hello world",
+            "QKIT": "ANDROID",
+            "QSYS": "Android"
+        },
+        "android.x86": {
+            "path+": [
+                "${cmake.bin}",
+                "${qt5.9.android_x86.bin}",
+                "${java1.8.bin}",
+                "${android.sdk}",
+                "${sdk.plat.tool}",
+                "${sdk.build.tool}",
+                "${sdk.tool}",
+                "${ant.bin}",
+                "${ndk.x86.bin}"
+            ],
+            "CLICOLOR": "1",
+            "ANDROID_API_VERSION": "android-23",
+            "ANDROID_SDK_ROOT": "${android.sdk}",
+            "ANDROID_NDK_ROOT": "${android.ndk}",
+            "ANDROID_NDK_HOST": "darwin-x86_64",
+            "ANDROID_NDK_TOOLCHAIN_PREFIX": "x86",
+            "ANDROID_NDK_TOOLCHAIN_VERSION": "4.9",
+            "ANDROID_NDK_PLATFORM": "android-23",
+            "NDK_TOOLCHAIN_PATH": "${ndk.x86.bin}",
+            "NDK_TOOLS_PREFIX": "i686-linux-android",
+            "QTVERSION": "${qt5.9.version}",
+            "QTDIR": "${qt5.9.android_x86}",
+            "QTSPEC": "-spec android-g++",
+            "QTCONFIG": "CONFIG+=x86",
+            "JAVA_HOME": "${java1.8.home}",
+            "CLASSPATH": ".:${JAVA_HOME}/lib/dt/jar:${JAVA_HOME}/lib/tools.jar",
+            "QKIT": "ANDROIDX86",
+            "QSYS": "AndroidX86"
+        },
+        "iOS": {
+            "path+": [
+                "${cmake.bin}",
+                "${qt5.9.ios.bin}"
+            ],
+            "QTVERSION": "${qt5.9.version}",
+            "QTDIR": "${qt5.9.ios}",
+            "QTSPEC": "-spec macx-ios-clang",
+            "QTCONFIG": "CONFIG+=iphoneos CONFIG+=device -after QMAKE_MAC_XCODE_SETTINGS+=qteam qteam.name=DEVELOPMENT_TEAM qteam.value=4EGMLT3G6T",
+            "QKIT": "iOS",
+            "QSYS": "iOS"
+        },
+        "iOSSimulator": {
+            "path+": [
+                "${cmake.bin}",
+                "${qt5.9.ios.bin}"
+            ],
+            "QTVERSION": "${qt5.9.version}",
+            "QTDIR": "${qt5.9.ios}",
+            "QTSPEC": "-spec macx-ios-clang",
+            "QTCONFIG": "CONFIG+=iphonesimulator CONFIG+=simulator",
+            "QKIT": "iOSSimulator",
+            "QSYS": "iOSSimulator"
+        },
+        "qt4": {
+            "path+": [
+                "${cmake.bin}",
+                "${qt4.8.clang.bin}"
+            ],
+            "QTVERSION": "${qt4.version}",
+            "QTDIR": "${qt4.8.clang}",
+            "QTSPEC": "-spec macx-llvm",
+            "QTCONFIG": "CONFIG+=x86_64",
+            "QKIT": "macOS",
+            "QSYS": "MacOS"
+        },
+        "macOS": {
+            "path+": [
+                "${cmake.bin}",
+                "${qt5.9.clang.bin}"
+            ],
+            "QTVERSION": "${qt5.9.version}",
+            "QTDIR": "${qt5.9.clang}",
+            "QTSPEC": "-spec macx-clang",
+            "QTCONFIG": "CONFIG+=x86_64",
+            "QKIT": "macOS",
+            "QSYS": "macOS"
+        },
+        "current": "macOS"
+    },
+    "variable-assemblage": [
+        "QQt",
+        "LibQQt",
+        "${root.build}/${qqt.proj.name}/${qt.sys.mac}/${build.release}",
+        "${root.src}/${qqt.proj.name}",
+        "${qqt.proj.name}.pro",
+        "${qqt.build.path}/src/bin",
+        "${root.prod}/QQt",
+        "qqtframe",
+        "${qqt.build.path}/examples/${qqtframe.prod.name}/bin",
+        "${qqt.build.path}/src/bin/QQt.framework",
+        "QQt.framework/Versions/1/QQt",
+        "${root.tool}/Source/qt5",
+        "${root.build}/qt5",
+        "androiddeployqt",
+        "macdeployqt",
+        "DownloadQueue",
+        "/Users/abel/Develop/c1-webrc/DownloadQueue/DownloadQueue.pro",
+        "${root.build}/${app.name}",
+        "macdeployqt ${app.path.build}/${app.name}.app",
+        "${prod.name}.app",
+        "${mac.app}/Contents",
+        "${mac.app.content}/MacOS",
+        "${mac.app.content}/Frameworks",
+        "${mac.app.content}/Resources",
+        "${mac.app.content}/PlugIns",
+        "${prod.name}.framework",
+        "${prod.name}.framework/Versions",
+        "${prod.name}.framework/Resources",
+        "macdeployqt ${}"
+    ],
+    "command-assemblage": [
+        "I'm not similar to these command, so list them here, rather than forgotten them",
+        "cl-command, sys-command",
+        "replace? no, append? easy!",
+        "help you to remeber these command.",
+        "mkdir -p ${qqt.build.path}",
+        "cd ${build-path}",
+        "cmake -G\"Unix Makefiles\" -DCMAKE_INSTALL_PREFIX=${prod-root} ${source-path}",
+        "cmake -GXCode -DCMAKE_INSTALL_PREFIX=${prod-root} ${source-path}",
+        "rm -f CMakeCache.txt",
+        "qmake ${source-path}/${qmake-file} -spec ${QTSPEC} CONFIG+=${QTCONFIG} && make qmake_all",
+        "make -j4",
+        "make clean in ${build-path}",
+        "make install",
+        "${deployqt} ${bin-path}/${app-bundle} -verbose=1",
+        "${deployqt} -dmg",
+        "${deployqt} --help",
+        "cp -fr ${lib-dep} ${lib-native}",
+        "install_name_tool -change ${lib-dep-name} @rpath/${lib-dep-name} ${app-native}/${prod-name} ",
+        "install_name_tool -change $LibDep @rpath/$LibDep ${app-native}/${prod-name} ",
+        "${source-path}/configure -prefix ${install-path} -hostprefix ${install-path} -xplatform android-g++ -release -nomake tests -nomake examples -android-ndk $ANDROID_NDK_ROOT -android-sdk $ANDROID_SDK_ROOT -android-ndk-host $ANDROID_NDK_HOST -android-toolchain-version $ANDROID_NDK_TOOLCHAIN_VERSION -skip qtwebkit-examples -no-warnings-are-errors",
+        "${qt5.path.source}/configure -prefix ${qt5.path.install} -hostprefix ${qt5.path.install} -xplatform android-g++ -release -nomake tests -nomake examples -android-ndk $ANDROID_NDK_ROOT -android-sdk $ANDROID_SDK_ROOT -android-ndk-host $ANDROID_NDK_HOST -android-toolchain-version $ANDROID_NDK_TOOLCHAIN_VERSION -skip qtwebkit-examples -no-warnings-are-errors"
+    ],
+    "command": {
+        "daily.qqt": [
+            "src_path=/Users/abel/Develop/a0-develop/LibQQt",
+            "src=$src_path/QQt.pro",
+            "build=/Users/abel/Develop/c0-buildstation/QQt/${QSYS}/${QTVERSION}/Debug",
+            "mkdir -p $build",
+            "cd $build",
+            "rm -rf src examples",
+            "qmake $src ${QTSPEC} ${QTCONFIG} CONFIG+=debug CONFIG+=qml_debug && make qmake_all",
+            "make -j4"
+        ],
+        "daily.qqt.release": [
+            "src_path=/Users/abel/Develop/a0-develop/LibQQt",
+            "src=$src_path/QQt.pro",
+            "build=/Users/abel/Develop/c0-buildstation/QQt/${QSYS}/${QTVERSION}/Release",
+            "mkdir -p $build",
+            "cd $build",
+            "rm -rf src examples",
+            "qmake $src ${QTSPEC} ${QTCONFIG} CONFIG+=release && make qmake_all",
+            "make -j4"
+        ],
+        "build.qqt": [
+            "src_path=/Users/abel/Develop/a0-develop/LibQQt",
+            "src=/Users/abel/Develop/a0-develop/LibQQt/QQt.pro",
+            "build=/Users/abel/Develop/c0-buildstation/QQt/${QSYS}/${QTVERSION}/Debug",
+            "mkdir -p $build",
+            "cd $build",
+            "echo build $(pwd)",
+            "qmake ${src} ${QTSPEC} CONFIG+=debug CONFIG+=qml_debug ${QTCONFIG} && make qmake_all",
+            "make -j4"
+        ],
+        "build.qqt.release": [
+            "src_path=/Users/abel/Develop/a0-develop/LibQQt",
+            "src=$src_path/QQt.pro",
+            "build=/Users/abel/Develop/c0-buildstation/QQt/${QSYS}/${QTVERSION}/Release",
+            "mkdir -p $build",
+            "cd $build",
+            "qmake $src ${QTSPEC} ${QTCONFIG} CONFIG+=release && make qmake_all",
+            "make -j4"
+        ],
+        "clean.qqt": [
+            "src=/Users/abel/Develop/a0-develop/LibQQt/QQt.pro",
+            "build=/Users/abel/Develop/c0-buildstation/QQt/${QSYS}/${QTVERSION}/Debug",
+            "cd $build",
+            "make clean"
+        ],
+        "clean.qqt.release": [
+            "src=/Users/abel/Develop/a0-develop/LibQQt/QQt.pro",
+            "build=/Users/abel/Develop/c0-buildstation/QQt/${QSYS}/${QTVERSION}/Release",
+            "cd $build",
+            "make clean"
+        ],
+        "qt": [
+            "open \"/Applications/Qt Creator.app\""
+        ],
+        "cmake": [
+            "open /Users/abel/Develop/b0-toolskits/macCompilers/CMake.app"
+        ],
+        "prod": [
+            "open /Users/abel/Develop/d0-product/ProductExecTool/macOS/ProductExecTool_debug.app"
+        ],
+        "libtool": [
+            "open /Users/abel/Develop/d0-product/AddLibraryTool/macOS/AddLibraryTool_debug.app"
+        ],
+        "check.qt": [
+            "src=/Users/abel/Develop/b0-toolskits/z0-Source/qt-everywhere-opensource-src-4.8.7",
+            "build=/Users/abel/Develop/c0-buildstation/qt4.8.7",
+            "install=/Users/abel/Develop/b0-toolskits/macLibraries/Qt/4.8.7/gcc_64",
+            "mkdir -p $build",
+            "cd $build",
+            "echo build $(pwd)",
+            "${src}/configure --help"
+        ],
+        "build.qt": [
+            "src=/Users/abel/Develop/b0-toolskits/z0-Source/qt",
+            "build=/Users/abel/Develop/c0-buildstation/qt",
+            "install=/Users/abel/Develop/b0-toolskits/macLibraries/Qt/4.8/gcc_64",
+            "mkdir -p $build",
+            "cd $build",
+            "echo build $(pwd)",
+            "CXXFLAGS=-stdlib=libc++",
+            "${src}/configure -prefix ${install}",
+            "make -j4",
+            "make install"
+        ],
+        "build.qt4.8.7": [
+            "src=/Users/abel/Develop/b0-toolskits/z0-Source/qt-everywhere-opensource-src-4.8.7",
+            "build=/Users/abel/Develop/c0-buildstation/qt4.8.7",
+            "install=/Users/abel/Develop/b0-toolskits/macLibraries/Qt/4.8.7/gcc_64",
+            "mkdir -p $build",
+            "cd $build",
+            "echo build $(pwd)",
+            "${src}/configure -prefix ${install}",
+            "make -j4",
+            "make install"
+        ],
+        "build soap": [
+            "src=/Users/abel/Develop/c1-webrc/qt-solutions/qtsoap",
+            "build=/Users/abel/Develop/c0-buildstation/qtsoap",
+            "install=/Users/abel/Develop/d1-product/QtSoap",
+            "cd $build",
+            "${src}/configure -library"
+        ],
+        "push.qqt": [
+            "src=/Users/abel/Develop/a0-develop/LibQQt",
+            "cd $src",
+            "git push",
+            "git push --tag"
+        ],
+        "pull.qqt": [
+            "src=/Users/abel/Develop/a0-develop/LibQQt",
+            "cd $src",
+            "git pull"
+        ],
+        "cloc.qqt": [
+            "src=/Users/abel/Develop/a0-develop/LibQQt",
+            "cd $src",
+            "perl /Users/abel/Develop/b1-buildshell/cloc-1.74.pl  .",
+            "date"
+        ],
+        "cloc.light": [
+            "src=/Users/abel/Develop/a0-develop/LightUnderWater/App",
+            "cd $src",
+            "perl /Users/abel/Develop/b1-buildshell/cloc-1.74.pl  .",
+            "date"
+        ],
+        "android.sdk": [
+            "/Users/abel/Develop/b0-toolskits/macAndroidLibraries/android-sdk-macosx/tools/android"
+        ]
+    }
+}

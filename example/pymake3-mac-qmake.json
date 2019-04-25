@@ -1,0 +1,218 @@
+{
+    "environ": {
+        "PYCMD_MYNAME": "T.D.R",
+        "a_special_var_const": "hello world",
+
+        "ios": {
+            "QKIT": "iOS"
+        },
+        "macOS": {
+            "QKIT": "macOS",
+            "QtSDK": "clang_64",
+            "QtVer": "5.9.1",
+            "QSYSNAME": "MacOS",
+            "BUILDTYPE": "Release",
+            "cmake-bin": "CMake.app/Contents/bin",
+            "path-toolchain": "/usr/bin",
+            "dev-root": "/Users/abel/Develop",
+            "QSYSNAME_BUILDTYPE": "${QSYSNAME}/${BUILDTYPE}",
+            "os-sdk": "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.13.sdk/System/Library/Frameworks"
+        },
+        "store-named-variable-comm":{
+
+        },
+        "macOS-Java":{
+            "QKIT": "macOS",
+            "dev-root": "/Users/abel/Develop",
+            "JAVA_HOME":"${dev-root}/b0-toolskits/AndroidGroupLibraries/java-macosx/Java/JavaVirtualMachines/jdk-9.jdk/Contents/Home",
+            "CLASSPATH":".:${JAVA_HOME}/lib/dt/jar:${JAVA_HOME}/lib/tools.jar",
+            "ANDROID_API_VERSION":"android-23",
+            "ANDROID_SDK_ROOT":"${dev-root}/b0-toolskits/AndroidGroupLibraries/android-sdk-macosx",
+            "ANDROID_NDK_ROOT":"${dev-root}/b0-toolskits/AndroidGroupLibraries/android-ndk-r13b",
+            "ANDROID_NDK_HOST":"darwin-x86_64",
+            "ANDROID_NDK_TOOLCHAIN_PREFIX":"arm-linux-androideabi",
+            "ANDROID_NDK_TOOLCHAIN_VERSION":"4.9",
+            "ANDROID_NDK_PLATFORM":"android-23",
+            "NDK_TOOLCHAIN_PATH":"${dev-root}/b0-toolskits/AndroidGroupLibraries/android-ndk-r13b/toolchains/arm-linux-androideabi-4.9/prebuilt/darwin-x86_64",
+            "NDK_TOOLS_PREFIX":"arm-linux-androideabi"
+        },
+        "current-group-0":{
+
+        },
+        "current": "macOS-Java",
+
+        "src-root": "${dev-root}/a0-Developworkspace",
+        "prod-root": "${dev-root}/b1-Product/a0-qqtbased/Application",
+        "build-root": "${dev-root}/c0-buildstation",
+        "tool-root": "${dev-root}/b0-toolskits",
+        "test-root": "${dev-root}/a1-testspace",
+        "webrc-root": "${dev-root}/b2-webrc",
+        "QTDIR": "${tool-root}/Libraries/QtLibraries/${QtVer}/${QtSDK}",
+
+        "path+": {
+            "dev-?": {
+                "cc-path": "ee/ff"
+            },
+            "macOS": {
+                "target-sdk": "${os-sdk}",
+                "QtSDK": "${tool-root}/Libraries/QtLibraries/${QtVer}/${QtSDK}/bin",
+                "cmake-path": "${tool-root}/compliers/${cmake-bin}",
+                "make-and-toolchain-path": "${path-toolchain}"
+            },
+            "macJava":{
+                "java-path":"${JAVA_HOME}/bin",
+                "android-platform-tool":"${tool-root}/AndroidGroupLibraries/android-sdk-macosx/platform-tools",
+                "ant-path":"${tool-root}/AndroidGroupLibraries/apache-ant-1.10.1/bin",
+                "toolchain-path":"${tool-root}/AndroidGroupLibraries/android-ndk-r10/toolchains/arm-linux-androideabi-4.9/prebuilt/darwin-x86_64/bin"
+            },
+            "current": "macJava"
+
+        }
+    },
+    "project": {
+        "qqt": {
+            "prod-name": "QQt",
+            "proj-name": "a0-qqtfoundation",
+            "build-path": "${build-root}/${proj-name}/${QSYSNAME_BUILDTYPE}",
+            "source-path": "${src-root}/${proj-name}",
+            "qmake-file": "${proj-name}.pro",
+            "bin-path": "${build-path}/src/bin"
+        },
+        "qqt-example":{
+            "prod-name": "qqtframe",
+            "proj-name": "a0-qqtfoundation",
+            "source-path": "${src-root}/${proj-name}",
+            "build-path": "${build-root}/${proj-name}/${QSYSNAME_BUILDTYPE}",
+            "qmake-file": "${proj-name}.pro",
+            "bin-path": "${build-path}/examples/${prod-name}/bin",
+            "lib-dep":"${build-path}/src/bin/QQt.framework",
+            "lib-dep-name":"QQt.framework/Versions/1/QQt"
+        },
+        "wiz": {
+            "build-path": ""
+        },
+        "myfamily":{
+            "":""
+        },
+        "android":{
+            "install-path":"${tool-root}/AndroidGroupLibraries/android-sdk-macosx"
+        },
+        "QtOnAndroid":{
+            "build-path":"${tool-root}/Libraries/QtLibraries/Source/qt5",
+            "install-path":"${tool-root}/Libraries/QtLibraries/5.9.1/android6.0_armv7_mac"
+        },
+        "current": "QtOnAndroid"
+    },
+    "command": {
+        "macgcc": {
+            "mkdir": "mkdir -p",
+            "cd": "cd",
+            "deployqt": "macdeployqt",
+            "make": "make"
+        },
+        "win-mingw32": {
+            "cd": "cd /d",
+            "make": "mingw32-make"
+        },
+        "current": "macgcc"
+    },
+    "store-named-variable": {
+        "tips": "put your any common & special variables here, you worn it",
+        "app-bundle": "${prod-name}.app",
+        "app-native":"${bin-path}/${app-bundle}/Contents/MacOS",
+        "lib-native":"${bin-path}/${app-bundle}/Contents/Frameworks",
+
+        "lib-bundle": "${prod-name}.framework"
+    },
+    "store-named-command": {
+        "why-to-set-these": "I'm not similar to these command, so list them here, rather than forgotten them",
+        "here": "cl-command, sys-command",
+        "here-1": "replace? no, append? easy!",
+
+        "mk-build-path": "${mkdir} ${build-path}",
+        "cd-build-path": "${cd} ${build-path}",
+        "cd-prod-path": "${cd} ${prod-root}",
+        "cd-bin-path":"${cd} ${bin-path}",
+        "cd-install-path": "${cd} ${install-path}",
+
+        "cmake": "cmake -G\"Unix Makefiles\" -DCMAKE_INSTALL_PREFIX=${prod-root} ${source-path}",
+        "cmake-xcode": "cmake -GXCode -DCMAKE_INSTALL_PREFIX=${prod-root} ${source-path}",
+        "cmake-rmcache": "rm -f CMakeCache.txt",
+
+        "qmake": "qmake ${source-path}/${qmake-file} -spec macx-g++ CONFIG+=x86_64 && ${make} qmake_all",
+        "make": "${make} -j4",
+        "make-clean": "${make} clean in ${build-path}",
+        "make-install": "${make} install",
+
+        "deployqt": "${deployqt} ${bin-path}/${app-bundle} -verbose=1",
+        "deployqt-dmg": "${deployqt} -dmg",
+        "deployqt-help": "${deployqt} --help",
+
+        "cp-dep": "cp -fr ${lib-dep} ${lib-native}",
+        "install_name_tool": "install_name_tool -change ${lib-dep-name} @rpath/${lib-dep-name} ${app-native}/${prod-name} ",
+
+        "pwd": "pwd",
+        "var": "echo 'qtdir:' $QTDIR ",
+        "var2": "echo 'qtdir:' ${QTDIR} ",
+        "msg": "echo 'work complete!'"
+    },
+    "execute-stream": {
+        "t": [
+              "pwd",
+            "pwd",
+            "var",
+            "var2",
+            "pwd",
+            "msg",
+            "var2",
+            "set ${build-path}",
+            "macdeployqt --help"
+        ],
+        "build": [
+            "mk-build-path",
+            "cd-build-path",
+            "qmake",
+            "make",
+            "msg"
+        ],
+        "macdeploy-qqt":[
+            "cd-build-path",
+            "deployqt",
+            "cp-dep",
+            "install_name_tool",
+            "msg"
+        ],
+        "rebuild": [
+            "mk-build-path",
+            "cd-build-path",
+            "qmake",
+            "make-clean",
+            "make",
+            "deployqt",
+            "cp-dep",
+            "install_name_tool",
+            "msg"
+        ],
+        "install": [
+            "cd-build-path"
+        ],
+        "test-android":[
+            "cd-install-path",
+            "pwd",
+            "which java",
+            "java --version",
+            "adb version",
+            "ant"
+        ],
+        "qt-creator":[
+            "\"/Applications/Qt Creator.app/Contents/MacOS/Qt Creator\""
+        ],
+        "QtOnAndroid":[
+            "cd-build-path",
+            "echo ./configure -prefix ${install-path} -hostprefix ${install-path} -xplatform android-g++ -release -nomake tests -nomake examples -android-ndk $ANDROID_NDK_ROOT -android-sdk $ANDROID_SDK_ROOT -android-ndk-host darwin-x86_64 -android-toolchain-version 4.9 -skip qtwebkit-examples -no-warnings-are-errors",
+            "make",
+            "make install"
+        ],
+        "current": "build"
+    }
+}

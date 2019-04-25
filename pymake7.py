@@ -376,7 +376,7 @@ def main_function():
     #print( "pymake file path:", pymakefilepath )
 
     # record pymake user source root [env, *.json] [ + auto create ]
-    pymakesourceroot = pymakefilepath + os.path.sep + 'USERSOURCE'
+    pymakesourceroot = pymakefilepath + os.path.sep + 'UserSource'
     if (not os.path.exists(pymakesourceroot)):
         os.makedirs(pymakesourceroot)
     #print( "pymake user source path:", pymakesourceroot )
@@ -386,9 +386,9 @@ def main_function():
     #print( "pymake user default source file:", pymakedefaultsourcefile )
 
     # record pymake user shell root [ dynamic work path ] [ ignored -> v7.2 ]
-    pymakeshellroot = pymakefilepath + os.path.sep + 'USERSOURCE' + os.path.sep + 'USERSHELL'
-    #if (not os.path.exists(pymakeshellroot)):
-    #    os.makedirs(pymakeshellroot)
+    pymakeshellroot = pymakesourceroot + os.path.sep + 'UserShell'
+    if (not os.path.exists(pymakeshellroot)):
+        os.makedirs(pymakeshellroot)
     #print( "pymake user shell path:", pymakeshellroot )
 
     """

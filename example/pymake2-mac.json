@@ -1,0 +1,30 @@
+{
+    "add-path-to-env": {
+        "qt5.9-clang64": "/Users/abel/Develop/b0-toolskits/Libraries/QtLibraries/5.9.1/clang_64/bin",
+        "gen-path": "/Users/abel/Develop/b0-toolskits/compliers/CMake.app/Contents/bin",
+        "macos10.12-xcode": "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk/System/Library/Frameworks",
+        "make-and-toolchain-path": "/usr/bin"
+    },
+    "env-variables": {
+        "PYCMD_MYNAME": "T.D.R", 
+        "QTDIR": "/Users/abel/Develop/b0-toolskits/Libraries/QtLibraries/5.9.1/clang_64"
+    }, 
+    "store-named-command": {
+        "cd-buildpath": "/Users/abel/Develop/c0-buildstation/mac-qqt", 
+        "gen": "cmake -G\"Unix Makefiles\" -DCMAKE_INSTALL_PREFIX=${CMAKE_SOURCE_DIR}../../b1-Product/a0-qqtbased/Application ../../a0-Developworkspace/a0-qqtpruduct-qqtfoundation/", 
+        "rmcache": "rm -f CMakeCache.txt", 
+        "make": "make -j4", 
+        "install": "make install", 
+        "msg": "echo 'work completed!'"
+    }, 
+    "execute-stream": {
+        "buildqqt": [
+            "cd-buildpath", 
+            "rmcache", 
+            "gen", 
+            "make", 
+            "install", 
+            "msg"
+        ]
+    }
+}

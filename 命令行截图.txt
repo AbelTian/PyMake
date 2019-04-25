@@ -76,17 +76,6 @@ Usage:
   pymake7.py get default exec root
   pymake7.py get exec root [ default | here ]
   pymake7.py -------------------------------------------------------------
-  pymake7.py get pc
-  pymake7.py get pc home
-  pymake7.py get pc [ setting ]
-  pymake7.py get pc [ desk ] [ doc ] [ download ] [ music ] [ picture ] [ movie ]
-  pymake7.py get pc [ favorite ] [ search ] [ contact ]
-  pymake7.py get pc [ develop ]
-  pymake7.py get date [ -y | -m | -d ] [ -f <sep-character> ]
-  pymake7.py get time [ -h | -m | -s ] [ -f <sep-character> ]
-  pymake7.py get datetime [ -f <sep-character> <sep2-character> <sep3-character> ]
-  pymake7.py get platform
-  pymake7.py -------------------------------------------------------------
   pymake7.py inport
   pymake7.py outport
   pymake7.py -------------------------------------------------------------

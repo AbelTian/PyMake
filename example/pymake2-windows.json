@@ -1,0 +1,30 @@
+{
+    "env-variables": {
+        "PYCMD_MYNAME": "T.D.R"
+    },
+    "add-path-to-env": {
+        "toolchain": "C:/Users/Administrator/Qt/Tools/mingw530_32/bin",
+        "genmake": "Z:/abel/Develop/b0-toolskits/compliers/cmake3.9.1_64/bin",
+        "make-path": "C:/Users/Administrator/Qt/Tools/mingw530_32/bin",
+        "qt5.9-win32": "C:/Users/Administrator/Qt/5.9.1/mingw53_32/bin"
+    },
+    "store-named-command": {
+        "cd-path0": "Z:/abel/Develop/a0-Developworkspace/a0-qqtpruduct-qqtfoundation/build",
+        "genqqt": "cmake -G\"MinGW Makefiles\" ../",
+        "makeqqt": "mingw32-make",
+        "installqqt": "mingw32-make install",
+        "cdup": "cd ../",
+        "cdtomyhome": "cd /home/tdr"
+    },
+    "execute-stream": {
+        "genqqt": [
+            "cdworkpath",
+            "gen",
+            "msg"
+        ],
+        "makeqqt": [
+            "cd-productpath",
+            "pwd"
+        ]
+    }
+}

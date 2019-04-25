@@ -1,0 +1,19 @@
+使用说明：
+我把程序安装为mm命令，所以终端里用mm命令调用。
+可以在任何地方调用。
+
+有的用户口味比较挑剔，对命令的名字有自己的喜好，
+我在当前路径提供了mm.bat pymm.bat两个pymake.bat命令的别名命令，用户可以仿照制作别名命令。
+所有的功能都是从pymake.bat[.sh]开始的。
+
+PyMake v7.2
+pymake<Ver>.py是主程序，pycodec.py，pyinfo.py是辅程序，
+pymake.bat[.sh]是主要壳子程序，mm，pymm，pyenv，pyvc，pycmd是补充壳子程序，进行了一定的封装，加工，实现功能。
+install安装的是对壳子程序的快捷方式，一般为同名安装。
+我把程序追加安装为mm，pymm，pymake等命令，
+如果命令不能用了，重新执行安装器即可。
+
+PyMake v8
+我更新了用户程序默认的执行目录，<PYSRC CODE>/USERSOURCE/USERSHELL，请关注。
+这会导致用户的脚本当中，获取默认运行路径的代码必须修改。
+$(mm source root)/xxx_exec.bat->$(mm get default exec root)/xxx_exec.bat
