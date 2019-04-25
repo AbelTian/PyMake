@@ -469,7 +469,6 @@ def main_function():
                     print ("successed: change source root to %s" % args['<source-root-path>'])
                 else:
                     print ("%s" % conf.get('source', 'root'))
-                return
             elif(args['config'] is True):
                 sourceroot = conf.get('source', 'root')
                 if(args['--del'] is True):
@@ -525,7 +524,6 @@ def main_function():
                         print ('You can\'t switch pymake.json and un.json\'s file...')
                 else:
                     print ("%s" % conf.get("source", "config"))
-                return
             elif (args['file'] is True):
                 if(args['<source-path-file>'] is None):
                     print("please input an abspath .json file.")
@@ -541,12 +539,28 @@ def main_function():
                 print ("change source to %s" % os.path.realpath(args['<source-path-file>']))
                 print ("source root    : %s" % r)
                 print ("source config  : %s" % f)
-                return
             else:
                 r = conf.get('source', 'root')
                 f = conf.get('source', 'config')
                 print ("%s%s%s" % (r, os.path.sep, f))
-                return
+
+            # check source status
+            # record user source root directory
+            sourceroot = conf.get('source', 'root')
+            # record source config file name
+            sourcefile = conf.get('source', 'config')
+            # record source config file
+            sourceconfigfile = sourceroot + os.path.sep + sourcefile
+            # print ("root: %s config: %s" % (sourceroot, sourcefile))
+            # print("use source config: %s" % (sourceconfigfile) )
+            if (not os.path.exists(sourceroot)):
+                os.makedirs(sourceroot)
+            os.chdir(sourceroot)
+            if (os.path.exists(sourceroot)):
+                if (os.path.abspath(sourceroot) != os.path.abspath(pymakeroot)
+                    and os.path.abspath(sourceroot) != os.path.abspath(pymakefilepath)):
+                    if (not os.path.exists(sourceconfigfile)):
+                        writeJsonData(sourceconfigfile, d)
             return
         else:
             ''
