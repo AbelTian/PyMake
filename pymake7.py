@@ -526,6 +526,15 @@ def main_function():
                 if(not args['<source-path-file>'].endswith(pymakesuffix)):
                     print("you can't set un.json file.")
                     return
+                if(not os.path.isabs(args['<source-path-file>'])):
+                    print("your file path is not abspath.")
+                    return
+                if(os.path.isdir(args['<source-path-file>'])):
+                    print("please input an abspath .json file.")
+                    return
+                if(os.path.islink(args['<source-path-file>'])):
+                    print("your file path cant be a link.")
+                    return
                 r = os.path.split(os.path.realpath(args['<source-path-file>']))[0]
                 f = os.path.split(os.path.realpath(args['<source-path-file>']))[1]
                 conf.set('source', 'root', r)
