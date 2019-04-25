@@ -82,8 +82,15 @@ Usage:
   pymake7.py get exec root [ default | here ]
   pymake7.py initialize
   pymake7.py -------------------------------------------------------------
-  pymake7.py inport
-  pymake7.py outport
+  pymake7.py port
+  pymake7.py port reset
+  pymake7.py port root [ <source-config-root> ] [ to <target-config-root> ]
+  pymake7.py port config [ <source-config-file> ] [ to <target-config-file> ]
+  pymake7.py translate
+  pymake7.py translate all [ -f | --force ]
+  pymake7.py translate ( path | env | cmd ) [ -f | --force ]
+  pymake7.py translate ( path | env | cmd ) <key-name> [ to <target-key-name> ] [ -f | --force ]
+  pymake7.py translate section <section-name> [ to <target-section-name> ]
   pymake7.py -------------------------------------------------------------
   pymake7.py (-h | --help)
   pymake7.py --version
@@ -92,7 +99,7 @@ Command:
   source           switch to another source file
   source root      config root directory
   source config    config source conf file
-  set path         path assessblage
+  set path         path assemblage
   set env          set env variable
   set cmd          set cmd stream
   export           output private env variable to a bat file or sh file [default:current, env]
@@ -100,7 +107,7 @@ Command:
   see              check command stream
   ss               check command stream
   cmd              check command stream
-  list             list configed values, show command also too.
+  list             list config values, show command also too.
   set cur env      set default env
   use              use selected env exec commands
   here             at here do exec commands e.g.
@@ -113,6 +120,8 @@ Command:
   program          pymake.py program information.
   get              lots of important information about pymake.py.
   initialize       if program crashed, user can use this command to reset.
+  port             port from source to target .json file, configure source root and config file.
+  translate        translate section from source to target, and other section.
 
 Options:
   -h --help     Show this screen.
@@ -121,8 +130,8 @@ Options:
   --del
   --mod         add or delete or modify a config or path
   --switch      switch to another source
-  --show        display haved stream config files
-  --restore     reset to pymake.json stream config file
+  --show        display source config files
+  --restore     reset to source config file pymake.json.
   -r, --raw     expand editing config values
 """
 
@@ -533,16 +542,15 @@ def main_function():
             ""
         break
 
+    # init pymake.json in sourceroot [ + program create ]
     #record user source root directory
     sourceroot = conf.get('source', 'root')
     #record source config file name
     sourcefile = conf.get('source', 'config')
     #record source config file
     sourceconfigfile = sourceroot + os.path.sep + sourcefile
-    #print ("root: %s, config: %s" % (sourceroot, sourcefile))
+    #print("root: %s, config: %s" % (sourceroot, sourcefile))
     #print("use source config: %s" % (sourceconfigfile) )
-
-    # init pymake.json in sourceroot [ + program create ]
     #record default source config file
     defaultsourceconfigfile = sourceroot + os.path.sep + pymakedefaultsourcefile
     #print ("root: %s, default config: %s" % (sourceroot, pymakedefaultsourcefile))
@@ -716,6 +724,119 @@ def main_function():
     # cd user shell root [ default shell execute path ]
     pymakeshellroot = sourceroot
     os.chdir(pymakeshellroot)
+
+    #port translate function
+    portdefaulttargetconfig = 'temp-target.json'
+    def init_portconf():
+        portinifile = os.path.join(pymakeshellroot, "port.ini")
+        portconf = MyConfigParser()
+        portconf.read(portinifile)
+        if (not portconf.has_section('port')):
+            portconf.add_section('port')
+            portconf.write(open(portinifile, 'w'))
+        if (not portconf.has_option('port', 'sourceroot')):
+            portconf.set('port', 'sourceroot', sourceroot)
+            portconf.write(open(portinifile, 'w'))
+        if (not portconf.has_option('port', 'sourceconfig')):
+            portconf.set('port', 'sourceconfig', pymakedefaultsourcefile)
+            portconf.write(open(portinifile, 'w'))
+        if (not portconf.has_option('port', 'targetroot')):
+            portconf.set('port', 'targetroot', sourceroot)
+            portconf.write(open(portinifile, 'w'))
+        if (not portconf.has_option('port', 'targetconfig')):
+            portconf.set('port', 'targetconfig', portdefaulttargetconfig)
+            portconf.write(open(portinifile, 'w'))
+        #print (portinifile)
+        #print ("sourceroot  :", portconf['port']['sourceroot'])
+        #print ("sourceconfig:", portconf['port']['sourceconfig'])
+        #print ("targetroot  :", portconf['port']['targetroot'])
+        #print ("targetconfig:", portconf['port']['targetconfig'])
+        return portconf, portinifile
+
+    # port translate
+    while (True):
+        if (args['port'] is True):
+            portconf, portinifile = init_portconf()
+            if (args['root'] is True):
+                if( args['<source-config-root>'] is not None ):
+                    if (not os.path.isdir(args['<source-config-root>'])
+                        or os.path.islink(args['<source-config-root>'])
+                        or not os.path.isabs(args['<source-config-root>'])):
+                        print("please input a legal source abspath.")
+                        return
+                    portconf.set('port', 'sourceroot', args['<source-config-root>'])
+                    portconf.write(open(portinifile, 'w'))
+                    #print("port: source config root is %s." % portconf['port']['sourceroot'])
+
+                if( args['<target-config-root>'] is not None ):
+                    if (not os.path.isdir(args['<target-config-root>'])
+                        or os.path.islink(args['<target-config-root>'])
+                        or not os.path.isabs(args['<target-config-root>'])):
+                        print("please input a legal target abspath.")
+                        return
+                    portconf.set('port', 'targetroot', args['<target-config-root>'])
+                    portconf.write(open(portinifile, 'w'))
+                    #print("port: target config root is %s." % portconf['port']['targetroot'])
+
+                print("port: source root is %s" % portconf['port']['sourceroot'])
+                print("port: target root is %s" % portconf['port']['targetroot'])
+            elif (args['config'] is True):
+                if( args['<source-config-file>'] is not None ):
+                    if (not args['<source-config-file>'].endswith(pymakesuffix)
+                        or os.path.isdir(args['<source-config-file>'])
+                        or os.path.islink(args['<source-config-file>'])
+                        or os.path.isabs(args['<source-config-file>'])):
+                        print("please input a real source .json file.")
+                        return
+                    portconf.set('port', 'sourceconfig', args['<source-config-file>'])
+                    portconf.write(open(portinifile, 'w'))
+                    #print("port: source config file is %s." % portconf['port']['sourceconfig'])
+
+                if( args['<target-config-file>'] is not None ):
+                    if (not args['<target-config-file>'].endswith(pymakesuffix)
+                        or os.path.isdir(args['<target-config-file>'])
+                        or os.path.islink(args['<target-config-file>'])
+                        or os.path.isabs(args['<target-config-file>'])):
+                        print("please input a real target .json file.")
+                        return
+                    portconf.set('port', 'targetconfig', args['<target-config-file>'])
+                    portconf.write(open(portinifile, 'w'))
+                    #print("port: target config file is %s." % portconf['port']['targetconfig'])
+
+                print("port: source config is %s" % portconf['port']['sourceconfig'])
+                print("port: target config is %s" % portconf['port']['targetconfig'])
+            elif (args['reset'] is True):
+                portconf.set('port', 'sourceroot', sourceroot)
+                portconf.set('port', 'sourceconfig', pymakedefaultsourcefile)
+                portconf.set('port', 'targetroot', sourceroot)
+                portconf.set('port', 'targetconfig', portdefaulttargetconfig)
+                portconf.write(open(portinifile, 'w'))
+                print("successed")
+            else:
+                print("port: source file   is %s" % os.path.join(portconf['port']['sourceroot'], portconf['port']['sourceconfig']))
+                print("port: source root   is %s" % portconf['port']['sourceroot'])
+                print("port: source config is %s" % portconf['port']['sourceconfig'])
+                print("port: target file   is %s" % os.path.join(portconf['port']['targetroot'], portconf['port']['targetconfig']))
+                print("port: target root   is %s" % portconf['port']['targetroot'])
+                print("port: target config is %s" % portconf['port']['targetconfig'])
+            return
+        elif (args['translate'] is True):
+            if (args['all'] is True):
+                ''
+            elif (args['path'] is True):
+                ''
+            elif (args['env'] is True):
+                ''
+            elif (args['cmd'] is True):
+                ''
+            elif (args['section'] is True):
+                ''
+            else:
+                ''
+            return
+        else:
+            ''
+        break
 
     # set this command here .
     # program
