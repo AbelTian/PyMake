@@ -4,6 +4,7 @@ Microsoft Windows [°æ±¾ 10.0.17134.706]
 R:\Develop\b0-toolkits\a0-compiler\PyMake>mm
 Usage:
   pymake7.py source
+  pymake7.py source file [ <source-path-file> ]
   pymake7.py source root [ <source-root-path> ]
   pymake7.py source config [ --add | --del | --mod | --switch | --restore | --show ] [ <config-file-name> ] [<new-config-file-name>]
   pymake7.py -------------------------------------------------------------
@@ -24,23 +25,23 @@ Usage:
   pymake7.py -------------------------------------------------------------
   pymake7.py clean [ here | hh ]
   pymake7.py export [ here | hh ] [ <env-name> ] [ to <file-name> ]
-  pymake7.py use <env-name> type [ here | hh ] [ <cmd-name> ]  [ to <file-name> ]
-  pymake7.py type [ here | hh ] [ <cmd-name> ]  [ to <file-name> ]
-  pymake7.py use <env-name> exec [ here | hh ] [ <command-names> ... ]
+  pymake7.py type [ here | hh ] [ <cmd-name> ] [ to <file-name> ]
   pymake7.py exec [ here | hh ] [ <command-names> ... ]
-  pymake7.py use <env-name> cc [ here | hh ] [ <command-names> ... ]
   pymake7.py cc [ here | hh ] [ <command-names> ... ]
+  pymake7.py use <env-name> type [ here | hh ] [ <cmd-name> ]  [ to <file-name> ]
+  pymake7.py use <env-name> exec [ here | hh ] [ <command-names> ... ]
+  pymake7.py use <env-name> cc [ here | hh ] [ <command-names> ... ]
   pymake7.py -------------------------------------------------------------
   pymake7.py set current env <name>
   pymake7.py set default env <name>
   pymake7.py show [ path | env | cmd ] [<name>] [-r | --raw] [-a | --all]
   pymake7.py environ [<name>] [-p | --path] [-v | --var] [-r | --raw] [-a | --all]
+  pymake7.py see [ <cmd-name> ] [ use <env-name> ] [-r | --raw] [-a | --all]
+  pymake7.py ss [ <cmd-name> ] [ use <env-name> ] [-r | --raw] [-a | --all]
+  pymake7.py cmd [ <cmd-name> ] [ use <env-name> ] [-r | --raw] [-a | --all]
   pymake7.py use <env-name> see [ <cmd-name> ] [-r | --raw] [-a | --all]
-  pymake7.py see [ <cmd-name> ] [-r | --raw] [-a | --all]
   pymake7.py use <env-name> ss [ <cmd-name> ] [-r | --raw] [-a | --all]
-  pymake7.py ss [ <cmd-name> ] [-r | --raw] [-a | --all]
   pymake7.py use <env-name> cmd [ <cmd-name> ] [-r | --raw] [-a | --all]
-  pymake7.py cmd [ <cmd-name> ] [-r | --raw] [-a | --all]
   pymake7.py -------------------------------------------------------------
   pymake7.py hh clean
   pymake7.py hh export [ <env-name> ] [ to <file-name> ]
@@ -60,10 +61,34 @@ Usage:
   pymake7.py get cur env
   pymake7.py get current env
   pymake7.py get default env
+  pymake7.py get env
+  pymake7.py get env ( cur | current | default )
   pymake7.py -------------------------------------------------------------
   pymake7.py program
   pymake7.py program root
   pymake7.py program file
+  pymake7.py program configure
+  pymake7.py program configure root
+  pymake7.py program configure file
+  pymake7.py get all
+  pymake7.py get all ( info | information )
+  pymake7.py get all ( stat | status )
+  pymake7.py get default exec root
+  pymake7.py get exec root [ default | here ]
+  pymake7.py -------------------------------------------------------------
+  pymake7.py get pc
+  pymake7.py get pc home
+  pymake7.py get pc [ setting ]
+  pymake7.py get pc [ desk ] [ doc ] [ download ] [ music ] [ picture ] [ movie ]
+  pymake7.py get pc [ favorite ] [ search ] [ contact ]
+  pymake7.py get pc [ develop ]
+  pymake7.py get date [ -y | -m | -d ] [ -f <sep-character> ]
+  pymake7.py get time [ -h | -m | -s ] [ -f <sep-character> ]
+  pymake7.py get datetime [ -f <sep-character> <sep2-character> <sep3-character> ]
+  pymake7.py get platform
+  pymake7.py -------------------------------------------------------------
+  pymake7.py inport
+  pymake7.py outport
   pymake7.py -------------------------------------------------------------
   pymake7.py (-h | --help)
   pymake7.py --version

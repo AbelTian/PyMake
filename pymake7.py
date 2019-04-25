@@ -76,17 +76,6 @@ Usage:
   pymake7.py get default exec root
   pymake7.py get exec root [ default | here ]
   pymake7.py -------------------------------------------------------------
-  pymake7.py get pc
-  pymake7.py get pc home
-  pymake7.py get pc [ setting ]
-  pymake7.py get pc [ desk ] [ doc ] [ download ] [ music ] [ picture ] [ movie ]
-  pymake7.py get pc [ favorite ] [ search ] [ contact ]
-  pymake7.py get pc [ develop ]
-  pymake7.py get date [ -y | -m | -d ] [ -f <sep-character> ]
-  pymake7.py get time [ -h | -m | -s ] [ -f <sep-character> ]
-  pymake7.py get datetime [ -f <sep-character> <sep2-character> ]
-  pymake7.py get platform
-  pymake7.py -------------------------------------------------------------
   pymake7.py inport
   pymake7.py outport
   pymake7.py -------------------------------------------------------------
@@ -116,7 +105,7 @@ Command:
   has              check env or path or cmd item whether user has configured.
   clean            clean *_effect.sh *_unset.sh *_exec.sh, or .bat.
   program          pymake.py program information.
-  get              lots of important information.
+  get              lots of important information about pymake.py.
 
 Options:
   -h --help     Show this screen.
@@ -392,6 +381,10 @@ def main_function():
         os.makedirs(pymakesourceroot)
     #print( "pymake user source path:", pymakesourceroot )
 
+    #record default user source config file name
+    pymakedefaultsourcefile = 'pymake.json'
+    #print( "pymake user default source file:", pymakedefaultsourcefile )
+
     # record pymake user shell root [ dynamic work path ] [ ignored -> v7.2 ]
     pymakeshellroot = pymakefilepath + os.path.sep + 'USERSOURCE' + os.path.sep + 'USERSHELL'
     #if (not os.path.exists(pymakeshellroot)):
@@ -426,7 +419,7 @@ def main_function():
         conf.set('source', 'root', pymakesourceroot)
         conf.write(open(pymakeini, 'w'))
     if(not conf.has_option('source', 'config')):
-        conf.set('source', 'config', 'pymake.json')
+        conf.set('source', 'config', pymakedefaultsourcefile)
         conf.write(open(pymakeini, 'w'))
 
     #record user source root directory
@@ -435,17 +428,14 @@ def main_function():
     sourcefile = conf.get('source', 'config')
     #record source config file
     sourceconfigfile = sourceroot + os.path.sep + sourcefile
-    #print ("root: %s config: %s" % (sourceroot, sourcefile))
+    #print ("root: %s, config: %s" % (sourceroot, sourcefile))
     #print("use source config: %s" % (sourceconfigfile) )
 
-    #record default source config file name
-    defaultsourcefile = 'pymake.json'
-    #record default source config file
-    defaultsourceconfigfile = sourceroot + os.path.sep + defaultsourcefile
-    #print ("root: %s default config: %s" % (sourceroot, defaultsourcefile))
-    #print("default source config: %s" % (defaultsourceconfigfile) )
-
     # init pymake.json in sourceroot [ + program create ]
+    #record default source config file
+    defaultsourceconfigfile = sourceroot + os.path.sep + pymakedefaultsourcefile
+    #print ("root: %s, default config: %s" % (sourceroot, pymakedefaultsourcefile))
+    #print("default source config: %s" % (defaultsourceconfigfile) )
     if (not os.path.exists(sourceroot)):
         os.makedirs(sourceroot)
     os.chdir(sourceroot)
@@ -845,58 +835,6 @@ def main_function():
                     print("CONFIGURE ROOT: %s" % (pymakeroot))
                     print("CONFIGURE FILE: %s" % (os.path.split(os.path.realpath(pymakeini))[1]))
                     return
-                return
-            elif (args['pc'] is True):
-                userroot = getuserroot()
-                #linux path is chinese, why?
-                #windows only
-                userdoc = userroot + os.path.sep + "Documents"
-                userdown = userroot + os.path.sep + "Downloads"
-                userset = getconfigroot()
-                userdesk = userroot + os.path.sep + "Desktop"
-                usermusic = userroot + os.path.sep + "Music"
-                usermovie = userroot + os.path.sep + "Videos" #Movies
-                userfavo = userroot + os.path.sep + "Favorites"
-                usersearch = userroot + os.path.sep + "Searches"
-                usercontact = userroot + os.path.sep + "Contacts"
-                userpictures = userroot + os.path.sep + "Pictures"
-                userdev = userroot + os.path.sep + "Develop"
-                if (args['home']):
-                    print(userroot)
-                elif (args['setting']):
-                    print(userset)
-                elif (args['doc']):
-                    print(userdoc)
-                elif (args['download']):
-                    print(userdown)
-                elif (args['desk']):
-                    print(userdesk)
-                elif (args['music']):
-                    print(usermusic)
-                elif (args['movie']):
-                    print(usermovie)
-                elif (args['favorite']):
-                    print(userfavo)
-                elif (args['search']):
-                    print(usersearch)
-                elif (args['contact']):
-                    print(usercontact)
-                elif (args['picture']):
-                    print(userpictures)
-                elif (args['develop']):
-                    print(userdev)
-                else:
-                    print(userroot)
-                    print(userset)
-                    print(userdesk)
-                    print(userdoc)
-                    print(userdown)
-                    print(usermusic)
-                    print(userpictures)
-                    print(usermovie)
-                    print(usersearch)
-                    print(usercontact)
-                    print(userdev)
                 return
             else:
                 ''
