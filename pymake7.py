@@ -74,7 +74,7 @@ Usage:
   pymake7.py get all ( info | information )
   pymake7.py get all ( stat | status )
   pymake7.py get default exec root
-  pymake7.py get exec root [ default ]
+  pymake7.py get exec root [ default | here ]
   pymake7.py -------------------------------------------------------------
   pymake7.py get pc
   pymake7.py get pc home
@@ -783,9 +783,11 @@ def main_function():
                     return
                 return
             elif (args['exec'] is True):
-                # if (args['default'] or args['root'] is True):
-                # else:
-                #    ""
+                if (args['here'] is True):
+                    print("%s" % (pymakeworkpath))
+                    return
+                else:
+                   ""
                 print("%s" % (pymakeshellroot))
                 return
             elif (args['all'] is True):
