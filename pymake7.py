@@ -83,14 +83,13 @@ Usage:
   pymake7.py initialize
   pymake7.py -------------------------------------------------------------
   pymake7.py port
-  pymake7.py port reset
   pymake7.py port root [ <source-config-root> ] [ to <target-config-root> ]
   pymake7.py port config [ <source-config-file> ] [ to <target-config-file> ]
   pymake7.py port file [ <source-path-file> ] [ to <target-path-file> ]
+  pymake7.py port reset
   pymake7.py translate
+  pymake7.py translate ( path | env | cmd ) [ <key-name> ] [ to <target-key-name> ] [ -f | --force ]
   pymake7.py translate all [ -f | --force ]
-  pymake7.py translate ( path | env | cmd ) [ -f | --force ]
-  pymake7.py translate ( path | env | cmd ) <key-name> [ to <target-key-name> ] [ -f | --force ]
   pymake7.py translate section <section-name> [ to <target-section-name> ]
   pymake7.py -------------------------------------------------------------
   pymake7.py (-h | --help)
@@ -754,6 +753,30 @@ def main_function():
         #print ("targetconfig:", portconf['port']['targetconfig'])
         return portconf, portinifile
 
+    def init_portconfig(portconf = MyConfigParser()):
+        portsourceconfigfile=os.path.join(portconf['port']['sourceroot'], portconf['port']['sourceconfig'])
+        porttargetconfigfile=os.path.join(portconf['port']['targetroot'], portconf['port']['targetconfig'])
+        d_temp = {
+            "path-assemblage": {
+            },
+            "environ":{
+                "default":{
+                    "path+": [
+                    ]
+                },
+                "current":"default"
+            },
+            "command":{
+            }
+        }
+        if(not os.path.exists(portsourceconfigfile)):
+            writeJsonData(portsourceconfigfile, d_temp)
+        if(not os.path.exists(porttargetconfigfile)):
+            writeJsonData(porttargetconfigfile, d_temp)
+        portconfig = readJsonData(portsourceconfigfile)
+        porttargetconfig = readJsonData(porttargetconfigfile)
+        return portconfig, porttargetconfig
+
     # port translate
     while (True):
         if (args['port'] is True):
@@ -822,18 +845,49 @@ def main_function():
                 print("port: target config is %s" % portconf['port']['targetconfig'])
             return
         elif (args['translate'] is True):
-            if (args['all'] is True):
-                ''
-            elif (args['path'] is True):
+            import itertools
+            portconf, portinifile = init_portconf()
+            portconfig, porttargetconfig = init_portconfig(portconf)
+            portsourceconfigfile = os.path.join(portconf['port']['sourceroot'], portconf['port']['sourceconfig'])
+            porttargetconfigfile = os.path.join(portconf['port']['targetroot'], portconf['port']['targetconfig'])
+            print("translate: source file   is %s" % portsourceconfigfile)
+            print("translate: source root   is %s" % portconf['port']['sourceroot'])
+            print("translate: source config is %s" % portconf['port']['sourceconfig'])
+            print("translate: target file   is %s" % porttargetconfigfile)
+            print("translate: target root   is %s" % portconf['port']['targetroot'])
+            print("translate: target config is %s" % portconf['port']['targetconfig'])
+            print("---------------------------------------------------------------------")
+            if (args['path'] is True):
                 ''
             elif (args['env'] is True):
                 ''
             elif (args['cmd'] is True):
                 ''
+            elif (args['all'] is True):
+                ''
             elif (args['section'] is True):
                 ''
             else:
-                ''
+                print(Fore.MAGENTA + "%-30s%s" % (portconf['port']['sourceconfig'], portconf['port']['targetconfig']))
+                print(Fore.CYAN + "section:")
+                keylist1 = []
+                keylist2 = []
+                #print(portconfig.keys())
+                for key in portconfig.keys():
+                    keylist1.append(key)
+                for key in porttargetconfig.keys():
+                    keylist2.append(key)
+                #print(keylist1)
+                #print(keylist2)
+                count = 1
+                for (key1,key2) in itertools.zip_longest(keylist1, keylist2):
+                    if(key1 is None):
+                        key1 = str("[EMPTY] %s" % count)
+                        count += 1
+                    if(key2 is None):
+                        key2 = str("[EMPTY] %s" %count)
+                        count += 1
+                    print("%-30s%s" % (key1,key2))
             return
         else:
             ''
