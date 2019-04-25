@@ -523,6 +523,7 @@ def main_function():
                 if(args['<source-path-file>'] is None):
                     print("please input an abspath .json file.")
                     return
+                #print ("source config file: %s" % os.path.realpath(args['<source-path-file>']))
                 if(not args['<source-path-file>'].endswith(pymakesuffix)):
                     print("you can't set un.json file.")
                     return
