@@ -389,7 +389,7 @@ Update the command-line.
 ![command line screenshot](./screenshot/a3.PNG)  
 
 #### User Support   
-[Readme](./USERSUPPORT.md)  
+[Readme](./SHELL.md)  
 
 # Dependencies  
 

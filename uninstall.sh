@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 #delete pymake link
-rm -f /usr/local/bin/mm
-rm -f /usr/local/bin/pymm
-rm -f /usr/local/bin/pymake
-rm -f /usr/local/bin/pyenv
-rm -f /usr/local/bin/pycmd
-rm -f /usr/local/bin/pyinfo
+sudo rm -f /usr/local/bin/mm
+sudo rm -f /usr/local/bin/pymm
+sudo rm -f /usr/local/bin/pymake
+sudo rm -f /usr/local/bin/pyenv
+sudo rm -f /usr/local/bin/pycmd
+sudo rm -f /usr/local/bin/pyinfo

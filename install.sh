@@ -2,6 +2,8 @@
 #get pymake.sh path (current path)
 filepath=$(cd `dirname $0`; pwd)
 
+chmod +x $filepath/*.sh
+
 #create pymake link
 sudo ln -sf $filepath/pymake.sh /usr/local/bin/mm
 sudo ln -sf $filepath/pymake.sh /usr/local/bin/pymm
