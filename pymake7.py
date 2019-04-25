@@ -80,6 +80,7 @@ Usage:
   pymake7.py get all ( stat | status )
   pymake7.py get default exec root
   pymake7.py get exec root [ default | here ]
+  pymake7.py initialize
   pymake7.py -------------------------------------------------------------
   pymake7.py inport
   pymake7.py outport
@@ -111,6 +112,7 @@ Command:
   clean            clean *_effect.sh *_unset.sh *_exec.sh, or .bat.
   program          pymake.py program information.
   get              lots of important information about pymake.py.
+  initialize       if program crashed, user can use this command to reset.
 
 Options:
   -h --help     Show this screen.
@@ -427,6 +429,21 @@ def main_function():
         conf.set('source', 'config', pymakedefaultsourcefile)
         conf.write(open(pymakeini, 'w'))
 
+    args = docopt(__doc__, version='pymake7.py v7.1')
+    #print(args)
+
+    #initialize
+    while (True):
+        if(args['initialize'] is True):
+            conf.set('source', 'root', pymakesourceroot)
+            conf.set('source', 'config', pymakedefaultsourcefile)
+            conf.write(open(pymakeini, 'w'))
+            print("successed")
+            return
+        else:
+            ""
+        break
+
     #record user source root directory
     sourceroot = conf.get('source', 'root')
     #record source config file name
@@ -441,6 +458,7 @@ def main_function():
     defaultsourceconfigfile = sourceroot + os.path.sep + pymakedefaultsourcefile
     #print ("root: %s, default config: %s" % (sourceroot, pymakedefaultsourcefile))
     #print("default source config: %s" % (defaultsourceconfigfile) )
+
     if (not os.path.exists(sourceroot)):
         os.makedirs(sourceroot)
     os.chdir(sourceroot)
@@ -449,9 +467,6 @@ def main_function():
             and os.path.abspath(sourceroot) != os.path.abspath(pymakefilepath)):
             if (not os.path.exists(defaultsourceconfigfile)):
                 writeJsonData(defaultsourceconfigfile, d)
-
-    args = docopt(__doc__, version='pymake7.py v7.1')
-    #print(args)
 
     #record source config file postfix
     pymakesuffix = '.json'
