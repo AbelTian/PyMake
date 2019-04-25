@@ -2,11 +2,22 @@
 程序是兼容2.7和3.6的，但是请查看pymake.bat pymake.sh两个运行文件，里边的调用者py被限定了使用python3，so please install python 3 or mod 这两个运行文件.
 
 Windows （需要管理员权限）
-使用 install %* 来安装。
+使用 install.bat %* 来安装。
 
 *Unix （需要sudo）
 使用 install.sh 来安装。
 
-使用：
+使用说明：
 我把程序安装为mm命令，所以终端里用mm命令调用。
 可以在任何地方调用。
+
+追加使用说明：
+我把程序追加安装为mm，pymm，pymake命令，
+如果命令不能用了，重新执行安装器即可。
+
+pymake<Ver>.py是主程序，
+pycodec.py，pyinfo.py是辅程序，
+pymake，pyenv，pyvc，pycmd是壳子程序，进行了一定的封装，加工，实现功能。
+install安装的是对壳子程序的快捷方式。
+
+PyMake v7.2 更新了用户程序默认的执行目录，<SRC CODE>/USERSOURCE/USERSHELL，请关注。

@@ -386,16 +386,16 @@ def main_function():
     pymakefilepath = os.path.split(os.path.realpath(__file__))[0]
     #print( "pymake file path:", pymakefilepath )
 
-    # record pymake user source root [env, *.json]
+    # record pymake user source root [env, *.json] [ + auto create ]
     pymakesourceroot = pymakefilepath + os.path.sep + 'USERSOURCE'
     if (not os.path.exists(pymakesourceroot)):
         os.makedirs(pymakesourceroot)
     #print( "pymake user source path:", pymakesourceroot )
 
-    # record pymake user shell root [ dynamic work path, default ]
+    # record pymake user shell root [ dynamic work path ] [ ignored -> v7.2 ]
     pymakeshellroot = pymakefilepath + os.path.sep + 'USERSOURCE' + os.path.sep + 'USERSHELL'
-    if (not os.path.exists(pymakeshellroot)):
-        os.makedirs(pymakeshellroot)
+    #if (not os.path.exists(pymakeshellroot)):
+    #    os.makedirs(pymakeshellroot)
     #print( "pymake user shell path:", pymakeshellroot )
 
     """
@@ -445,7 +445,10 @@ def main_function():
     #print ("root: %s default config: %s" % (sourceroot, defaultsourcefile))
     #print("default source config: %s" % (defaultsourceconfigfile) )
 
-    # init pymake.json in sourceroot
+    # init pymake.json in sourceroot [ + program create ]
+    if (not os.path.exists(sourceroot)):
+        os.makedirs(sourceroot)
+    os.chdir(sourceroot)
     if (os.path.exists(sourceroot)):
         if (os.path.abspath(sourceroot) != os.path.abspath(pymakeroot)
             and os.path.abspath(sourceroot) != os.path.abspath(pymakefilepath)):
@@ -469,7 +472,6 @@ def main_function():
                 return
             elif(args['config'] is True):
                 sourceroot = conf.get('source', 'root')
-                os.chdir(sourceroot)
                 if(args['--del'] is True):
                     if (args['<config-file-name>'] is not None and args['<config-file-name>'] == 'pymake.json'):
                         print('You can\'t remove pymake\'s file...')
@@ -574,6 +576,7 @@ def main_function():
     # pymake default execute user bat/sh in pymakeshellroot,
     # user can use here param to restrict exec action.
     # cd user shell root [ default shell execute path ]
+    pymakeshellroot = sourceroot
     os.chdir(pymakeshellroot)
 
     # set this command here .
