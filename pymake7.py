@@ -88,11 +88,9 @@ Usage:
   pymake7.py port file [ <source-path-file> ] [ to <target-path-file> ]
   pymake7.py port reset
   pymake7.py translate
-  pymake7.py translate ( path | env | cmd ) [ <key-name> ] [ to <target-key-name> ] [ -f | --force ] [ -a | --all ]
-  pymake7.py translate ( path | env | cmd ) [ -a | --all ]
-  pymake7.py translate all [ -f | --force ]
-  pymake7.py translate section <section-name> [ to <target-section-name> ] [ -f | --force ] [ -a | --all ]
-  pymake7.py translate all-section [ -f | --force ]
+  pymake7.py translate ( path | env | cmd ) [ <key-name> ] [ to <target-key-name> ] [ -a | --all ] [ -f | --force ]
+  pymake7.py translate all [ -a | --all ] [ -f | --force ]
+  pymake7.py translate section [ <section-name> ] [ to <target-section-name> ] [ -a | --all ] [ -f | --force ]
   pymake7.py -------------------------------------------------------------
   pymake7.py (-h | --help)
   pymake7.py --version
@@ -988,6 +986,192 @@ def main_function():
             print("translate: target config is %s" % portconf['port']['targetconfig'])
             print("---------------------------------------------------------------------")
             print(Fore.MAGENTA + "%-30s%-30s%s" % ( "[source] " + portconf['port']['sourceconfig'], "[target] " + portconf['port']['targetconfig'], "[status]"))
+
+            def translate_section(section_name = None):
+                if(section_name is None):
+                    return
+
+                masterkey = section_name
+
+                srckey = ''
+                tarkey = ''
+                #print(args['<key-name>'], args['<target-key-name>'])
+                if (args['<key-name>'] is not None):
+                    srckey = args['<key-name>']
+                # print("src key:%s" % srckey)
+
+                if (args['<target-key-name>'] is not None):
+                    tarkey = args['<target-key-name>']
+                else:
+                    tarkey = srckey
+                # print("tar key:%s" % tarkey)
+
+                if (args['<key-name>'] is not None
+                    or args['<target-key-name>'] is not None):
+                    # print("src key:%s, tar key:%s" % (srckey, tarkey))
+
+                    existedflag = '[       ]'
+                    if (porttargetconfig[masterkey].__contains__(tarkey)):
+                        existedflag = '[EXISTED]'
+
+                    if (args['-f'] or args['--force'] is True):
+                        if (portconfig[masterkey].__contains__(srckey) is False):
+                            print("please ensure the source key %s is existed." % srckey)
+                            return
+                        porttargetconfig[masterkey][tarkey] = copy.deepcopy(portconfig[masterkey][srckey])
+                        writeJsonData(porttargetconfigfile, porttargetconfig)
+                        print(Fore.MAGENTA + "%-30s%-30s%s" % (srckey, tarkey, "[SUCCESS]" + existedflag + "[FORCE]"))
+                        return
+
+                    if (porttargetconfig[masterkey].__contains__(tarkey)):
+                        print(Fore.MAGENTA + "%-30s%-30s%s" % (srckey, tarkey, "[CANCEL ]" + existedflag))
+                        return
+                    else:
+                        if (portconfig[masterkey].__contains__(srckey) is False):
+                            print("please ensure the source key %s is existed." % srckey)
+                            return
+                        porttargetconfig[masterkey][tarkey] = copy.deepcopy(portconfig[masterkey][srckey])
+                        writeJsonData(porttargetconfigfile, porttargetconfig)
+                        print(Fore.MAGENTA + "%-30s%-30s%s" % (srckey, tarkey, "[SUCCESS][     ]" + existedflag))
+                    return
+
+                if (args['-a'] or args['--all'] is True):
+                    for key in portconfig[masterkey].keys():
+                        existedflag = '[       ]'
+                        if (porttargetconfig[masterkey].__contains__(key)):
+                            existedflag = '[EXISTED]'
+
+                        if (args['-f'] or args['--force'] is True):
+                            porttargetconfig[masterkey][key] = copy.deepcopy(portconfig[masterkey][key])
+                            print(Fore.MAGENTA + "%-30s%-30s%s" % (key, key, "[SUCCESS]" + existedflag + "[FORCE]"))
+                        else:
+                            if (porttargetconfig[masterkey].__contains__(key)):
+                                print(Fore.MAGENTA + "%-30s%-30s%s" % (key, key, "[CANCEL ]" + existedflag))
+                            else:
+                                porttargetconfig[masterkey][key] = copy.deepcopy(portconfig[masterkey][key])
+                                print(Fore.MAGENTA + "%-30s%-30s%s" % (key, key, "[SUCCESS]" + existedflag))
+
+                    writeJsonData(porttargetconfigfile, porttargetconfig)
+                    return
+
+                keylist1 = []
+                keylist2 = []
+                # print(portconfig.keys())
+                for key in portconfig[masterkey].keys():
+                    keylist1.append(key)
+                for key in porttargetconfig[masterkey].keys():
+                    keylist2.append(key)
+                # print(keylist1)
+                # print(keylist2)
+                count = 1
+                for (key1, key2) in itertools.zip_longest(keylist1, keylist2):
+                    if (key1 is None):
+                        key1 = str("[EMPTY] %s" % count)
+                        count += 1
+                    if (key2 is None):
+                        key2 = str("[EMPTY] %s" % count)
+                        count += 1
+                    print("%-30s%-30s%s" % (key1, key2, '[NORMAL]'))
+                return
+
+            def translate_envsection(section_name = None):
+                if(section_name is None):
+                    return
+
+                masterkey = section_name
+
+                srckey = ''
+                tarkey = ''
+                #print(args['<key-name>'], args['<target-key-name>'])
+                if(args['<key-name>'] is not None):
+                    srckey = args['<key-name>']
+                #print("src key:%s" % srckey)
+
+                if(args['<target-key-name>'] is not None):
+                    tarkey = args['<target-key-name>']
+                else:
+                    tarkey = srckey
+                #print("tar key:%s" % tarkey)
+
+                if(args['<key-name>'] is not None
+                   or args['<target-key-name>'] is not None):
+                    #print("src key:%s, tar key:%s" % (srckey, tarkey))
+
+                    existedflag = '[       ]'
+                    if (porttargetconfig[masterkey].__contains__(tarkey)):
+                        existedflag = '[EXISTED]'
+
+                    if(args['-f'] or args['--force'] is True):
+                        if (portconfig[masterkey].__contains__(srckey) is False):
+                            print("please ensure the source key %s is existed." % srckey)
+                            return
+                        porttargetconfig[masterkey][tarkey] = copy.deepcopy(portconfig[masterkey][srckey])
+                        porttargetconfig[masterkey].__delitem__('current')
+                        porttargetconfig[masterkey]['current'] = tarkey
+                        writeJsonData(porttargetconfigfile, porttargetconfig)
+                        print(Fore.MAGENTA + "%-30s%-30s%s" % (srckey, tarkey, "[SUCCESS]"+existedflag+"[FORCE]"))
+                        return
+
+                    if(porttargetconfig[masterkey].__contains__(tarkey)):
+                        print(Fore.MAGENTA + "%-30s%-30s%s" % (srckey, tarkey, "[CANCEL ]"+existedflag))
+                        return
+                    else:
+                        if (portconfig[masterkey].__contains__(srckey) is False):
+                            print("please ensure the source key %s is existed." % srckey)
+                            return
+                        porttargetconfig[masterkey][tarkey] = copy.deepcopy(portconfig[masterkey][srckey])
+                        porttargetconfig[masterkey].__delitem__('current')
+                        porttargetconfig[masterkey]['current'] = tarkey
+                        writeJsonData(porttargetconfigfile, porttargetconfig)
+                        print(Fore.MAGENTA + "%-30s%-30s%s" % (srckey, tarkey, "[SUCCESS][     ]"+existedflag))
+                    return
+
+                if(args['-a'] or args['--all'] is True):
+                    for key in portconfig[masterkey].keys():
+                        existedflag = '[       ]'
+                        if (porttargetconfig[masterkey].__contains__(key)):
+                            existedflag = '[EXISTED]'
+
+                        if(args['-f'] or args['--force'] is True):
+                            porttargetconfig[masterkey][key] = copy.deepcopy(portconfig[masterkey][key])
+                            print(Fore.MAGENTA + "%-30s%-30s%s" % (key, key, "[SUCCESS]"+existedflag+"[FORCE]"))
+                        else:
+                            if (porttargetconfig[masterkey].__contains__(key)):
+                                print(Fore.MAGENTA + "%-30s%-30s%s" % (key, key, "[CANCEL ]" + existedflag))
+                            else:
+                                porttargetconfig[masterkey][key] = copy.deepcopy(portconfig[masterkey][key])
+                                print(Fore.MAGENTA + "%-30s%-30s%s" % (key, key, "[SUCCESS]" + existedflag))
+
+                    tarkey = ''
+                    if (args['-f'] or args['--force'] is True):
+                        tarkey = portconfig[masterkey]['current']
+                    else:
+                        tarkey = porttargetconfig[masterkey]['current']
+                    porttargetconfig[masterkey].__delitem__('current')
+                    porttargetconfig[masterkey]['current'] = tarkey
+                    writeJsonData(porttargetconfigfile, porttargetconfig)
+                    return
+
+                keylist1 = []
+                keylist2 = []
+                #print(portconfig.keys())
+                for key in portconfig[masterkey].keys():
+                    keylist1.append(key)
+                for key in porttargetconfig[masterkey].keys():
+                    keylist2.append(key)
+                #print(keylist1)
+                #print(keylist2)
+                count = 1
+                for (key1,key2) in itertools.zip_longest(keylist1, keylist2):
+                    if(key1 is None):
+                        key1 = str("[EMPTY] %s" % count)
+                        count += 1
+                    if(key2 is None):
+                        key2 = str("[EMPTY] %s" %count)
+                        count += 1
+                    print("%-30s%-30s%s" % (key1, key2, '[NORMAL]'))
+                return
+
             if (args['path'] is True):
                 print(Fore.CYAN + "path-assemblage:")
 
@@ -1251,11 +1435,113 @@ def main_function():
                     print("%-30s%-30s%s" % (key1, key2, '[NORMAL]'))
                 return
             elif (args['all'] is True):
-                ''
+                print(Fore.CYAN + "path-assemblage:")
+                masterkey = "path-assemblage"
+                translate_section(masterkey)
+
+                print(Fore.CYAN + "environ:")
+                masterkey = "environ"
+                translate_envsection(masterkey)
+
+                print(Fore.CYAN + "command:")
+                masterkey = "command"
+                translate_section(masterkey)
             elif (args['section'] is True):
-                ''
-            else:
                 print(Fore.CYAN + "section:")
+                srckey = ''
+                tarkey = ''
+                #print(args['<section-name>'], args['<target-section-name>'])
+                if (args['<section-name>'] is not None):
+                    srckey = args['<section-name>']
+                #print("src section:%s" % srckey)
+
+                if (args['<target-section-name>'] is not None):
+                    tarkey = args['<target-section-name>']
+                else:
+                    tarkey = srckey
+                #print("tar section:%s" % tarkey)
+
+                if (args['<section-name>'] is not None
+                    or args['<target-section-name>'] is not None):
+                    #print("src section:%s, tar section:%s" % (srckey, tarkey))
+
+                    if(tarkey == "path-assemblage"
+                       or tarkey == "environ"
+                       or tarkey == "command"):
+                        print("please ensure your target section name, it cant be pymake's section.")
+                        return
+
+                    existedflag = '[       ]'
+                    if (porttargetconfig.__contains__(tarkey)):
+                        existedflag = '[EXISTED]'
+
+                    if (args['-f'] or args['--force'] is True):
+                        if (portconfig.__contains__(srckey) is False):
+                            print("please ensure the source section %s is existed." % srckey)
+                            return
+                        porttargetconfig[tarkey] = copy.deepcopy(portconfig[srckey])
+                        writeJsonData(porttargetconfigfile, porttargetconfig)
+                        print(Fore.MAGENTA + "%-30s%-30s%s" % (srckey, tarkey, "[SUCCESS]" + existedflag + "[FORCE]"))
+                        return
+
+                    if (porttargetconfig.__contains__(tarkey)):
+                        print(Fore.MAGENTA + "%-30s%-30s%s" % (srckey, tarkey, "[CANCEL ]" + existedflag))
+                        return
+                    else:
+                        if (portconfig.__contains__(srckey) is False):
+                            print("please ensure the source section %s is existed." % srckey)
+                            return
+                        porttargetconfig[tarkey] = copy.deepcopy(portconfig[srckey])
+                        writeJsonData(porttargetconfigfile, porttargetconfig)
+                        print(Fore.MAGENTA + "%-30s%-30s%s" % (srckey, tarkey, "[SUCCESS][     ]" + existedflag))
+                    return
+
+                if (args['-a'] or args['--all'] is True):
+                    for key in portconfig.keys():
+                        existedflag = '[       ]'
+                        if (porttargetconfig.__contains__(key)):
+                            existedflag = '[EXISTED]'
+
+                        if (key == "path-assemblage"
+                            or key == "environ"
+                            or key == "command"):
+                            print(Fore.MAGENTA + "%-30s%-30s%s" % (key, key, "[CANCEL ]" + existedflag + "[RESERVED]"))
+                            continue
+
+                        if (args['-f'] or args['--force'] is True):
+                            porttargetconfig[key] = copy.deepcopy(portconfig[key])
+                            print(Fore.MAGENTA + "%-30s%-30s%s" % (key, key, "[SUCCESS]" + existedflag + "[FORCE]"))
+                        else:
+                            if (porttargetconfig.__contains__(key)):
+                                print(Fore.MAGENTA + "%-30s%-30s%s" % (key, key, "[CANCEL ]" + existedflag))
+                            else:
+                                porttargetconfig[key] = copy.deepcopy(portconfig[key])
+                                print(Fore.MAGENTA + "%-30s%-30s%s" % (key, key, "[SUCCESS]" + existedflag))
+
+                    writeJsonData(porttargetconfigfile, porttargetconfig)
+                    return
+
+                keylist1 = []
+                keylist2 = []
+                # print(portconfig.keys())
+                for key in portconfig.keys():
+                    keylist1.append(key)
+                for key in porttargetconfig.keys():
+                    keylist2.append(key)
+                # print(keylist1)
+                # print(keylist2)
+                count = 1
+                for (key1, key2) in itertools.zip_longest(keylist1, keylist2):
+                    if (key1 is None):
+                        key1 = str("[EMPTY] %s" % count)
+                        count += 1
+                    if (key2 is None):
+                        key2 = str("[EMPTY] %s" % count)
+                        count += 1
+                    print("%-30s%-30s%s" % (key1, key2, '[NORMAL]'))
+                return
+            else:
+                print(Fore.CYAN + "all sections:")
                 keylist1 = []
                 keylist2 = []
                 #print(portconfig.keys())
