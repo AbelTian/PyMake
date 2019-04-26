@@ -771,17 +771,101 @@ def main_function():
                     "path+": [
                     ]
                 },
-                "current":"default"
+                "current": "default"
             },
             "command":{
+            },
+            "Tips": {
+                "path-assemblage": {
+                    "Tips": "All path are located in this group.",
+                    "p1": "a path on computer",
+                    "p2": "${p1}/a sub path under p1"
+                },
+                "environ": {
+                    "default": {
+                        "path+": [
+                            "path+ paths will be added to default env path.",
+                            "${p2}"
+                            "I add p2 to default env path."
+                        ],
+                        "Tips1": "Tips1 variables will be added to default env.",
+                        "Tips2": "Current env is default.",
+                        "VAR1":"a variable",
+                        "VARXXX": "${VAR1} param3",
+                        "VARP3": "${p2}/VAR0",
+                        "Tips2": "You can use ${var-name} in path-assemblage and this environ to abb variables.",
+                        "a_special_var_const": "hello world"
+                    },
+                    "current": "default"
+                },
+                "command": {
+                    "command-name": [
+                        "All commands are here, they will be executed step by step.",
+                        "This is a command, step 2",
+                        "${p2}/cmd2 ${VARXXX}",
+                        "You can use ${var-name} in path-assemblage and current environ to abb command line."
+                    ]
+                },
+                "Tips": "User can delete these Tips group."
             }
         }
         if(not os.path.exists(portsourceconfigfile)):
             writeJsonData(portsourceconfigfile, d_temp)
         if(not os.path.exists(porttargetconfigfile)):
             writeJsonData(porttargetconfigfile, d_temp)
+        srcsize = os.path.getsize(portsourceconfigfile)
+        tarsize = os.path.getsize(porttargetconfigfile)
+        if(srcsize < 166):
+            writeJsonData(portsourceconfigfile, d_temp)
+        if(tarsize < 166):
+            writeJsonData(porttargetconfigfile, d_temp)
+
         portconfig = readJsonData(portsourceconfigfile)
         porttargetconfig = readJsonData(porttargetconfigfile)
+
+        #hard
+        if(portconfig.__contains__("path-assemblage") is False):
+            portconfig['path-assemblage']={}
+            writeJsonData(portsourceconfigfile, portconfig)
+        if(portconfig.__contains__("environ") is False):
+            portconfig['environ']={}
+            writeJsonData(portsourceconfigfile, portconfig)
+        if (portconfig.__contains__("command") is False):
+            portconfig['command'] = {}
+            writeJsonData(portsourceconfigfile, portconfig)
+
+        #soft
+        #if(portconfig['environ'].__contains__("default") is False):
+        #    portconfig['environ']['default']={"path+":[]}
+        #    writeJsonData(portsourceconfigfile, portconfig)
+        #if(portconfig['environ']['default'].__contains__("path+") is False):
+        #    portconfig['environ']['default']['path+']=[]
+        #    writeJsonData(portsourceconfigfile, portconfig)
+        #if(portconfig['environ'].__contains__("current") is False):
+        #    portconfig['environ']['current']='default'
+        #    writeJsonData(portsourceconfigfile, portconfig)
+
+        #hard
+        if(porttargetconfig.__contains__("path-assemblage") is False):
+            porttargetconfig['path-assemblage']={}
+            writeJsonData(porttargetconfigfile, porttargetconfig)
+        if(porttargetconfig.__contains__("environ") is False):
+            porttargetconfig['environ']={}
+            writeJsonData(porttargetconfigfile, porttargetconfig)
+        if(porttargetconfig.__contains__("command") is False):
+            porttargetconfig['command']={}
+            writeJsonData(porttargetconfigfile, porttargetconfig)
+
+        #soft
+        if(porttargetconfig['environ'].__contains__("default") is False):
+            porttargetconfig['environ']['default']={"path+":[]}
+            writeJsonData(porttargetconfigfile, porttargetconfig)
+        if(porttargetconfig['environ']['default'].__contains__("path+") is False):
+            porttargetconfig['environ']['default']['path+']=[]
+            writeJsonData(porttargetconfigfile, porttargetconfig)
+        if(porttargetconfig['environ'].__contains__("current") is False):
+            porttargetconfig['environ']['current']='default'
+            writeJsonData(porttargetconfigfile, porttargetconfig)
         return portconfig, porttargetconfig
 
     # port translate
@@ -988,15 +1072,190 @@ def main_function():
                     print("%-30s%-30s%s" % (key1, key2, '[NORMAL]'))
                 return
             elif (args['env'] is True):
-                ''
+                print(Fore.CYAN + "environ:")
+                masterkey = "environ"
+
+                srckey = ''
+                tarkey = ''
+                #print(args['<key-name>'], args['<target-key-name>'])
+                if(args['<key-name>'] is not None):
+                    srckey = args['<key-name>']
+                #print("src key:%s" % srckey)
+
+                if(args['<target-key-name>'] is not None):
+                    tarkey = args['<target-key-name>']
+                else:
+                    tarkey = srckey
+                #print("tar key:%s" % tarkey)
+
+                if(args['<key-name>'] is not None
+                   or args['<target-key-name>'] is not None):
+                    #print("src key:%s, tar key:%s" % (srckey, tarkey))
+
+                    existedflag = '[       ]'
+                    if (porttargetconfig[masterkey].__contains__(tarkey)):
+                        existedflag = '[EXISTED]'
+
+                    if(args['-f'] or args['--force'] is True):
+                        if (portconfig[masterkey].__contains__(srckey) is False):
+                            print("please ensure the source key %s is existed." % srckey)
+                            return
+                        porttargetconfig[masterkey][tarkey] = copy.deepcopy(portconfig[masterkey][srckey])
+                        porttargetconfig[masterkey].__delitem__('current')
+                        porttargetconfig[masterkey]['current'] = tarkey
+                        writeJsonData(porttargetconfigfile, porttargetconfig)
+                        print(Fore.MAGENTA + "%-30s%-30s%s" % (srckey, tarkey, "[SUCCESS]"+existedflag+"[FORCE]"))
+                        return
+
+                    if(porttargetconfig[masterkey].__contains__(tarkey)):
+                        print(Fore.MAGENTA + "%-30s%-30s%s" % (srckey, tarkey, "[CANCEL ]"+existedflag))
+                        return
+                    else:
+                        if (portconfig[masterkey].__contains__(srckey) is False):
+                            print("please ensure the source key %s is existed." % srckey)
+                            return
+                        porttargetconfig[masterkey][tarkey] = copy.deepcopy(portconfig[masterkey][srckey])
+                        porttargetconfig[masterkey].__delitem__('current')
+                        porttargetconfig[masterkey]['current'] = tarkey
+                        writeJsonData(porttargetconfigfile, porttargetconfig)
+                        print(Fore.MAGENTA + "%-30s%-30s%s" % (srckey, tarkey, "[SUCCESS][     ]"+existedflag))
+                    return
+
+                if(args['-a'] or args['--all'] is True):
+                    for key in portconfig[masterkey].keys():
+                        existedflag = '[       ]'
+                        if (porttargetconfig[masterkey].__contains__(key)):
+                            existedflag = '[EXISTED]'
+
+                        if(args['-f'] or args['--force'] is True):
+                            porttargetconfig[masterkey][key] = copy.deepcopy(portconfig[masterkey][key])
+                            print(Fore.MAGENTA + "%-30s%-30s%s" % (key, key, "[SUCCESS]"+existedflag+"[FORCE]"))
+                        else:
+                            if (porttargetconfig[masterkey].__contains__(key)):
+                                print(Fore.MAGENTA + "%-30s%-30s%s" % (key, key, "[CANCEL ]" + existedflag))
+                            else:
+                                porttargetconfig[masterkey][key] = copy.deepcopy(portconfig[masterkey][key])
+                                print(Fore.MAGENTA + "%-30s%-30s%s" % (key, key, "[SUCCESS]" + existedflag))
+
+                    tarkey = ''
+                    if (args['-f'] or args['--force'] is True):
+                        tarkey = portconfig[masterkey]['current']
+                    else:
+                        tarkey = porttargetconfig[masterkey]['current']
+                    porttargetconfig[masterkey].__delitem__('current')
+                    porttargetconfig[masterkey]['current'] = tarkey
+                    writeJsonData(porttargetconfigfile, porttargetconfig)
+                    return
+
+                keylist1 = []
+                keylist2 = []
+                #print(portconfig.keys())
+                for key in portconfig[masterkey].keys():
+                    keylist1.append(key)
+                for key in porttargetconfig[masterkey].keys():
+                    keylist2.append(key)
+                #print(keylist1)
+                #print(keylist2)
+                count = 1
+                for (key1,key2) in itertools.zip_longest(keylist1, keylist2):
+                    if(key1 is None):
+                        key1 = str("[EMPTY] %s" % count)
+                        count += 1
+                    if(key2 is None):
+                        key2 = str("[EMPTY] %s" %count)
+                        count += 1
+                    print("%-30s%-30s%s" % (key1, key2, '[NORMAL]'))
+                return
             elif (args['cmd'] is True):
-                ''
+                print(Fore.CYAN + "command:")
+                masterkey = "command"
+
+                srckey = ''
+                tarkey = ''
+                # print(args['<key-name>'], args['<target-key-name>'])
+                if (args['<key-name>'] is not None):
+                    srckey = args['<key-name>']
+                # print("src key:%s" % srckey)
+
+                if (args['<target-key-name>'] is not None):
+                    tarkey = args['<target-key-name>']
+                else:
+                    tarkey = srckey
+                # print("tar key:%s" % tarkey)
+
+                if (args['<key-name>'] is not None
+                    or args['<target-key-name>'] is not None):
+                    # print("src key:%s, tar key:%s" % (srckey, tarkey))
+
+                    existedflag = '[       ]'
+                    if (porttargetconfig[masterkey].__contains__(tarkey)):
+                        existedflag = '[EXISTED]'
+
+                    if (args['-f'] or args['--force'] is True):
+                        if (portconfig[masterkey].__contains__(srckey) is False):
+                            print("please ensure the source key %s is existed." % srckey)
+                            return
+                        porttargetconfig[masterkey][tarkey] = copy.deepcopy(portconfig[masterkey][srckey])
+                        writeJsonData(porttargetconfigfile, porttargetconfig)
+                        print(Fore.MAGENTA + "%-30s%-30s%s" % (srckey, tarkey, "[SUCCESS]" + existedflag + "[FORCE]"))
+                        return
+
+                    if (porttargetconfig[masterkey].__contains__(tarkey)):
+                        print(Fore.MAGENTA + "%-30s%-30s%s" % (srckey, tarkey, "[CANCEL ]" + existedflag))
+                        return
+                    else:
+                        if (portconfig[masterkey].__contains__(srckey) is False):
+                            print("please ensure the source key %s is existed." % srckey)
+                            return
+                        porttargetconfig[masterkey][tarkey] = copy.deepcopy(portconfig[masterkey][srckey])
+                        writeJsonData(porttargetconfigfile, porttargetconfig)
+                        print(Fore.MAGENTA + "%-30s%-30s%s" % (srckey, tarkey, "[SUCCESS][     ]" + existedflag))
+                    return
+
+                if (args['-a'] or args['--all'] is True):
+                    for key in portconfig[masterkey].keys():
+                        existedflag = '[       ]'
+                        if (porttargetconfig[masterkey].__contains__(key)):
+                            existedflag = '[EXISTED]'
+
+                        if (args['-f'] or args['--force'] is True):
+                            porttargetconfig[masterkey][key] = copy.deepcopy(portconfig[masterkey][key])
+                            print(Fore.MAGENTA + "%-30s%-30s%s" % (key, key, "[SUCCESS]" + existedflag + "[FORCE]"))
+                        else:
+                            if (porttargetconfig[masterkey].__contains__(key)):
+                                print(Fore.MAGENTA + "%-30s%-30s%s" % (key, key, "[CANCEL ]" + existedflag))
+                            else:
+                                porttargetconfig[masterkey][key] = copy.deepcopy(portconfig[masterkey][key])
+                                print(Fore.MAGENTA + "%-30s%-30s%s" % (key, key, "[SUCCESS]" + existedflag))
+
+                    writeJsonData(porttargetconfigfile, porttargetconfig)
+                    return
+
+                keylist1 = []
+                keylist2 = []
+                # print(portconfig.keys())
+                for key in portconfig[masterkey].keys():
+                    keylist1.append(key)
+                for key in porttargetconfig[masterkey].keys():
+                    keylist2.append(key)
+                # print(keylist1)
+                # print(keylist2)
+                count = 1
+                for (key1, key2) in itertools.zip_longest(keylist1, keylist2):
+                    if (key1 is None):
+                        key1 = str("[EMPTY] %s" % count)
+                        count += 1
+                    if (key2 is None):
+                        key2 = str("[EMPTY] %s" % count)
+                        count += 1
+                    print("%-30s%-30s%s" % (key1, key2, '[NORMAL]'))
+                return
             elif (args['all'] is True):
                 ''
             elif (args['section'] is True):
                 ''
             else:
-                print(Fore.CYAN + "all sections:")
+                print(Fore.CYAN + "section:")
                 keylist1 = []
                 keylist2 = []
                 #print(portconfig.keys())
