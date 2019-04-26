@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #!/usr/bin/env python
-"""PyMake 7.1.
+"""PyMake 7.2.
 
 Usage:
   pymake7.py source
@@ -88,9 +88,13 @@ Usage:
   pymake7.py port file [ <source-path-file> ] [ to <target-path-file> ]
   pymake7.py port reset
   pymake7.py translate
-  pymake7.py translate ( path | env | cmd ) [ <key-name> ] [ to <target-key-name> ] [ -a | --all ] [ -f | --force ]
+  pymake7.py translate ( path | env | cmd )
+  pymake7.py translate ( path | env | cmd ) <key-name> [ to <target-key-name> ] [ -f | --force ]
+  pymake7.py translate ( path | env | cmd ) [ -a | --all ] [ -f | --force ]
   pymake7.py translate all [ -a | --all ] [ -f | --force ]
-  pymake7.py translate section [ <section-name> ] [ to <target-section-name> ] [ -a | --all ] [ -f | --force ]
+  pymake7.py translate section
+  pymake7.py translate section <section-name> [ to <target-section-name> ] [ -f | --force ]
+  pymake7.py translate section [ -a | --all ] [ -f | --force ]
   pymake7.py -------------------------------------------------------------
   pymake7.py (-h | --help)
   pymake7.py --version
@@ -324,60 +328,6 @@ def main_function():
             },
             "current": "macOS"
         },
-        "variable-assemblage": [
-            "QQt",
-            "LibQQt",
-            "${root.build}/${qqt.proj.name}/${qt.sys.mac}/${build.release}",
-            "${root.src}/${qqt.proj.name}",
-            "${qqt.proj.name}.pro",
-            "${qqt.build.path}/src/bin",
-            "${root.prod}/QQt",
-            "qqtframe",
-            "${qqt.build.path}/examples/${qqtframe.prod.name}/bin",
-            "${qqt.build.path}/src/bin/QQt.framework",
-            "QQt.framework/Versions/1/QQt",
-            "${root.tool}/Source/qt5",
-            "${root.build}/qt5",
-            "androiddeployqt",
-            "macdeployqt",
-            "DownloadQueue",
-            "/Users/abel/Develop/c1-webrc/DownloadQueue/DownloadQueue.pro",
-            "${root.build}/${app.name}",
-            "macdeployqt ${app.path.build}/${app.name}.app",
-            "${prod.name}.app",
-            "${mac.app}/Contents",
-            "${mac.app.content}/MacOS",
-            "${mac.app.content}/Frameworks",
-            "${mac.app.content}/Resources",
-            "${mac.app.content}/PlugIns",
-            "${prod.name}.framework",
-            "${prod.name}.framework/Versions",
-            "${prod.name}.framework/Resources",
-            "macdeployqt ${}"
-        ],
-        "command-assemblage": [
-            "I'm not similar to these command, so list them here, rather than forgotten them",
-            "cl-command, sys-command",
-            "replace? no, append? easy!",
-            "help you to remeber these command.",
-            "mkdir -p ${qqt.build.path}",
-            "cd ${build-path}",
-            "cmake -G\"Unix Makefiles\" -DCMAKE_INSTALL_PREFIX=${prod-root} ${source-path}",
-            "cmake -GXCode -DCMAKE_INSTALL_PREFIX=${prod-root} ${source-path}",
-            "rm -f CMakeCache.txt",
-            "qmake ${source-path}/${qmake-file} -spec ${QTSPEC} CONFIG+=${QTCONFIG} && make qmake_all",
-            "make -j4",
-            "make clean in ${build-path}",
-            "make install",
-            "${deployqt} ${bin-path}/${app-bundle} -verbose=1",
-            "${deployqt} -dmg",
-            "${deployqt} --help",
-            "cp -fr ${lib-dep} ${lib-native}",
-            "install_name_tool -change ${lib-dep-name} @rpath/${lib-dep-name} ${app-native}/${prod-name} ",
-            "install_name_tool -change $LibDep @rpath/$LibDep ${app-native}/${prod-name} ",
-            "${source-path}/configure -prefix ${install-path} -hostprefix ${install-path} -xplatform android-g++ -release -nomake tests -nomake examples -android-ndk $ANDROID_NDK_ROOT -android-sdk $ANDROID_SDK_ROOT -android-ndk-host $ANDROID_NDK_HOST -android-toolchain-version $ANDROID_NDK_TOOLCHAIN_VERSION -skip qtwebkit-examples -no-warnings-are-errors",
-            "${qt5.path.source}/configure -prefix ${qt5.path.install} -hostprefix ${qt5.path.install} -xplatform android-g++ -release -nomake tests -nomake examples -android-ndk $ANDROID_NDK_ROOT -android-sdk $ANDROID_SDK_ROOT -android-ndk-host $ANDROID_NDK_HOST -android-toolchain-version $ANDROID_NDK_TOOLCHAIN_VERSION -skip qtwebkit-examples -no-warnings-are-errors"
-        ],
         "command": {
             "test":[
                 "echo $(pwd)"
@@ -469,7 +419,61 @@ def main_function():
             "android.sdk": [
                 "${root.tool}/macAndroidLibraries/android-sdk-macosx/tools/android"
             ]
-        }
+        },
+        "variable-assemblage": [
+            "QQt",
+            "LibQQt",
+            "${root.build}/${qqt.proj.name}/${qt.sys.mac}/${build.release}",
+            "${root.src}/${qqt.proj.name}",
+            "${qqt.proj.name}.pro",
+            "${qqt.build.path}/src/bin",
+            "${root.prod}/QQt",
+            "qqtframe",
+            "${qqt.build.path}/examples/${qqtframe.prod.name}/bin",
+            "${qqt.build.path}/src/bin/QQt.framework",
+            "QQt.framework/Versions/1/QQt",
+            "${root.tool}/Source/qt5",
+            "${root.build}/qt5",
+            "androiddeployqt",
+            "macdeployqt",
+            "DownloadQueue",
+            "/Users/abel/Develop/c1-webrc/DownloadQueue/DownloadQueue.pro",
+            "${root.build}/${app.name}",
+            "macdeployqt ${app.path.build}/${app.name}.app",
+            "${prod.name}.app",
+            "${mac.app}/Contents",
+            "${mac.app.content}/MacOS",
+            "${mac.app.content}/Frameworks",
+            "${mac.app.content}/Resources",
+            "${mac.app.content}/PlugIns",
+            "${prod.name}.framework",
+            "${prod.name}.framework/Versions",
+            "${prod.name}.framework/Resources",
+            "macdeployqt ${}"
+        ],
+        "command-assemblage": [
+            "I'm not similar to these command, so list them here, rather than forgotten them",
+            "cl-command, sys-command",
+            "replace? no, append? easy!",
+            "help you to remeber these command.",
+            "mkdir -p ${qqt.build.path}",
+            "cd ${build-path}",
+            "cmake -G\"Unix Makefiles\" -DCMAKE_INSTALL_PREFIX=${prod-root} ${source-path}",
+            "cmake -GXCode -DCMAKE_INSTALL_PREFIX=${prod-root} ${source-path}",
+            "rm -f CMakeCache.txt",
+            "qmake ${source-path}/${qmake-file} -spec ${QTSPEC} CONFIG+=${QTCONFIG} && make qmake_all",
+            "make -j4",
+            "make clean in ${build-path}",
+            "make install",
+            "${deployqt} ${bin-path}/${app-bundle} -verbose=1",
+            "${deployqt} -dmg",
+            "${deployqt} --help",
+            "cp -fr ${lib-dep} ${lib-native}",
+            "install_name_tool -change ${lib-dep-name} @rpath/${lib-dep-name} ${app-native}/${prod-name} ",
+            "install_name_tool -change $LibDep @rpath/$LibDep ${app-native}/${prod-name} ",
+            "${source-path}/configure -prefix ${install-path} -hostprefix ${install-path} -xplatform android-g++ -release -nomake tests -nomake examples -android-ndk $ANDROID_NDK_ROOT -android-sdk $ANDROID_SDK_ROOT -android-ndk-host $ANDROID_NDK_HOST -android-toolchain-version $ANDROID_NDK_TOOLCHAIN_VERSION -skip qtwebkit-examples -no-warnings-are-errors",
+            "${qt5.path.source}/configure -prefix ${qt5.path.install} -hostprefix ${qt5.path.install} -xplatform android-g++ -release -nomake tests -nomake examples -android-ndk $ANDROID_NDK_ROOT -android-sdk $ANDROID_SDK_ROOT -android-ndk-host $ANDROID_NDK_HOST -android-toolchain-version $ANDROID_NDK_TOOLCHAIN_VERSION -skip qtwebkit-examples -no-warnings-are-errors"
+        ]
     }
 
     # record current directory [pwd, execute path]
@@ -527,7 +531,7 @@ def main_function():
         conf.set('source', 'config', pymakedefaultsourcefile)
         conf.write(open(pymakeini, 'w'))
 
-    args = docopt(__doc__, version='pymake7.py v7.1')
+    args = docopt(__doc__, version='pymake7.py v7.2')
     #print(args)
 
     #initialize

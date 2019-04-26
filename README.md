@@ -378,7 +378,7 @@ Update the command-line.
 ## Screen shot  
 ![using screenshot](./screenshot/a2.png)  
 
-# Version 7.1  
+# Version 7.2  
 
 Update the command-line.  
 1. add lots of abb-command, about hh command.  
@@ -389,9 +389,12 @@ Update the command-line.
 3. add get command.
 4. add port and translate command.
 5. add initialize command.
+6. add port/translate command.  
 3. add user support shell.    
 
 ![command line screenshot](./screenshot/a3.png)   
+![command line screenshot](./screenshot/a4.png)   
+![command line screenshot](./screenshot/a5.png)   
 
 #### User Support   
 [Readme](./SHELL.md)  
