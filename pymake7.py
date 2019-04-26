@@ -829,6 +829,39 @@ def main_function():
 
                 print("port: source config is %s" % portconf['port']['sourceconfig'])
                 print("port: target config is %s" % portconf['port']['targetconfig'])
+            elif (args['file'] is True):
+                if(args['<source-path-file>'] is not None):
+                   if( not args['<source-path-file>'].endswith(pymakesuffix)
+                       or os.path.isdir(args['<source-path-file>'])
+                       or os.path.islink(args['<source-path-file>'])
+                       or not os.path.isabs(args['<source-path-file>'])):
+                        print("please input a legal source abspath .json file.")
+                        return
+                   r = os.path.split(os.path.realpath(args['<source-path-file>']))[0]
+                   f = os.path.split(os.path.realpath(args['<source-path-file>']))[1]
+                   portconf.set('port', 'sourceroot', r)
+                   portconf.set('port', 'sourceconfig', f)
+                   portconf.write(open(portinifile, 'w'))
+
+                if(args['<target-path-file>'] is not None):
+                   if(not args['<target-path-file>'].endswith(pymakesuffix)
+                      or os.path.isdir(args['<target-path-file>'])
+                      or os.path.islink(args['<target-path-file>'])
+                      or not os.path.isabs(args['<target-path-file>'])):
+                        print("please input a legal target abspath .json file.")
+                        return
+                   r = os.path.split(os.path.realpath(args['<target-path-file>']))[0]
+                   f = os.path.split(os.path.realpath(args['<target-path-file>']))[1]
+                   portconf.set('port', 'targetroot', r)
+                   portconf.set('port', 'targetconfig', f)
+                   portconf.write(open(portinifile, 'w'))
+
+                print("port: source file   is %s" % os.path.join(portconf['port']['sourceroot'], portconf['port']['sourceconfig']))
+                print("port: source root   is %s" % portconf['port']['sourceroot'])
+                print("port: source config is %s" % portconf['port']['sourceconfig'])
+                print("port: target file   is %s" % os.path.join(portconf['port']['targetroot'], portconf['port']['targetconfig']))
+                print("port: target root   is %s" % portconf['port']['targetroot'])
+                print("port: target config is %s" % portconf['port']['targetconfig'])
             elif (args['reset'] is True):
                 portconf.set('port', 'sourceroot', sourceroot)
                 portconf.set('port', 'sourceconfig', pymakedefaultsourcefile)
@@ -858,7 +891,32 @@ def main_function():
             print("translate: target config is %s" % portconf['port']['targetconfig'])
             print("---------------------------------------------------------------------")
             if (args['path'] is True):
-                ''
+                srckey = ''
+                tarkey = ''
+                #print(args['<key-name>'], args['<target-key-name>'])
+                if(args['<key-name>'] is not None):
+                    srckey = args['<key-name>']
+                #print("src key:%s" % srckey)
+
+                if(args['<target-key-name>'] is not None):
+                    tarkey = args['<target-key-name>']
+                else:
+                    tarkey = srckey
+                #print("tar key:%s" % tarkey)
+
+                if(args['<key-name>'] is not None
+                   or args['<target-key-name>'] is not None):
+                    print("src key:%s, tar key:%s" % (srckey, tarkey))
+                    if(args['-f'] or args['--force'] is True):
+                        print("")
+                    return
+
+                if(args['<key-name>'] is None
+                   and args['<target-key-name>'] is None):
+                    print("")
+                    return
+
+                return
             elif (args['env'] is True):
                 ''
             elif (args['cmd'] is True):
@@ -868,7 +926,7 @@ def main_function():
             elif (args['section'] is True):
                 ''
             else:
-                print(Fore.MAGENTA + "%-30s%s" % (portconf['port']['sourceconfig'], portconf['port']['targetconfig']))
+                print(Fore.MAGENTA + "%-30s%s" % ("[source]:" + portconf['port']['sourceconfig'], "[target]:" + portconf['port']['targetconfig']))
                 print(Fore.CYAN + "section:")
                 keylist1 = []
                 keylist2 = []
@@ -880,7 +938,7 @@ def main_function():
                 #print(keylist1)
                 #print(keylist2)
                 count = 1
-                for (key1,key2) in itertools.zip_longest(keylist1, keylist2):
+                for (key1,key2) in itertools.zip_longest(keylist1, keylist2, fillvalue="[EMPTY]"):
                     if(key1 is None):
                         key1 = str("[EMPTY] %s" % count)
                         count += 1
@@ -1096,8 +1154,8 @@ def main_function():
                     print("%s" % os.getcwd())
                     return
                 elif (args['status'] is True):
-                    print("EXECUTE ROOT [PWD]: %s" % pymakeworkpath)
-                    print("WORKING ROOT [VAR]: %s" % os.getcwd())
+                    print("EXECUTE ROOT [HERE   ]: %s" % pymakeworkpath)
+                    print("EXECUTE ROOT [DEFAULT]: %s" % os.getcwd())
                     return
                 elif (args['info'] is True):
                     if(config.__contains__("environ") is True):
@@ -1125,11 +1183,11 @@ def main_function():
                 else:
                     if(config.__contains__("environ") is True):
                         if (config['environ'].__contains__("current") is True):
-                            print("CUR ENVIRON   : %s" % (config["environ"]["current"]))
+                            print("CURRENT ENVIRON %s" % (config["environ"]["current"]))
                         else:
-                            print("CUR ENVIRON   : failed: .json file is broken, environ section lost current key, please use set command fix it.")
+                            print("CURRENT ENVIRON failed: .json file is broken, environ section lost current key, please use set command fix it.")
                     else:
-                        print("CUR ENVIRON   : failed: please check your .json file content, it is not now version .json.")
+                        print("CURRENT ENVIRON failed: please check your .json file content, it is not compatible version .json.")
 
                     r = conf.get('source', 'root')
                     f = conf.get('source', 'config')
