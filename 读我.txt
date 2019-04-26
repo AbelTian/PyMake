@@ -1,0 +1,458 @@
+开发的初衷
+      接触Qt开发的时候在做嵌入式，通常会编译两套程序，一套桌面的，一套嵌入式的。开始的时候也没有什么难过，Qt Creator都把环境配置好了，编译就行了。后来，我开发了一套库LibQQt，给应用程序提供通用框架。当我要编译Windows桌面、Android手机、Android模拟器，Linux桌面、嵌入式Linux，macOS桌面、iOS模拟器，等等多个目标平台的时候，问题来了，我要开多个IDE进行编译，一个IDE编译多个库的时候就需要等待。痛苦不堪。
+    Qt强大的跨平台能力，一个IDE窗口无法发挥他的全部能力。
+    怎么办呢？我去寻找了多个工程管理工具，cmake、scoins、xmake，他们和qmake一样，甚至还比不上qmake，都需要配置复杂的环境然后开启编译。我在网上找了半天还发现了pymake，可以无法得到。
+    自己开发一个吧。定立了程序目标，能够配置多个环境，可以应对多个环境的并行编译。
+
+开发程序的过程
+    说起来容易，可实施起来，还是蛮费劲的，我从2017年9月决定开发这款工具，一直开发到现在，2019年4月。历时一年半还多，已经开发到第七代，才良好的达到了我的目标。
+    先说第一代，先把cmake支持起来，因为cmake的环境配置最简单，我决定使用pymake.json作为保存环境的文件。文件里加入几个list，分别存储path，env变量，命令。第一代只能维持一次编译，只能保存一个环境。可是，已经保存了一个环境不是吗。千里之行始于足下，已经开始了！
+    使用着第一代产品，然后开发第二代，路途还遥远。我升级了保存命令的部分代码，先能运行多个命令再说。在开发的一开始我就使用了${}引用变量。
+    可能是太过于追求简化命令了，第三代，我重新设计了保存环境的数据结构，使用起environ字段，继续加大简化命令，结果导致命令简化到只有一个个单词在那里，多步命令，多步单词，谁都看不明白命令组里到底保存了什么。
+    我直接跳过了第四代，开发第五代。^^
+    第五代沿用了第三代的设计，在数据结构上继续强化对${}变量引用符的使用。可是我纠结于到底是把path+放在environ的外边还是里边，所以第五代我做起了测试，先把path+放在environ字段的外边。数据结构达到了空前的复杂，我写代码写到了飘忽，这可是用python开发啊，竟然解析数据结构解析到飘忽。需要配置的字段太多了，没有人能记得住需要配置哪些字段。
+    我急忙开始开发第六代，仔细设计了保存环境的数据结构。我保留path-assemblage字段、environ字段、command字段，我正式把path+字段移动进了environ里，并且属于确定的某一个环境，每个环境都有自己的path+字段，并且environ字段里有current字段，表示默认使用的环境。我规范了对${}的使用，只能从下往上顺序解开。command字段里也开始保存命令组，每组命令由多步命令组成，可以存很多组这样的命令。
+    第六代还是比较满意的，我2018年使用了一年，效果不错。我可以在确定而且独立的环境下，在确定的位置执行我的bat或者sh脚本；我可以在bat里导出我保存的环境，影响当前的bat脚本的环境，这大大简化了bat里对环境的设置和清理工作。但是第六代还是存在不足，功能比较少。
+    最近两个月我深度的优化了代码，开始开发第七代，增加了很多使用很充分的功能。以下仔细介绍。
+
+开发成果
+    讲讲第七代的强大功能吧，他能够在独立的环境里执行PyMake保存的命令和系统命令，可以临时的使用某个保存的环境执行命令，也可以在bat、sh文件当中导出保存的环境进行使用，还可以在当前的命令行里使用pyenv、pyvc、pycmd使用保存的环境和命令！太强大了。
+    哦，程序的名字叫PyMake，命令行里使用pymake、pymm、mm等别名，我使用install脚本进行安装。
+    PyMake天生就是跨平台的，使用Python进行开发，不依赖第三方包，只使用默认包！安装即可使用，卸载即可无效！
+    回想读大学的时候，随意向系统Path里添加路径的历史吧，回想2017年希望配置复杂、多变的环境而看着命令行束手无策的感受吧。
+    现在好了，复杂的环境、多变的环境，都能胜任了。我把环境保存起来了！随时启用！
+    
+     介绍下PyMake的提供的命令和脚本。
+     先说说脚本，PyMake7提供了mm、pymm、pymake、pyenv、pyvc、pycmd、pyinfo等程序分别提供不同的具体的功能，install.bat即可全部安装，unstall.bat即可卸载干净。在Unix平台上，安装器和卸载器后缀名为.sh。
+     再说说命令，pymake是主程序，所有的重要的环境配置命令都由他提供。
+     现在根据脚本不同分别进行介绍，用户安装后可以使用全部bat或者sh，稍微注意下Unix下，使用风格和Windows有点区别。
+     使用之前，请执行一下，观察下命令行，随后需要编辑下自己的环境，或者从我提供的环境里port出自己的环境，配置一次环境，以后就光使用。
+     pymake：
+     source命令：切换环境文件的目录，切换环境文件。一般一个操作系统使用一个环境文件，.json后缀的文件，在我提供的example里面有很多.json环境文件，用户可以仿照配置自己的环境，port命令可以导出很具体的环境哦，这一个环境文件，保存了很多环境，互相冲突或者兼容，都知道的，多目标编译的时候，需要使用不同的环境，环境之间是冲突的。
+     set命令：在设定完成环境文件后，使用set命令进行具体的设置，包括设置path、env内容、command内容。一般我会记事本2编辑.json文件，那样更方便，当然set命令也很方便。set current env非常方便。
+     list/show命令：查看path、env、cmd的配置，非常beautiful。环境多的记不清了就list以下。
+     env命令：和上边的命令一样的性质，只是查看env的具体配置。我特别喜欢这个命令，我最关注这个命令。别名environ
+     see命令：查看用户保存的命令集。有cmd、ss两个别名。
+     clean命令：pymake执行用户程序时会生成*_effect.bat/*_unset.bat/*_exec.bat，临时生成，如果用户程序执行崩溃，这些bat就会留下，clean命令可以准确的清理他们。pymakev8我会把这些bat移动到确定的目录下，pymake7这些bat跟随用户环境文件目录移动。
+     here命令：pymake执行用户程序会在默认执行目录下执行，这个目录可以用get default exec root命令获取到，here命令则迫使pymake在当前目录下执行用户程序。pymake的很多命令都支持here参数。别名hh。
+    export命令：将用户保存的env，依照环境名导出。不是环境文件哦，里边有好多环境，他们各有各的名字，pymake能够找到他们依照名字导出给用户使用。
+     type命令：将用户保存的cmd，依照命令名导出。pymake可以帮助用户保存一些命令，命令组，各有名字，可以按照名字导出给用户使用。
+      exec命令：执行用户输入的命令。别名cc。包括pymake保存的，包括系统的，都可以执行，只要当前环境里找得到的，都可以执行。
+      use命令：以上几个命令都是在current环境下执行的，也就是pymake里保存的用户默认环境。use命令促使pymake在用户指定的保存的环境下工作。这个用途很广泛，可以使用某个环境导出env、cmd，可以使用某个环境查看环境文件内的各项数据。
+     have/has命令：查看环境文件中是否存在某个配置，path、env、cmd等都可以查看，返回True或者False。
+     get命令：包含获取当前env，即默认env；获取默认执行目录；获取所有信息，包括环境文件所在、程序所在、程序INI所在，source/program可以获取到具体的值，返回字串。
+      initialize：用户进行了某些非法操作，pymake没处理上，initialize即可。initialize会把用户环境目录重置到默认位置。然后用户继续设置到自己的环境文件目录即可。
+     port/translate命令：这是个重要的命令。用户自己有一些环境，别人有一些环境，用户和别人之间希望互相使用下环境，可是用户不愿意直接使用，而且路径还有一点分歧。env的配置是可以通用的，也有特用的。用户可以使用port/translate这一对命令在自己和别人的环境文件之间进行数据传输。包括传输path、传输env、传输cmd。可以具体到传输某个项。这是一个很beautiful的命令，显示很美观、直观，使用对比视图。
+     -h，--version：默认命令。
+    pymm，mm：这两个脚本是pymake的别名脚本，用户安装后也可以使用这两个命令调用以上命令。
+    pyenv：
+    open/close命令：用户使用pyenv有非常大的好处，他可以在当前执行器下，使用pymake保存的环境影响当前执行器的环境。并且可以开启、可以关闭。
+     pyvc：
+     open/close命令：这个命令和上边那个是一样的，可是，这个可以启动vc环境，而且用户可以设定使用哪个vc环境，使用什么目标都可以轻易设置，已经被用户保存起来了！
+     pycmd：
+      这个脚本，是对pyenv命令的封装，他允许在当前执行器环境里，使用用户指定或者默认的环境执行用户保存的或者系统的命令，并且影响当前环境。
+     pyinfo：
+     这个脚本还在开发之中，为用户提供丰富的PC信息等。
+     这几个脚本的目标是把pymake保存的环境、命令，应用于当前执行器。
+    历时1-2年，如此之久，开发出这样的多环境配置器，随意切换环境，实在是了不起的建筑，我自己都觉得自己了不起。^^
+    说了这么多命令和脚本，看看PyMake的庐山真面目。
+
+程序截图
+命令行：
+R:\Develop\b0-toolkits\a0-compiler\PyMake\test>mm
+Usage:
+  pymake7.py source
+  pymake7.py source file [ <source-path-file> ]
+  pymake7.py source root [ <source-root-path> ]
+  pymake7.py source config [ --add  ] [ <config-file-name> ] [<new-config-file-name>]
+  pymake7.py source config [ --del  ] [ <config-file-name> ] [<new-config-file-name>]
+  pymake7.py source config [ --mod  ] [ <config-file-name> ] [<new-config-file-name>]
+  pymake7.py source config [ --switch  ] [ <config-file-name> ] [<new-config-file-name>]
+  pymake7.py source config [ --restore  ] [ <config-file-name> ] [<new-config-file-name>]
+  pymake7.py source config [ --show ] [ <config-file-name> ] [<new-config-file-name>]
+  pymake7.py -------------------------------------------------------------
+  pymake7.py set path ( --add | --del | --mod ) <name> [ <value> ]
+  pymake7.py set env [ path ] ( --add | --del | --mod ) <group> <name> [ <value> ]
+  pymake7.py set cmd (--add | --del | --mod ) <name> [ <values> ... ]
+  pymake7.py set cur env <name>
+  pymake7.py list [ path | env | cmd ] [<name>] [-r | --raw] [-a | --all]
+  pymake7.py env [<name>] [-p | --path] [-v | --var] [-r | --raw] [-a | --all]
+  pymake7.py -------------------------------------------------------------
+  pymake7.py here clean
+  pymake7.py here export [ <env-name> ] [ to <file-name> ]
+  pymake7.py here type [ <cmd-name> ]  [ to <file-name> ]
+  pymake7.py here use <env-name> exec [ <command-names> ... ]
+  pymake7.py here exec [ <command-names> ... ]
+  pymake7.py here use <env-name> cc [ <command-names> ... ]
+  pymake7.py here cc [ <command-names> ... ]
+  pymake7.py -------------------------------------------------------------
+  pymake7.py clean [ here | hh ]
+  pymake7.py export [ here | hh ] [ <env-name> ] [ to <file-name> ]
+  pymake7.py type [ here | hh ] [ <cmd-name> ] [ to <file-name> ]
+  pymake7.py exec [ here | hh ] [ <command-names> ... ]
+  pymake7.py cc [ here | hh ] [ <command-names> ... ]
+  pymake7.py use <env-name> type [ here | hh ] [ <cmd-name> ]  [ to <file-name> ]
+  pymake7.py use <env-name> exec [ here | hh ] [ <command-names> ... ]
+  pymake7.py use <env-name> cc [ here | hh ] [ <command-names> ... ]
+  pymake7.py -------------------------------------------------------------
+  pymake7.py set current env <name>
+  pymake7.py set default env <name>
+  pymake7.py show [ path | env | cmd ] [<name>] [-r | --raw] [-a | --all]
+  pymake7.py environ [<name>] [-p | --path] [-v | --var] [-r | --raw] [-a | --all]
+  pymake7.py see [ <cmd-name> ] [ use <env-name> ] [-r | --raw] [-a | --all]
+  pymake7.py ss [ <cmd-name> ] [ use <env-name> ] [-r | --raw] [-a | --all]
+  pymake7.py cmd [ <cmd-name> ] [ use <env-name> ] [-r | --raw] [-a | --all]
+  pymake7.py use <env-name> see [ <cmd-name> ] [-r | --raw] [-a | --all]
+  pymake7.py use <env-name> ss [ <cmd-name> ] [-r | --raw] [-a | --all]
+  pymake7.py use <env-name> cmd [ <cmd-name> ] [-r | --raw] [-a | --all]
+  pymake7.py -------------------------------------------------------------
+  pymake7.py hh clean
+  pymake7.py hh export [ <env-name> ] [ to <file-name> ]
+  pymake7.py hh type [ <cmd-name> ]  [ to <file-name> ]
+  pymake7.py hh use <env-name> exec [ <command-names> ... ]
+  pymake7.py hh exec [ <command-names> ... ]
+  pymake7.py hh use <env-name> cc [ <command-names> ... ]
+  pymake7.py hh cc [ <command-names> ... ]
+  pymake7.py -------------------------------------------------------------
+  pymake7.py have path <name> [-r | --raw]
+  pymake7.py have env [ path ] [ <group> ] [ <name> ] [-r | --raw]
+  pymake7.py have cmd <name> [-r | --raw]
+  pymake7.py has path <name> [-r | --raw]
+  pymake7.py has env [ path ] [ <group> ] [ <name> ] [-r | --raw]
+  pymake7.py has cmd <name> [-r | --raw]
+  pymake7.py -------------------------------------------------------------
+  pymake7.py get cur env
+  pymake7.py get current env
+  pymake7.py get default env
+  pymake7.py get env
+  pymake7.py get env ( cur | current | default )
+  pymake7.py -------------------------------------------------------------
+  pymake7.py program
+  pymake7.py program root
+  pymake7.py program file
+  pymake7.py program configure
+  pymake7.py program configure root
+  pymake7.py program configure file
+  pymake7.py get all
+  pymake7.py get all ( info | information )
+  pymake7.py get all ( stat | status )
+  pymake7.py get default exec root
+  pymake7.py get exec root [ default | here ]
+  pymake7.py initialize
+  pymake7.py -------------------------------------------------------------
+  pymake7.py port
+  pymake7.py port root [ <source-config-root> ] [ to <target-config-root> ]
+  pymake7.py port config [ <source-config-file> ] [ to <target-config-file> ]
+  pymake7.py port file [ <source-path-file> ] [ to <target-path-file> ]
+  pymake7.py port reset
+  pymake7.py translate
+  pymake7.py translate ( path | env | cmd )
+  pymake7.py translate ( path | env | cmd ) <key-name> [ to <target-key-name> ] [ -f | --force ]
+  pymake7.py translate ( path | env | cmd ) [ -a | --all ] [ -f | --force ]
+  pymake7.py translate all [ -a | --all ] [ -f | --force ]
+  pymake7.py translate section
+  pymake7.py translate section <section-name> [ to <target-section-name> ] [ -f | --force ]
+  pymake7.py translate section [ -a | --all ] [ -f | --force ]
+  pymake7.py -------------------------------------------------------------
+  pymake7.py (-h | --help)
+  pymake7.py --version
+R:\Develop\b0-toolkits\a0-compiler\PyMake\test>
+
+命令部1：
+R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource>mm initialize
+SOURCE        : R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource\pymake.json
+SOURCE ROOT   : R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource
+SOURCE CONFIG : pymake.json
+successed
+R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource>mm get all
+CURRENT ENVIRON macOS
+SOURCE        : R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource\pymake.json
+SOURCE ROOT   : R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource
+SOURCE CONFIG : pymake.json
+-----------------------------------------
+PROGRAM       : R:\Develop\b0-toolkits\a0-compiler\PyMake\pymake7.py
+PROGRAM ROOT  : R:\Develop\b0-toolkits\a0-compiler\PyMake
+PROGRAM FILE  : pymake7.py
+-----------------------------------------
+CONFIGURE     : C:\Users\Administrator\.pymake\pymake.ini
+CONFIGURE ROOT: C:\Users\Administrator\.pymake
+CONFIGURE FILE: pymake.ini
+R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource>mm get all status
+EXECUTE ROOT [HERE   ]: R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource
+EXECUTE ROOT [DEFAULT]: R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource
+R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource>mm get default env
+macOS
+R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource>mm get default exec root
+R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource
+R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource>mm program
+R:\Develop\b0-toolkits\a0-compiler\PyMake\pymake7.py
+R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource>mm source
+R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource\pymake.json
+R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource>
+
+命令部2：在命令行里显示的比较整齐
+R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource>mm show
+macOS
+android.mobile
+android.x86
+iOS
+iOSSimulator
+qt4
+R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource>mm env
+macOS
+android.mobile
+android.x86
+iOS
+iOSSimulator
+qt4
+R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource>mm env qt5
+please ensure the environ is right
+R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource>mm env macOS
+env macOS
+path+:
+  ${cmake.bin}
+  ${qt5.9.clang.bin}
+variable:
+  QTVERSION                      ${qt5.9.version}
+  QTDIR                          ${qt5.9.clang}
+  QTSPEC                         -spec macx-clang
+  QTCONFIG                       CONFIG+=x86_64
+  QKIT                           macOS
+  QSYS                           macOS
+R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource>mm env macOS -r
+env macOS
+path+:
+  /Users/abel/Develop/b0-toolskits/a0-compiler/CMake.app/Contents/bin
+  /Users/abel/Develop/b0-toolskits/macLibraries/Qt/5.9.2/clang_64/bin
+variable:
+  QTVERSION                      5.9.2
+  QTDIR                          /Users/abel/Develop/b0-toolskits/macLibraries/Qt/5.9.2/clang_64
+  QTSPEC                         -spec macx-clang
+  QTCONFIG                       CONFIG+=x86_64
+  QKIT                           macOS
+  QSYS                           macOS
+R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource>mm env macOS -r -a
+env macOS
+path+:
+  /Users/abel/Develop/b0-toolskits/a0-compiler/CMake.app/Contents/bin
+  /Users/abel/Develop/b0-toolskits/macLibraries/Qt/5.9.2/clang_64/bin
+  R:/Develop/b0-toolkits/winLibraries/Qt/5.9.2/mingw53_32/bin
+  R:/Develop/b0-toolkits/winLibraries/Qt/Tools/mingw530_32/bin
+  R:/Develop/b0-toolkits/winCompilers/cmake3.9.1_64/bin
+  R:/Develop/e0-tools/doxygen/graphviz-2.38/bin
+  R:/Develop/e0-tools/doxygen/bin
+  R:/Develop/b0-toolkits/winLibraries/Qt/5.9.2/mingw53_32/bin
+  R:/Develop/b0-toolkits/winLibraries/Qt/Tools/mingw530_32/bin
+  R:/Develop/b0-toolkits/winCompilers/cmake3.9.1_64/bin
+  R:/Develop/e0-tools/doxygen/graphviz-2.38/bin
+  R:/Develop/e0-tools/doxygen/bin
+  C:\WINDOWS\system32
+  C:\WINDOWS
+  C:\WINDOWS\System32\Wbem
+  C:\WINDOWS\System32\WindowsPowerShell\v1.0\
+  C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common
+  C:\Program Files\TortoiseGit\bin
+  C:\WINDOWS\system32
+  C:\WINDOWS
+  C:\WINDOWS\System32\Wbem
+  C:\WINDOWS\System32\WindowsPowerShell\v1.0\
+  C:\WINDOWS\System32\OpenSSH\
+  C:\Program Files\Microsoft Network Monitor 3\
+  D:\HsuHelper\TZWebPdf
+  D:\HsuHelper\TZKey
+  R:\Develop\e0-tools\doxygen\bin
+  C:\Program Files\Git\cmd
+  C:\Users\Administrator\AppData\Local\Programs\Python\Python36\Scripts\
+  C:\Users\Administrator\AppData\Local\Programs\Python\Python36\
+  C:\Users\Administrator\AppData\Local\Microsoft\WindowsApps
+variable:
+  QTVERSION                      5.9.2
+  QTDIR                          /Users/abel/Develop/b0-toolskits/macLibraries/Qt/5.9.2/clang_64
+  QTSPEC                         -spec macx-clang
+  QTCONFIG                       CONFIG+=x86_64
+  QKIT                           macOS
+  QSYS                           macOS
+  ALLUSERSPROFILE                C:\ProgramData
+  APPDATA                        C:\Users\Administrator\AppData\Roaming
+  COMMONPROGRAMFILES             C:\Program Files\Common Files
+  COMMONPROGRAMFILES(X86)        C:\Program Files (x86)\Common Files
+  COMMONPROGRAMW6432             C:\Program Files\Common Files
+  COMPUTERNAME                   SC-201803271727
+  COMSPEC                        C:\WINDOWS\system32\cmd.exe
+  DRIVERDATA                     C:\Windows\System32\Drivers\DriverData
+  FILEPATH                       R:\Develop\b0-toolkits\a0-compiler\PyMake\
+  FPS_BROWSER_APP_PROFILE_STRING Internet Explorer
+  FPS_BROWSER_USER_PROFILE_STRING Default
+  HOMEDRIVE                      C:
+  HOMEPATH                       \Users\Administrator
+  LOCALAPPDATA                   C:\Users\Administrator\AppData\Local
+  LOGONSERVER                    \\SC-201803271727
+  NUMBER_OF_PROCESSORS           20
+  ONEDRIVE                       C:\Users\Administrator\OneDrive
+  OS                             Windows_NT
+  PATHEXT                        .COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC
+  PROCESSOR_ARCHITECTURE         AMD64
+  PROCESSOR_IDENTIFIER           Intel64 Family 6 Model 62 Stepping 4, GenuineIntel
+  PROCESSOR_LEVEL                6
+  PROCESSOR_REVISION             3e04
+  PROGRAMDATA                    C:\ProgramData
+  PROGRAMFILES                   C:\Program Files
+  PROGRAMFILES(X86)              C:\Program Files (x86)
+  PROGRAMW6432                   C:\Program Files
+  PROMPT                         $P$G
+  PSMODULEPATH                   C:\Program Files\WindowsPowerShell\Modules;C:\WINDOWS\system32\WindowsPowerShell\v1.0\Modules
+  PUBLIC                         C:\Users\Public
+  PYENVEXISTEDFLAG               True
+  PYENVFLAG                      True
+  PYENVINDEX                     15870
+  PYENVNAME                      qt5
+  PYMMDEFAULTENVNAME             qt5
+  PYMMSHELLROOT                  R:\Develop\b0-toolkits\a0-compiler\PyMake\example
+  PYMMSOURCECONFIG               pymake7-win-tai.json
+  PYMMSOURCEROOT                 R:\Develop\b0-toolkits\a0-compiler\PyMake\example
+  PYPROGRAMNAME                  pymake.bat
+  PYPROGRAMPATH                  R:\Develop\b0-toolkits\a0-compiler\PyMake\
+  PYPROGRAMPATHNAME              R:\Develop\b0-toolkits\a0-compiler\PyMake\pymake.bat
+  QKIT                           WIN32
+  QSYS                           Windows
+  QTDIR                          R:/Develop/b0-toolkits/winLibraries/Qt/5.9.2/mingw53_32
+  QTSPEC                         -spec win32-g++
+  QTVERSION                      5.9.2
+  SESSIONNAME                    Console
+  SYSTEMDRIVE                    C:
+  SYSTEMROOT                     C:\WINDOWS
+  TEMP                           C:\Users\ADMINI~1\AppData\Local\Temp
+  TMP                            C:\Users\ADMINI~1\AppData\Local\Temp
+  USERDOMAIN                     SC-201803271727
+  USERDOMAIN_ROAMINGPROFILE      SC-201803271727
+  USERNAME                       Administrator
+  USERPROFILE                    C:\Users\Administrator
+  WINDIR                         C:\WINDOWS
+R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource>
+
+命令部3：
+R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource>mm port
+port: source file   is R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource\pymake.json
+port: source root   is R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource
+port: source config is pymake.json
+port: target file   is R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource\temp-target.json
+port: target root   is R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource
+port: target config is temp-target.json
+R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource>mm translate
+translate: source file   is R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource\pymake.json
+translate: source root   is R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource
+translate: source config is pymake.json
+translate: target file   is R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource\temp-target.json
+translate: target root   is R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource
+translate: target config is temp-target.json
+---------------------------------------------------------------------
+[source] pymake.json          [target] temp-target.json     [status]
+all sections:
+path-assemblage               path-assemblage               [NORMAL]
+environ                       environ                       [NORMAL]
+command                       command                       [NORMAL]
+variable-assemblage           Tips                          [NORMAL]
+command-assemblage            [EMPTY] 1                     [NORMAL]
+R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource>mm translate cmd
+translate: source file   is R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource\pymake.json
+translate: source root   is R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource
+translate: source config is pymake.json
+translate: target file   is R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource\temp-target.json
+translate: target root   is R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource
+translate: target config is temp-target.json
+---------------------------------------------------------------------
+[source] pymake.json          [target] temp-target.json     [status]
+command:
+test                          [EMPTY] 1                     [NORMAL]
+qqt.build                     [EMPTY] 2                     [NORMAL]
+qqt.clean                     [EMPTY] 3                     [NORMAL]
+Qt                            [EMPTY] 4                     [NORMAL]
+cmake                         [EMPTY] 5                     [NORMAL]
+prod                          [EMPTY] 6                     [NORMAL]
+libtool                       [EMPTY] 7                     [NORMAL]
+Qt.check                      [EMPTY] 8                     [NORMAL]
+Qt4.build                     [EMPTY] 9                     [NORMAL]
+Qt4.8.7.build                 [EMPTY] 10                    [NORMAL]
+QtSoap.build                  [EMPTY] 11                    [NORMAL]
+qqt.push                      [EMPTY] 12                    [NORMAL]
+qqt.pull                      [EMPTY] 13                    [NORMAL]
+qqt.cloc                      [EMPTY] 14                    [NORMAL]
+android.sdk                   [EMPTY] 15                    [NORMAL]
+R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource>mm translate cmd -a
+translate: source file   is R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource\pymake.json
+translate: source root   is R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource
+translate: source config is pymake.json
+translate: target file   is R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource\temp-target.json
+translate: target root   is R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource
+translate: target config is temp-target.json
+---------------------------------------------------------------------
+[source] pymake.json          [target] temp-target.json     [status]
+command:
+test                          test                          [SUCCESS][       ]
+qqt.build                     qqt.build                     [SUCCESS][       ]
+qqt.clean                     qqt.clean                     [SUCCESS][       ]
+Qt                            Qt                            [SUCCESS][       ]
+cmake                         cmake                         [SUCCESS][       ]
+prod                          prod                          [SUCCESS][       ]
+libtool                       libtool                       [SUCCESS][       ]
+Qt.check                      Qt.check                      [SUCCESS][       ]
+Qt4.build                     Qt4.build                     [SUCCESS][       ]
+Qt4.8.7.build                 Qt4.8.7.build                 [SUCCESS][       ]
+QtSoap.build                  QtSoap.build                  [SUCCESS][       ]
+qqt.push                      qqt.push                      [SUCCESS][       ]
+qqt.pull                      qqt.pull                      [SUCCESS][       ]
+qqt.cloc                      qqt.cloc                      [SUCCESS][       ]
+android.sdk                   android.sdk                   [SUCCESS][       ]
+R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource>mm translate cmd -a
+translate: source file   is R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource\pymake.json
+translate: source root   is R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource
+translate: source config is pymake.json
+translate: target file   is R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource\temp-target.json
+translate: target root   is R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource
+translate: target config is temp-target.json
+---------------------------------------------------------------------
+[source] pymake.json          [target] temp-target.json     [status]
+command:
+test                          test                          [CANCEL ][EXISTED]
+qqt.build                     qqt.build                     [CANCEL ][EXISTED]
+qqt.clean                     qqt.clean                     [CANCEL ][EXISTED]
+Qt                            Qt                            [CANCEL ][EXISTED]
+cmake                         cmake                         [CANCEL ][EXISTED]
+prod                          prod                          [CANCEL ][EXISTED]
+libtool                       libtool                       [CANCEL ][EXISTED]
+Qt.check                      Qt.check                      [CANCEL ][EXISTED]
+Qt4.build                     Qt4.build                     [CANCEL ][EXISTED]
+Qt4.8.7.build                 Qt4.8.7.build                 [CANCEL ][EXISTED]
+QtSoap.build                  QtSoap.build                  [CANCEL ][EXISTED]
+qqt.push                      qqt.push                      [CANCEL ][EXISTED]
+qqt.pull                      qqt.pull                      [CANCEL ][EXISTED]
+qqt.cloc                      qqt.cloc                      [CANCEL ][EXISTED]
+android.sdk                   android.sdk                   [CANCEL ][EXISTED]
+R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource>mm translate cmd -a -f
+translate: source file   is R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource\pymake.json
+translate: source root   is R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource
+translate: source config is pymake.json
+translate: target file   is R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource\temp-target.json
+translate: target root   is R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource
+translate: target config is temp-target.json
+---------------------------------------------------------------------
+[source] pymake.json          [target] temp-target.json     [status]
+command:
+test                          test                          [SUCCESS][EXISTED][FORCE]
+qqt.build                     qqt.build                     [SUCCESS][EXISTED][FORCE]
+qqt.clean                     qqt.clean                     [SUCCESS][EXISTED][FORCE]
+Qt                            Qt                            [SUCCESS][EXISTED][FORCE]
+cmake                         cmake                         [SUCCESS][EXISTED][FORCE]
+prod                          prod                          [SUCCESS][EXISTED][FORCE]
+libtool                       libtool                       [SUCCESS][EXISTED][FORCE]
+Qt.check                      Qt.check                      [SUCCESS][EXISTED][FORCE]
+Qt4.build                     Qt4.build                     [SUCCESS][EXISTED][FORCE]
+Qt4.8.7.build                 Qt4.8.7.build                 [SUCCESS][EXISTED][FORCE]
+QtSoap.build                  QtSoap.build                  [SUCCESS][EXISTED][FORCE]
+qqt.push                      qqt.push                      [SUCCESS][EXISTED][FORCE]
+qqt.pull                      qqt.pull                      [SUCCESS][EXISTED][FORCE]
+qqt.cloc                      qqt.cloc                      [SUCCESS][EXISTED][FORCE]
+android.sdk                   android.sdk                   [SUCCESS][EXISTED][FORCE]
+R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource>
+
+好了就这些吧，希望各位搞Qt的同事，Enjoy it。
