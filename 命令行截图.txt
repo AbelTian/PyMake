@@ -1,9 +1,7 @@
 Microsoft Windows [版本 10.0.17134.706]
 (c) 2018 Microsoft Corporation。保留所有权利。
 
-R:\Develop\b0-toolkits\a0-compiler\PyMake>mm -h
-PyMake 7.1.
-
+R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource>mm
 Usage:
   pymake7.py source
   pymake7.py source file [ <source-path-file> ]
@@ -85,56 +83,276 @@ Usage:
   pymake7.py initialize
   pymake7.py -------------------------------------------------------------
   pymake7.py port
-  pymake7.py port reset
   pymake7.py port root [ <source-config-root> ] [ to <target-config-root> ]
   pymake7.py port config [ <source-config-file> ] [ to <target-config-file> ]
   pymake7.py port file [ <source-path-file> ] [ to <target-path-file> ]
+  pymake7.py port reset
   pymake7.py translate
-  pymake7.py translate all [ -f | --force ]
-  pymake7.py translate ( path | env | cmd ) [ -f | --force ]
+  pymake7.py translate ( path | env | cmd )
   pymake7.py translate ( path | env | cmd ) <key-name> [ to <target-key-name> ] [ -f | --force ]
-  pymake7.py translate section <section-name> [ to <target-section-name> ]
+  pymake7.py translate ( path | env | cmd ) [ -a | --all ] [ -f | --force ]
+  pymake7.py translate all [ -a | --all ] [ -f | --force ]
+  pymake7.py translate section
+  pymake7.py translate section <section-name> [ to <target-section-name> ] [ -f | --force ]
+  pymake7.py translate section [ -a | --all ] [ -f | --force ]
   pymake7.py -------------------------------------------------------------
   pymake7.py (-h | --help)
   pymake7.py --version
 
-Command:
-  source           switch to another source file
-  source root      config root directory
-  source config    config source conf file
-  set path         path assemblage
-  set env          set env variable
-  set cmd          set cmd stream
-  export           output private env variable to a bat file or sh file [default:current, env]
-  type             output command to a bat file or sh file [default:cmd]
-  see              check command stream
-  ss               check command stream
-  cmd              check command stream
-  list             list config values, show command also too.
-  set cur env      set default env
-  use              use selected env exec commands
-  here             at here do exec commands e.g.
-  hh               at here do exec commands e.g.
-  exec             exec commands list.
-  cc               exec commands list.
-  have             check env or path or cmd item whether user has configured.
-  has              check env or path or cmd item whether user has configured.
-  clean            clean *_effect.sh *_unset.sh *_exec.sh, or .bat.
-  program          pymake.py program information.
-  get              lots of important information about pymake.py.
-  initialize       if program crashed, user can use this command to reset.
-  port             port from source to target .json file, configure source root and config file.
-  translate        translate section from source to target, and other section.
+R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource>mm initialize
+SOURCE        : R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource\pymake.json
+SOURCE ROOT   : R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource
+SOURCE CONFIG : pymake.json
+successed
 
-Options:
-  -h --help     Show this screen.
-  --version     Show version.
-  --add
-  --del
-  --mod         add or delete or modify a config or path
-  --switch      switch to another source
-  --show        display source config files
-  --restore     reset to source config file pymake.json.
-  -r, --raw     expand editing config values
+R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource>mm get all
+CURRENT ENVIRON macOS
+SOURCE        : R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource\pymake.json
+SOURCE ROOT   : R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource
+SOURCE CONFIG : pymake.json
+-----------------------------------------
+PROGRAM       : R:\Develop\b0-toolkits\a0-compiler\PyMake\pymake7.py
+PROGRAM ROOT  : R:\Develop\b0-toolkits\a0-compiler\PyMake
+PROGRAM FILE  : pymake7.py
+-----------------------------------------
+CONFIGURE     : C:\Users\Administrator\.pymake\pymake.ini
+CONFIGURE ROOT: C:\Users\Administrator\.pymake
+CONFIGURE FILE: pymake.ini
 
-R:\Develop\b0-toolkits\a0-compiler\PyMake>
+R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource>mm get all status
+EXECUTE ROOT [HERE   ]: R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource
+EXECUTE ROOT [DEFAULT]: R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource
+
+R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource>mm get default env
+macOS
+
+R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource>mm get default exec root
+R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource
+
+R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource>mm program
+R:\Develop\b0-toolkits\a0-compiler\PyMake\pymake7.py
+
+R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource>mm source
+R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource\pymake.json
+
+R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource>mm show
+macOS
+android.mobile
+android.x86
+iOS
+iOSSimulator
+qt4
+
+R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource>mm env
+macOS
+android.mobile
+android.x86
+iOS
+iOSSimulator
+qt4
+
+R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource>mm env qt5
+please ensure the environ is right
+
+R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource>mm env macOS
+env macOS
+path+:
+  ${cmake.bin}
+  ${qt5.9.clang.bin}
+variable:
+  QTVERSION                      ${qt5.9.version}
+  QTDIR                          ${qt5.9.clang}
+  QTSPEC                         -spec macx-clang
+  QTCONFIG                       CONFIG+=x86_64
+  QKIT                           macOS
+  QSYS                           macOS
+
+R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource>mm env macOS -r
+env macOS
+path+:
+  /Users/abel/Develop/b0-toolskits/a0-compiler/CMake.app/Contents/bin
+  /Users/abel/Develop/b0-toolskits/macLibraries/Qt/5.9.2/clang_64/bin
+variable:
+  QTVERSION                      5.9.2
+  QTDIR                          /Users/abel/Develop/b0-toolskits/macLibraries/Qt/5.9.2/clang_64
+  QTSPEC                         -spec macx-clang
+  QTCONFIG                       CONFIG+=x86_64
+  QKIT                           macOS
+  QSYS                           macOS
+
+R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource>mm env macOS -r -a
+env macOS
+path+:
+  /Users/abel/Develop/b0-toolskits/a0-compiler/CMake.app/Contents/bin
+  /Users/abel/Develop/b0-toolskits/macLibraries/Qt/5.9.2/clang_64/bin
+  C:\WINDOWS\system32
+  C:\WINDOWS
+  C:\WINDOWS\System32\Wbem
+  C:\WINDOWS\System32\WindowsPowerShell\v1.0\
+  C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common
+  C:\Program Files\TortoiseGit\bin
+  C:\WINDOWS\system32
+  C:\WINDOWS
+  C:\WINDOWS\System32\Wbem
+  C:\WINDOWS\System32\WindowsPowerShell\v1.0\
+  C:\WINDOWS\System32\OpenSSH\
+  C:\Program Files\Microsoft Network Monitor 3\
+  D:\HsuHelper\TZWebPdf
+  D:\HsuHelper\TZKey
+  R:\Develop\e0-tools\doxygen\bin
+  C:\Program Files\Git\cmd
+  C:\Users\Administrator\AppData\Local\Programs\Python\Python36\Scripts\
+  C:\Users\Administrator\AppData\Local\Programs\Python\Python36\
+  C:\Users\Administrator\AppData\Local\Microsoft\WindowsApps
+
+variable:
+  QTVERSION                      5.9.2
+  QTDIR                          /Users/abel/Develop/b0-toolskits/macLibraries/Qt/5.9.2/clang_64
+  QTSPEC                         -spec macx-clang
+  QTCONFIG                       CONFIG+=x86_64
+  QKIT                           macOS
+  QSYS                           macOS
+  ALLUSERSPROFILE                C:\ProgramData
+  APPDATA                        C:\Users\Administrator\AppData\Roaming
+  COMMONPROGRAMFILES             C:\Program Files\Common Files
+  COMMONPROGRAMFILES(X86)        C:\Program Files (x86)\Common Files
+  COMMONPROGRAMW6432             C:\Program Files\Common Files
+  COMPUTERNAME                   SC-201803271727
+  COMSPEC                        C:\WINDOWS\system32\cmd.exe
+  DRIVERDATA                     C:\Windows\System32\Drivers\DriverData
+  FILEPATH                       R:\Develop\b0-toolkits\a0-compiler\PyMake\
+  FPS_BROWSER_APP_PROFILE_STRING Internet Explorer
+  FPS_BROWSER_USER_PROFILE_STRING Default
+  HOMEDRIVE                      C:
+  HOMEPATH                       \Users\Administrator
+  LOCALAPPDATA                   C:\Users\Administrator\AppData\Local
+  LOGONSERVER                    \\SC-201803271727
+  NUMBER_OF_PROCESSORS           20
+  ONEDRIVE                       C:\Users\Administrator\OneDrive
+  OS                             Windows_NT
+  PATHEXT                        .COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC
+  PROCESSOR_ARCHITECTURE         AMD64
+  PROCESSOR_IDENTIFIER           Intel64 Family 6 Model 62 Stepping 4, GenuineIntel
+  PROCESSOR_LEVEL                6
+  PROCESSOR_REVISION             3e04
+  PROGRAMDATA                    C:\ProgramData
+  PROGRAMFILES                   C:\Program Files
+  PROGRAMFILES(X86)              C:\Program Files (x86)
+  PROGRAMW6432                   C:\Program Files
+  PROMPT                         $P$G
+  PSMODULEPATH                   C:\Program Files\WindowsPowerShell\Modules;C:\WINDOWS\system32\WindowsPowerShell\v1.0\Modules
+  PUBLIC                         C:\Users\Public
+  SESSIONNAME                    Console
+  SYSTEMDRIVE                    C:
+  SYSTEMROOT                     C:\WINDOWS
+  TEMP                           C:\Users\ADMINI~1\AppData\Local\Temp
+  TMP                            C:\Users\ADMINI~1\AppData\Local\Temp
+  USERDOMAIN                     SC-201803271727
+  USERDOMAIN_ROAMINGPROFILE      SC-201803271727
+  USERNAME                       Administrator
+  USERPROFILE                    C:\Users\Administrator
+  WINDIR                         C:\WINDOWS
+
+R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource>mm port
+port: source file   is R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource\pymake.json
+port: source root   is R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource
+port: source config is pymake.json
+port: target file   is R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource\temp-target.json
+port: target root   is R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource
+port: target config is temp-target.json
+
+R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource>mm translate
+translate: source file   is R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource\pymake.json
+translate: source root   is R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource
+translate: source config is pymake.json
+translate: target file   is R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource\temp-target.json
+translate: target root   is R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource
+translate: target config is temp-target.json
+---------------------------------------------------------------------
+[source] pymake.json          [target] temp-target.json     [status]
+all sections:
+path-assemblage               path-assemblage               [NORMAL]
+environ                       environ                       [NORMAL]
+command                       command                       [NORMAL]
+variable-assemblage           Tips                          [NORMAL]
+command-assemblage            [EMPTY] 1                     [NORMAL]
+
+R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource>mm translate cmd
+translate: source file   is R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource\pymake.json
+translate: source root   is R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource
+translate: source config is pymake.json
+translate: target file   is R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource\temp-target.json
+translate: target root   is R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource
+translate: target config is temp-target.json
+---------------------------------------------------------------------
+[source] pymake.json          [target] temp-target.json     [status]
+command:
+test                          test                          [NORMAL]
+qqt.build                     qqt.build                     [NORMAL]
+qqt.clean                     qqt.clean                     [NORMAL]
+Qt                            Qt                            [NORMAL]
+cmake                         cmake                         [NORMAL]
+prod                          prod                          [NORMAL]
+libtool                       libtool                       [NORMAL]
+Qt.check                      Qt.check                      [NORMAL]
+Qt4.build                     Qt4.build                     [NORMAL]
+Qt4.8.7.build                 Qt4.8.7.build                 [NORMAL]
+QtSoap.build                  QtSoap.build                  [NORMAL]
+qqt.push                      qqt.push                      [NORMAL]
+qqt.pull                      qqt.pull                      [NORMAL]
+qqt.cloc                      qqt.cloc                      [NORMAL]
+android.sdk                   android.sdk                   [NORMAL]
+
+R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource>mm translate cmd -a
+translate: source file   is R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource\pymake.json
+translate: source root   is R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource
+translate: source config is pymake.json
+translate: target file   is R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource\temp-target.json
+translate: target root   is R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource
+translate: target config is temp-target.json
+---------------------------------------------------------------------
+[source] pymake.json          [target] temp-target.json     [status]
+command:
+test                          test                          [CANCEL ][EXISTED]
+qqt.build                     qqt.build                     [CANCEL ][EXISTED]
+qqt.clean                     qqt.clean                     [CANCEL ][EXISTED]
+Qt                            Qt                            [CANCEL ][EXISTED]
+cmake                         cmake                         [CANCEL ][EXISTED]
+prod                          prod                          [CANCEL ][EXISTED]
+libtool                       libtool                       [CANCEL ][EXISTED]
+Qt.check                      Qt.check                      [CANCEL ][EXISTED]
+Qt4.build                     Qt4.build                     [CANCEL ][EXISTED]
+Qt4.8.7.build                 Qt4.8.7.build                 [CANCEL ][EXISTED]
+QtSoap.build                  QtSoap.build                  [CANCEL ][EXISTED]
+qqt.push                      qqt.push                      [CANCEL ][EXISTED]
+qqt.pull                      qqt.pull                      [CANCEL ][EXISTED]
+qqt.cloc                      qqt.cloc                      [CANCEL ][EXISTED]
+android.sdk                   android.sdk                   [CANCEL ][EXISTED]
+
+R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource>mm translate cmd -a -f
+translate: source file   is R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource\pymake.json
+translate: source root   is R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource
+translate: source config is pymake.json
+translate: target file   is R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource\temp-target.json
+translate: target root   is R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource
+translate: target config is temp-target.json
+---------------------------------------------------------------------
+[source] pymake.json          [target] temp-target.json     [status]
+command:
+test                          test                          [SUCCESS][EXISTED][FORCE]
+qqt.build                     qqt.build                     [SUCCESS][EXISTED][FORCE]
+qqt.clean                     qqt.clean                     [SUCCESS][EXISTED][FORCE]
+Qt                            Qt                            [SUCCESS][EXISTED][FORCE]
+cmake                         cmake                         [SUCCESS][EXISTED][FORCE]
+prod                          prod                          [SUCCESS][EXISTED][FORCE]
+libtool                       libtool                       [SUCCESS][EXISTED][FORCE]
+Qt.check                      Qt.check                      [SUCCESS][EXISTED][FORCE]
+Qt4.build                     Qt4.build                     [SUCCESS][EXISTED][FORCE]
+Qt4.8.7.build                 Qt4.8.7.build                 [SUCCESS][EXISTED][FORCE]
+QtSoap.build                  QtSoap.build                  [SUCCESS][EXISTED][FORCE]
+qqt.push                      qqt.push                      [SUCCESS][EXISTED][FORCE]
+qqt.pull                      qqt.pull                      [SUCCESS][EXISTED][FORCE]
+qqt.cloc                      qqt.cloc                      [SUCCESS][EXISTED][FORCE]
+android.sdk                   android.sdk                   [SUCCESS][EXISTED][FORCE]
+
+R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource>
