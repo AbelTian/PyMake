@@ -88,9 +88,11 @@ Usage:
   pymake7.py port file [ <source-path-file> ] [ to <target-path-file> ]
   pymake7.py port reset
   pymake7.py translate
-  pymake7.py translate ( path | env | cmd ) [ <key-name> ] [ to <target-key-name> ] [ -f | --force ]
+  pymake7.py translate ( path | env | cmd ) [ <key-name> ] [ to <target-key-name> ] [ -f | --force ] [ -a | --all ]
+  pymake7.py translate ( path | env | cmd ) [ -a | --all ]
   pymake7.py translate all [ -f | --force ]
-  pymake7.py translate section <section-name> [ to <target-section-name> ]
+  pymake7.py translate section <section-name> [ to <target-section-name> ] [ -f | --force ] [ -a | --all ]
+  pymake7.py translate all-section [ -f | --force ]
   pymake7.py -------------------------------------------------------------
   pymake7.py (-h | --help)
   pymake7.py --version
@@ -536,6 +538,11 @@ def main_function():
             conf.set('source', 'root', pymakesourceroot)
             conf.set('source', 'config', pymakedefaultsourcefile)
             conf.write(open(pymakeini, 'w'))
+            r = conf.get('source', 'root')
+            f = conf.get('source', 'config')
+            print("SOURCE        : %s%s%s" % (r, os.path.sep, f))
+            print("SOURCE ROOT   : %s" % (r))
+            print("SOURCE CONFIG : %s" % (f))
             print("successed")
             return
         else:
@@ -868,6 +875,12 @@ def main_function():
                 portconf.set('port', 'targetroot', sourceroot)
                 portconf.set('port', 'targetconfig', portdefaulttargetconfig)
                 portconf.write(open(portinifile, 'w'))
+                print("port: source file   is %s" % os.path.join(portconf['port']['sourceroot'], portconf['port']['sourceconfig']))
+                print("port: source root   is %s" % portconf['port']['sourceroot'])
+                print("port: source config is %s" % portconf['port']['sourceconfig'])
+                print("port: target file   is %s" % os.path.join(portconf['port']['targetroot'], portconf['port']['targetconfig']))
+                print("port: target root   is %s" % portconf['port']['targetroot'])
+                print("port: target config is %s" % portconf['port']['targetconfig'])
                 print("successed")
             else:
                 print("port: source file   is %s" % os.path.join(portconf['port']['sourceroot'], portconf['port']['sourceconfig']))
@@ -890,7 +903,10 @@ def main_function():
             print("translate: target root   is %s" % portconf['port']['targetroot'])
             print("translate: target config is %s" % portconf['port']['targetconfig'])
             print("---------------------------------------------------------------------")
+            print(Fore.MAGENTA + "%-30s%-30s%s" % ( "[source] " + portconf['port']['sourceconfig'], "[target] " + portconf['port']['targetconfig'], "[status]"))
             if (args['path'] is True):
+                print(Fore.CYAN + "path-assemblage:")
+
                 srckey = ''
                 tarkey = ''
                 #print(args['<key-name>'], args['<target-key-name>'])
@@ -906,16 +922,70 @@ def main_function():
 
                 if(args['<key-name>'] is not None
                    or args['<target-key-name>'] is not None):
-                    print("src key:%s, tar key:%s" % (srckey, tarkey))
+                    #print("src key:%s, tar key:%s" % (srckey, tarkey))
+
+                    existedflag = '[       ]'
+                    if (porttargetconfig['path-assemblage'].__contains__(tarkey)):
+                        existedflag = '[EXISTED]'
+
                     if(args['-f'] or args['--force'] is True):
-                        print("")
+                        if (portconfig['path-assemblage'].__contains__(srckey) is False):
+                            print("please ensure the source key %s is existed." % srckey)
+                            return
+                        porttargetconfig['path-assemblage'][tarkey] = copy.deepcopy(portconfig['path-assemblage'][srckey])
+                        writeJsonData(porttargetconfigfile, porttargetconfig)
+                        print(Fore.MAGENTA + "%-30s%-30s%s" % (srckey, tarkey, "[SUCCESS]"+existedflag+"[FORCE]"))
+                        return
+
+                    if(porttargetconfig['path-assemblage'].__contains__(tarkey)):
+                        print(Fore.MAGENTA + "%-30s%-30s%s" % (srckey, tarkey, "[CANCEL ]"+existedflag))
+                        return
+                    else:
+                        if (portconfig['path-assemblage'].__contains__(srckey) is False):
+                            print("please ensure the source key %s is existed." % srckey)
+                            return
+                        porttargetconfig['path-assemblage'][tarkey] = copy.deepcopy(portconfig['path-assemblage'][srckey])
+                        writeJsonData(porttargetconfigfile, porttargetconfig)
+                        print(Fore.MAGENTA + "%-30s%-30s%s" % (srckey, tarkey, "[SUCCESS][     ]"+existedflag))
                     return
 
-                if(args['<key-name>'] is None
-                   and args['<target-key-name>'] is None):
-                    print("")
+                if(args['-a'] or args['--all'] is True):
+                    for key in portconfig['path-assemblage'].keys():
+                        existedflag = '[       ]'
+                        if (porttargetconfig['path-assemblage'].__contains__(key)):
+                            existedflag = '[EXISTED]'
+
+                        if(args['-f'] or args['--force'] is True):
+                            porttargetconfig['path-assemblage'][key] = copy.deepcopy(portconfig['path-assemblage'][key])
+                            print(Fore.MAGENTA + "%-30s%-30s%s" % (key, key, "[SUCCESS]"+existedflag+"[FORCE]"))
+                        else:
+                            if (porttargetconfig['path-assemblage'].__contains__(key)):
+                                print(Fore.MAGENTA + "%-30s%-30s%s" % (key, key, "[CANCEL ]" + existedflag))
+                            else:
+                                porttargetconfig['path-assemblage'][key] = copy.deepcopy(portconfig['path-assemblage'][key])
+                                print(Fore.MAGENTA + "%-30s%-30s%s" % (key, key, "[SUCCESS]" + existedflag))
+
+                    writeJsonData(porttargetconfigfile, porttargetconfig)
                     return
 
+                keylist1 = []
+                keylist2 = []
+                #print(portconfig.keys())
+                for key in portconfig['path-assemblage'].keys():
+                    keylist1.append(key)
+                for key in porttargetconfig['path-assemblage'].keys():
+                    keylist2.append(key)
+                #print(keylist1)
+                #print(keylist2)
+                count = 1
+                for (key1,key2) in itertools.zip_longest(keylist1, keylist2):
+                    if(key1 is None):
+                        key1 = str("[EMPTY] %s" % count)
+                        count += 1
+                    if(key2 is None):
+                        key2 = str("[EMPTY] %s" %count)
+                        count += 1
+                    print("%-30s%-30s%s" % (key1, key2, '[NORMAL]'))
                 return
             elif (args['env'] is True):
                 ''
@@ -926,8 +996,7 @@ def main_function():
             elif (args['section'] is True):
                 ''
             else:
-                print(Fore.MAGENTA + "%-30s%s" % ("[source]:" + portconf['port']['sourceconfig'], "[target]:" + portconf['port']['targetconfig']))
-                print(Fore.CYAN + "section:")
+                print(Fore.CYAN + "all sections:")
                 keylist1 = []
                 keylist2 = []
                 #print(portconfig.keys())
@@ -938,14 +1007,14 @@ def main_function():
                 #print(keylist1)
                 #print(keylist2)
                 count = 1
-                for (key1,key2) in itertools.zip_longest(keylist1, keylist2, fillvalue="[EMPTY]"):
+                for (key1,key2) in itertools.zip_longest(keylist1, keylist2):
                     if(key1 is None):
                         key1 = str("[EMPTY] %s" % count)
                         count += 1
                     if(key2 is None):
                         key2 = str("[EMPTY] %s" %count)
                         count += 1
-                    print("%-30s%s" % (key1,key2))
+                    print("%-30s%-30s%s" % (key1,key2,'[NORMAL]'))
             return
         else:
             ''

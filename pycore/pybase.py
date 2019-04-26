@@ -24,6 +24,28 @@ class MyConfigParser(PyConfigParser.ConfigParser):
     def optionxform(self, optionstr):
         return optionstr
 
+class MyOrderedDict(OrderedDict):
+    def prepend(self, key, value, dict_setitem=dict.__setitem__):
+        root = self[0]
+        first = root[1]
+        if key in self:
+            link = self[key]
+            link_prev, link_next, _ = link
+            link_prev[1] = link_next
+            link_next[0] = link_prev
+            link[0] = root
+            link[1] = first
+            root[1] = first[0] = link
+        else:
+            root[1] = first[0] = self[key] = [root, first, key]
+            dict_setitem(self, key, value)
+
+    def insert(self, index, key, value):
+        self[key] = value
+        for ii, k in enumerate(list(self.keys())):
+            if ii >= index and k != key:
+                self.move_to_end(k)
+
 def TestPlatform( ):
     print ("----------Operation System--------------------------")
     #  Python Version
