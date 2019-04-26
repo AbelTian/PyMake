@@ -2153,14 +2153,17 @@ def main_function():
                 list_config = rawconfig
 
             env = os.environ
-            current_var = list_config['environ']['current']
-            if (args['<name>'] is not None):
-                current_var = args['<name>']
 
-            if (list_config['environ'].__contains__(current_var) is False
-                or current_var == "current"):
-                print("please ensure the environ is right")
-                return
+            current_var = args['<name>']
+            if(args['<name>'] is None):
+                current_var = list_config['environ']['current']
+            elif (args['<name>'] is not None):
+                current_var = args['<name>']
+                if(current_var == "current"):
+                    current_var = list_config['environ']['current']
+                if (list_config['environ'].__contains__(current_var) is False):
+                    print("please ensure the environ is right")
+                    return
 
             dict0 = copy.deepcopy(list_config['environ'][current_var])
 
