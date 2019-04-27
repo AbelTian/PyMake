@@ -735,9 +735,11 @@ def main_function():
     os.chdir(pymakeshellroot)
 
     #port translate function
+    portdefaultsourceconfig = pymakedefaultsourcefile
     portdefaulttargetconfig = 'temp-target.json'
+    portiniconfig = 'port.ini'
+    portinifile = os.path.join(pymakeshellroot, "port.ini")
     def init_portconf():
-        portinifile = os.path.join(pymakeshellroot, "port.ini")
         portconf = MyConfigParser()
         portconf.read(portinifile)
         if (not portconf.has_section('port')):
@@ -747,7 +749,7 @@ def main_function():
             portconf.set('port', 'sourceroot', sourceroot)
             portconf.write(open(portinifile, 'w'))
         if (not portconf.has_option('port', 'sourceconfig')):
-            portconf.set('port', 'sourceconfig', pymakedefaultsourcefile)
+            portconf.set('port', 'sourceconfig', portdefaultsourceconfig)
             portconf.write(open(portinifile, 'w'))
         if (not portconf.has_option('port', 'targetroot')):
             portconf.set('port', 'targetroot', sourceroot)
@@ -1744,6 +1746,7 @@ def main_function():
             ''
         break
 
+    # need return, set return, default break.
     # get
     while (True):
         if (args['get'] == True):
@@ -1798,7 +1801,7 @@ def main_function():
                     print("%s" % (pymakeroot))
                     print("%s" % (os.path.split(os.path.realpath(pymakeini))[1]))
                     return
-                else:
+                elif (args['information'] is True):
                     if(config.__contains__("environ") is True):
                         if (config['environ'].__contains__("current") is True):
                             print("CURRENT ENVIRON %s" % (config["environ"]["current"]))
@@ -1821,10 +1824,44 @@ def main_function():
                     print("CONFIGURE ROOT: %s" % (pymakeroot))
                     print("CONFIGURE FILE: %s" % (os.path.split(os.path.realpath(pymakeini))[1]))
                     return
-                return
+                else:
+                    if(config.__contains__("environ") is True):
+                        if (config['environ'].__contains__("current") is True):
+                            print("CURRENT ENVIRON %s" % (config["environ"]["current"]))
+                        else:
+                            print("CURRENT ENVIRON failed: .json file is broken, environ section lost current key, please use set command fix it.")
+                    else:
+                        print("CURRENT ENVIRON failed: please check your .json file content, it is not compatible version .json.")
+
+                    r = conf.get('source', 'root')
+                    f = conf.get('source', 'config')
+                    print ("SOURCE        : %s%s%s" % (r, os.path.sep, f))
+                    print ("SOURCE ROOT   : %s" % (r))
+                    print ("SOURCE CONFIG : %s" % (f))
+                    print("-----------------------------------------")
+                    print("PROGRAM       : %s" % os.path.realpath(__file__))
+                    print("PROGRAM ROOT  : %s" % os.path.split(os.path.realpath(__file__))[0])
+                    print("PROGRAM FILE  : %s" % os.path.split(os.path.realpath(__file__))[1])
+                    print("-----------------------------------------")
+                    print("CONFIGURE     : %s" % (pymakeini))
+                    print("CONFIGURE ROOT: %s" % (pymakeroot))
+                    print("CONFIGURE FILE: %s" % (os.path.split(os.path.realpath(pymakeini))[1]))
+                    print("-----------------------------------------")
+                    print ("PORT INI      : %s" % portinifile)
+                    print ("PORT INI ROOT : %s" % os.path.split(os.path.realpath(portinifile))[0])
+                    print ("PORT INI CONF : %s" % os.path.split(os.path.realpath(portinifile))[1])
+                    print("-----------------------------------------")
+                    print("EXECUTE ROOT [HERE   ]: %s" % pymakeworkpath)
+                    print("EXECUTE ROOT [DEFAULT]: %s" % os.getcwd())
+                    print("-----------------------------------------")
+                    plat = getplatform()
+                    if (plat == "Windows"):
+                        print("INSTALL ROOT  : %s" % "C:\Windows")
+                    else:
+                        print("INSTALL ROOT  : %s" % "/usr/local/bin")
+                    return
             else:
                 ''
-            return
         else:
             ''
         break
