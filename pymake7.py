@@ -1984,19 +1984,29 @@ def main_function():
 
             if( args['path'] == True):
                 dict0 = copy.deepcopy(list_config['path-assemblage'])
-                for (k, v) in dict0.items():
-                    print(Fore.BLUE+ "%-24s %s" % (k, v) )
+                if (args['<name>'] is not None):
+                    if(dict0.__contains__(args['<name>']) is False):
+                        print("there is no this path item in path assemblage.")
+                        return
+                    value = dict0[args['<name>']]
+                    print(Fore.GREEN + "%s" % (value))
+                else:
+                    for (k, v) in dict0.items():
+                        print(Fore.BLUE+ "%-24s %s" % (k, v) )
 
             elif( args['env'] == True):
                 env = os.environ
-                current_var = list_config['environ']['current']
-                if(args['<name>'] is not None):
-                    current_var = args['<name>']
 
-                if (list_config['environ'].__contains__(current_var) is False
-                    or current_var == "current"):
-                    print("please ensure the environ is right")
-                    return
+                current_var = args['<name>']
+                if (args['<name>'] is None):
+                    current_var = list_config['environ']['current']
+                elif (args['<name>'] is not None):
+                    current_var = args['<name>']
+                    if (current_var == "current"):
+                        current_var = list_config['environ']['current']
+                    if (list_config['environ'].__contains__(current_var) is False):
+                        print("please ensure the environ is right")
+                        return
 
                 dict0 = copy.deepcopy(list_config['environ'][current_var])
 
@@ -2022,6 +2032,9 @@ def main_function():
                 dict0 = copy.deepcopy(list_config['command'])
                 if (args['<name>'] is not None):
                     #print(Fore.CYAN + "group: %s" % args['<name>'])
+                    if(dict0.__contains__(args['<name>']) is False):
+                        print("there is no this cmd in command group.")
+                        return
                     value = dict0[args['<name>']]
                     step = 1
                     for cmd in value:
