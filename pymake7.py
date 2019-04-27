@@ -1752,26 +1752,7 @@ def main_function():
     # get
     while (True):
         if (args['get'] == True):
-            if (args['env'] is True):
-                #if (args['default'] or args['current'] or args['cur'] is True):
-                #else:
-                #    ""
-                if (config['environ'].__contains__("current") is True):
-                    print("%s" % (config["environ"]["current"]))
-                    return
-                else:
-                    print("failed: .json file is broken, environ section lost current key, please use set command fix it.")
-                    return
-                return
-            elif (args['exec'] is True):
-                if (args['here'] is True):
-                    print("%s" % (pymakeworkpath))
-                    return
-                else:
-                   ""
-                print("%s" % (pymakeshellroot))
-                return
-            elif (args['all'] is True):
+            if (args['all'] is True):
                 if (args['stat'] is True):
                     print("%s" % pymakeworkpath)
                     print("%s" % os.getcwd())
@@ -1865,6 +1846,25 @@ def main_function():
                     else:
                         print("INSTALL ROOT  : %s" % "/usr/local/bin")
                     return
+            elif (args['env'] is True):
+                #if (args['default'] or args['current'] or args['cur'] is True):
+                #else:
+                #    ""
+                if (config['environ'].__contains__("current") is True):
+                    print("%s" % (config["environ"]["current"]))
+                    return
+                else:
+                    print("failed: .json file is broken, environ section lost current key, please use set command fix it.")
+                    return
+                return
+            elif (args['exec'] is True):
+                if (args['here'] is True):
+                    print("%s" % (pymakeworkpath))
+                    return
+                else:
+                   ""
+                print("%s" % (pymakeshellroot))
+                return
             else:
                 ''
         else:
@@ -2195,6 +2195,76 @@ def main_function():
             else:
                 print("please ensure your assemblage name.")
                 return
+        else:
+            ''
+        break
+
+    # get
+    while (True):
+        if (args['get'] is True):
+            if (args['all'] is True):
+                if (args['settings'] is True):
+                    list_config = config
+                    if (args['--raw'] is True):
+                        list_config = rawconfig
+
+                    if (args['env'] == True):
+                        env = os.environ
+                        if (args['<name>'] is not None):
+                            current_var = args['<name>']
+                            if (current_var == "current"):
+                                current_var = list_config['environ']['current']
+                            if (list_config['environ'].__contains__(current_var) is False):
+                                print("please ensure the environ is right")
+                                return
+                            dict0 = copy.deepcopy(list_config['environ'][current_var])
+                            print(Fore.CYAN + "env %s" % current_var)
+                            print(Fore.MAGENTA + "path+:")
+                            for (key) in dict0["path+"]:
+                                print(Fore.BLUE + "  %s" % key)
+                            if (args['-a'] or args['--all'] is True):
+                                for path in env["PATH"].split(os.path.pathsep):
+                                    print(Fore.BLUE + "  %s" % path)
+                            print(Fore.MAGENTA + "variable:")
+                            for (key, value) in dict0.items():
+                                if (key == 'path+'):
+                                    continue
+                                print(Fore.GREEN + "  %-30s %s" % (key, value))
+                            if (args['-a'] or args['--all'] is True):
+                                for (key, value) in env.items():
+                                    if (key == 'PATH'):
+                                        continue
+                                    print(Fore.GREEN + "  %-30s %s" % (key, value))
+                            return
+
+                        for current_var in list_config['environ'].keys():
+                            if (current_var == "current"):
+                                continue
+                            dict0 = copy.deepcopy(list_config['environ'][current_var])
+                            print(Fore.RESET + "env %s" % current_var)
+                            print(Fore.MAGENTA + "path+:")
+                            for (key) in dict0["path+"]:
+                                print(Fore.BLUE + "  %s" % key)
+                            if (args['-a'] or args['--all'] is True):
+                                for path in env["PATH"].split(os.path.pathsep):
+                                    print(Fore.BLUE + "  %s" % path)
+                            print(Fore.MAGENTA + "variable:")
+                            for (key, value) in dict0.items():
+                                if (key == 'path+'):
+                                    continue
+                                print(Fore.GREEN + "  %-30s %s" % (key, value))
+                            if (args['-a'] or args['--all'] is True):
+                                for (key, value) in env.items():
+                                    if (key == 'PATH'):
+                                        continue
+                                    print(Fore.GREEN + "  %-30s %s" % (key, value))
+                        return
+                    else:
+                        ''
+                else:
+                    ''
+            else:
+                ''
         else:
             ''
         break
@@ -2681,37 +2751,54 @@ def main_function():
 
                     elif (args['env'] == True):
                         env = os.environ
-
-                        current_var = args['<name>']
-                        if (args['<name>'] is None):
-                            current_var = list_config['environ']['current']
-                        elif (args['<name>'] is not None):
+                        if (args['<name>'] is not None):
                             current_var = args['<name>']
                             if (current_var == "current"):
                                 current_var = list_config['environ']['current']
                             if (list_config['environ'].__contains__(current_var) is False):
                                 print("please ensure the environ is right")
                                 return
-
-                        dict0 = copy.deepcopy(list_config['environ'][current_var])
-
-                        print(Fore.CYAN + "env %s" % current_var)
-                        print(Fore.MAGENTA + "path+:")
-                        for (key) in dict0["path+"]:
-                            print(Fore.BLUE + "  %s" % key)
-                        if (args['-a'] or args['--all'] is True):
-                            for path in env["PATH"].split(os.path.pathsep):
-                                print(Fore.BLUE + "  %s" % path)
-                        print(Fore.MAGENTA + "variable:")
-                        for (key, value) in dict0.items():
-                            if (key == 'path+'):
-                                continue
-                            print(Fore.GREEN + "  %-30s %s" % (key, value))
-                        if (args['-a'] or args['--all'] is True):
-                            for (key, value) in env.items():
-                                if (key == 'PATH'):
+                            dict0 = copy.deepcopy(list_config['environ'][current_var])
+                            print(Fore.CYAN + "env %s" % current_var)
+                            print(Fore.MAGENTA + "path+:")
+                            for (key) in dict0["path+"]:
+                                print(Fore.BLUE + "  %s" % key)
+                            if (args['-a'] or args['--all'] is True):
+                                for path in env["PATH"].split(os.path.pathsep):
+                                    print(Fore.BLUE + "  %s" % path)
+                            print(Fore.MAGENTA + "variable:")
+                            for (key, value) in dict0.items():
+                                if (key == 'path+'):
                                     continue
                                 print(Fore.GREEN + "  %-30s %s" % (key, value))
+                            if (args['-a'] or args['--all'] is True):
+                                for (key, value) in env.items():
+                                    if (key == 'PATH'):
+                                        continue
+                                    print(Fore.GREEN + "  %-30s %s" % (key, value))
+                            return
+
+                        for current_var in list_config['environ'].keys():
+                            if (current_var == "current"):
+                                continue
+                            dict0 = copy.deepcopy(list_config['environ'][current_var])
+                            print(Fore.RESET + "env %s" % current_var)
+                            print(Fore.MAGENTA + "path+:")
+                            for (key) in dict0["path+"]:
+                                print(Fore.BLUE + "  %s" % key)
+                            if (args['-a'] or args['--all'] is True):
+                                for path in env["PATH"].split(os.path.pathsep):
+                                    print(Fore.BLUE + "  %s" % path)
+                            print(Fore.MAGENTA + "variable:")
+                            for (key, value) in dict0.items():
+                                if (key == 'path+'):
+                                    continue
+                                print(Fore.GREEN + "  %-30s %s" % (key, value))
+                            if (args['-a'] or args['--all'] is True):
+                                for (key, value) in env.items():
+                                    if (key == 'PATH'):
+                                        continue
+                                    print(Fore.GREEN + "  %-30s %s" % (key, value))
 
                     elif (args['cmd'] == True):
                         dict0 = copy.deepcopy(list_config['command'])
