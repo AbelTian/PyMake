@@ -305,7 +305,7 @@
             "cd ${qt5.build.path}",
             "${qt5.source}/configure -prefix ${qqt.install.path} -hostprefix ${qqt.install.path} -xplatform android-g++ -release -nomake tests -nomake examples -android-ndk $ANDROID_NDK_ROOT -android-sdk $ANDROID_SDK_ROOT -android-ndk-host $ANDROID_NDK_HOST -android-toolchain-version $ANDROID_NDK_TOOLCHAIN_VERSION -skip qtwebkit-examples -no-warnings-are-errors"
         ],
-        "adb": [
+        "adb.d": [
             "adb devices"
         ],
         "cmake": [
@@ -336,9 +336,6 @@
         ],
         "test": [
             "echo %cd%"
-        ],
-        "test2": [
-            "echo $(pwd)"
         ],
         "build-osg-release": [
             "cd /d R:/Develop/c0-buildstation/OpenSceneGraph_Release",

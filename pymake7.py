@@ -78,6 +78,7 @@ Usage:
   pymake7.py get all
   pymake7.py get all ( info | information )
   pymake7.py get all ( stat | status )
+  pymake7.py get all settings [ path | env | cmd ] [<name>] [-r | --raw] [-a | --all]
   pymake7.py get default exec root
   pymake7.py get exec root [ default | here ]
   pymake7.py initialize
@@ -576,6 +577,7 @@ def main_function():
 
     #record source config file postfix
     pymakesuffix = '.json'
+    #source
     while (True):
         if(args['source'] is True):
             if(args['root'] is True):
@@ -1824,6 +1826,9 @@ def main_function():
                     print("CONFIGURE ROOT: %s" % (pymakeroot))
                     print("CONFIGURE FILE: %s" % (os.path.split(os.path.realpath(pymakeini))[1]))
                     return
+                elif (args['settings'] is True):
+                    #print('break to display backward.')
+                    break
                 else:
                     if(config.__contains__("environ") is True):
                         if (config['environ'].__contains__("current") is True):
@@ -2273,7 +2278,7 @@ def main_function():
         break
 
     # set into env [False]
-    while(False):
+    while (False):
         env = os.environ
         current_var = rawconfig['environ']['current']
         dict0 = copy.deepcopy(rawconfig['environ'][current_var])
@@ -2460,7 +2465,7 @@ def main_function():
         break
 
     # use env type command
-    while(True):
+    while (True):
         if (args['use'] is True):
             if(args['<env-name>'] is None):
                 print("please appoint a environ")
@@ -2652,6 +2657,149 @@ def main_function():
             ""
         break
 
+    # get
+    while (True):
+        if (args['get'] is True):
+            if (args['all'] is True):
+                if (args['settings'] is True):
+
+                    list_config = config
+                    if (args['--raw'] is True):
+                        list_config = rawconfig
+
+                    if (args['path'] == True):
+                        dict0 = copy.deepcopy(list_config['path-assemblage'])
+                        if (args['<name>'] is not None):
+                            if (dict0.__contains__(args['<name>']) is False):
+                                print("there is no this path item in path assemblage.")
+                                return
+                            value = dict0[args['<name>']]
+                            print(Fore.GREEN + "%s" % (value))
+                        else:
+                            for (k, v) in dict0.items():
+                                print(Fore.BLUE + "%-24s %s" % (k, v))
+
+                    elif (args['env'] == True):
+                        env = os.environ
+
+                        current_var = args['<name>']
+                        if (args['<name>'] is None):
+                            current_var = list_config['environ']['current']
+                        elif (args['<name>'] is not None):
+                            current_var = args['<name>']
+                            if (current_var == "current"):
+                                current_var = list_config['environ']['current']
+                            if (list_config['environ'].__contains__(current_var) is False):
+                                print("please ensure the environ is right")
+                                return
+
+                        dict0 = copy.deepcopy(list_config['environ'][current_var])
+
+                        print(Fore.CYAN + "env %s" % current_var)
+                        print(Fore.MAGENTA + "path+:")
+                        for (key) in dict0["path+"]:
+                            print(Fore.BLUE + "  %s" % key)
+                        if (args['-a'] or args['--all'] is True):
+                            for path in env["PATH"].split(os.path.pathsep):
+                                print(Fore.BLUE + "  %s" % path)
+                        print(Fore.MAGENTA + "variable:")
+                        for (key, value) in dict0.items():
+                            if (key == 'path+'):
+                                continue
+                            print(Fore.GREEN + "  %-30s %s" % (key, value))
+                        if (args['-a'] or args['--all'] is True):
+                            for (key, value) in env.items():
+                                if (key == 'PATH'):
+                                    continue
+                                print(Fore.GREEN + "  %-30s %s" % (key, value))
+
+                    elif (args['cmd'] == True):
+                        dict0 = copy.deepcopy(list_config['command'])
+                        if (args['<name>'] is not None):
+                            # print(Fore.CYAN + "group: %s" % args['<name>'])
+                            if (dict0.__contains__(args['<name>']) is False):
+                                print("there is no this cmd in command group.")
+                                return
+                            value = dict0[args['<name>']]
+                            step = 1
+                            for cmd in value:
+                                print(Fore.RED + "%-3s %s" % (step, cmd))
+                                step += 1
+                        else:
+                            for (key, value) in dict0.items():
+                                if (args['-a'] is not True and args['--all'] is not True):
+                                    print(Fore.CYAN + "%s" % key)
+                                    continue
+                                print(Fore.CYAN + "group: %s" % key)
+                                step = 1
+                                for cmd in value:
+                                    print(Fore.RED + "%-3s %s" % (step, cmd))
+                                    step += 1
+                    else:
+                        print(Fore.BLACK + "path-assemblage:")
+                        for (k, v) in list_config['path-assemblage'].items():
+                            print(Fore.BLUE + "%-24s %s" % (k, v))
+
+                        print(Fore.BLACK + "environ:")
+                        env = os.environ
+                        for current_var in list_config['environ'].keys():
+                            if (current_var == "current"):
+                                continue
+
+                            dict0 = copy.deepcopy(list_config['environ'][current_var])
+
+                            print(Fore.RESET + "env %s" % current_var)
+                            print(Fore.MAGENTA + "path+:")
+                            for (key) in dict0["path+"]:
+                                print(Fore.BLUE + "  %s" % key)
+                            if (args['-a'] or args['--all'] is True):
+                                for path in env["PATH"].split(os.path.pathsep):
+                                    print(Fore.BLUE + "  %s" % path)
+                            print(Fore.MAGENTA + "variable:")
+                            for (key, value) in dict0.items():
+                                if (key == 'path+'):
+                                    continue
+                                print(Fore.GREEN + "  %-30s %s" % (key, value))
+                            if (args['-a'] or args['--all'] is True):
+                                for (key, value) in env.items():
+                                    if (key == 'PATH'):
+                                        continue
+                                    print(Fore.GREEN + "  %-30s %s" % (key, value))
+
+                        print(Fore.BLACK + "command:")
+                        current_var = args['<name>']
+                        if (args['<name>'] is not None):
+                            if (args['<name>'] == "current"):
+                                current_var = list_config['environ']['current']
+
+                            if (list_config['environ'].__contains__(current_var) is False):
+                                print('please ensure your env name is right.')
+                                return
+
+                            local_command = list_config['command']
+                            if (args['--raw'] is True):
+                                local_command = raw_command(current_var)
+
+                            dict0 = copy.deepcopy(local_command)
+                        else:
+                            dict0 = copy.deepcopy(list_config['command'])
+
+                        for (key, value) in dict0.items():
+                            print(Fore.CYAN + "cmd %s" % key)
+                            step = 1
+                            for cmd in value:
+                                print(Fore.RED + "%-3s %s" % (step, cmd))
+                                step += 1
+
+                    return
+                else:
+                    ''
+            else:
+                ''
+        else:
+            ''
+        break
+
     def createCmdList0(list0):
 
         cmd_list = []
@@ -2818,7 +2966,7 @@ def main_function():
         return
 
     # use env exec command
-    while(True):
+    while (True):
         if (args['use'] is True):
             if(args['<env-name>'] is None):
                 print("please appoint a environ")
@@ -2901,7 +3049,7 @@ def main_function():
         break
 
     # cc exec
-    while ( True ):
+    while (True):
         if (args['cc'] or args['exec'] is True):
             if (args['<command-names>'] == []):
                 print("please appoint your commands")
@@ -2963,7 +3111,7 @@ def main_function():
         break
 
     # here [False]
-    while ( False ):
+    while (False):
         if (args['here'] or args['hh'] is True):
             os.chdir(pymakeworkpath)
 
