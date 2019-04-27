@@ -92,28 +92,6 @@
         "ndk.x86_64.bin": "${ndk.x86_64}/bin"
     },
     "environ": {
-        "CMake":{
-            "path+": [
-                "${cmake.bin}",
-                "${mingw32.bin}",
-                "${qt5.9.mingw32.bin}"
-            ],
-            "CMAKE_SYSTEM_NAME":"",
-            "CMAKE_TOOLCHAIN_FILE":"",
-            "CMAKE_C_COMPILER":"",
-            "CMAKE_CXX_COMPILER":"",
-            "CMAKE_FIND_ROOT_PATH":"",
-            "CMAKE_FIND_ROOT_PATH_MODE_PROGRAM":"NEVER",
-            "CMAKE_FIND_ROOT_PATH_MODE_LIBRARY":"ONLY",
-            "CMAKE_FIND_ROOT_PATH_MODE_INCLUDE":"ONLY",
-            "BOOST_ROOT":"",
-            "QTVERSION": "${qt5.9.version}",
-            "QTDIR": "${qt5.9.mingw32}",
-            "QTSPEC": "-spec win32-g++",
-            "QTCONFIG": "",
-            "QKIT": "WIN32",
-            "QSYS": "Windows"
-        },
         "android.mobile": {
             "path+": [
                 "${cmake.bin}",
@@ -256,23 +234,6 @@
             "QTCONFIG": "",
             "QKIT": "WIN64",
             "QSYS": "Win64"
-        },
-        "FFmpeg": {
-            "path+": [
-                "${msys.bin}",
-                "${FFmpeg.bin}",
-                "${FFmpeg.lib}",
-                "${FFmpeg.inc}",
-                "${cmake.bin}",
-                "${mingw32.bin}",
-                "${qt5.9.mingw32.bin}"
-            ],
-            "QTVERSION": "${qt5.9.version}",
-            "QTDIR": "${qt5.9.mingw32}",
-            "QTSPEC": "-spec win32-g++",
-            "QTCONFIG": "",
-            "QKIT": "WIN32",
-            "QSYS": "Windows"
         },
         "armhf32": {
             "path+": [
