@@ -6,12 +6,12 @@ Usage:
   pymake7.py source
   pymake7.py source file [ <source-path-file> ]
   pymake7.py source root [ <source-root-path> ]
-  pymake7.py source config [ --add  ] [ <config-file-name> ] [<new-config-file-name>]
-  pymake7.py source config [ --del  ] [ <config-file-name> ] [<new-config-file-name>]
+  pymake7.py source config [ --add  ] [ <config-file-name> ]
+  pymake7.py source config [ --del  ] [ <config-file-name> ]
   pymake7.py source config [ --mod  ] [ <config-file-name> ] [<new-config-file-name>]
-  pymake7.py source config [ --switch  ] [ <config-file-name> ] [<new-config-file-name>]
-  pymake7.py source config [ --restore  ] [ <config-file-name> ] [<new-config-file-name>]
-  pymake7.py source config [ --show ] [ <config-file-name> ] [<new-config-file-name>]
+  pymake7.py source config [ --switch  ] [ <config-file-name> ]
+  pymake7.py source config [ --restore  ]
+  pymake7.py source config [ --show ]
   pymake7.py -------------------------------------------------------------
   pymake7.py set path ( --add | --del | --mod ) <name> [ <value> ]
   pymake7.py set env [ path ] ( --add | --del | --mod ) <group> <name> [ <value> ]
