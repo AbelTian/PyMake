@@ -17,11 +17,11 @@ build.module (){
 
 env.open () {
     mm export $1 $2
-    source $(mm source root)/$2_effect.sh
+    source $(mm get default exec root)/$2_effect.sh
 }
 
 env.close () {
-    source $(mm source root)/$1_unset.sh
+    source $(mm get default exec root)/$1_unset.sh
 }
 
 #####################################################

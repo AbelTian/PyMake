@@ -35,31 +35,31 @@ exit /b 0
 :env_open
 ::env effect
 call mm export %1 %2
-for /f "" %%a in ('mm source root') do call %%a\%2_effect.bat
+for /f "" %%a in ('mm get default exec root') do call %%a\%2_effect.bat
 goto :eof
 
 :env_effect
 ::env effect
 call mm export %1 %2
-for /f "" %%a in ('mm source root') do call %%a\%2_effect.bat
+for /f "" %%a in ('mm get default exec root') do call %%a\%2_effect.bat
 goto :eof
 
 :env_reset
 ::env reset (need)
-for /f "" %%a in ('mm source root') do call %%a\%1_unset.bat
+for /f "" %%a in ('mm get default exec root') do call %%a\%1_unset.bat
 goto :eof
 
 :env_unset
 ::env unset (need)
-for /f "" %%a in ('mm source root') do call %%a\%1_unset.bat
+for /f "" %%a in ('mm get default exec root') do call %%a\%1_unset.bat
 goto :eof
 
 :env_clean
 ::env unset (need)
-for /f "" %%a in ('mm source root') do call %%a\%1_unset.bat
+for /f "" %%a in ('mm get default exec root') do call %%a\%1_unset.bat
 goto :eof
 
 :env_close
 ::env unset (need)
-for /f "" %%a in ('mm source root') do call %%a\%1_unset.bat
+for /f "" %%a in ('mm get default exec root') do call %%a\%1_unset.bat
 goto :eof

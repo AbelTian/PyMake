@@ -1,6 +1,6 @@
 @echo off
 
-::env effect
+::env effect (need)
 call mm set cur env "qt5"
 ::do command in this env
 call mm exec build.qqt
@@ -29,6 +29,7 @@ call mm set cur env qt5.winrt.simulator
 call mm exec build.qqt
 ::env reset (no need)
 
+:: reset
 call mm set cur env "qt5"
 
 exit /b 0
@@ -48,10 +49,10 @@ exit /b 0
 :env_effect
 ::env effect
 call mm export %1 to env
-for /f "" %%a in ('mm source root') do call %%a\env_effect.bat
+for /f "" %%a in ('mm get default exec root') do call %%a\env_effect.bat
 goto :eof
 
 :env_reset
 ::env reset (need)
-for /f "" %%a in ('mm source root') do call %%a\env_unset.bat
+for /f "" %%a in ('mm get default exec root') do call %%a\env_unset.bat
 goto :eof

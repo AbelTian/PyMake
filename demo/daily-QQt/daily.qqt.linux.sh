@@ -30,19 +30,19 @@ ename=qqtdebug0
 
 #env effect
 mm export 'qt5' ${ename}
-source $(mm source root)/${ename}_effect.sh
+source $(mm get default exec root)/${ename}_effect.sh
 #do command in this env
 daily.qqt
 #daily.qqt.release
 #env reset (need)
-source $(mm source root)/${ename}_unset.sh
+source $(mm get default exec root)/${ename}_unset.sh
 
 
 #env effect
 mm export 'qt5.armhf32' ${ename}
-source $(mm source root)/${ename}_effect.sh
+source $(mm get default exec root)/${ename}_effect.sh
 #do command in this env
 daily.qqt
 #daily.qqt.release
 #env reset (need)
-source $(mm source root)/${ename}_unset.sh
+source $(mm get default exec root)/${ename}_unset.sh
