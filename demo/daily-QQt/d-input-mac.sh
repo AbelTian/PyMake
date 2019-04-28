@@ -28,7 +28,7 @@ env.close () {
 module_name=QQtInput
 
 #env effect
-env.open 'macOS' $module_name
+env.open 'macos' $module_name
 #do command in this env
 build.module
 #env reset
@@ -36,7 +36,7 @@ env.close $module_name
 
 
 #env effect
-env.open 'iOSSimulator' $module_name
+env.open 'iossimulator' $module_name
 #do command in this env
 build.module
 #env reset

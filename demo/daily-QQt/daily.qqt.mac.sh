@@ -25,7 +25,7 @@ daily.qqt.release(){
 }
 
 #env effect
-mm set cur env 'macOS'
+mm set cur env 'macos'
 #do command in this env
 mm exec build.qqt
 #env reset (no need)
@@ -52,7 +52,7 @@ mm exec build.qqt
 #mm exec daily.qqt
 #mm exec daily.qqt.release
 
-mm set cur env iOSSimulator
+mm set cur env iossimulator
 mm exec build.qqt
 
-mm set cur env macOS
+mm set cur env macos

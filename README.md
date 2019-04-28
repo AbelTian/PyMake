@@ -399,6 +399,9 @@ Update the command-line.
 #### User Support   
 [Readme](./SHELL.md)  
 
+#### Language     
+[PyMake Language](./LANGUAGE.md)  
+
 # Dependencies  
 
 *This program edited by python, support python 2.7 -> 3.6 (tested).You need install python, only python in path. configured.*  

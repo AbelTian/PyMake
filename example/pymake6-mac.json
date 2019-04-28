@@ -121,7 +121,7 @@
             "QKIT": "ANDROIDX86",
             "QSYS": "AndroidX86"
         },
-        "iOS": {
+        "ios": {
             "path+": [
                 "${cmake.bin}",
                 "${qt5.9.ios.bin}"
@@ -133,7 +133,7 @@
             "QKIT": "iOS",
             "QSYS": "iOS"
         },
-        "iOSSimulator": {
+        "iossimulator": {
             "path+": [
                 "${cmake.bin}",
                 "${qt5.9.ios.bin}"
@@ -157,7 +157,7 @@
             "QKIT": "macOS",
             "QSYS": "MacOS"
         },
-        "macOS": {
+        "macos": {
             "path+": [
                 "${cmake.bin}",
                 "${qt5.9.clang.bin}"
@@ -169,7 +169,7 @@
             "QKIT": "macOS",
             "QSYS": "macOS"
         },
-        "current": "macOS"
+        "current": "macos"
     },
     "variable-assemblage": [
         "QQt",

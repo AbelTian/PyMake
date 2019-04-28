@@ -279,7 +279,7 @@ def main_function():
                 "QKIT": "ANDROIDX86",
                 "QSYS": "AndroidX86"
             },
-            "iOS": {
+            "ios": {
                 "path+": [
                     "${cmake.bin}",
                     "${qt5.9.ios.bin}"
@@ -291,7 +291,7 @@ def main_function():
                 "QKIT": "iOS",
                 "QSYS": "iOS"
             },
-            "iOSSimulator": {
+            "iossimulator": {
                 "path+": [
                     "${cmake.bin}",
                     "${qt5.9.ios.bin}"
@@ -315,7 +315,7 @@ def main_function():
                 "QKIT": "macOS",
                 "QSYS": "MacOS"
             },
-            "macOS": {
+            "macos": {
                 "path+": [
                     "${cmake.bin}",
                     "${qt5.9.clang.bin}"
@@ -327,99 +327,7 @@ def main_function():
                 "QKIT": "macOS",
                 "QSYS": "macOS"
             },
-            "current": "macOS"
-        },
-        "command": {
-            "test":[
-                "echo $(pwd)"
-            ],
-            "qqt.build": [
-                "src_path=${root.src}/LibQQt",
-                "src=${root.src}/LibQQt/QQt.pro",
-                "build=${root.build}/QQt/${QSYS}/${QTVERSION}/Debug",
-                "mkdir -p $build",
-                "cd $build",
-                "echo build $(pwd)",
-                "qmake ${src} ${QTSPEC} CONFIG+=debug CONFIG+=qml_debug ${QTCONFIG} && make qmake_all",
-                "make -j4"
-            ],
-            "qqt.clean": [
-                "src=${root.src}/LibQQt/QQt.pro",
-                "build=${root.build}/QQt/${QSYS}/${QTVERSION}/Debug",
-                "cd $build",
-                "make clean"
-            ],
-            "Qt": [
-                "open \"/Applications/Qt Creator.app\""
-            ],
-            "cmake": [
-                "open ${root.tool}/macCompilers/CMake.app"
-            ],
-            "prod": [
-                "open ${root.prod}/ProductExecTool/macOS/ProductExecTool_debug.app"
-            ],
-            "libtool": [
-                "open ${root.prod}/AddLibraryTool/macOS/AddLibraryTool_debug.app"
-            ],
-            "Qt.check": [
-                "src=${root.tool}/z0-Source/qt-everywhere-opensource-src-4.8.7",
-                "build=${root.build}/qt4.8.7",
-                "install=${root.tool}/macLibraries/Qt/4.8.7/gcc_64",
-                "mkdir -p $build",
-                "cd $build",
-                "echo build $(pwd)",
-                "${src}/configure --help"
-            ],
-            "Qt4.build": [
-                "src=${root.tool}/z0-Source/qt",
-                "build=${root.build}/qt",
-                "install=${root.tool}/macLibraries/Qt/4.8/gcc_64",
-                "mkdir -p $build",
-                "cd $build",
-                "echo build $(pwd)",
-                "CXXFLAGS=-stdlib=libc++",
-                "${src}/configure -prefix ${install}",
-                "make -j4",
-                "make install"
-            ],
-            "Qt4.8.7.build": [
-                "src=${root.tool}/z0-Source/qt-everywhere-opensource-src-4.8.7",
-                "build=${root.build}/qt4.8.7",
-                "install=${root.tool}/macLibraries/Qt/4.8.7/gcc_64",
-                "mkdir -p $build",
-                "cd $build",
-                "echo build $(pwd)",
-                "${src}/configure -prefix ${install}",
-                "make -j4",
-                "make install"
-            ],
-            "QtSoap.build": [
-                "src=/Users/abel/Develop/c1-webrc/qt-solutions/qtsoap",
-                "build=${root.build}/qtsoap",
-                "install=/Users/abel/Develop/d1-product/QtSoap",
-                "cd $build",
-                "${src}/configure -library"
-            ],
-            "qqt.push": [
-                "src=${root.src}/LibQQt",
-                "cd $src",
-                "git push",
-                "git push --tag"
-            ],
-            "qqt.pull": [
-                "src=${root.src}/LibQQt",
-                "cd $src",
-                "git pull"
-            ],
-            "qqt.cloc": [
-                "src=${root.src}/LibQQt",
-                "cd $src",
-                "perl ${pymake}/demo/cloc-1.74.pl  .",
-                "date"
-            ],
-            "android.sdk": [
-                "${root.tool}/macAndroidLibraries/android-sdk-macosx/tools/android"
-            ]
+            "current": "macos"
         },
         "variable-assemblage": [
             "QQt",
@@ -474,7 +382,99 @@ def main_function():
             "install_name_tool -change $LibDep @rpath/$LibDep ${app-native}/${prod-name} ",
             "${source-path}/configure -prefix ${install-path} -hostprefix ${install-path} -xplatform android-g++ -release -nomake tests -nomake examples -android-ndk $ANDROID_NDK_ROOT -android-sdk $ANDROID_SDK_ROOT -android-ndk-host $ANDROID_NDK_HOST -android-toolchain-version $ANDROID_NDK_TOOLCHAIN_VERSION -skip qtwebkit-examples -no-warnings-are-errors",
             "${qt5.path.source}/configure -prefix ${qt5.path.install} -hostprefix ${qt5.path.install} -xplatform android-g++ -release -nomake tests -nomake examples -android-ndk $ANDROID_NDK_ROOT -android-sdk $ANDROID_SDK_ROOT -android-ndk-host $ANDROID_NDK_HOST -android-toolchain-version $ANDROID_NDK_TOOLCHAIN_VERSION -skip qtwebkit-examples -no-warnings-are-errors"
-        ]
+        ],
+        "command": {
+            "test":[
+                "echo $(pwd)"
+            ],
+            "qqt.build": [
+                "src_path=${root.src}/LibQQt",
+                "src=${root.src}/LibQQt/QQt.pro",
+                "build=${root.build}/QQt/${QSYS}/${QTVERSION}/Debug",
+                "mkdir -p $build",
+                "cd $build",
+                "echo build $(pwd)",
+                "qmake ${src} ${QTSPEC} CONFIG+=debug CONFIG+=qml_debug ${QTCONFIG} && make qmake_all",
+                "make -j4"
+            ],
+            "qqt.clean": [
+                "src=${root.src}/LibQQt/QQt.pro",
+                "build=${root.build}/QQt/${QSYS}/${QTVERSION}/Debug",
+                "cd $build",
+                "make clean"
+            ],
+            "qt": [
+                "open \"/Applications/Qt Creator.app\""
+            ],
+            "cmake": [
+                "open ${root.tool}/macCompilers/CMake.app"
+            ],
+            "prod": [
+                "open ${root.prod}/ProductExecTool/macOS/ProductExecTool_debug.app"
+            ],
+            "libtool": [
+                "open ${root.prod}/AddLibraryTool/macOS/AddLibraryTool_debug.app"
+            ],
+            "qt.check": [
+                "src=${root.tool}/z0-Source/qt-everywhere-opensource-src-4.8.7",
+                "build=${root.build}/qt4.8.7",
+                "install=${root.tool}/macLibraries/Qt/4.8.7/gcc_64",
+                "mkdir -p $build",
+                "cd $build",
+                "echo build $(pwd)",
+                "${src}/configure --help"
+            ],
+            "qt4.build": [
+                "src=${root.tool}/z0-Source/qt",
+                "build=${root.build}/qt",
+                "install=${root.tool}/macLibraries/Qt/4.8/gcc_64",
+                "mkdir -p $build",
+                "cd $build",
+                "echo build $(pwd)",
+                "CXXFLAGS=-stdlib=libc++",
+                "${src}/configure -prefix ${install}",
+                "make -j4",
+                "make install"
+            ],
+            "qt4.8.7.build": [
+                "src=${root.tool}/z0-Source/qt-everywhere-opensource-src-4.8.7",
+                "build=${root.build}/qt4.8.7",
+                "install=${root.tool}/macLibraries/Qt/4.8.7/gcc_64",
+                "mkdir -p $build",
+                "cd $build",
+                "echo build $(pwd)",
+                "${src}/configure -prefix ${install}",
+                "make -j4",
+                "make install"
+            ],
+            "qtsoap.build": [
+                "src=/Users/abel/Develop/c1-webrc/qt-solutions/qtsoap",
+                "build=${root.build}/qtsoap",
+                "install=/Users/abel/Develop/d1-product/QtSoap",
+                "cd $build",
+                "${src}/configure -library"
+            ],
+            "qqt.push": [
+                "src=${root.src}/LibQQt",
+                "cd $src",
+                "git push",
+                "git push --tag"
+            ],
+            "qqt.pull": [
+                "src=${root.src}/LibQQt",
+                "cd $src",
+                "git pull"
+            ],
+            "qqt.cloc": [
+                "src=${root.src}/LibQQt",
+                "cd $src",
+                "perl ${pymake}/demo/cloc-1.74.pl  .",
+                "date"
+            ],
+            "android.sdk": [
+                "${root.tool}/macAndroidLibraries/android-sdk-macosx/tools/android"
+            ]
+        }
     }
 
     # record current directory [pwd, execute path]
@@ -780,45 +780,13 @@ def main_function():
                 "current": "default"
             },
             "command":{
-            },
-            "Tips": {
-                "path-assemblage": {
-                    "Tips": "All path are located in this group.",
-                    "p1": "a path on computer",
-                    "p2": "${p1}/a sub path under p1"
-                },
-                "environ": {
-                    "default": {
-                        "path+": [
-                            "path+ paths will be added to default env path.",
-                            "${p2}"
-                            "I add p2 to default env path."
-                        ],
-                        "Tips1": "Tips1 variables will be added to default env.",
-                        "Tips2": "Current env is default.",
-                        "VAR1":"a variable",
-                        "VARXXX": "${VAR1} param3",
-                        "VARP3": "${p2}/VAR0",
-                        "Tips2": "You can use ${var-name} in path-assemblage and this environ to abb variables.",
-                        "a_special_var_const": "hello world"
-                    },
-                    "current": "default"
-                },
-                "command": {
-                    "command-name": [
-                        "All commands are here, they will be executed step by step.",
-                        "This is a command, step 2",
-                        "${p2}/cmd2 ${VARXXX}",
-                        "You can use ${var-name} in path-assemblage and current environ to abb command line."
-                    ]
-                },
-                "Tips": "User can delete these Tips group."
             }
         }
         if(not os.path.exists(portsourceconfigfile)):
             writeJsonData(portsourceconfigfile, d_temp)
         if(not os.path.exists(porttargetconfigfile)):
             writeJsonData(porttargetconfigfile, d_temp)
+
         srcsize = os.path.getsize(portsourceconfigfile)
         tarsize = os.path.getsize(porttargetconfigfile)
         if(srcsize < 166):

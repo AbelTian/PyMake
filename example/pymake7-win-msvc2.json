@@ -269,7 +269,7 @@
             "QSYS": "WinRTSimulator",
             "MSMAKE": "${make2}"
         },
-        "FFmpeg": {
+        "ffmpeg": {
             "path+": [
                 "${msys.bin}",
                 "${FFmpeg.bin}",
