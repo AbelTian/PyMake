@@ -24,10 +24,36 @@ daily.qqt.release(){
     make -j4
 }
 
+build.module (){
+    src_path=/Users/abel/Develop/a0-develop
+    build_path=/Users/abel/Develop/c0-buildstation
+    src=/Users/abel/Develop/a0-develop/LibQQt/${module_name}.pro
+    build=/Users/abel/Develop/c0-buildstation/${module_name}/${QSYS}/${QTVERSION}/Debug
+    echo build $src
+    echo in $build
+    mkdir -p $build
+    cd $build
+    #rm -rf src examples
+    #rm -rf ${src_path}/sdk
+    qmake $src ${QTSPEC} ${QTCONFIG} "CONFIG+=debug" "CONFIG+=qml_debug" && make qmake_all
+    make -j4
+}
+
+module_name=QQt
+. pyenv macos
+build.module
+. pyenv close macos
+
+. pyenv iossimulator
+build.module
+. pyenv close iossimulator
+
+
+#success
 #env effect
-mm set cur env 'macos'
+#mm set cur env 'macos'
 #do command in this env
-mm exec build.qqt
+#mm exec build.qqt
 #env reset (no need)
 
 #mm set cur env qt4
@@ -52,7 +78,7 @@ mm exec build.qqt
 #mm exec daily.qqt
 #mm exec daily.qqt.release
 
-mm set cur env iossimulator
-mm exec build.qqt
-
-mm set cur env macos
+#success
+#mm set cur env iossimulator
+#mm exec build.qqt
+#mm set cur env macos
