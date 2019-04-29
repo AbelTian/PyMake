@@ -401,7 +401,6 @@ Update the command-line.
 
 # Language       
 [PyMake Language](./LANGUAGE.md)  
-[PyMake Language Animation](./screenshot/language.gif)  
 [PyMake Language Example](./example/pymake7-win-msvc3.json)    
 
 # Dependencies  
