@@ -7,15 +7,19 @@ do
 
 
 if [ "$1" = "" ]; then
-    echo "pycmd <cmd-name> [ <env-name> ]"
+    echo "pyexecvp <cmd-name> [ <cmd-params> ] [<env-name>]"
+    echo "env name: current is suggested."
     echo please appoint a cmd name.
     break
 fi
 export PYEXECNAME=$1
 
-if [ "$2" != "" ]; then
-    export PYENVNAME=$2
+if [ "$3" != "" ]; then
+    export PYENVNAME=$3
 fi
+export PYEXECNAME=$1
+export PYEXECPARAM=$2
+export PYENVNAME=$3
 
 #if has source[.] call , failed. source default work path is user home.
 #这些都只是获取到了工作路径
@@ -76,11 +80,13 @@ echo configure: \[$PYMMSOURCECONFIG\] \[1\]
 
 export PYMMDEFAULTENVNAME=$("$PYPROGRAMPATHNAME" get current env)
 echo environme: \[$PYMMDEFAULTENVNAME\] \[default\]
-if [ "$2" != "" ]; then
-    export PYENVNAME=$2
+#echo $1 $2 $3
+if [ "$3" != "" ]; then
+    export PYENVNAME=$3
 else
     export PYENVNAME=$PYMMDEFAULTENVNAME
 fi
+#echo $PYENVNAME
 export PYEXECFLAG=$("$PYPROGRAMPATHNAME" have env $PYENVNAME)
 if [ "$PYEXECFLAG" = "False" ]; then
     echo environme: \[$PYENVNAME\] is not existed.
@@ -102,7 +108,7 @@ echo exec root: \[$PYMMSHELLROOT\] \[default\]
 "$PYPROGRAMPATHNAME" use $PYENVNAME type $PYEXECNAME to $PYEXECINDEX
 chmod +x "${PYMMSHELLROOT}/${PYEXECINDEX}_effect.sh"
 source "${PYMMSHELLROOT}/${PYEXECINDEX}_effect.sh"
-"${PYMMSHELLROOT}/${PYEXECINDEX}_exec.sh"
+"${PYMMSHELLROOT}/${PYEXECINDEX}_exec.sh" $PYEXECPARAM
 
 #clean
 rm -f "${PYMMSHELLROOT}/${PYEXECINDEX}_exec.sh"

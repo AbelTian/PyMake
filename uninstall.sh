@@ -10,5 +10,6 @@ sudo rm -f ${mmpath}/pymake
 
 sudo rm -f ${mmpath}/pyenv
 sudo rm -f ${mmpath}/pycmd
+sudo rm -f ${mmpath}/pyexecvp
 
 sudo rm -f ${mmpath}/pyinfo

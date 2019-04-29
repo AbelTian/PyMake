@@ -226,9 +226,6 @@
         "${qt5.path.source}/configure -prefix ${qt5.path.install} -hostprefix ${qt5.path.install} -xplatform android-g++ -release -nomake tests -nomake examples -android-ndk $ANDROID_NDK_ROOT -android-sdk $ANDROID_SDK_ROOT -android-ndk-host $ANDROID_NDK_HOST -android-toolchain-version $ANDROID_NDK_TOOLCHAIN_VERSION -skip qtwebkit-examples -no-warnings-are-errors"
     ],
     "command": {
-        "test":[
-            "echo $(pwd)"
-        ],
         "daily.qqt": [
             "src_path=/Users/abel/Develop/a0-develop/LibQQt",
             "src=$src_path/QQt.pro",
@@ -353,6 +350,56 @@
             "cd $src",
             "perl /Users/abel/Develop/b1-buildshell/cloc-1.74.pl  .",
             "date"
+        ],
+        "qtdir":[
+            "echo $QTDIR"
+        ],
+        "test":[
+            "echo $(pwd)"
+        ],
+        "test.2": [
+            "#echo $*",
+            "param=$*",
+            "ping 127.0.0.1 $param"
+        ],
+        "test.3": [
+            "#echo $*",
+            "ping $*"
+        ],
+        "test.4": [
+            "echo param1: $1",
+            "echo param2: $2",
+            "echo param3: $3",
+            "echo param4: $4"
+        ],
+        "build.pro": [
+            "while [ 1 ]",
+            "do",
+            "if [ -f \"$1.pro\" ]; then",
+            "   echo $1.pro existed.",
+            "else",
+            "   echo has $1.pro? please add here command to restrict.",
+            "   break",
+            "fi",
+            "src_path=$(pwd)",
+            "profilename=$1",
+            "src=$src_path/$profilename.pro",
+            "build=${root.build}/$profilename/${QSYS}/${QTVERSION}/Debug",
+            "mkdir -p $build",
+            "cd $build",
+            "echo src file: $src",
+            "echo build at: $build",
+            "echo ${QTSPEC} ${QTCONFIG}",
+            "qmake $src ${QTSPEC} CONFIG+=debug CONFIG+=qml_debug ${QTCONFIG} && make qmake_all",
+            "make -j4",
+            "echo build inf ${QTSPEC} ${QTCONFIG}",
+            "echo src file: $src",
+            "echo build at: $build",
+            "break",
+            "done"
+        ],
+        "open-dir":[
+            "open $1"
         ],
         "android.sdk": [
             "/Users/abel/Develop/b0-toolskits/macAndroidLibraries/android-sdk-macosx/tools/android"

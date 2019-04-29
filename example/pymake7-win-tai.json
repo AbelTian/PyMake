@@ -365,8 +365,8 @@
             "echo build at: %build%"
         ],
         "open-dir":[
-            "if not exist \"%1\" ( echo has no this dir. & exit /b 0)",
-            "start \"%1\""
+            "if not exist \"%*\" ( echo has no this dir. & exit /b 0)",
+            "start %*"
         ],
         "build-osg-release": [
             "cd /d R:/Develop/c0-buildstation/OpenSceneGraph_Release",
