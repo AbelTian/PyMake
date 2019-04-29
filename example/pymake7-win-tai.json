@@ -260,6 +260,18 @@
         "hello.work": "hello world."
     },
     "command": {
+        "build": [
+            "if not exits *.pro ( echo has any .pro? please add here command to restrict. & exit /b 0 )",
+            "set src_path=%CD%",
+            "set profilename=%1",
+            "set src=%src_path%/%profilename%.pro",
+            "set build=${root.build}/%profilename%/${QSYS}/${QTVERSION}/Debug",
+            "md %build:/=\\%",
+            "cd /d %build%",
+            "rem del /f /q demo examples src test",
+            "qmake %src% ${QTSPEC} CONFIG+=debug CONFIG+=qml_debug ${QTCONFIG} && mingw32-make qmake_all",
+            "mingw32-make -j10"
+        ],
         "ccc": [
             "echo %QTDIR%"
         ],

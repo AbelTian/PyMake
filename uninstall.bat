@@ -1,25 +1,27 @@
 @echo off
 ::请使用 uninstall.bat 进行卸载
 
-set mmfile=C:\Windows\mm.bat
+set mmpath=C:\Windows
+
+set mmfile=%mmpath%\mm.bat
 call :uninstall
 
-set mmfile=C:\Windows\pymm.bat
+set mmfile=%mmpath%\pymm.bat
 call :uninstall
 
-set mmfile=C:\Windows\pymake.bat
+set mmfile=%mmpath%\pymake.bat
 call :uninstall
 
-set mmfile=C:\Windows\pyenv.bat
+set mmfile=%mmpath%\pyenv.bat
 call :uninstall
 
-set mmfile=C:\Windows\pyvc.bat
+set mmfile=%mmpath%\pyvc.bat
 call :uninstall
 
-set mmfile=C:\Windows\pycmd.bat
+set mmfile=%mmpath%\pycmd.bat
 call :uninstall
 
-set mmfile=C:\Windows\pyinfo.bat
+set mmfile=%mmpath%\pyinfo.bat
 call :uninstall
 
 ::================================================================
