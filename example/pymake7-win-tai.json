@@ -260,18 +260,6 @@
         "hello.work": "hello world."
     },
     "command": {
-        "build": [
-            "if not exits *.pro ( echo has any .pro? please add here command to restrict. & exit /b 0 )",
-            "set src_path=%CD%",
-            "set profilename=%1",
-            "set src=%src_path%/%profilename%.pro",
-            "set build=${root.build}/%profilename%/${QSYS}/${QTVERSION}/Debug",
-            "md %build:/=\\%",
-            "cd /d %build%",
-            "rem del /f /q demo examples src test",
-            "qmake %src% ${QTSPEC} CONFIG+=debug CONFIG+=qml_debug ${QTCONFIG} && mingw32-make qmake_all",
-            "mingw32-make -j10"
-        ],
         "ccc": [
             "echo %QTDIR%"
         ],
@@ -348,6 +336,37 @@
         ],
         "test": [
             "echo %cd%"
+        ],
+        "test.2": [
+            "rem echo %*",
+            "set param=%*",
+            "ping 127.0.0.1 \"%param%\""
+        ],
+        "test.3": [
+            "rem echo %*",
+            "ping \"%*\""
+        ],
+        "build.pro": [
+            "if not exist \"*.pro\" ( echo has any .pro? please add here command to restrict. & exit /b 0 )",
+            "set src_path=%CD%",
+            "set profilename=%1",
+            "set src=%src_path%/%profilename%.pro",
+            "set build=${root.build}/%profilename%/${QSYS}/${QTVERSION}/Debug",
+            "md %build:/=\\%",
+            "cd /d %build%",
+            "rem del /f /q demo examples src test",
+            "echo src file: %src%",
+            "echo build at: %build%",
+            "echo ${QTSPEC} ${QTCONFIG}",
+            "qmake %src% ${QTSPEC} CONFIG+=debug CONFIG+=qml_debug ${QTCONFIG} && mingw32-make qmake_all",
+            "mingw32-make -j10",
+            "echo build inf ${QTSPEC} ${QTCONFIG}",
+            "echo src file: %src%",
+            "echo build at: %build%"
+        ],
+        "open-dir":[
+            "if not exist \"%1\" ( echo has no this dir. & exit /b 0)",
+            "start \"%1\""
         ],
         "build-osg-release": [
             "cd /d R:/Develop/c0-buildstation/OpenSceneGraph_Release",

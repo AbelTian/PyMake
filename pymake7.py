@@ -99,24 +99,24 @@ Usage:
   pymake7.py translate section [ -a | --all ] [ -f | --force ]
   pymake7.py -------------------------------------------------------------
   pymake7.py exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ]
-  pymake7.py execlp [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ]
-  pymake7.py cclp [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ]
+  pymake7.py execvp [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ]
+  pymake7.py ccvp [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ]
   pymake7.py use <env-name> exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ]
-  pymake7.py use <env-name> execlp [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ]
-  pymake7.py use <env-name> cclp [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ]
+  pymake7.py use <env-name> execvp [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ]
+  pymake7.py use <env-name> ccvp [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ]
   pymake7.py -------------------------------------------------------------
   pymake7.py here exec-with-params [ <command-name> ] [ --params=<command-params> ... ]
-  pymake7.py here execlp [ <command-name> ] [ --params=<command-params> ... ]
-  pymake7.py here cclp [ <command-name> ] [ --params=<command-params> ... ]
+  pymake7.py here execvp [ <command-name> ] [ --params=<command-params> ... ]
+  pymake7.py here ccvp [ <command-name> ] [ --params=<command-params> ... ]
   pymake7.py here use <env-name> exec-with-params [ <command-name> ] [ --params=<command-params> ... ]
-  pymake7.py here use <env-name> execlp [ <command-name> ] [ --params=<command-params> ... ]
-  pymake7.py here use <env-name> cclp [ <command-name> ] [ --params=<command-params> ... ]
+  pymake7.py here use <env-name> execvp [ <command-name> ] [ --params=<command-params> ... ]
+  pymake7.py here use <env-name> ccvp [ <command-name> ] [ --params=<command-params> ... ]
   pymake7.py hh exec-with-params [ <command-name> ] [ --params=<command-params> ... ]
-  pymake7.py hh execlp [ <command-name> ] [ --params=<command-params> ... ]
-  pymake7.py hh cclp [ <command-name> ] [ --params=<command-params> ... ]
+  pymake7.py hh execvp [ <command-name> ] [ --params=<command-params> ... ]
+  pymake7.py hh ccvp [ <command-name> ] [ --params=<command-params> ... ]
   pymake7.py hh use <env-name> exec-with-params [ <command-name> ] [ --params=<command-params> ... ]
-  pymake7.py hh use <env-name> execlp [ <command-name> ] [ --params=<command-params> ... ]
-  pymake7.py hh use <env-name> cclp [ <command-name> ] [ --params=<command-params> ... ]
+  pymake7.py hh use <env-name> execvp [ <command-name> ] [ --params=<command-params> ... ]
+  pymake7.py hh use <env-name> ccvp [ <command-name> ] [ --params=<command-params> ... ]
   pymake7.py -------------------------------------------------------------
   pymake7.py (-h | --help)
   pymake7.py --version
@@ -148,7 +148,7 @@ Command:
   initialize       if program crashed, user can use this command to reset.
   port             port from source to target .json file, configure source root and config file.
   translate        translate section from source to target, and other section.
-  exec-with-params exec a command with params, it is also execlp and cclp.
+  exec-with-params exec a command with params, it is also execvp and ccvp.
 
 Options:
   -h --help     Show this screen.
@@ -3202,7 +3202,7 @@ def main_function():
         # print (cmd_list)
         return cmd_list, name
 
-    # use env exec-with-params/execlp/cclp command
+    # use env exec-with-params/execvp/ccvp command
     while (True):
         if (args['use'] is True):
             if (args['<env-name>'] is None):
@@ -3223,79 +3223,81 @@ def main_function():
                     ".json file is broken, environ section current env config is lost, please use set command fix it.")
                 return
 
-            if (args['<command-name>'] is None):
-                print("please appoint your command")
-                return
+            if (args['execvp'] or args['ccvp'] is True):
 
-            if (args['here'] or args['hh'] is True):
-                os.chdir(pymakeworkpath)
+                if (args['<command-name>'] is None):
+                    print("please appoint your command")
+                    return
 
-            # create cmd_list
-            current_var = current_env
-            local_command = raw_command(current_var)
-            dict0 = copy.deepcopy(local_command)
+                if (args['here'] or args['hh'] is True):
+                    os.chdir(pymakeworkpath)
 
-            list0 = []
-            local = True
-            current_var = args['<command-name>']
-            if (current_var in dict0):
-                list0.extend(dict0[current_var])
+                # create cmd_list
+                current_var = current_env
+                local_command = raw_command(current_var)
+                dict0 = copy.deepcopy(local_command)
+
+                list0 = []
                 local = True
-            else:
-                list0.append(current_var)
-                local = False
+                current_var = args['<command-name>']
+                if (current_var in dict0):
+                    list0.extend(dict0[current_var])
+                    local = True
+                else:
+                    list0.append(current_var)
+                    local = False
 
-            params0 = []
-            for current_var in args['--params']:
-                params0.append(current_var)
+                params0 = []
+                for current_var in args['--params']:
+                    params0.append(current_var)
 
-            cmd_list = []
-            temp_file_name = ""
-            # if (getplatform() == "Windows"):
-            #    cmd_list, temp_file_name = createCmdList0(list0)
-            # else:
-            #    cmd_list, temp_file_name = createCmdList01(list0)
-            # good compatibility
-            cmd_list, temp_file_name = createCmdList02(local, list0, params0)
+                cmd_list = []
+                temp_file_name = ""
+                # if (getplatform() == "Windows"):
+                #    cmd_list, temp_file_name = createCmdList0(list0)
+                # else:
+                #    cmd_list, temp_file_name = createCmdList01(list0)
+                # good compatibility
+                cmd_list, temp_file_name = createCmdList02(local, list0, params0)
 
-            # export env
-            current_var = current_env
-            # print (current_var, temp_file_name)
-            env_export(current_var, temp_file_name)
+                # export env
+                current_var = current_env
+                # print (current_var, temp_file_name)
+                env_export(current_var, temp_file_name)
 
-            ret = communicateWithCommandLine(cmd_list)
+                ret = communicateWithCommandLine(cmd_list)
 
-            # delete env file and cmd file
-            if (getplatform() == "Windows"):
-                temp_file = temp_file_name + "_exec.bat"
-                if (os.path.exists(temp_file)):
-                    os.remove(temp_file)
-                temp_file = temp_file_name + "_effect.bat"
-                if (os.path.exists(temp_file)):
-                    os.remove(temp_file)
-                temp_file = temp_file_name + "_unset.bat"
-                if (os.path.exists(temp_file)):
-                    os.remove(temp_file)
-            else:
-                temp_file = temp_file_name + "_exec.sh"
-                if (os.path.exists(temp_file)):
-                    os.remove(temp_file)
-                temp_file = temp_file_name + "_effect.sh"
-                if (os.path.exists(temp_file)):
-                    os.remove(temp_file)
-                temp_file = temp_file_name + "_unset.sh"
-                if (os.path.exists(temp_file)):
-                    os.remove(temp_file)
+                # delete env file and cmd file
+                if (getplatform() == "Windows"):
+                    temp_file = temp_file_name + "_exec.bat"
+                    if (os.path.exists(temp_file)):
+                        os.remove(temp_file)
+                    temp_file = temp_file_name + "_effect.bat"
+                    if (os.path.exists(temp_file)):
+                        os.remove(temp_file)
+                    temp_file = temp_file_name + "_unset.bat"
+                    if (os.path.exists(temp_file)):
+                        os.remove(temp_file)
+                else:
+                    temp_file = temp_file_name + "_exec.sh"
+                    if (os.path.exists(temp_file)):
+                        os.remove(temp_file)
+                    temp_file = temp_file_name + "_effect.sh"
+                    if (os.path.exists(temp_file)):
+                        os.remove(temp_file)
+                    temp_file = temp_file_name + "_unset.sh"
+                    if (os.path.exists(temp_file)):
+                        os.remove(temp_file)
 
-            os._exit(ret)
-            return
+                os._exit(ret)
+                return
         else:
             ''
         break
 
-    # exec-with-params cclp execlp
+    # exec-with-params ccvp execvp
     while (True):
-        if (args['exec-with-params'] or args['cclp'] or args['execlp'] is True):
+        if (args['exec-with-params'] or args['execvp'] or args['ccvp'] is True):
             #print(args)
             if (args['<command-name>'] is None):
                 print("please appoint your command")
