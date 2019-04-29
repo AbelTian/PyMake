@@ -257,7 +257,7 @@
         "TIPS":"If you lost variable content or command content, please record to there, I wont delete them."
     },
     "command-assemblage": {
-        "hello,work": "hello,world."
+        "hello.work": "hello world."
     },
     "command": {
         "ccc": [

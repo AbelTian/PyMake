@@ -40,3 +40,6 @@ nosetests.xml
 
 UserSource
 port.ini
+
+extra
+screenshot/language.gif
