@@ -15,5 +15,6 @@ sudo ln -sf ${filepath}/pymake.sh ${mmpath}/pymake
 sudo ln -sf ${filepath}/pyenv.sh ${mmpath}/pyenv
 sudo ln -sf ${filepath}/pycmd.sh ${mmpath}/pycmd
 sudo ln -sf ${filepath}/pyexecvp.sh ${mmpath}/pyexecvp
+sudo ln -sf ${filepath}/pyccvp.sh ${mmpath}/pyccvp
 
 sudo ln -sf ${filepath}/pyinfo.sh ${mmpath}/pyinfo

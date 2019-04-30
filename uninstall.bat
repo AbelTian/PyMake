@@ -24,6 +24,9 @@ call :uninstall
 set mmfile=%mmpath%\pyexecvp.bat
 call :uninstall
 
+set mmfile=%mmpath%\pyccvp.bat
+call :uninstall
+
 set mmfile=%mmpath%\pyinfo.bat
 call :uninstall
 

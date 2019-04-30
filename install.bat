@@ -38,6 +38,11 @@ set filepath=%~dp0
 set sourcefile=pyexecvp.bat
 call :install %*
 
+set mmfile=%mmpath%\pyccvp.bat
+set filepath=%~dp0
+set sourcefile=pyccvp.bat
+call :install %*
+
 set mmfile=%mmpath%\pyinfo.bat
 set filepath=%~dp0
 set sourcefile=pyinfo.bat
