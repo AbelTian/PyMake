@@ -803,7 +803,7 @@ def main_function():
 
     #port translate function
     portdefaultsourceconfig = pymakedefaultsourcefile
-    portdefaulttargetconfig = 'temp-target.json'
+    portdefaulttargetconfig = 'temporary-target.json'
     portiniconfig = 'port.ini'
     portinifile = os.path.join(pymakeshellroot, "port.ini")
     def init_portconf():
@@ -896,15 +896,18 @@ def main_function():
             writeJsonData(porttargetconfigfile, porttargetconfig)
 
         #soft
-        if(porttargetconfig['environ'].__contains__("default") is False):
-            porttargetconfig['environ']['default']={"path+":[]}
-            writeJsonData(porttargetconfigfile, porttargetconfig)
-        if(porttargetconfig['environ']['default'].__contains__("path+") is False):
-            porttargetconfig['environ']['default']['path+']=[]
-            writeJsonData(porttargetconfigfile, porttargetconfig)
-        if(porttargetconfig['environ'].__contains__("current") is False):
-            porttargetconfig['environ']['current']='default'
-            writeJsonData(porttargetconfigfile, porttargetconfig)
+        order_of_keys = porttargetconfig['environ'].keys()
+        list_of_tuples = [key for key in order_of_keys]
+        if (list_of_tuples.__len__() < 2):
+            if(porttargetconfig['environ'].__contains__("default") is False):
+                porttargetconfig['environ']['default']={"path+":[]}
+                writeJsonData(porttargetconfigfile, porttargetconfig)
+            if(porttargetconfig['environ']['default'].__contains__("path+") is False):
+                porttargetconfig['environ']['default']['path+']=[]
+                writeJsonData(porttargetconfigfile, porttargetconfig)
+            if(porttargetconfig['environ'].__contains__("current") is False):
+                porttargetconfig['environ']['current']='default'
+                writeJsonData(porttargetconfigfile, porttargetconfig)
 
         #move 'current' to be last key
         order_of_keys = porttargetconfig['environ'].keys()

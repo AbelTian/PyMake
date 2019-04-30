@@ -351,10 +351,10 @@
             "perl /Users/abel/Develop/b1-buildshell/cloc-1.74.pl  .",
             "date"
         ],
-        "qtdir":[
+        "qtdir": [
             "echo $QTDIR"
         ],
-        "test":[
+        "test": [
             "echo $(pwd)"
         ],
         "test.2": [
@@ -398,11 +398,14 @@
             "break",
             "done"
         ],
-        "open-dir":[
+        "open-dir": [
             "open $1"
         ],
         "android.sdk": [
             "/Users/abel/Develop/b0-toolskits/macAndroidLibraries/android-sdk-macosx/tools/android"
+        ],
+        "test.5": [
+            "exit 0"
         ]
     }
 }
