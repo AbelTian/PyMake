@@ -118,6 +118,10 @@ Usage:
   pymake7.py hh use <env-name> execvp [ <command-name> ] [ --params=<command-params> ... ]
   pymake7.py hh use <env-name> ccvp [ <command-name> ] [ --params=<command-params> ... ]
   pymake7.py -------------------------------------------------------------
+  pymake7.py backup [ here | hh ] [ <zip-file-name> ]
+  pymake7.py here backup [ <zip-file-name> ]
+  pymake7.py hh backup [ <zip-file-name> ]
+  pymake7.py -------------------------------------------------------------
   pymake7.py (-h | --help)
   pymake7.py --version
 
@@ -149,6 +153,7 @@ Command:
   port             port from source to target .json file, configure source root and config file.
   translate        translate section from source to target, and other section.
   exec-with-params exec a command with params, it is also execvp and ccvp.
+  backup           backup all env .json to a zip file.
 
 Options:
   -h --help     Show this screen.
@@ -171,6 +176,7 @@ import time
 import json
 import copy
 import types
+import zipfile
 from pycore.pycore import *
 from pycore.docopt import docopt
 
@@ -757,6 +763,43 @@ def main_function():
     # cd user shell root [ default shell execute path ]
     pymakeshellroot = sourceroot
     os.chdir(pymakeshellroot)
+
+    #backup
+    while (True):
+        if ( args['backup'] is True ):
+            os.chdir(sourceroot)
+            if(args['here'] or args['hh'] is True):
+                os.chdir(pymakeworkpath)
+
+            if(args['<zip-file-name>'] is None):
+                files = os.listdir(os.getcwd())
+                for f in files:
+                    if (f.endswith('.zip')):
+                        print(f)
+                return
+
+            file = os.path.realpath(args['<zip-file-name>'])
+            if (file.endswith('.zip') is False):
+                print("please use a .zip file name.")
+                return
+
+            os.chdir(sourceroot)
+
+            files = os.listdir(os.getcwd())
+            if ( files.__len__() < 1 ):
+                print("has no .json file in %s" % sourceroot)
+                return
+
+            ziphandle = zipfile.ZipFile(file, 'w')
+            for f in files:
+                if (f.endswith('.json')):
+                    print(f)
+                    ziphandle.write(f, compress_type=zipfile.ZIP_DEFLATED)
+            ziphandle.close()
+            return
+        else:
+            ''
+        break
 
     #port translate function
     portdefaultsourceconfig = pymakedefaultsourcefile
@@ -2890,6 +2933,7 @@ def main_function():
             ''
         break
 
+    # windows unix
     def createCmdList0(list0):
 
         cmd_list = []
@@ -2951,6 +2995,7 @@ def main_function():
         # print (cmd_list)
         return cmd_list, name
 
+    #windows not compatibility, unix only
     def createCmdList01(list0):
 
         cmd_list = []
@@ -3024,12 +3069,12 @@ def main_function():
 
                 cmd_list = []
                 temp_file_name = ""
-                if(getplatform()=="Windows"):
-                    cmd_list, temp_file_name = createCmdList0(list0)
-                else:
-                    cmd_list, temp_file_name = createCmdList01(list0)
+                #if(getplatform()=="Windows"):
+                #    cmd_list, temp_file_name = createCmdList0(list0)
+                #else:
+                #    cmd_list, temp_file_name = createCmdList01(list0)
                 # good compatibility
-                #cmd_list, temp_file_name = createCmdList0(list0)
+                cmd_list, temp_file_name = createCmdList0(list0)
 
                 # export env
                 current_var = current_env
@@ -3088,12 +3133,12 @@ def main_function():
 
             cmd_list = []
             temp_file_name = ""
-            if(getplatform()=="Windows"):
-                cmd_list, temp_file_name = createCmdList0(list0)
-            else:
-                cmd_list, temp_file_name = createCmdList01(list0)
+            #if(getplatform()=="Windows"):
+            #    cmd_list, temp_file_name = createCmdList0(list0)
+            #else:
+            #    cmd_list, temp_file_name = createCmdList01(list0)
             # good compatibility
-            #cmd_list, temp_file_name = createCmdList0(list0)
+            cmd_list, temp_file_name = createCmdList0(list0)
 
             current_var = rawconfig['environ']['current']
             env_export(current_var, temp_file_name)
@@ -3128,6 +3173,7 @@ def main_function():
             ""
         break
 
+    #windows, unix
     def createCmdList02(local = True, list0 = [], params0 = []):
 
         cmd_list = []
