@@ -108,6 +108,7 @@ echo exec root: \[$PYMMSHELLROOT\] \[default\]
 "$PYPROGRAMPATHNAME" use $PYENVNAME type $PYEXECNAME to $PYEXECINDEX
 chmod +x "${PYMMSHELLROOT}/${PYEXECINDEX}_effect.sh"
 source "${PYMMSHELLROOT}/${PYEXECINDEX}_effect.sh"
+# I set this, sh it, but not .
 "${PYMMSHELLROOT}/${PYEXECINDEX}_exec.sh" $PYEXECPARAM
 
 #clean
