@@ -1691,16 +1691,23 @@ def main_function():
 
                 if( args['-a'] or args['--all'] is True):
                     #print('-a')
+                    #print("%-30s %-5s %-5s" % (args['<script-file>'], os.path.isdir(args['<script-file>']), os.path.islink(args['<script-file>'])))
+                    root_path = ""
+                    if (os.path.isdir(args['<script-file>'])):
+                        root_path = args['<script-file>']
+                    else:
+                        root_path = os.getcwd()
+
                     print(Fore.CYAN + "%-30s%-30s%s" % ("[command] ", "[status] ", "[file] "))
                     keylist1 = []
                     if(args['--recursive'] is True):
-                        for ( dirpath, dirnames, filenames ) in os.walk(os.getcwd()):
+                        for ( dirpath, dirnames, filenames ) in os.walk(root_path):
                             for name in filenames:
                                 #print(os.path.relpath(os.path.join(dirpath, name), os.getcwd()))
                                 keylist1.append(os.path.relpath(os.path.join(dirpath, name), os.getcwd()))
                     else:
-                        for key in os.listdir(os.getcwd()):
-                            keylist1.append(key)
+                        for key in os.listdir(root_path):
+                            keylist1.append(os.path.relpath(os.path.join(root_path, key), os.getcwd()))
 
                     #print(keylist1)
                     #for file in keylist1:
@@ -1831,21 +1838,23 @@ def main_function():
                 if (args['<script-file>'] is not None):
                     #print("%-30s %-5s %-5s" % (args['<script-file>'], os.path.isdir(args['<script-file>']), os.path.islink(args['<script-file>'])))
                     if (os.path.isdir(args['<script-file>'])):
-                        print(Fore.CYAN + "%-30s%-30s" % ("[file] ", "[command] "))
+                        print(Fore.CYAN + "%-30s%-30s" % ("[command] ", "[file] "))
                         keylist1 = []
                         keylist2 = []
                         for key in os.listdir(args['<script-file>']):
-                            keylist1.append(key)
+                            keylist1.append(os.path.relpath(os.path.join(args['<script-file>'], key), os.getcwd()))
                         for key in config['command'].keys():
                             keylist2.append(key)
 
                         dirlist = []
                         for (key) in keylist1:
                             # print("%-30s %-5s %-5s" % (key, os.path.isdir(key), os.path.islink(key)))
-                            if (os.path.isdir(args['<script-file>'] + os.path.sep + key)
-                                or os.path.islink(args['<script-file>'] + os.path.sep + key)):
+                            if (os.path.isdir(key)
+                                or os.path.islink(key)):
                                 dirlist.append(key)
                         #print(dirlist)
+                        #for file in dirlist:
+                        #   print ('dir : ' + file)
                         for key in dirlist:
                             keylist1.remove(key)
 
@@ -1867,9 +1876,9 @@ def main_function():
                                         tarkeylist.append(key)
                                         # print(fil, key)
                         # print(tarkeylist)
-                        # for file in tarkeylist:
-                        #    print (file)
-                        # return
+                        #for file in tarkeylist:
+                        #   print ('file: ' + file)
+                        #return
 
                         # print(keylist1)
                         # print(keylist2)
@@ -1880,7 +1889,7 @@ def main_function():
                             if (key2 is not ""):
                                 key2 = str("%-4s%s" % (count2, key2))
                                 count2 += 1
-                            print("%-30s%-30s" % (key1, key2))
+                            print("%-30s%-30s" % (key2, key1))
 
                         #print("Those are the files under %s" % os.path.realpath(args['<script-file>']))
                         return
