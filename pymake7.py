@@ -122,13 +122,9 @@ Usage:
   pymake7.py here backup [ <zip-file-name> ]
   pymake7.py hh backup [ <zip-file-name> ]
   pymake7.py -------------------------------------------------------------
-  pymake7.py import cmd [ hh | here ] [ <script-file> ] [ -f | --force ] [ --encoding=<encoding-name> ] [ --filter=<name-filter> ... ]
-  pymake7.py import cmd [ hh | here ] [ -a | --all ] [ -f | --force ] [ --recursive ] [--encoding=<encoding-name>] [ --filter=<name-filter> ... ]
-  pymake7.py *************************************************************
-  pymake7.py here import cmd [ <script-file> ] [ -f | --force ] [ --encoding=<encoding-name> ] [ --filter=<name-filter> ... ]
-  pymake7.py here import cmd [ -a | --all ] [ -f | --force ] [ --recursive ] [ --encoding=<encoding-name> ] [ --filter=<name-filter> ... ]
-  pymake7.py hh import cmd [ <script-file> ] [ -f | --force ] [ --encoding=<encoding-name> ] [ --filter=<name-filter> ... ]
-  pymake7.py hh import cmd [ -a | --all ] [ -f | --force ] [ --recursive ] [ --encoding=<encoding-name> ] [ --filter=<name-filter> ... ]
+  pymake7.py import cmd [ hh | here ] [ <script-file> ] [ -a | --all ] [ -f | --force ] [ --recursive ] [ --encoding=<encoding-name> ] [ --filter=<name-filter> ... ]
+  pymake7.py here import cmd [ <script-file> ] [ -a | --all ] [ -f | --force ] [ --recursive ] [ --encoding=<encoding-name> ] [ --filter=<name-filter> ... ]
+  pymake7.py hh import cmd [ <script-file> ] [ -a | --all ] [ -f | --force ] [ --recursive ] [ --encoding=<encoding-name> ] [ --filter=<name-filter> ... ]
   pymake7.py -------------------------------------------------------------
   pymake7.py (-h | --help)
   pymake7.py --version
