@@ -1737,6 +1737,7 @@ def main_function():
                         #print(filterString)
                         #print(filterList)
                         for fil in filterList:
+                            fil = fil.strip()
                             for key in keylist1:
                                 if(os.path.splitext(key)[1] == fil):
                                     tarkeylist.append(key)
@@ -1781,7 +1782,7 @@ def main_function():
                     return
 
                 if (args['<script-file>'] is None):
-                    print(Fore.CYAN + "%-30s%-30s" % ( "[file] ", "[command] " ))
+                    print(Fore.CYAN + "%-30s%-30s" % ( "[command] ", "[file] " ))
                     keylist1 = []
                     keylist2 = []
                     for key in os.listdir(os.getcwd()):
@@ -1812,6 +1813,7 @@ def main_function():
                         # print(filterString)
                         # print(filterList)
                         for fil in filterList:
+                            fil = fil.strip()
                             for key in keylist1:
                                 if (os.path.splitext(key)[1] == fil):
                                     tarkeylist.append(key)
@@ -1830,7 +1832,7 @@ def main_function():
                         if (key2 is not ""):
                             key2 = str("%-4s%s" % (count2, key2))
                             count2 += 1
-                        print("%-30s%-30s" % (key1, key2))
+                        print("%-30s%-30s" % (key2, key1))
 
                     #print("Those are the files under %s" % os.getcwd())
                     return
@@ -1871,6 +1873,7 @@ def main_function():
                             # print(filterString)
                             # print(filterList)
                             for fil in filterList:
+                                fil = fil.strip()
                                 for key in keylist1:
                                     if (os.path.splitext(key)[1] == fil):
                                         tarkeylist.append(key)
