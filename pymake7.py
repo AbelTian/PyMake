@@ -1694,38 +1694,6 @@ def main_function():
 
                 if (args['<script-file>'] is not None):
                     #print("%-30s %-5s %-5s" % (args['<script-file>'], os.path.isdir(args['<script-file>']), os.path.islink(args['<script-file>'])))
-                    if (os.path.isdir(args['<script-file>'])):
-                        print(Fore.CYAN + "%-30s%-30s" % ("[file] ", "[command] "))
-                        keylist1 = []
-                        keylist2 = []
-                        for key in os.listdir(args['<script-file>']):
-                            keylist1.append(key)
-                        for key in config['command'].keys():
-                            keylist2.append(key)
-
-                        dirlist = []
-                        for (key) in keylist1:
-                            # print("%-30s %-5s %-5s" % (key, os.path.isdir(key), os.path.islink(key)))
-                            if (os.path.isdir(args['<script-file>'] + os.path.sep + key)
-                                or os.path.islink(args['<script-file>'] + os.path.sep + key)):
-                                dirlist.append(key)
-                        #print(dirlist)
-
-                        for key in dirlist:
-                            keylist1.remove(key)
-
-                        # print(keylist1)
-                        # print(keylist2)
-                        count2 = 1
-                        for (key1, key2) in itertools.zip_longest(keylist1, keylist2, fillvalue=""):
-                            if (key1 is not ""):
-                                key1 = str("%s" % (key1))
-                            if (key2 is not ""):
-                                key2 = str("%-4s%s" % (count2, key2))
-                                count2 += 1
-                            print("%-30s%-30s" % (key1, key2))
-                        return
-
                     if (os.path.isdir(args['<script-file>'])
                         or os.path.islink(args['<script-file>'])):
                         print("please input a legal script file.")
