@@ -1,9 +1,13 @@
 # User Support  
 
 User support shell module, user can install them to share their functions.   
-- pyenv  
-- pyvc  
-- ...   
+
+|Program|Shortcut|Shortcut(Level 2)|
+|----|----|----|  
+|pymake.py| pymake | mm, pymm |
+|pymake.py| pyenv | pyvc |
+|pymake.py| pycmd, pyexecvp | pyccvp |
+|pyinfo.py| pyinfo || 
 
 
 # pyenv   

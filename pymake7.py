@@ -123,12 +123,12 @@ Usage:
   pymake7.py hh backup [ <zip-file-name> ]
   pymake7.py -------------------------------------------------------------
   pymake7.py import cmd [ hh | here ] [ <script-file> ] [ -f | --force ] [ --encoding=<encoding-name> ]
-  pymake7.py import cmd [ hh | here ] [ -a | --all ] [ -f | --force ] [ --recursive ] [ --filter=<name-filter> ... ]
+  pymake7.py import cmd [ hh | here ] [ -a | --all ] [ -f | --force ] [ --recursive ] [--encoding=<encoding-name>] [ --filter=<name-filter> ... ]
   pymake7.py *************************************************************
   pymake7.py here import cmd [ <script-file> ] [ -f | --force ] [ --encoding=<encoding-name> ]
-  pymake7.py here import cmd [ -a | --all ] [ -f | --force ] [ --recursive ] [ --filter=<name-filter> ... ]
+  pymake7.py here import cmd [ -a | --all ] [ -f | --force ] [ --recursive ] [ --encoding=<encoding-name> ] [ --filter=<name-filter> ... ]
   pymake7.py hh import cmd [ <script-file> ] [ -f | --force ] [ --encoding=<encoding-name> ]
-  pymake7.py hh import cmd [ -a | --all ] [ -f | --force ] [ --recursive ] [ --filter=<name-filter> ... ]
+  pymake7.py hh import cmd [ -a | --all ] [ -f | --force ] [ --recursive ] [ --encoding=<encoding-name> ] [ --filter=<name-filter> ... ]
   pymake7.py -------------------------------------------------------------
   pymake7.py (-h | --help)
   pymake7.py --version
@@ -1686,14 +1686,47 @@ def main_function():
     # import command
     while (True):
         if (args['import'] is True):
-            import itertools
             if(args['cmd'] is True):
+                import itertools
+
                 os.chdir(sourceroot)
                 if (args['here'] or args['hh'] is True):
                     os.chdir(pymakeworkpath)
 
                 if (args['<script-file>'] is not None):
                     #print("%-30s %-5s %-5s" % (args['<script-file>'], os.path.isdir(args['<script-file>']), os.path.islink(args['<script-file>'])))
+                    if (os.path.isdir(args['<script-file>'])):
+                        print(Fore.CYAN + "%-30s%-30s" % ("[file] ", "[command] "))
+                        keylist1 = []
+                        keylist2 = []
+                        for key in os.listdir(args['<script-file>']):
+                            keylist1.append(key)
+                        for key in config['command'].keys():
+                            keylist2.append(key)
+
+                        dirlist = []
+                        for (key) in keylist1:
+                            # print("%-30s %-5s %-5s" % (key, os.path.isdir(key), os.path.islink(key)))
+                            if (os.path.isdir(args['<script-file>'] + os.path.sep + key)
+                                or os.path.islink(args['<script-file>'] + os.path.sep + key)):
+                                dirlist.append(key)
+                        #print(dirlist)
+
+                        for key in dirlist:
+                            keylist1.remove(key)
+
+                        # print(keylist1)
+                        # print(keylist2)
+                        count2 = 1
+                        for (key1, key2) in itertools.zip_longest(keylist1, keylist2, fillvalue=""):
+                            if (key1 is not ""):
+                                key1 = str("%s" % (key1))
+                            if (key2 is not ""):
+                                key2 = str("%-4s%s" % (count2, key2))
+                                count2 += 1
+                            print("%-30s%-30s" % (key1, key2))
+                        return
+
                     if (os.path.isdir(args['<script-file>'])
                         or os.path.islink(args['<script-file>'])):
                         print("please input a legal script file.")
@@ -1725,7 +1758,7 @@ def main_function():
                                     command_content.append(l.rstrip('\r').rstrip('\n'))
                             config['command'][command_name] = command_content
                             writeJsonData(sourceconfigfile, config)
-                            print('successed')
+                            print('successed: %s' % command_name)
                             return
                         print("failed: command %s is existed." % command_name)
                         return
@@ -1737,14 +1770,91 @@ def main_function():
                             command_content.append(l.rstrip('\r').rstrip('\n'))
                     config['command'][command_name] = command_content
                     writeJsonData(sourceconfigfile, config)
-                    print('successed')
+                    print('successed: %s' % command_name)
                     return
 
                 if( args['-a'] or args['--all'] is True):
                     #print('-a')
-                    #if(args[''])
-                    if (args['-f'] or args['--force'] is True):
-                        print('-f')
+                    print(Fore.CYAN + "%-30s%-30s%s" % ("[command] ", "[status] ", "[file] "))
+                    keylist1 = []
+                    if(args['--recursive'] is True):
+                        for ( dirpath, dirnames, filenames ) in os.walk(os.getcwd()):
+                            for name in filenames:
+                                #print(os.path.relpath(os.path.join(dirpath, name), os.getcwd()))
+                                keylist1.append(os.path.relpath(os.path.join(dirpath, name), os.getcwd()))
+                    else:
+                        for key in os.listdir(os.getcwd()):
+                            keylist1.append(key)
+
+                    #print(keylist1)
+                    #for file in keylist1:
+                    #    print (file)
+
+                    dirlist = []
+                    for (key) in keylist1:
+                        # print("%-30s %-5s %-5s" % (key, os.path.isdir(key), os.path.islink(key)))
+                        if (os.path.isdir(key)
+                            or os.path.islink(key)):
+                            dirlist.append(key)
+                    # print(dirlist)
+                    for key in dirlist:
+                        keylist1.remove(key)
+
+                    #print(args)
+                    tarkeylist = []
+                    #print(args['--filter'])
+                    if(args['--filter'] is not []):
+                        filterString = ''
+                        for fi in args['--filter']:
+                            filterString += fi + '|'
+                        filterList = filterString.split('|')
+                        filterList.remove('')
+                        #print(filterString)
+                        #print(filterList)
+                        for fil in filterList:
+                            for key in keylist1:
+                                if(os.path.splitext(key)[1] == fil):
+                                    tarkeylist.append(key)
+                                    #print(fil, key)
+                    else:
+                        tarkeylist = keylist1
+                    #print(tarkeylist)
+                    #for file in tarkeylist:
+                    #    print (file)
+                    #return
+
+                    useencoding = 'utf8'
+                    if(args['--encoding'] is not None):
+                        useencoding = args['--encoding']
+
+                    for (key1) in (tarkeylist):
+                        local_path = os.path.realpath(key1)
+                        command_name = os.path.splitext(os.path.basename(key1))[0]
+
+                        #fixer
+                        #ext = os.path.splitext(os.path.basename(key1))[1]
+                        #if (ext == '.bat'):
+                        #    useencoding = 'gbk'
+
+                        if (config['command'].__contains__(command_name) is False):
+                            command_content = []
+                            with open(local_path, 'r', encoding=useencoding) as f:
+                                for l in f.readlines():
+                                    command_content.append(l.rstrip('\r').rstrip('\n'))
+                            config['command'][command_name] = command_content
+                            writeJsonData(sourceconfigfile, config)
+                            print("%-30s%-30s%s" % (command_name, "[SUCCESS][       ][     ]", key1))
+                        else:
+                            if (args['-f'] or args['--force'] is True):
+                                command_content = []
+                                with open(local_path, 'r', encoding=useencoding) as f:
+                                    for l in f.readlines():
+                                        command_content.append(l.rstrip('\r').rstrip('\n'))
+                                config['command'][command_name] = command_content
+                                writeJsonData(sourceconfigfile, config)
+                                print("%-30s%-30s%s" % (command_name, "[SUCCESS][EXISTED][FORCE]", key1))
+                            else:
+                                print("%-30s%-30s%s" % (command_name, "[CANCEL ][EXISTED][     ]", key1))
                     return
 
                 print(Fore.CYAN + "%-30s%-30s" % ( "[file] ", "[command] " ))
