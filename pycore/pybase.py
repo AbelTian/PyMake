@@ -114,7 +114,7 @@ def getconfigroot():
 def readJsonData(file):
 
     datas = ""
-    with open(file, 'r') as json_file:
+    with open(file, 'r', encoding='utf8') as json_file:
         for line in json_file.readlines():
             datas += line
     data = json.loads(datas, encoding='utf-8', object_pairs_hook=OrderedDict);
@@ -127,8 +127,8 @@ def readJsonData(file):
 
 def writeJsonData(file, data):
 
-    with open(file, 'w') as json_file:
-        json_file.write(json.dumps(data, indent=4, sort_keys=False))
+    with open(file, 'w', encoding='utf8') as json_file:
+        json_file.write(json.dumps(data, indent=4, sort_keys=False, ensure_ascii=False))
 
 
     #with open(file, 'w') as json_file:

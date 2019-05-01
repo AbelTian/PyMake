@@ -104,7 +104,7 @@ Usage:
   pymake7.py use <env-name> exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ]
   pymake7.py use <env-name> execvp [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ]
   pymake7.py use <env-name> ccvp [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ]
-  pymake7.py -------------------------------------------------------------
+  pymake7.py *************************************************************
   pymake7.py here exec-with-params [ <command-name> ] [ --params=<command-params> ... ]
   pymake7.py here execvp [ <command-name> ] [ --params=<command-params> ... ]
   pymake7.py here ccvp [ <command-name> ] [ --params=<command-params> ... ]
@@ -121,6 +121,14 @@ Usage:
   pymake7.py backup [ here | hh ] [ <zip-file-name> ]
   pymake7.py here backup [ <zip-file-name> ]
   pymake7.py hh backup [ <zip-file-name> ]
+  pymake7.py -------------------------------------------------------------
+  pymake7.py import cmd [ hh | here ] [ <script-file> ] [ -f | --force ] [ --encoding=<encoding-name> ]
+  pymake7.py import cmd [ hh | here ] [ -a | --all ] [ -f | --force ] [ --recursive ] [ --filter=<name-filter> ... ]
+  pymake7.py *************************************************************
+  pymake7.py here import cmd [ <script-file> ] [ -f | --force ] [ --encoding=<encoding-name> ]
+  pymake7.py here import cmd [ -a | --all ] [ -f | --force ] [ --recursive ] [ --filter=<name-filter> ... ]
+  pymake7.py hh import cmd [ <script-file> ] [ -f | --force ] [ --encoding=<encoding-name> ]
+  pymake7.py hh import cmd [ -a | --all ] [ -f | --force ] [ --recursive ] [ --filter=<name-filter> ... ]
   pymake7.py -------------------------------------------------------------
   pymake7.py (-h | --help)
   pymake7.py --version
@@ -154,6 +162,7 @@ Command:
   translate        translate section from source to target, and other section.
   exec-with-params exec a command with params, it is also execvp and ccvp.
   backup           backup all env .json to a zip file.
+  import           import user path or env or cmd to env .json file. example, import cmd [ <script-file>: x.bat x.cmd x.sh x.ps1 ... ]
 
 Options:
   -h --help     Show this screen.
@@ -165,6 +174,9 @@ Options:
   --show        display source config files
   --restore     reset to source config file pymake.json.
   -r, --raw     expand editing config values
+
+  --encoding=<encoding-name>    script file encoding, support utf8, gbk, ... and so on. [default:utf8]
+  --filter=<name-filter> ...    filter file name postfix, separated by |, example: .bat | .sh | .ps1.
 """
 
 import os
@@ -176,7 +188,6 @@ import time
 import json
 import copy
 import types
-import zipfile
 from pycore.pycore import *
 from pycore.docopt import docopt
 
@@ -767,6 +778,7 @@ def main_function():
     #backup
     while (True):
         if ( args['backup'] is True ):
+            import zipfile
             os.chdir(sourceroot)
             if(args['here'] or args['hh'] is True):
                 os.chdir(pymakeworkpath)
@@ -1670,6 +1682,138 @@ def main_function():
 
     config = readJsonData(sourceconfigfile)
     #print(config)
+
+    # import command
+    while (True):
+        if (args['import'] is True):
+            import itertools
+            if(args['cmd'] is True):
+                os.chdir(sourceroot)
+                if (args['here'] or args['hh'] is True):
+                    os.chdir(pymakeworkpath)
+
+                if (args['<script-file>'] is not None):
+                    #print("%-30s %-5s %-5s" % (args['<script-file>'], os.path.isdir(args['<script-file>']), os.path.islink(args['<script-file>'])))
+                    if (os.path.isdir(args['<script-file>'])):
+                        print(Fore.CYAN + "%-30s%-30s" % ("[file] ", "[command] "))
+                        keylist1 = []
+                        keylist2 = []
+                        for key in os.listdir(args['<script-file>']):
+                            keylist1.append(key)
+                        for key in config['command'].keys():
+                            keylist2.append(key)
+
+                        dirlist = []
+                        for (key) in keylist1:
+                            # print("%-30s %-5s %-5s" % (key, os.path.isdir(key), os.path.islink(key)))
+                            if (os.path.isdir(args['<script-file>'] + os.path.sep + key)
+                                or os.path.islink(args['<script-file>'] + os.path.sep + key)):
+                                dirlist.append(key)
+                        #print(dirlist)
+
+                        for key in dirlist:
+                            keylist1.remove(key)
+
+                        # print(keylist1)
+                        # print(keylist2)
+                        count2 = 1
+                        for (key1, key2) in itertools.zip_longest(keylist1, keylist2, fillvalue=""):
+                            if (key1 is not ""):
+                                key1 = str("%s" % (key1))
+                            if (key2 is not ""):
+                                key2 = str("%-4s%s" % (count2, key2))
+                                count2 += 1
+                            print("%-30s%-30s" % (key1, key2))
+                        return
+
+                    if (os.path.isdir(args['<script-file>'])
+                        or os.path.islink(args['<script-file>'])):
+                        print("please input a legal script file.")
+                        return
+
+                    useencoding = 'utf8'
+                    if(args['--encoding'] is not None):
+                        useencoding = args['--encoding']
+
+                    local_path = os.path.realpath(args['<script-file>'])
+                    #print(os.path.dirname(local_path))
+                    #print(os.path.basename(local_path) )
+                    #print(os.path.splitext(os.path.basename(local_path))[0])
+                    #print(os.path.splitext(os.path.basename(local_path))[1])
+                    if(os.path.exists(local_path) is False):
+                        print('failed: %s is not existed.' % args['<script-file>'])
+                        return
+
+                    command_name = os.path.splitext(os.path.basename(local_path))[0]
+
+                    #print(args)
+                    if(config['command'].__contains__(command_name) is True):
+                        if ( args['-f'] or args['--force'] is True):
+                            #print('-f')
+                            #set in force
+                            command_content = []
+                            with open(local_path, 'r', encoding=useencoding) as f:
+                                for l in f.readlines():
+                                    command_content.append(l.rstrip('\r').rstrip('\n'))
+                            config['command'][command_name] = command_content
+                            writeJsonData(sourceconfigfile, config)
+                            print('successed')
+                            return
+                        print("failed: command %s is existed." % command_name)
+                        return
+
+                    # set in
+                    command_content = []
+                    with open(local_path, 'r', encoding=useencoding) as f:
+                        for l in f.readlines():
+                            command_content.append(l.rstrip('\r').rstrip('\n'))
+                    config['command'][command_name] = command_content
+                    writeJsonData(sourceconfigfile, config)
+                    print('successed')
+                    return
+
+                if( args['-a'] or args['--all'] is True):
+                    #print('-a')
+                    #if(args[''])
+                    if (args['-f'] or args['--force'] is True):
+                        print('-f')
+                    return
+
+                print(Fore.CYAN + "%-30s%-30s" % ( "[file] ", "[command] " ))
+                keylist1 = []
+                keylist2 = []
+                for key in os.listdir(os.getcwd()):
+                    keylist1.append(key)
+                for key in config['command'].keys():
+                    keylist2.append(key)
+
+                dirlist = []
+                for (key) in keylist1:
+                    #print("%-30s %-5s %-5s" % (key, os.path.isdir(key), os.path.islink(key)))
+                    if (os.path.isdir(key)
+                        or os.path.islink(key)):
+                        dirlist.append(key)
+                #print(dirlist)
+
+                for key in dirlist:
+                    keylist1.remove(key)
+
+                #print(keylist1)
+                #print(keylist2)
+                count2 = 1
+                for (key1, key2) in itertools.zip_longest(keylist1, keylist2, fillvalue=""):
+                    if (key1 is not ""):
+                        key1 = str("%s" % (key1))
+                    if (key2 is not ""):
+                        key2 = str("%-4s%s" % (count2, key2))
+                        count2 += 1
+                    print("%-30s%-30s" % (key1, key2))
+                return
+            else:
+                ''
+        else:
+            ''
+        break
 
     # set
     while (True):

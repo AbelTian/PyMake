@@ -254,7 +254,7 @@
     },
     "variable-assemblage": {
         "MyName": "T.D.R.",
-        "TIPS":"If you lost variable content or command content, please record to there, I wont delete them."
+        "TIPS": "If you lost variable content or command content, please record to there, I wont delete them."
     },
     "command-assemblage": {
         "hello.work": "hello world."
@@ -364,7 +364,7 @@
             "echo src file: %src%",
             "echo build at: %build%"
         ],
-        "open-dir":[
+        "open-dir": [
             "if not exist \"%*\" ( echo has no this dir. & exit /b 0)",
             "start %*"
         ],
@@ -385,6 +385,31 @@
         ],
         "android.sdk.manager": [
             "${android.sdk}/\"SDK Manager.exe\""
+        ],
+        "libtool2": [
+            "cd /d ${root.prod}/AddLibraryTool-Multiple/Windows",
+            "start ${root.prod}/AddLibraryTool-Multiple/Windows/AddLibraryTool-Multiple.exe"
+        ],
+        "openprod": [
+            "set prod=%1",
+            "cd /d ${root.prod}/%prod%/Windows",
+            "start ${root.prod}/%prod%/Windows/%prod%.exe"
+        ],
+        "openprodd": [
+            "set prod=%1",
+            "cd /d ${root.prod}/%prod%/Windows",
+            "start ${root.prod}/%prod%/Windows/%prod%d.exe"
+        ],
+        "opensdk": [
+            "set sdk=%1",
+            "start ${root.sdk}/%sdk%"
+        ],
+        "openbuild": [
+            "set build=%1",
+            "start ${root.build}/%build%"
+        ],
+        "test.4": [
+            "exit /b 0"
         ]
     }
 }
