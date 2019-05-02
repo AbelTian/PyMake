@@ -9,8 +9,8 @@ Usage:
   pyinfo.py get pc [ desk ] [ doc ] [ download ] [ music ] [ picture ] [ movie ]
   pyinfo.py get pc [ favorite ] [ search ] [ contact ]
   pyinfo.py get pc [ develop ]
-  pyinfo.py get date [ -Y | -m | -d ] [ -f <sep-character> ]
   pyinfo.py get time [ -H | -M | -S ] [ -f <sep-character> ]
+  pyinfo.py get date [ -t | -T ] [ -Y | -m | -d ] [ -f <sep-character> ]
   pyinfo.py get datetime [ -t | -T ] [ -Y | -m | -d | -H | -M | -S ] [ -f <sep-character> <sep2-character> <sep3-character> ]
   pyinfo.py get datetime [ <timestamp> ] --timestamp [ -t | -T ] [ -Y | -m | -d | -H | -M | -S ] [ -f <sep-character> <sep2-character> <sep3-character> ]
   pyinfo.py get datetime [ <std-datetime-string> ] --datetime [ -t | -T ] [ -Y | -m | -d | -H | -M | -S ] [ -f <sep-character> <sep2-character> <sep3-character> ]
@@ -27,7 +27,7 @@ Command:
 Params:
   <std-datetime-string>         YYYY-mm-dd HH:MM:SS
   <timestamp>                   seconds to 1970-01-01 00:00:00, unique.
-  -t | -T                       different precision for outputting timestamp.
+  -t | -T                       output timestamp, different precision.
   -Y | -m | -d | -H | -M | -S   outputting quantity.
   -f                            outputting style.
 
@@ -53,7 +53,7 @@ from pycore.pycore import *
 def main_function():
 
     args = docopt(__doc__, version='pyinfo.py v1.0')
-    print(args)
+    #print(args)
 
     # get
     while (True):
@@ -133,6 +133,11 @@ def main_function():
             elif (args['date'] is True):
                 # print(datetime.datetime.today())
                 # print(datetime.date.today())
+                if(args['-t'] or args['-T'] is True):
+                    str0 = str("%d" % time.mktime(datetime.date.timetuple(datetime.date(2014, 5, 5))) )
+                    print(str0)
+                    return
+
                 if (args['-Y'] is True):
                     print(datetime.datetime.now().strftime("%Y"))
                 elif (args['-m'] is True):
@@ -153,6 +158,12 @@ def main_function():
                     print(datetime.datetime.now().strftime("%m"))
                 elif (args['-d'] is True):
                     print(datetime.datetime.now().strftime("%d"))
+                elif (args['-H'] is True):
+                    print(datetime.datetime.now().strftime("%H"))
+                elif (args['-M'] is True):
+                    print(datetime.datetime.now().strftime("%M"))
+                elif (args['-S'] is True):
+                    print(datetime.datetime.now().strftime("%S"))
                 else:
                     sep = "%Y-%m-%d %H:%M:%S"
                     sep1 = '-'
