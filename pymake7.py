@@ -87,6 +87,9 @@ Usage:
   pymake7.py port root [ <source-config-root> ] [ to <target-config-root> ]
   pymake7.py port config [ <source-config-file> ] [ to <target-config-file> ]
   pymake7.py port file [ <source-path-file> ] [ to <target-path-file> ]
+  pymake7.py port root ( --source | --target ) <config-root>
+  pymake7.py port config ( --source | --target ) <config-file>
+  pymake7.py port file ( --source | --target ) <path-file>
   pymake7.py port reset
   pymake7.py translate
   pymake7.py translate ( path | env | cmd )
@@ -936,6 +939,28 @@ def main_function():
         if (args['port'] is True):
             portconf, portinifile = init_portconf()
             if (args['root'] is True):
+                if( args['--source'] is True ):
+                    if (not os.path.isdir(args['<config-root>'])
+                        or os.path.islink(args['<config-root>'])
+                        or not os.path.isabs(args['<config-root>'])):
+                        print("please input a legal source abspath.")
+                        return
+                    portconf.set('port', 'sourceroot', args['<config-root>'])
+                    portconf.write(open(portinifile, 'w'))
+                    print("port: source root is %s" % portconf['port']['sourceroot'])
+                    return
+
+                if( args['--target'] is True ):
+                    if (not os.path.isdir(args['<config-root>'])
+                        or os.path.islink(args['<config-root>'])
+                        or not os.path.isabs(args['<config-root>'])):
+                        print("please input a legal target abspath.")
+                        return
+                    portconf.set('port', 'targetroot', args['<config-root>'])
+                    portconf.write(open(portinifile, 'w'))
+                    print("port: target root is %s" % portconf['port']['targetroot'])
+                    return
+
                 if( args['<source-config-root>'] is not None ):
                     if (not os.path.isdir(args['<source-config-root>'])
                         or os.path.islink(args['<source-config-root>'])
@@ -959,6 +984,30 @@ def main_function():
                 print("port: source root is %s" % portconf['port']['sourceroot'])
                 print("port: target root is %s" % portconf['port']['targetroot'])
             elif (args['config'] is True):
+                if( args['--source'] is True ):
+                    if (not args['<config-file>'].endswith(pymakesuffix)
+                        or os.path.isdir(args['<config-file>'])
+                        or os.path.islink(args['<config-file>'])
+                        or os.path.isabs(args['<config-file>'])):
+                        print("please input a real source .json file.")
+                        return
+                    portconf.set('port', 'sourceconfig', args['<config-file>'])
+                    portconf.write(open(portinifile, 'w'))
+                    print("port: source config is %s" % portconf['port']['sourceconfig'])
+                    return
+
+                if( args['--target'] is True ):
+                    if (not args['<config-file>'].endswith(pymakesuffix)
+                        or os.path.isdir(args['<config-file>'])
+                        or os.path.islink(args['<config-file>'])
+                        or os.path.isabs(args['<config-file>'])):
+                        print("please input a real target .json file.")
+                        return
+                    portconf.set('port', 'targetconfig', args['<config-file>'])
+                    portconf.write(open(portinifile, 'w'))
+                    print("port: target config is %s" % portconf['port']['targetconfig'])
+                    return
+
                 if( args['<source-config-file>'] is not None ):
                     if (not args['<source-config-file>'].endswith(pymakesuffix)
                         or os.path.isdir(args['<source-config-file>'])
@@ -984,6 +1033,40 @@ def main_function():
                 print("port: source config is %s" % portconf['port']['sourceconfig'])
                 print("port: target config is %s" % portconf['port']['targetconfig'])
             elif (args['file'] is True):
+                if( args['--source'] is True ):
+                    if (not args['<path-file>'].endswith(pymakesuffix)
+                        or os.path.isdir(args['<path-file>'])
+                        or os.path.islink(args['<path-file>'])
+                        or not os.path.isabs(args['<path-file>'])):
+                        print("please input a legal source abspath .json file.")
+                        return
+                    r = os.path.split(os.path.realpath(args['<path-file>']))[0]
+                    f = os.path.split(os.path.realpath(args['<path-file>']))[1]
+                    portconf.set('port', 'sourceroot', r)
+                    portconf.set('port', 'sourceconfig', f)
+                    portconf.write(open(portinifile, 'w'))
+                    print("port: source file   is %s" % os.path.join(portconf['port']['sourceroot'], portconf['port']['sourceconfig']))
+                    print("port: source root   is %s" % portconf['port']['sourceroot'])
+                    print("port: source config is %s" % portconf['port']['sourceconfig'])
+                    return
+
+                if( args['--target'] is True ):
+                    if (not args['<path-file>'].endswith(pymakesuffix)
+                        or os.path.isdir(args['<path-file>'])
+                        or os.path.islink(args['<path-file>'])
+                        or not os.path.isabs(args['<path-file>'])):
+                        print("please input a legal target abspath .json file.")
+                        return
+                    r = os.path.split(os.path.realpath(args['<path-file>']))[0]
+                    f = os.path.split(os.path.realpath(args['<path-file>']))[1]
+                    portconf.set('port', 'targetroot', r)
+                    portconf.set('port', 'targetconfig', f)
+                    portconf.write(open(portinifile, 'w'))
+                    print("port: target file   is %s" % os.path.join(portconf['port']['targetroot'], portconf['port']['targetconfig']))
+                    print("port: target root   is %s" % portconf['port']['targetroot'])
+                    print("port: target config is %s" % portconf['port']['targetconfig'])
+                    return
+
                 if(args['<source-path-file>'] is not None):
                    if( not args['<source-path-file>'].endswith(pymakesuffix)
                        or os.path.isdir(args['<source-path-file>'])
