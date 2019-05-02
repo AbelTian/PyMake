@@ -133,8 +133,18 @@ def main_function():
             elif (args['date'] is True):
                 # print(datetime.datetime.today())
                 # print(datetime.date.today())
-                if(args['-t'] or args['-T'] is True):
-                    str0 = str("%d" % time.mktime(datetime.date.timetuple(datetime.date(2014, 5, 5))) )
+                tuple_time = datetime.datetime.now()
+                if(args['-t'] is True):
+                    #str0 = str("%d" % time.mktime(datetime.date.timetuple(datetime.date(2014, 5, 5))) )
+                    str0 = str("%s" % tuple_time.date())
+                    strp_tuple = tuple_time.strptime(str0, "%Y-%m-%d")
+                    str0 = str("%d" % strp_tuple.timestamp())
+                    print(str0)
+                    return
+                elif (args['-T'] is True):
+                    str0 = str("%s" % tuple_time.date())
+                    strp_tuple = tuple_time.strptime(str0, "%Y-%m-%d")
+                    str0 = str("%s" % strp_tuple.timestamp())
                     print(str0)
                     return
 
@@ -152,18 +162,69 @@ def main_function():
             elif (args['datetime'] is True):
                 # print(datetime.datetime.today())
                 # print(datetime.date.today())
+                tuple_time = datetime.datetime.now()
+                #print(tuple_time)
+
+                #--timestamp
+                if (args['<timestamp>'] is not None):
+                    # string_time = datetime.datetime.fromtimestamp(float(args['<timestamp>'])).strftime('%Y-%m-%d %H:%M:%S')
+                    #tuple_time = time.localtime(float(args['<timestamp>']))
+                    #print(tuple_time)
+                    #tuple_time = time.strptime(datetime.datetime.fromtimestamp(float(args['<timestamp>'])).strftime('%Y-%m-%d %H:%M:%S'), "%Y-%m-%d %H:%M:%S")
+                    #print(tuple_time)
+                    tuple_time = datetime.datetime.fromtimestamp(float(args['<timestamp>']))
+                    #print(tuple_time)
+                    if (args['-t'] is True):
+                        str0 = str("%d" % tuple_time.timestamp())
+                        print(str0)
+                        return
+                    elif (args['-T'] is True):
+                        str0 = str("%s" % tuple_time.timestamp())
+                        print(str0)
+                        return
+
+                #--datetime
+                if (args['<std-datetime-string>'] is not None):
+                    #struct_time = time.strptime(args['<std-datetime-string>'], '%Y-%m-%d %H:%M:%S')
+                    #print(struct_time)
+                    #time struct time -> datetime tuple time
+                    #tuple_time = datetime.datetime(*struct_time[0:6])
+                    #print(tuple_time)
+                    tuple_time = datetime.datetime.strptime(args['<std-datetime-string>'], '%Y-%m-%d %H:%M:%S')
+                    #print(tuple_time)
+                    #c_time = datetime.datetime.ctime(tuple_time)
+                    if (args['-t'] is True):
+                        str0 = str("%d" % tuple_time.timestamp())
+                        print(str0)
+                        return
+                    elif (args['-T'] is True):
+                        str0 = str("%s" % tuple_time.timestamp())
+                        print(str0)
+                        return
+
+                if(args['-t'] is True):
+                    #datetime tuple time -> time struct time
+                    #str0 = str("%d" % time.mktime(datetime.datetime.timetuple(tuple_time)))
+                    str0 = str("%d" % tuple_time.timestamp())
+                    print(str0)
+                    return
+                elif (args['-T'] is True):
+                    str0 = str("%s" % tuple_time.timestamp())
+                    print(str0)
+                    return
+
                 if (args['-Y'] is True):
-                    print(datetime.datetime.now().strftime("%Y"))
+                    print(tuple_time.strftime("%Y"))
                 elif (args['-m'] is True):
-                    print(datetime.datetime.now().strftime("%m"))
+                    print(tuple_time.strftime("%m"))
                 elif (args['-d'] is True):
-                    print(datetime.datetime.now().strftime("%d"))
+                    print(tuple_time.strftime("%d"))
                 elif (args['-H'] is True):
-                    print(datetime.datetime.now().strftime("%H"))
+                    print(tuple_time.strftime("%H"))
                 elif (args['-M'] is True):
-                    print(datetime.datetime.now().strftime("%M"))
+                    print(tuple_time.strftime("%M"))
                 elif (args['-S'] is True):
-                    print(datetime.datetime.now().strftime("%S"))
+                    print(tuple_time.strftime("%S"))
                 else:
                     sep = "%Y-%m-%d %H:%M:%S"
                     sep1 = '-'
@@ -176,19 +237,22 @@ def main_function():
                     if (args['<sep3-character>'] is not None):
                         sep3 = args['<sep3-character>']
                     sep = str("%%Y%s%%m%s%%d%s%%H%s%%M%s%%S" % ( sep1, sep1, sep2, sep3, sep3))
-                    print(datetime.datetime.now().strftime(sep))
+                    print(tuple_time.strftime(sep))
             elif (args['timestamp'] is True):
+                tuple_time = datetime.datetime.now()
+                if (args['<std-datetime-string>'] is not None):
+                    tuple_time = tuple_time.strptime(args['<std-datetime-string>'], '%Y-%m-%d %H:%M:%S')
+
                 if (args['-t'] is True):
-                    str0 = str("%d" % time.mktime(datetime.datetime.today().timetuple()))
-                    if(args['<std-datetime-string>'] is not None):
-                        struct_time = time.strptime(args['<std-datetime-string>'],'%Y-%m-%d %H:%M:%S')
-                        str0 = str("%d" % time.mktime(struct_time))
+                    str0 = str("%d" % tuple_time.timestamp())
                     print(str0)
                     #print(str0.split('.')[0])
                 elif (args['-T'] is True):
-                    print(datetime.datetime.today().timestamp())
+                    str0 = str("%s" % tuple_time.timestamp())
+                    print(str0)
                 else:
-                    print(datetime.datetime.today().timestamp())
+                    str0 = str("%s" % tuple_time.timestamp())
+                    print(str0)
             else:
                 ''
             return
