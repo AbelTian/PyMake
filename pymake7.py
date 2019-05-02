@@ -98,25 +98,25 @@ Usage:
   pymake7.py translate section <section-name> [ to <target-section-name> ] [ -f | --force ]
   pymake7.py translate section [ -a | --all ] [ -f | --force ]
   pymake7.py -------------------------------------------------------------
-  pymake7.py exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ]
-  pymake7.py execvp [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ]
-  pymake7.py ccvp [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ]
-  pymake7.py use <env-name> exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ]
-  pymake7.py use <env-name> execvp [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ]
-  pymake7.py use <env-name> ccvp [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ]
+  pymake7.py exec-with-params [ here | hh ] [ <command-name> ] [ <command-params> ... ]
+  pymake7.py execvp [ here | hh ] [ <command-name> ] [ <command-params> ... ]
+  pymake7.py ccvp [ here | hh ] [ <command-name> ] [ <command-params> ... ]
+  pymake7.py use <env-name> exec-with-params [ here | hh ] [ <command-name> ] [ <command-params> ... ]
+  pymake7.py use <env-name> execvp [ here | hh ] [ <command-name> ] [ <command-params> ... ]
+  pymake7.py use <env-name> ccvp [ here | hh ] [ <command-name> ] [ <command-params> ... ]
   pymake7.py *************************************************************
-  pymake7.py here exec-with-params [ <command-name> ] [ --params=<command-params> ... ]
-  pymake7.py here execvp [ <command-name> ] [ --params=<command-params> ... ]
-  pymake7.py here ccvp [ <command-name> ] [ --params=<command-params> ... ]
-  pymake7.py here use <env-name> exec-with-params [ <command-name> ] [ --params=<command-params> ... ]
-  pymake7.py here use <env-name> execvp [ <command-name> ] [ --params=<command-params> ... ]
-  pymake7.py here use <env-name> ccvp [ <command-name> ] [ --params=<command-params> ... ]
-  pymake7.py hh exec-with-params [ <command-name> ] [ --params=<command-params> ... ]
-  pymake7.py hh execvp [ <command-name> ] [ --params=<command-params> ... ]
-  pymake7.py hh ccvp [ <command-name> ] [ --params=<command-params> ... ]
-  pymake7.py hh use <env-name> exec-with-params [ <command-name> ] [ --params=<command-params> ... ]
-  pymake7.py hh use <env-name> execvp [ <command-name> ] [ --params=<command-params> ... ]
-  pymake7.py hh use <env-name> ccvp [ <command-name> ] [ --params=<command-params> ... ]
+  pymake7.py here exec-with-params [ <command-name> ] [ <command-params> ... ]
+  pymake7.py here execvp [ <command-name> ] [ <command-params> ... ]
+  pymake7.py here ccvp [ <command-name> ] [ <command-params> ... ]
+  pymake7.py here use <env-name> exec-with-params [ <command-name> ] [ <command-params> ... ]
+  pymake7.py here use <env-name> execvp [ <command-name> ] [ <command-params> ... ]
+  pymake7.py here use <env-name> ccvp [ <command-name> ] [ <command-params> ... ]
+  pymake7.py hh exec-with-params [ <command-name> ] [ <command-params> ... ]
+  pymake7.py hh execvp [ <command-name> ] [ <command-params> ... ]
+  pymake7.py hh ccvp [ <command-name> ] [ <command-params> ... ]
+  pymake7.py hh use <env-name> exec-with-params [ <command-name> ] [ <command-params> ... ]
+  pymake7.py hh use <env-name> execvp [ <command-name> ] [ <command-params> ... ]
+  pymake7.py hh use <env-name> ccvp [ <command-name> ] [ <command-params> ... ]
   pymake7.py -------------------------------------------------------------
   pymake7.py backup [ here | hh ] [ <zip-file-name> ]
   pymake7.py here backup [ <zip-file-name> ]
@@ -3575,7 +3575,7 @@ def main_function():
                     local = False
 
                 params0 = []
-                for current_var in args['--params']:
+                for current_var in args['<command-params>']:
                     params0.append(current_var)
 
                 cmd_list = []
@@ -3648,9 +3648,8 @@ def main_function():
 
             params0 = []
             #print(args['<command-name>'])
-            #print(args['--params'])
             #print(args['<command-params>'])
-            for current_var in args['--params']:
+            for current_var in args['<command-params>']:
                 params0.append(current_var)
 
             cmd_list = []
