@@ -11,10 +11,12 @@ Usage:
   pyinfo.py get pc [ develop ]
   pyinfo.py get date [ -Y | -m | -d ] [ -f <sep-character> ]
   pyinfo.py get time [ -H | -M | -S ] [ -f <sep-character> ]
-  pyinfo.py get datetime [ -Y | -m | -d | -H | -M | -S ] [ -f <sep-character> <sep2-character> <sep3-character> ]
-  pyinfo.py get datetime [ <std-datetime-string> ] [ -t | -T ]
-  pyinfo.py get datetime [ <timestamp> ] [ --string ] [ -f <sep-character> <sep2-character> <sep3-character> ]
-  pyinfo.py get datetime timedelta <time1> [ <time2> ] [ --struct | --number ] [ --format=<format-string> ]
+  pyinfo.py get datetime [ -t | -T ] [ -Y | -m | -d | -H | -M | -S ] [ -f <sep-character> <sep2-character> <sep3-character> ]
+  pyinfo.py get datetime [ <timestamp> ] --timestamp [ -t | -T ] [ -Y | -m | -d | -H | -M | -S ] [ -f <sep-character> <sep2-character> <sep3-character> ]
+  pyinfo.py get datetime [ <std-datetime-string> ] --datetime [ -t | -T ] [ -Y | -m | -d | -H | -M | -S ] [ -f <sep-character> <sep2-character> <sep3-character> ]
+  pyinfo.py get datetime diff [ <std-datetime1-string> <std-datetime2-string> ] --datetime [ -t | -T ] [ -Y | -m | -d | -H | -M | -S ] [ -f <sep-character> <sep2-character> <sep3-character> ]
+  pyinfo.py get datetime diff [ <timestamp1> <timestamp2> ] --timestamp [ -t | -T ] [ -Y | -m | -d | -H | -M | -S ] [ -f <sep-character> <sep2-character> <sep3-character> ]
+  pyinfo.py get timestamp [ <std-datetime-string> ] [ -t | -T ]
   pyinfo.py get platform
   pyinfo.py (-h | --help)
   pyinfo.py --version
@@ -22,9 +24,18 @@ Usage:
 Command:
   get              lots of important information.
 
+Params:
+  <std-datetime-string>         YYYY-mm-dd HH:MM:SS
+  <timestamp>                   seconds to 1970-01-01 00:00:00, unique.
+  -t | -T                       different precision for outputting timestamp.
+  -Y | -m | -d | -H | -M | -S   outputting quantity.
+  -f                            outputting style.
+
 Options:
   -h --help     Show this screen.
   --version     Show version.
+  --timestamp   restrict inputting timestamp.
+  --datetime    restrict inputting std datetime string.
 """
 
 import os
@@ -129,7 +140,7 @@ def main_function():
                 elif (args['-d'] is True):
                     print(datetime.datetime.now().strftime("%d"))
                 else:
-                    sep = "%Y:%m:%d"
+                    sep = "%Y-%m-%d"
                     if (args['<sep-character>'] is not None):
                         sep = str("%%Y%s%%m%s%%d" % (args['<sep-character>'], args['<sep-character>']))
                     print(datetime.datetime.now().strftime(sep))
@@ -142,15 +153,6 @@ def main_function():
                     print(datetime.datetime.now().strftime("%m"))
                 elif (args['-d'] is True):
                     print(datetime.datetime.now().strftime("%d"))
-                elif (args['-t'] is True):
-                    str0 = str("%d" % time.mktime(datetime.datetime.today().timetuple()))
-                    if(args['<std-datetime-string>'] is not None):
-                        struct_time = time.localtime(float(args['<std-datetime-string>']))
-                        str0 = str("%d" % time.mktime(struct_time))
-                        print(str0)
-                    print(str0.split('.')[0])
-                elif (args['-T'] is True):
-                    print(datetime.datetime.today().timestamp())
                 else:
                     sep = "%Y-%m-%d %H:%M:%S"
                     sep1 = '-'
@@ -164,6 +166,18 @@ def main_function():
                         sep3 = args['<sep3-character>']
                     sep = str("%%Y%s%%m%s%%d%s%%H%s%%M%s%%S" % ( sep1, sep1, sep2, sep3, sep3))
                     print(datetime.datetime.now().strftime(sep))
+            elif (args['timestamp'] is True):
+                if (args['-t'] is True):
+                    str0 = str("%d" % time.mktime(datetime.datetime.today().timetuple()))
+                    if(args['<std-datetime-string>'] is not None):
+                        struct_time = time.strptime(args['<std-datetime-string>'],'%Y-%m-%d %H:%M:%S')
+                        str0 = str("%d" % time.mktime(struct_time))
+                    print(str0)
+                    #print(str0.split('.')[0])
+                elif (args['-T'] is True):
+                    print(datetime.datetime.today().timestamp())
+                else:
+                    print(datetime.datetime.today().timestamp())
             else:
                 ''
             return

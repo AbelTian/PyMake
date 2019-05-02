@@ -362,11 +362,12 @@
             "mingw32-make -j10",
             "echo build inf ${QTSPEC} ${QTCONFIG}",
             "echo src file: %src%",
-            "echo build at: %build%"
+            "echo build at: %build%",
+            "cd /d %src_path%"
         ],
         "open-dir": [
-            "if not exist \"%*\" ( echo has no this dir. & exit /b 0)",
-            "start %*"
+            "if not exist \"%1\" ( echo has no this dir. & exit /b 0)",
+            "start %1"
         ],
         "build-osg-release": [
             "cd /d R:/Develop/c0-buildstation/OpenSceneGraph_Release",
