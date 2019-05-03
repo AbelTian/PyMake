@@ -706,9 +706,9 @@ def main_function():
                 if(os.path.isdir(args['<source-path-file>'])):
                     print("please input an abspath .json file.")
                     return
-                if(os.path.islink(args['<source-path-file>'])):
-                    print("your file path cant be a link.")
-                    return
+                #if(os.path.islink(args['<source-path-file>'])):
+                #    print("your file path cant be a link.")
+                #    return
                 if(not os.path.isabs(args['<source-path-file>'])):
                     print("your file path is not an abspath.")
                     return
@@ -941,7 +941,7 @@ def main_function():
             if (args['root'] is True):
                 if( args['--source'] is True ):
                     if (not os.path.isdir(args['<config-root>'])
-                        or os.path.islink(args['<config-root>'])
+                        #or os.path.islink(args['<config-root>'])
                         or not os.path.isabs(args['<config-root>'])):
                         print("please input a legal source abspath.")
                         return
@@ -952,7 +952,7 @@ def main_function():
 
                 if( args['--target'] is True ):
                     if (not os.path.isdir(args['<config-root>'])
-                        or os.path.islink(args['<config-root>'])
+                        #or os.path.islink(args['<config-root>'])
                         or not os.path.isabs(args['<config-root>'])):
                         print("please input a legal target abspath.")
                         return
@@ -963,7 +963,7 @@ def main_function():
 
                 if( args['<source-config-root>'] is not None ):
                     if (not os.path.isdir(args['<source-config-root>'])
-                        or os.path.islink(args['<source-config-root>'])
+                        #or os.path.islink(args['<source-config-root>'])
                         or not os.path.isabs(args['<source-config-root>'])):
                         print("please input a legal source abspath.")
                         return
@@ -973,7 +973,7 @@ def main_function():
 
                 if( args['<target-config-root>'] is not None ):
                     if (not os.path.isdir(args['<target-config-root>'])
-                        or os.path.islink(args['<target-config-root>'])
+                        #or os.path.islink(args['<target-config-root>'])
                         or not os.path.isabs(args['<target-config-root>'])):
                         print("please input a legal target abspath.")
                         return
@@ -987,7 +987,7 @@ def main_function():
                 if( args['--source'] is True ):
                     if (not args['<config-file>'].endswith(pymakesuffix)
                         or os.path.isdir(args['<config-file>'])
-                        or os.path.islink(args['<config-file>'])
+                        #or os.path.islink(args['<config-file>'])
                         or os.path.isabs(args['<config-file>'])):
                         print("please input a real source .json file.")
                         return
@@ -999,7 +999,7 @@ def main_function():
                 if( args['--target'] is True ):
                     if (not args['<config-file>'].endswith(pymakesuffix)
                         or os.path.isdir(args['<config-file>'])
-                        or os.path.islink(args['<config-file>'])
+                        #or os.path.islink(args['<config-file>'])
                         or os.path.isabs(args['<config-file>'])):
                         print("please input a real target .json file.")
                         return
@@ -1011,7 +1011,7 @@ def main_function():
                 if( args['<source-config-file>'] is not None ):
                     if (not args['<source-config-file>'].endswith(pymakesuffix)
                         or os.path.isdir(args['<source-config-file>'])
-                        or os.path.islink(args['<source-config-file>'])
+                        #or os.path.islink(args['<source-config-file>'])
                         or os.path.isabs(args['<source-config-file>'])):
                         print("please input a real source .json file.")
                         return
@@ -1022,7 +1022,7 @@ def main_function():
                 if( args['<target-config-file>'] is not None ):
                     if (not args['<target-config-file>'].endswith(pymakesuffix)
                         or os.path.isdir(args['<target-config-file>'])
-                        or os.path.islink(args['<target-config-file>'])
+                        #or os.path.islink(args['<target-config-file>'])
                         or os.path.isabs(args['<target-config-file>'])):
                         print("please input a real target .json file.")
                         return
@@ -1036,7 +1036,7 @@ def main_function():
                 if( args['--source'] is True ):
                     if (not args['<path-file>'].endswith(pymakesuffix)
                         or os.path.isdir(args['<path-file>'])
-                        or os.path.islink(args['<path-file>'])
+                        #or os.path.islink(args['<path-file>'])
                         or not os.path.isabs(args['<path-file>'])):
                         print("please input a legal source abspath .json file.")
                         return
@@ -1053,7 +1053,7 @@ def main_function():
                 if( args['--target'] is True ):
                     if (not args['<path-file>'].endswith(pymakesuffix)
                         or os.path.isdir(args['<path-file>'])
-                        or os.path.islink(args['<path-file>'])
+                        #or os.path.islink(args['<path-file>'])
                         or not os.path.isabs(args['<path-file>'])):
                         print("please input a legal target abspath .json file.")
                         return
@@ -1070,7 +1070,7 @@ def main_function():
                 if(args['<source-path-file>'] is not None):
                    if( not args['<source-path-file>'].endswith(pymakesuffix)
                        or os.path.isdir(args['<source-path-file>'])
-                       or os.path.islink(args['<source-path-file>'])
+                       #or os.path.islink(args['<source-path-file>'])
                        or not os.path.isabs(args['<source-path-file>'])):
                         print("please input a legal source abspath .json file.")
                         return
@@ -1083,7 +1083,7 @@ def main_function():
                 if(args['<target-path-file>'] is not None):
                    if(not args['<target-path-file>'].endswith(pymakesuffix)
                       or os.path.isdir(args['<target-path-file>'])
-                      or os.path.islink(args['<target-path-file>'])
+                      #or os.path.islink(args['<target-path-file>'])
                       or not os.path.isabs(args['<target-path-file>'])):
                         print("please input a legal target abspath .json file.")
                         return
@@ -1799,8 +1799,9 @@ def main_function():
                     dirlist = []
                     for (key) in keylist1:
                         # print("%-30s %-5s %-5s" % (key, os.path.isdir(key), os.path.islink(key)))
-                        if (os.path.isdir(key)
-                            or os.path.islink(key)):
+                        if ( os.path.isdir(key)
+                            #or os.path.islink(key)
+                            ):
                             dirlist.append(key)
                     # print(dirlist)
                     for key in dirlist:
@@ -1877,7 +1878,8 @@ def main_function():
                     for (key) in keylist1:
                         #print("%-30s %-5s %-5s" % (key, os.path.isdir(key), os.path.islink(key)))
                         if (os.path.isdir(key)
-                            or os.path.islink(key)):
+                            #or os.path.islink(key)
+                            ):
                             dirlist.append(key)
                     #print(dirlist)
                     for key in dirlist:
@@ -1935,7 +1937,8 @@ def main_function():
                         for (key) in keylist1:
                             # print("%-30s %-5s %-5s" % (key, os.path.isdir(key), os.path.islink(key)))
                             if (os.path.isdir(key)
-                                or os.path.islink(key)):
+                                #or os.path.islink(key)
+                                ):
                                 dirlist.append(key)
                         #print(dirlist)
                         #for file in dirlist:
@@ -1981,7 +1984,8 @@ def main_function():
                         return
 
                     if (os.path.isdir(args['<script-file>'])
-                        or os.path.islink(args['<script-file>'])):
+                        #or os.path.islink(args['<script-file>'])
+                        ):
                         print("please input a legal script file.")
                         return
 
