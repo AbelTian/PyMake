@@ -1766,6 +1766,11 @@ def main_function():
     while (True):
         if (args['import'] is True):
             if(args['cmd'] is True):
+                print("source file   is %s" % sourceconfigfile)
+                print("source root   is %s" % sourceroot)
+                print("source config is %s" % sourcefile)
+                print("---------------------------------------------------------------------")
+
                 import itertools
 
                 os.chdir(sourceroot)

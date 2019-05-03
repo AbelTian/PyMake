@@ -53,10 +53,12 @@ set filepath=%~dp0
 set sourcefile=pypaths.bat
 call :install %*
 
+echo 安装成功。
 exit /b 0
 
 ::================================================================
 :install
 echo @echo off > %mmfile%
 echo call "%filepath%\%sourcefile%" %* >> %mmfile%
+echo 安装 %sourcefile%
 goto :eof
