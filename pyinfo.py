@@ -14,8 +14,8 @@ Usage:
   pyinfo.py get datetime [ -t | -T ] [ -Y | -m | -d | -H | -M | -S ] [ -f <sep-character> <sep2-character> <sep3-character> ]
   pyinfo.py get datetime [ <timestamp> ] --timestamp [ -t | -T ] [ -Y | -m | -d | -H | -M | -S ] [ -f <sep-character> <sep2-character> <sep3-character> ]
   pyinfo.py get datetime [ <std-datetime-string> ] --datetime [ -t | -T ] [ -Y | -m | -d | -H | -M | -S ] [ -f <sep-character> <sep2-character> <sep3-character> ]
-  pyinfo.py get datetime diff [ <std-datetime1-string> <std-datetime2-string> ] --datetime [ -t | -T ] [ -Y | -m | -d | -H | -M | -S ] [ -f <sep-character> <sep2-character> <sep3-character> ]
-  pyinfo.py get datetime diff [ <timestamp1> <timestamp2> ] --timestamp [ -t | -T ] [ -Y | -m | -d | -H | -M | -S ] [ -f <sep-character> <sep2-character> <sep3-character> ]
+  pyinfo.py get datetime [ <std-datetime1-string> <std-datetime2-string> ] --datetime --diff [ -t | -T ] [ -Y | -m | -d | -H | -M | -S ] [ -f <sep-character> <sep2-character> <sep3-character> ]
+  pyinfo.py get datetime [ <timestamp1> <timestamp2> ] --timestamp --diff [ -t | -T ] [ -Y | -m | -d | -H | -M | -S ] [ -f <sep-character> <sep2-character> <sep3-character> ]
   pyinfo.py get timestamp [ <std-datetime-string> ] [ -t | -T ]
   pyinfo.py get platform
   pyinfo.py (-h | --help)
@@ -164,6 +164,53 @@ def main_function():
                 # print(datetime.date.today())
                 tuple_time = datetime.datetime.now()
                 #print(tuple_time)
+
+                if(args['--diff'] is True):
+                    tuple_time1 = tuple_time
+                    tuple_time2 = tuple_time
+
+                    float_time1 = 0
+                    float_time2 = 0
+                    if(args['<std-datetime1-string>'] is not None):
+                        tuple_time1 = datetime.datetime.strptime(args['<std-datetime1-string>'], '%Y-%m-%d %H:%M:%S')
+                        float_time1 = tuple_time1.timestamp()
+                    if(args['<std-datetime2-string>'] is not None):
+                        float_time2 = tuple_time2.timestamp()
+                        tuple_time2 = datetime.datetime.strptime(args['<std-datetime2-string>'], '%Y-%m-%d %H:%M:%S')
+
+                    if (args['<timestamp1>'] is not None):
+                        float_time1 = float(args['<timestamp1>'])
+                        tuple_time1 = datetime.datetime.fromtimestamp(float(args['<timestamp1>']))
+                    if (args['<timestamp2>'] is not None):
+                        float_time2 = float(args['<timestamp2>'])
+                        tuple_time2 = datetime.datetime.fromtimestamp(float(args['<timestamp2>']))
+
+                    tuple_time = datetime.datetime.fromtimestamp(float_time1 - float_time2)
+
+                    #detla_time = tuple_time1 - tuple_time2
+                    #print(detla_time.total_seconds())
+                    #struct_time = time.localtime(detla_time.total_seconds())
+                    #print(time.ctime(detla_time.total_seconds()))
+                    #print(time.time())
+                    #print(struct_time)
+                    #print(datetime.datetime(*struct_time[0:6]))
+                    #print(datetime.datetime.replace(datetime.datetime.today(), *struct_time[0:6]))
+                    #day0 = datetime.datetime.replace(datetime.datetime.today(), year=1, month=1, day=1, hour=0, minute=0, second=0, microsecond=0)
+                    #print(day0)
+                    #print(datetime.datetime.fromtimestamp(detla_time.total_seconds()))
+                    #struct_time = day0.timetuple()
+                    #print(time.mktime(struct_time))
+                    #time0 = time.strptime("0001-1-1 0:0:0","%Y-%m-%d %H:%M:%S")
+                    #print(time0)
+
+                    if (args['-t'] is True):
+                        str0 = str("%d" % tuple_time.timestamp())
+                        print(str0)
+                        return
+                    elif (args['-T'] is True):
+                        str0 = str("%s" % tuple_time.timestamp())
+                        print(str0)
+                        return
 
                 #--timestamp
                 if (args['<timestamp>'] is not None):
