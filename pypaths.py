@@ -42,7 +42,12 @@ def main_function():
                 for fi in files:
                     fi_d = os.path.join(filepath, fi)
                     if (os.path.isdir(fi_d)):
-                        if (os.path.relpath(fi_d, os.getcwd()).startswith('.')):
+                        ignore_path = os.path.relpath(fi_d, os.getcwd())
+                        if (ignore_path.startswith('.')):
+                            continue
+                        if(ignore_path.__contains__('.git')):
+                            continue
+                        if(ignore_path.__contains__('.idea')):
                             continue
                         #if (depth_value == 0):
                         allpath_list.append(fi_d)
@@ -55,7 +60,12 @@ def main_function():
             for fi in files:
                 fi_d = os.path.join(filepath, fi)
                 if (os.path.isdir(fi_d)):
-                    if (os.path.relpath(fi_d, os.getcwd()).startswith('.')):
+                    ignore_path = os.path.relpath(fi_d, os.getcwd())
+                    if (ignore_path.startswith('.')):
+                        continue
+                    if (ignore_path.__contains__('.git')):
+                        continue
+                    if (ignore_path.__contains__('.idea')):
                         continue
                     allpath_list.append(fi_d)
                     Depth_Ergodic_new(fi_d, allpath_list, depth_value, sign)
