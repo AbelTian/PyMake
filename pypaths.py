@@ -3,7 +3,7 @@
 """PyPaths 1.0.
 
 Usage:
-  pypaths.py list [ <abs-path> ] [ -d <deeps> ]
+  pypaths.py list [ <abs-path> ] [ -d <deeps> ] [ --pymake ]
   pypaths.py (-h | --help)
   pypaths.py --version
 
@@ -34,16 +34,32 @@ def main_function():
 
     pypathsworkpath = os.getcwd()
 
-    def level_depath(path0, deep = 0):
-        tuple_path = []
-        positon = 0
-        for path1 in os.listdir(path0):
-            if(os.path.isdir(path1)):
-                positon += 1
-                tuple_path = level_depath(path1, positon)
-                return tuple_path
-
-        return tuple_path
+    def Depth_Ergodic_new(filepath, allpath_list, depth_value, sign=True):
+        if (sign):
+            depth_value -= 1
+            if (depth_value >= 0):
+                files = os.listdir(filepath)
+                for fi in files:
+                    fi_d = os.path.join(filepath, fi)
+                    if (os.path.isdir(fi_d)):
+                        if (os.path.relpath(fi_d, os.getcwd()).startswith('.')):
+                            continue
+                        #if (depth_value == 0):
+                        allpath_list.append(fi_d)
+                        Depth_Ergodic_new(fi_d, allpath_list, depth_value, sign)
+                    else:
+                        pass
+                    #print (os.path.join(filepath,fi_d))
+        else:
+            files = os.listdir(filepath)
+            for fi in files:
+                fi_d = os.path.join(filepath, fi)
+                if (os.path.isdir(fi_d)):
+                    if (os.path.relpath(fi_d, os.getcwd()).startswith('.')):
+                        continue
+                    allpath_list.append(fi_d)
+                    Depth_Ergodic_new(fi_d, allpath_list, depth_value, sign)
+        return allpath_list
 
     # list
     while (True):
@@ -66,30 +82,23 @@ def main_function():
                 print("please input a legal abspath.")
                 return
 
-            deeps = 0
+            os.chdir(localabspath)
+
+            deeps = 1
             if(args['<deeps>'] is not None):
                 deeps = int(args['<deeps>'])
 
-            positon = 0
-            for (dirpath, dirnames, filenames) in os.walk(localabspath, topdown=True):
-                #for name in filenames:
-                #    print(os.path.relpath(os.path.join(dirpath, name), os.getcwd()))
-                #    #keylist1.append(os.path.relpath(os.path.join(dirpath, name), os.getcwd()))
-                for name in dirnames:
-                    str0 = os.path.relpath(os.path.join(dirpath, name), os.getcwd())
-                    if(str0.startswith('.')):
-                        continue
-                    if(str0.count(os.path.sep) > deeps):
-                        continue
-                    #print(dirpath, name)
-                    print(os.path.relpath(os.path.join(dirpath, name), os.getcwd()))
-                    #keylist1.append(os.path.relpath(os.path.join(dirpath, name), os.getcwd()))
+            allpath_list = []
+            all_path = Depth_Ergodic_new(localabspath, allpath_list, deeps, True)
 
-                print(positon)
-                if(positon > deeps):
-                    break
-                positon += 1
-
+            if(args['--pymake'] is True):
+                pos = 1
+                for path0 in all_path:
+                    print("\"P%d\": \"%s\"," % (pos, path0))
+                    pos += 1
+            else:
+                for path0 in all_path:
+                    print(path0)
 
         else:
             ''
