@@ -3,7 +3,7 @@
 """PyPaths 1.0.
 
 Usage:
-  pypaths.py list [ <abs-path> ] [ -d <deeps> ] [ --pymake ]
+  pypaths.py list [ <abs-path> ] [ -d <deeps> ] [ --pymake <substitute> <substitute-value> ]
   pypaths.py (-h | --help)
   pypaths.py --version
 
@@ -92,9 +92,21 @@ def main_function():
             all_path = Depth_Ergodic_new(localabspath, allpath_list, deeps, True)
 
             if(args['--pymake'] is True):
+                sub0 = ""
+                sub1 = ""
+                if(args['<substitute>'] is not None):
+                    sub0 = args['<substitute>']
+                    sub0 = sub0.replace('\\', '/')
+                if(args['<substitute-value>'] is not None):
+                    sub1 = args['<substitute-value>']
+                    sub1 = sub1.replace('\\', '/')
+
                 pos = 1
                 for path0 in all_path:
-                    print("\"P%d\": \"%s\"," % (pos, path0))
+                    str0 = str(path0).replace('\\', '/')
+                    if (args['<substitute-value>'] is not None):
+                        str0 = str(str0).replace(sub1, "${%s}" % sub0)
+                    print("\"P%d\": \"%s\"," % (pos, str0))
                     pos += 1
             else:
                 for path0 in all_path:
