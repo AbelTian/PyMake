@@ -1,5 +1,5 @@
 @echo off
-::è¯·ä½¿ç”¨ uninstall.bat è¿›è¡Œå¸è½½
+::ÇëÊ¹ÓÃ uninstall.bat ½øĞĞĞ¶ÔØ
 
 set mmpath=C:\Windows
 
@@ -28,6 +28,9 @@ set mmfile=%mmpath%\pyccvp.bat
 call :uninstall
 
 set mmfile=%mmpath%\pyinfo.bat
+call :uninstall
+
+set mmfile=%mmpath%\pypaths.bat
 call :uninstall
 
 exit /b 0

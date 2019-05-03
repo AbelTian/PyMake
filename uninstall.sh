@@ -14,3 +14,4 @@ sudo rm -f ${mmpath}/pyexecvp
 sudo rm -f ${mmpath}/pyccvp
 
 sudo rm -f ${mmpath}/pyinfo
+sudo rm -f ${mmpath}/pypaths

@@ -1,27 +1,19 @@
 # -*- coding: utf-8 -*-
 #!/usr/bin/env python
-"""PyInfo 1.0.
+"""PyPaths 1.0.
 
 Usage:
-  pyinfo.py get pc
-  pyinfo.py get pc home
-  pyinfo.py get pc [ setting ]
-  pyinfo.py get pc [ desk ] [ doc ] [ download ] [ music ] [ picture ] [ movie ]
-  pyinfo.py get pc [ favorite ] [ search ] [ contact ]
-  pyinfo.py get pc [ develop ]
-  pyinfo.py get date [ -y | -m | -d ] [ -f <sep-character> ]
-  pyinfo.py get time [ -h | -m | -s ] [ -f <sep-character> ]
-  pyinfo.py get datetime [ -f <sep-character> <sep2-character> <sep3-character> ]
-  pyinfo.py get platform
-  pyinfo.py (-h | --help)
-  pyinfo.py --version
+  pypaths.py list [ <abs-path> ] [ -d <deeps> ]
+  pypaths.py (-h | --help)
+  pypaths.py --version
 
 Command:
-  get              lots of important information.
+  list              list all directory in a abs path.
 
 Options:
   -h --help     Show this screen.
   --version     Show version.
+  -d            restrict deeps.
 """
 
 import os
@@ -37,67 +29,68 @@ from pycore.pycore import *
 
 def main_function():
 
-    args = docopt(__doc__, version='pyinfo.py v1.0')
+    args = docopt(__doc__, version='pypaths.py v1.0')
     #print(args)
 
-    # get
+    pypathsworkpath = os.getcwd()
+
+    def level_depath(path0, deep = 0):
+        tuple_path = []
+        positon = 0
+        for path1 in os.listdir(path0):
+            if(os.path.isdir(path1)):
+                positon += 1
+                tuple_path = level_depath(path1, positon)
+                return tuple_path
+
+        return tuple_path
+
+    # list
     while (True):
-        if (args['get'] == True):
-            if (args['pc'] is True):
-                userroot = getuserroot()
-                #linux path is chinese, why?
-                #windows only
-                userdoc = userroot + os.path.sep + "Documents"
-                userdown = userroot + os.path.sep + "Downloads"
-                userset = getconfigroot()
-                userdesk = userroot + os.path.sep + "Desktop"
-                usermusic = userroot + os.path.sep + "Music"
-                usermovie = userroot + os.path.sep + "Videos" #Movies
-                userfavo = userroot + os.path.sep + "Favorites"
-                usersearch = userroot + os.path.sep + "Searches"
-                usercontact = userroot + os.path.sep + "Contacts"
-                userpictures = userroot + os.path.sep + "Pictures"
-                userdev = userroot + os.path.sep + "Develop"
-                if (args['home']):
-                    print(userroot)
-                elif (args['setting']):
-                    print(userset)
-                elif (args['doc']):
-                    print(userdoc)
-                elif (args['download']):
-                    print(userdown)
-                elif (args['desk']):
-                    print(userdesk)
-                elif (args['music']):
-                    print(usermusic)
-                elif (args['movie']):
-                    print(usermovie)
-                elif (args['favorite']):
-                    print(userfavo)
-                elif (args['search']):
-                    print(usersearch)
-                elif (args['contact']):
-                    print(usercontact)
-                elif (args['picture']):
-                    print(userpictures)
-                elif (args['develop']):
-                    print(userdev)
-                else:
-                    print(userroot)
-                    print(userset)
-                    print(userdesk)
-                    print(userdoc)
-                    print(userdown)
-                    print(usermusic)
-                    print(userpictures)
-                    print(usermovie)
-                    print(usersearch)
-                    print(usercontact)
-                    print(userdev)
+        if (args['list'] == True):
+            ''
+
+            localabspath = args['<abs-path>']
+            if(args['<abs-path>'] is None):
+                localabspath = os.getcwd()
+
+            if(args['<abs-path>'] is '.'):
+                localabspath = os.getcwd()
+
+            if(args['<abs-path>'] is '..'):
+                localabspath = os.getcwd() + os.path.sep + ".."
+
+            if (not os.path.isdir(localabspath)
+                #or os.path.islink(localabspath)
+                or not os.path.isabs(localabspath)):
+                print("please input a legal abspath.")
                 return
-            else:
-                ''
-            return
+
+            deeps = 0
+            if(args['<deeps>'] is not None):
+                deeps = int(args['<deeps>'])
+
+            positon = 0
+            for (dirpath, dirnames, filenames) in os.walk(localabspath, topdown=True):
+                #for name in filenames:
+                #    print(os.path.relpath(os.path.join(dirpath, name), os.getcwd()))
+                #    #keylist1.append(os.path.relpath(os.path.join(dirpath, name), os.getcwd()))
+                for name in dirnames:
+                    str0 = os.path.relpath(os.path.join(dirpath, name), os.getcwd())
+                    if(str0.startswith('.')):
+                        continue
+                    if(str0.count(os.path.sep) > deeps):
+                        continue
+                    #print(dirpath, name)
+                    print(os.path.relpath(os.path.join(dirpath, name), os.getcwd()))
+                    #keylist1.append(os.path.relpath(os.path.join(dirpath, name), os.getcwd()))
+
+                print(positon)
+                if(positon > deeps):
+                    break
+                positon += 1
+
+
         else:
             ''
         break

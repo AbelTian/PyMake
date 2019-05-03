@@ -1,0 +1,457 @@
+{
+    "path-assemblage": {
+        "root": "R:/Develop",
+        "root2": "V:/Develop",
+        "root.src": "${root}/a0-develop",
+        "root.prod": "${root2}/d0-product",
+        "root.sdk": "${root2}/d1-sdk",
+        "root.tool": "${root}/b0-toolkits",
+        "root.tools": "${root}/e0-tools",
+        "root.build": "${root2}/c0-buildstation",
+        "root.test": "${root}/e3-test",
+        "root.webrc": "${root}/e2-webrc",
+        "cc": "${root.tool}/compiler",
+        "FFmpeg": "${root.sdk}/FFmpeg3/Windows",
+        "FFmpeg.bin": "${FFmpeg}/bin",
+        "FFmpeg.lib": "${FFmpeg}/lib",
+        "FFmpeg.inc": "${FFmpeg}/include/FFmpeg3",
+        "wincc": "${root.tool}/winCompilers",
+        "cmake": "${wincc}/cmake3.9.1_64",
+        "cmake.bin": "${cmake}/bin",
+        "msys.bin": "${root.tool}/winCompilers/mSys/bin",
+        "qt": "${root.tool}/winLibraries/Qt",
+        "qt5.8": "${root.tool}/winLibraries/Qt",
+        "qt5.9": "${root.tool}/winLibraries/Qt",
+        "qt5.12": "${root.tool}/winLibraries/Qt",
+        "qt5.9.version": "5.9.2",
+        "qt5.12.version": "5.12.2",
+        "qt5.5.version": "5.5.1",
+        "qt5.version": "5.9.2",
+        "qt4.version": "4.8.6",
+        "qt4.8.mingw32": "${qt}/${qt4.version}/mingw32",
+        "qt4.8.mingw32.bin": "${qt4.8.mingw32}/bin",
+        "qt5.armhf32": "${qt}/${qt5.version}/mingw53_armhf32",
+        "qt5.armhf32.bin": "${qt5.armhf32}/bin",
+        "qt5.5.armhf32": "${qt}/${qt5.5.version}/armhf32",
+        "qt5.5.armhf32.bin": "${qt5.5.armhf32}/bin",
+        "qt5.5.armhf32.sysroot": "${qt5.5.armhf32}/sysroots/cortexa9hf-vfp-neon-poky-linux-gnueabi",
+        "qt5.9.mingw32": "${qt}/${qt5.9.version}/mingw53_32",
+        "qt5.9.mingw32.bin": "${qt5.9.mingw32}/bin",
+        "qt5.9.msvc2015": "${qt5.9}/${qt5.9.version}/msvc2015",
+        "qt5.9.msvc2015.bin": "${qt5.9.msvc2015}/bin",
+        "qt5.12.msvc2015_64": "${qt5.12}/${qt5.12.version}/msvc2015_64",
+        "qt5.12.msvc2015_64.bin": "${qt5.12.msvc2015_64}/bin",
+        "qt5.12.winrt.arm": "${qt5.12}/${qt5.12.version}/winrt_armv7_msvc2015",
+        "qt5.12.winrt.arm.bin": "${qt5.12}/${qt5.12.version}/winrt_armv7_msvc2015/bin",
+        "qt5.12.winrt.x64": "${qt5.12}/${qt5.12.version}/winrt_x64_msvc2015",
+        "qt5.12.winrt.x64.bin": "${qt5.12}/${qt5.12.version}/winrt_x64_msvc2015/bin",
+        "qt5.9.clang": "${qt}/${qt5.9.version}/clang_64",
+        "qt5.9.clang.bin": "${qt5.9.clang}/bin",
+        "qt5.9.gcc_64": "${qt}/${qt5.9.version}/gcc_64",
+        "qt5.9.gcc_64.bin": "${qt5.9.gcc_64}/bin",
+        "qt5.9.android_arm": "${qt}/${qt5.9.version}/android_armv7",
+        "qt5.9.android_arm.bin": "${qt}/${qt5.9.version}/android_armv7/bin",
+        "qt5.9.android_x86": "${qt}/${qt5.9.version}/android_x86",
+        "qt5.9.android_x86.bin": "${qt}/${qt5.9.version}/android_x86/bin",
+        "qt5.8.android_x86": "${qt}/5.8/android_x86",
+        "qt5.8.android_x86.bin": "${qt5.8.android_x86}/bin",
+        "qt5.8.android_arm": "${qt}/5.8/android_armv7",
+        "qt5.8.android_arm.bin": "${qt5.8.android_arm}/bin",
+        "qt5.8.mingw32": "${qt}/5.8/mingw53_32",
+        "qt5.8.mingw32.bin": "${qt5.8.mingw32}/bin",
+        "qt5.8.gcc_64": "${qt}/5.8/gcc_64",
+        "qt5.8.gcc_64.bin": "${qt5.8.gcc_64}/bin",
+        "qt5.8.clang": "${qt}/5.8/clang_64",
+        "qt5.8.clang.bin": "${qt5.8.clang}/bin",
+        "qt5.8.ios": "${qt}/5.8/ios",
+        "qt5.8.ios.bin": "${qt5.8.ios}/bin",
+        "qt5.7.gcc_64": "${qt}/5.7.1/gcc_64",
+        "qt5.7.android_x86": "${qt}/5.7/android_x86",
+        "qt5.7.android_arm": "${qt}/5.7/android_armv7",
+        "qt4.8.clang": "${qt}/${qt4.version}/clang_64",
+        "qt4.8.clang.bin": "${qt4.8.clang}/bin",
+        "mingw32": "${qt}/Tools/mingw530_32",
+        "mingw32.bin": "${mingw32}/bin",
+        "VC6.BIN":"C:/Program Files (x86)/Microsoft Visual Studio/VC98/Bin;C:/Program Files (x86)/Microsoft Visual Studio/Common/MSDev98/Bin",
+        "VC6.INCLUDE":"C:/Program Files (x86)/Microsoft Visual Studio/VC98/Include;C:/Program Files (x86)/Microsoft Visual Studio/VC98/MFC/Include",
+        "VC6.LIB":"C:/Program Files (x86)/Microsoft Visual Studio/VC98/Lib;C:/Program Files (x86)/Microsoft Visual Studio/VC98/MFC/Lib",
+        "QtMsBuild": "C:/Users/Administrator/AppData/Local/QtMsBuild",
+        "vcvarsall-2005":"C:/Program Files (x86)/Microsoft Visual Studio 8/VC/vcvarsall.bat",
+        "vcvarsall-2008":"C:/Program Files (x86)/Microsoft Visual Studio 9.0/VC/vcvarsall.bat",
+        "vcvarsall-2010":"C:/Program Files (x86)/Microsoft Visual Studio 10.0/VC/vcvarsall.bat",
+        "vcvarsall-2012":"C:/Program Files (x86)/Microsoft Visual Studio 11.0/VC/vcvarsall.bat",
+        "vcvarsall-2013":"C:/Program Files (x86)/Microsoft Visual Studio 12.0/VC/vcvarsall.bat",
+        "vcvarsall-2015":"${wincc}/msvc2015/VC/vcvarsall.bat",
+        "vcvarsall-2017":"C:/Program Files (x86)/Microsoft Visual Studio/2017/Community/VC/Auxiliary/Build/vcvarsall.bat",
+        "vcvarsall-2017-2":"C:/Program Files (x86)/Microsoft Visual Studio/2017/Enterprise/VC/Auxiliary/Build/vcvarsall.bat",
+        "make1": "C:/Users/Administrator/msvc_make.bat",
+        "make2": "nmake.exe",
+        "cdb": "${wincc}/Windows Kits/10/Debuggers/x86",
+        "cdb.x64": "${wincc}/Windows Kits/10/Debuggers/x64",
+        "android": "${root.tool}/winAndroidLibraries",
+        "android.sdk": "${android}/android-sdk-windows",
+        "android.ndk": "${android}/android-ndk-r13b",
+        "android.ant": "${android}/apache-ant-1.10.3",
+        "android.java": "${android}/Java",
+        "sdk.plat.tool": "${android.sdk}/platform-tools",
+        "sdk.build.tool": "${android.sdk}/build-tools",
+        "sdk.tool": "${android.sdk}/tools",
+        "java1.7.home": "${android.java}/jdk1.7.0_79.jdk/Contents/Home",
+        "java1.8.home": "${android.java}/jdk1.8.0_131",
+        "java1.9.home": "${android.java}/jdk9.jdk/Contents/Home",
+        "java1.7.bin": "${java1.7.home}/bin",
+        "java1.8.bin": "${java1.8.home}/bin",
+        "java1.9.bin": "${java1.9.home}/bin",
+        "ant.bin": "${android.ant}/bin",
+        "ndk.arm": "${android.ndk}/toolchains/arm-linux-androideabi-4.9/prebuilt/windows-x86_64",
+        "ndk.x86": "${android.ndk}/toolchains/x86-4.9/prebuilt/windows-x86_64",
+        "ndk.x86_64": "${android.ndk}/toolchains/x86_64-4.9/prebuilt/windows-x86_64",
+        "ndk.arm.bin": "${ndk.arm}/bin",
+        "ndk.x86.bin": "${ndk.x86}/bin",
+        "ndk.x86_64.bin": "${ndk.x86_64}/bin"
+    },
+    "environ": {
+        "android.mobile": {
+            "path+": [
+                "${cmake.bin}",
+                "${qt5.9.android_arm.bin}",
+                "${mingw32.bin}",
+                "${java1.8.bin}",
+                "${android.sdk}",
+                "${sdk.plat.tool}",
+                "${sdk.build.tool}",
+                "${sdk.tool}",
+                "${ant.bin}",
+                "${ndk.arm.bin}"
+            ],
+            "ANDROID_API_VERSION": "android-23",
+            "ANDROID_SDK_ROOT": "${android.sdk}",
+            "ANDROID_NDK_ROOT": "${android.ndk}",
+            "ANDROID_NDK_HOST": "windows-x86_64",
+            "ANDROID_NDK_TOOLCHAIN_PREFIX": "arm-linux-androideabi",
+            "ANDROID_NDK_TOOLCHAIN_VERSION": "4.9",
+            "ANDROID_NDK_PLATFORM": "android-23",
+            "NDK_TOOLCHAIN_PATH": "${ndk.arm.bin}",
+            "NDK_TOOLS_PREFIX": "arm-linux-androideabi",
+            "QTDIR": "${qt5.9.android_arm}",
+            "QTSPEC": "android-g++",
+            "QTCONFIG": "",
+            "JAVA_HOME": "${java1.8.home}",
+            "CLASSPATH": ".:${JAVA_HOME}/lib/dt/jar:${JAVA_HOME}/lib/tools.jar",
+            "PYCMD_MYNAME": "T.D.R",
+            "a_special_var_const": "hello world",
+            "QKIT": "ANDROID",
+            "QSYS": "Android"
+        },
+        "android.x86": {
+            "path+": [
+                "${cmake.bin}",
+                "${qt5.8.android_x86.bin}",
+                "${mingw32.bin}",
+                "${java1.8.bin}",
+                "${android.sdk}",
+                "${sdk.plat.tool}",
+                "${sdk.build.tool}",
+                "${sdk.tool}",
+                "${ant.bin}",
+                "${ndk.x86.bin}"
+            ],
+            "CLICOLOR": "1",
+            "ANDROID_API_VERSION": "android-23",
+            "ANDROID_SDK_ROOT": "${android.sdk}",
+            "ANDROID_NDK_ROOT": "${android.ndk}",
+            "ANDROID_NDK_HOST": "windows-x86_64",
+            "ANDROID_NDK_TOOLCHAIN_PREFIX": "x86",
+            "ANDROID_NDK_TOOLCHAIN_VERSION": "4.9",
+            "ANDROID_NDK_PLATFORM": "android-23",
+            "NDK_TOOLCHAIN_PATH": "${ndk.x86.bin}",
+            "NDK_TOOLS_PREFIX": "i686-linux-android",
+            "PYCMD_MYNAME": "T.D.R",
+            "a_special_var_const": "hello world",
+            "QTDIR": "${qt5.8.android_x86}",
+            "QTSPEC": "android-g++",
+            "QTCONFIG": "",
+            "JAVA_HOME": "${java1.8.home}",
+            "CLASSPATH": ".:${JAVA_HOME}/lib/dt/jar:${JAVA_HOME}/lib/tools.jar",
+            "QKIT": "ANDROIDX86",
+            "QSYS": "Android_x86"
+        },
+        "qt.android": {
+            "path+": [
+                "${cmake.bin}",
+                "${qt5.8.mingw32.bin}",
+                "${mingw32.bin}",
+                "${java1.8.bin}",
+                "${android.sdk}",
+                "${sdk.plat.tool}",
+                "${sdk.build.tool}",
+                "${sdk.tool}",
+                "${ant.bin}",
+                "${ndk.x86.bin}"
+            ],
+            "CLICOLOR": "1",
+            "ANDROID_API_VERSION": "android-23",
+            "ANDROID_SDK_ROOT": "${android.sdk}",
+            "ANDROID_NDK_ROOT": "${android.ndk}",
+            "ANDROID_NDK_HOST": "windows-x86_64",
+            "ANDROID_NDK_TOOLCHAIN_PREFIX": "x86",
+            "ANDROID_NDK_TOOLCHAIN_VERSION": "4.9",
+            "ANDROID_NDK_PLATFORM": "android-23",
+            "NDK_TOOLCHAIN_PATH": "${ndk.x86.bin}",
+            "NDK_TOOLS_PREFIX": "i686-linux-android",
+            "QTDIR": "${qt5.8.mingw32}",
+            "QTSPEC": "win32-g++",
+            "QTCONFIG": "x86_64",
+            "JAVA_HOME": "${java1.8.home}",
+            "CLASSPATH": ".:${JAVA_HOME}/lib/dt/jar:${JAVA_HOME}/lib/tools.jar",
+            "PYCMD_MYNAME": "T.D.R",
+            "a_special_var_const": "hello world",
+            "QKIT": "WIN",
+            "QSYS": "Mingw32"
+        },
+        "qt4": {
+            "path+": [
+                "${cmake.bin}",
+                "${mingw32.bin}",
+                "${qt4.8.mingw32.bin}"
+            ],
+            "QTVERSION": "${qt4.version}",
+            "QTDIR": "${qt4.8.mingw32}",
+            "QTSPEC": "-spec win32-g++",
+            "QTCONFIG": "CONFIG+=x86",
+            "QKIT": "WIN32",
+            "QSYS": "Windows"
+        },
+        "qt5.vc6": {
+            "path+": [
+                "${cmake.bin}",
+                "VC6.BIN",
+                "${qt5.5.vc6.bin}"
+            ],
+            "INCLUDE": "VC6.INCLUDE",
+            "LIB": "VC6.LIB",
+            "QTVERSION": "${qt5.5.version}",
+            "QTDIR": "${qt5.5.vc6}",
+            "QTSPEC": "-spec win32-msvc",
+            "QTCONFIG": "",
+            "QKIT": "WIN32",
+            "QSYS": "MSVC",
+            "MSMAKE": "${make2}"
+        },
+        "qt5": {
+            "path+": [
+                "${cmake.bin}",
+                "${cdb}",
+                "${qt5.9.msvc2015.bin}"
+            ],
+            "VS140COMNTOOLS": "${wincc}/msvc2015/Common7/Tools/",
+            "VSSDK140Install": "${wincc}/msvc2015/VSSDK/",
+            "vcvarsall": "${vcvarsall-2015}",
+            "vcvarsallparam": "amd64_x86",
+            "run-vcvarsall": "\"${vcvarsall}\" ${vcvarsallparam}",
+            "QtMsBuild": "${QtMsBuild}",
+            "QTVERSION": "${qt5.9.version}",
+            "QTDIR": "${qt5.9.msvc2015}",
+            "QTSPEC": "-spec win32-msvc",
+            "QTCONFIG": "",
+            "QKIT": "WIN32",
+            "QSYS": "MSVC",
+            "MSMAKE": "${make2}"
+        },
+        "qt5.x64": {
+            "path+": [
+                "${cmake.bin}",
+                "${cdb.x64}",
+                "${qt5.12.msvc2015_64.bin}"
+            ],
+            "VS140COMNTOOLS": "${wincc}/msvc2015/Common7/Tools/",
+            "VSSDK140Install": "${wincc}/msvc2015/VSSDK/",
+            "vcvarsall": "${vcvarsall-2015}",
+            "vcvarsallparam": "x86_amd64",
+            "run-vcvarsall": "${vcvarsall} ${vcvarsallparam}",
+            "QtMsBuild": "${QtMsBuild}",
+            "QTVERSION": "${qt5.12.version}",
+            "QTDIR": "${qt5.12.msvc2015_64}",
+            "QTSPEC": "-spec win32-msvc",
+            "QTCONFIG": "",
+            "QKIT": "WIN32",
+            "QSYS": "MSVC64",
+            "MSMAKE": "${make2}"
+        },
+        "qt5.winrt": {
+            "path+": [
+                "${cmake.bin}",
+                "${qt5.12.winrt.arm.bin}"
+            ],
+            "VS140COMNTOOLS": "${wincc}/msvc2015/Common7/Tools/",
+            "VSSDK140Install": "${wincc}/msvc2015/VSSDK/",
+            "vcvarsall": "${vcvarsall-2015}",
+            "vcvarsallparam": "amd64_arm",
+            "run-vcvarsall": "${vcvarsall} ${vcvarsallparam}",
+            "QtMsBuild": "${QtMsBuild}",
+            "QTVERSION": "${qt5.12.version}",
+            "QTDIR": "${qt5.12.winrt.arm}",
+            "QTSPEC": "-spec winrt-arm-msvc2015",
+            "QTCONFIG": "",
+            "QKIT": "WIN32",
+            "QSYS": "WinRT",
+            "MSMAKE": "${make2}"
+        },
+        "qt5.winrt.simulator": {
+            "path+": [
+                "${cmake.bin}",
+                "${qt5.12.winrt.x64.bin}"
+            ],
+            "VS140COMNTOOLS": "${wincc}/msvc2015/Common7/Tools/",
+            "VSSDK140Install": "${wincc}/msvc2015/VSSDK/",
+            "vcvarsall": "${vcvarsall-2015}",
+            "vcvarsallparam": "x86_amd64",
+            "run-vcvarsall": "${vcvarsall} ${vcvarsallparam}",
+            "QtMsBuild": "${QtMsBuild}",
+            "QTVERSION": "${qt5.12.version}",
+            "QTDIR": "${qt5.12.winrt.x64}",
+            "QTSPEC": "-spec winrt-x64-msvc2015",
+            "QTCONFIG": "",
+            "QKIT": "WIN32",
+            "QSYS": "WinRTSimulator",
+            "MSMAKE": "${make2}"
+        },
+        "ffmpeg": {
+            "path+": [
+                "${msys.bin}",
+                "${FFmpeg.bin}",
+                "${FFmpeg.lib}",
+                "${FFmpeg.inc}",
+                "${cmake.bin}",
+                "${mingw32.bin}",
+                "${qt5.9.mingw32.bin}"
+            ],
+            "QTVERSION": "${qt5.9.version}",
+            "QTDIR": "${qt5.9.mingw32}",
+            "QTSPEC": "-spec win32-g++",
+            "QTCONFIG": "",
+            "QKIT": "WIN32",
+            "QSYS": "Windows"
+        },
+        "armhf32": {
+            "path+": [
+                "${cmake.bin}",
+                "${armhf32.bin}",
+                "${qt5.armhf32.bin}",
+                "${mingw32.bin}",
+                "${msys.bin}"
+            ],
+            "QTVERSION": "${qt5.version}",
+            "QTDIR": "${qt5.armhf32}",
+            "QTSPEC": "-spec linux-arm-gnueabihf-g++",
+            "QTCONFIG": "",
+            "QKIT": "Armhf32",
+            "QSYS": "Armhf32"
+        },
+        "current": "qt5"
+    },
+    "command-assemblage":[
+        "cl.exe /nologo /ML /W3 /GX /O2 /D \"WIN32\" /D \"NDEBUG\" /D \"_CONSOLE\" /D \"_MBCS\" /Fp\"Release/hw.pch\" /Yc\"stdafx.h\" /Fo\"Release/\" /Fd\"Release/\" /FD /c \"./\\StdAfx.cpp\"",
+        "cl.exe /nologo /ML /W3 /GX /O2 /D \"WIN32\" /D \"NDEBUG\" /D \"_CONSOLE\" /D \"_MBCS\" /Fp\"Release/hw.pch\" /Yu\"stdafx.h\" /Fo\"Release/\" /Fd\"Release/\" /FD /c \".\\hw.cpp\"",
+        "link.exe kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /incremental:no /pdb:\"Release/hw2.pdb\" /machine:I386 /out:\"..\\hw2.exe\" .\\Release\\StdAfx.obj .\\Release\\hw.obj",
+        "cd D:/GDAL/gdal-2.3.2",
+        "nmake /f makefile.vc MSVC_VER=1910 WIN64=yes",
+        "nmake /f makefile.vc install MSVC_VER=1910 WIN64=yes",
+        "nmake /f makefile.vc devinstall MSVC_VER=1910 WIN64=yes",
+        "关于为什么要写MSVC_VER=1910 WIN64=yes，MSVC_VER=1910表示VS2017 ，WIN64=yes表示64位。"
+    ],
+    "command": {
+        "ccc": [
+            "echo %QTDIR%"
+        ],
+        "configure.qt.armhf32": [
+            "set src_path=${root.webrc}/qt-everywhere-opensource-src-5.9.2",
+            "set build=${root.build}/Qt5/${QSYS}/${QTVERSION}/Debug",
+            "md %build:/=\\%",
+            "cd /d %build%",
+            "%src_path%/configure -opensource -confirm-license -shared --sysroot=${qt5.5.armhf32.sysroot} --prefix=/usr/Qt5.9.2 -xplatform linux-arm-gnueabihf-g++ -nomake tests -nomake examples -no-warnings-are-errors"
+        ],
+        "daily.qqt": [
+            "set src_path=${root.src}/LibQQt",
+            "set src=%src_path%/QQt.pro",
+            "set build=${root.build}/QQt/${QSYS}/${QTVERSION}/Debug",
+            "md %build:/=\\%",
+            "cd /d %build%",
+            "del /f /q /s demo examples src test",
+            "qmake %src% ${QTSPEC} CONFIG+=debug CONFIG+=qml_debug ${QTCONFIG} && mingw32-make qmake_all",
+            "mingw32-make -j20",
+            "set build=${root.build}/QQt/${QSYS}/${QTVERSION}/Release",
+            "md %build:/=\\%",
+            "cd /d %build%",
+            "del /f /q /s demo examples src test",
+            "qmake %src% ${QTSPEC} CONFIG+=release CONFIG+=qml_release ${QTCONFIG} && mingw32-make qmake_all",
+            "mingw32-make -j20"
+        ],
+        "build.qqt": [
+            "call ${run-vcvarsall}",
+            "set src_path=${root.src}/LibQQt",
+            "set src=%src_path%/QQt.pro",
+            "set build=${root.build}/QQt/${QSYS}/${QTVERSION}/Debug",
+            "md %build:/=\\%",
+            "cd /d %build%",
+            "qmake %src% ${QTSPEC} CONFIG+=debug CONFIG+=qml_debug ${QTCONFIG} && ${MSMAKE} qmake_all",
+            "${MSMAKE}"
+        ],
+        "qt-creator": [
+            "cd ${root.build}",
+            "\"R:/Develop/b0-toolkits/winLibraries/Qt/Tools/QtCreator/bin/qtcreator.exe\""
+        ],
+        "qt5.android.build": [
+            "mkdir -p ${qt5.build.path}",
+            "cd ${qt5.build.path}",
+            "${qt5.source}/configure -prefix ${qqt.install.path} -hostprefix ${qqt.install.path} -xplatform android-g++ -release -nomake tests -nomake examples -android-ndk $ANDROID_NDK_ROOT -android-sdk $ANDROID_SDK_ROOT -android-ndk-host $ANDROID_NDK_HOST -android-toolchain-version $ANDROID_NDK_TOOLCHAIN_VERSION -skip qtwebkit-examples -no-warnings-are-errors"
+        ],
+        "adb": [
+            "adb devices"
+        ],
+        "cmake": [
+            "start ${cmake.bin}/cmake-gui.exe"
+        ],
+        "libtool": [
+            "cd /d ${root.prod}/AddLibraryTool/Windows",
+            "start ${root.prod}/AddLibraryTool/Windows/AddLibraryTool.exe"
+        ],
+        "apptool": [
+            "cd /d ${root.prod}/ProductExecTool/Windows",
+            "start ${root.prod}/ProductExecTool/Windows/ProductExecTool.exe"
+        ],
+        "build-opencv": [
+            "cd /d R:/Develop/c0-buildstation/opencv2.3.1",
+            "mingw32-make -j 10",
+            "mingw32-make install"
+        ],
+        "build-opencv-release": [
+            "cd /d R:/Develop/c0-buildstation/opencv2.3.1-release",
+            "mingw32-make -j 10",
+            "mingw32-make install"
+        ],
+        "build-openscenegraph": [
+            "cd /d R:/Develop/c0-buildstation/OpenSceneGraph",
+            "mingw32-make -j 10",
+            "mingw32-make install"
+        ],
+        "test": [
+            "echo %cd%"
+        ],
+        "build-osg-release": [
+            "cd /d R:/Develop/c0-buildstation/OpenSceneGraph_Release",
+            "mingw32-make -j 10",
+            "mingw32-make install"
+        ],
+        "install-qwt": [
+            "cd /d R:/Develop/c0-buildstation/qwt/5.9.2/Windows/Debug",
+            "mingw32-make install"
+        ],
+        "make": [
+            "mingw32-make"
+        ],
+        "android.sdk.manager": [
+            "${android.sdk}/\"SDK Manager.exe\""
+        ]
+    }
+}

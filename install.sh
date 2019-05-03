@@ -18,3 +18,4 @@ sudo ln -sf ${filepath}/pyexecvp.sh ${mmpath}/pyexecvp
 sudo ln -sf ${filepath}/pyccvp.sh ${mmpath}/pyccvp
 
 sudo ln -sf ${filepath}/pyinfo.sh ${mmpath}/pyinfo
+sudo ln -sf ${filepath}/pypaths.sh ${mmpath}/pypaths

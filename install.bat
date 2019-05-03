@@ -48,6 +48,11 @@ set filepath=%~dp0
 set sourcefile=pyinfo.bat
 call :install %*
 
+set mmfile=%mmpath%\pypaths.bat
+set filepath=%~dp0
+set sourcefile=pypaths.bat
+call :install %*
+
 exit /b 0
 
 ::================================================================
