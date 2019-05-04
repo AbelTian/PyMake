@@ -1823,7 +1823,8 @@ def main_function():
                         for fi in args['--filter']:
                             filterString += fi + '|'
                         filterList = filterString.split('|')
-                        filterList.remove('')
+                        if (filterList.__contains__('')):
+                            filterList.remove('')
                         #print(filterString)
                         #print(filterList)
                         for fil in filterList:
@@ -1900,7 +1901,8 @@ def main_function():
                         for fi in args['--filter']:
                             filterString += fi + '|'
                         filterList = filterString.split('|')
-                        filterList.remove('')
+                        if (filterList.__contains__('')):
+                            filterList.remove('')
                         # print(filterString)
                         # print(filterList)
                         for fil in filterList:
@@ -1961,7 +1963,8 @@ def main_function():
                             for fi in args['--filter']:
                                 filterString += fi + '|'
                             filterList = filterString.split('|')
-                            filterList.remove('')
+                            if(filterList.__contains__('')):
+                                filterList.remove('')
                             # print(filterString)
                             # print(filterList)
                             for fil in filterList:

@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 #!/usr/bin/env python
-"""PyPaths 1.0.
+"""PyPaths 1.1.
 
 Usage:
-  pypaths.py list [ <abs-path> ] [ -d <deeps> ] [ --pymake <substitute> <substitute-value> ]
+  pypaths.py list [ <abs-path> ] [ -d <deeps> ] [ --pymake=<substitute>:<substitute-value> ... ] [ --ignore=<ignore-keywords> ... ] [ --filter=<keywords> ... ]
   pypaths.py (-h | --help)
   pypaths.py --version
 
@@ -29,12 +29,13 @@ from pycore.pycore import *
 
 def main_function():
 
-    args = docopt(__doc__, version='pypaths.py v1.0')
+    args = docopt(__doc__, version='pypaths.py v1.1')
     #print(args)
+    #return
 
     pypathsworkpath = os.getcwd()
 
-    def Depth_Ergodic_new(filepath, allpath_list, depth_value, sign=True):
+    def Depth_Ergodic_new(filepath, allpath_list, depth_value, sign=True, keywords = [], ignore_keywords = []):
         if (sign):
             depth_value -= 1
             if (depth_value >= 0):
@@ -49,9 +50,30 @@ def main_function():
                             continue
                         if(ignore_path.__contains__('.idea')):
                             continue
+
+                        ignore = 1
+                        if (keywords == []):
+                            ignore = 0
+                        for keyword in keywords:
+                            if (fi_d.__contains__(keyword) is True):
+                                ignore = 0
+                                break
+                        if (ignore == 1):
+                            continue
+
+                        ignore = 0
+                        for keyword in ignore_keywords:
+                            if (fi_d.__contains__(keyword) is True):
+                                ignore = 1
+                                break
+                        if (ignore == 1):
+                            continue
+                        #print(ignore , ignore_keywords)
+                        #continue
+
                         #if (depth_value == 0):
                         allpath_list.append(fi_d)
-                        Depth_Ergodic_new(fi_d, allpath_list, depth_value, sign)
+                        Depth_Ergodic_new(fi_d, allpath_list, depth_value, sign, keywords, ignore_keywords)
                     else:
                         pass
                     #print (os.path.join(filepath,fi_d))
@@ -67,8 +89,27 @@ def main_function():
                         continue
                     if (ignore_path.__contains__('.idea')):
                         continue
+
+                    ignore = 1
+                    if (keywords == []):
+                        ignore = 0
+                    for keyword in keywords:
+                        if (fi_d.__contains__(keyword) is True):
+                            ignore = 0
+                            break
+                    if (ignore == 1):
+                        continue
+
+                    ignore = 0
+                    for keyword in ignore_keywords:
+                        if (fi_d.__contains__(keyword) is True):
+                            ignore = 1
+                            break
+                    if (ignore == 1):
+                        continue
+
                     allpath_list.append(fi_d)
-                    Depth_Ergodic_new(fi_d, allpath_list, depth_value, sign)
+                    Depth_Ergodic_new(fi_d, allpath_list, depth_value, sign, keywords, ignore_keywords)
         return allpath_list
 
     # list
@@ -98,26 +139,55 @@ def main_function():
             if(args['<deeps>'] is not None):
                 deeps = int(args['<deeps>'])
 
-            allpath_list = []
-            all_path = Depth_Ergodic_new(localabspath, allpath_list, deeps, True)
+            all_keywords = []
+            if(args['--filter'] != []):
+                key_list = []
+                for key in args['--filter']:
+                    key_list.extend(str(key).split(' '))
+                if(key_list.__contains__('')):
+                    key_list.remove('')
+                all_keywords = key_list
+            #print(all_keywords)
+            #return
 
-            if(args['--pymake'] is True):
-                sub0 = ""
-                sub1 = ""
-                if(args['<substitute>'] is not None):
-                    sub0 = args['<substitute>']
-                    sub0 = sub0.replace('\\', '/')
-                if(args['<substitute-value>'] is not None):
-                    sub1 = args['<substitute-value>']
-                    sub1 = sub1.replace('\\', '/')
+            all_ignore_keywords = []
+            if(args['--ignore'] != []):
+                key_list = []
+                for key in args['--ignore']:
+                    key_list.extend(str(key).split(' '))
+                if(key_list.__contains__('')):
+                    key_list.remove('')
+                all_ignore_keywords = key_list
+            #print(all_ignore_keywords)
+            #return
+
+            allpath_list = []
+            all_path = Depth_Ergodic_new(localabspath, allpath_list, deeps, True, all_keywords, all_ignore_keywords)
+
+            if(args['--pymake'] is not []):
+                all_new_path = copy.deepcopy(all_path)
+
+                for item in args['--pymake']:
+                    sub0 = str(item).split(':')[0]
+                    sub1 = str(item).split(':')[1]
+                    #print(item)
+                    #print(sub0,sub1)
+                    if(sub0 != ''):
+                        sub0 = sub0.replace('\\', '/')
+                    if(sub1 != ''):
+                        sub1 = sub1.replace('\\', '/')
+
+                    for (i, path0) in enumerate(all_path):
+                        str0 = str(all_new_path[i]).replace('\\', '/')
+                        if (sub1 != ''):
+                            str0 = str(str0).replace(sub1, "${%s}" % sub0)
+                        all_new_path[i] = str0
 
                 pos = 1
-                for path0 in all_path:
-                    str0 = str(path0).replace('\\', '/')
-                    if (args['<substitute-value>'] is not None):
-                        str0 = str(str0).replace(sub1, "${%s}" % sub0)
-                    print("\"P%d\": \"%s\"," % (pos, str0))
+                for path0 in all_new_path:
+                    print("\"P%d\": \"%s\"," % (pos, path0))
                     pos += 1
+
             else:
                 for path0 in all_path:
                     print(path0)
