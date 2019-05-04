@@ -3,52 +3,52 @@
 
 set mmpath=C:\Windows
 
-set mmfile=%mmpath%\mm.bat
+set mmfile=mm.bat
 set filepath=%~dp0
 set sourcefile=pymake.bat
 call :install %*
 
-set mmfile=%mmpath%\pymm.bat
+set mmfile=pymm.bat
 set filepath=%~dp0
 set sourcefile=pymake.bat
 call :install %*
 
-set mmfile=%mmpath%\pymake.bat
+set mmfile=pymake.bat
 set filepath=%~dp0
 set sourcefile=pymake.bat
 call :install %*
 
-set mmfile=%mmpath%\pyenv.bat
+set mmfile=pyenv.bat
 set filepath=%~dp0
 set sourcefile=pyenv.bat
 call :install %*
 
-set mmfile=%mmpath%\pyvc.bat
+set mmfile=pyvc.bat
 set filepath=%~dp0
 set sourcefile=pyvc.bat
 call :install %*
 
-set mmfile=%mmpath%\pycmd.bat
+set mmfile=pycmd.bat
 set filepath=%~dp0
 set sourcefile=pycmd.bat
 call :install %*
 
-set mmfile=%mmpath%\pyexecvp.bat
+set mmfile=pyexecvp.bat
 set filepath=%~dp0
 set sourcefile=pyexecvp.bat
 call :install %*
 
-set mmfile=%mmpath%\pyccvp.bat
+set mmfile=pyccvp.bat
 set filepath=%~dp0
 set sourcefile=pyccvp.bat
 call :install %*
 
-set mmfile=%mmpath%\pyinfo.bat
+set mmfile=pyinfo.bat
 set filepath=%~dp0
 set sourcefile=pyinfo.bat
 call :install %*
 
-set mmfile=%mmpath%\pypaths.bat
+set mmfile=pypaths.bat
 set filepath=%~dp0
 set sourcefile=pypaths.bat
 call :install %*
@@ -59,6 +59,6 @@ exit /b 0
 ::================================================================
 :install
 echo @echo off > %mmfile%
-echo call "%filepath%\%sourcefile%" %* >> %mmfile%
-echo 安装 %sourcefile%
+echo call "%filepath%\%sourcefile%" %* >> "%mmpath%\%mmfile%"
+echo 安装 %mmpath%\%mmfile%
 goto :eof

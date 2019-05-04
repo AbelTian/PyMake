@@ -7,15 +7,46 @@ mmpath=/usr/local/bin
 filepath=$(cd `dirname $0`; pwd)
 chmod +x ${filepath}/*.sh
 
+install () {
+    sudo ln -sf ${filepath}/${sourcefile} ${mmpath}/${mmfile}
+    echo install ${mmfile}
+}
+
 #create pymake link
-sudo ln -sf ${filepath}/pymake.sh ${mmpath}/mm
-sudo ln -sf ${filepath}/pymake.sh ${mmpath}/pymm
-sudo ln -sf ${filepath}/pymake.sh ${mmpath}/pymake
+sourcefile=pymake.sh
+mmfile=mm
+install
 
-sudo ln -sf ${filepath}/pyenv.sh ${mmpath}/pyenv
-sudo ln -sf ${filepath}/pycmd.sh ${mmpath}/pycmd
-sudo ln -sf ${filepath}/pyexecvp.sh ${mmpath}/pyexecvp
-sudo ln -sf ${filepath}/pyccvp.sh ${mmpath}/pyccvp
+sourcefile=pymake.sh
+mmfile=pymm
+install
 
-sudo ln -sf ${filepath}/pyinfo.sh ${mmpath}/pyinfo
-sudo ln -sf ${filepath}/pypaths.sh ${mmpath}/pypaths
+sourcefile=pymake.sh
+mmfile=pymake
+install
+
+sourcefile=pyenv.sh
+mmfile=pyenv
+install
+
+sourcefile=pycmd.sh
+mmfile=pycmd
+install
+
+sourcefile=pyexecvp.sh
+mmfile=pyexecvp
+install
+
+sourcefile=pyccvp.sh
+mmfile=pyccvp
+install
+
+sourcefile=pyinfo.sh
+mmfile=pyinfo
+install
+
+sourcefile=pypaths.sh
+mmfile=pypaths
+install
+
+echo installed.

@@ -3,15 +3,37 @@
 #install path
 mmpath=/usr/local/bin
 
+uninstall () {
+    sudo rm -f ${mmpath}/${mmfile}
+    echo uninstall ${mmfile}
+}
+
 #delete pymake link
-sudo rm -f ${mmpath}/mm
-sudo rm -f ${mmpath}/pymm
-sudo rm -f ${mmpath}/pymake
+mmfile=mm
+uninstall
 
-sudo rm -f ${mmpath}/pyenv
-sudo rm -f ${mmpath}/pycmd
-sudo rm -f ${mmpath}/pyexecvp
-sudo rm -f ${mmpath}/pyccvp
+mmfile=pymm
+uninstall
 
-sudo rm -f ${mmpath}/pyinfo
-sudo rm -f ${mmpath}/pypaths
+mmfile=pymake
+uninstall
+
+mmfile=pyenv
+uninstall
+
+mmfile=pycmd
+uninstall
+
+mmfile=pyexecvp
+uninstall
+
+mmfile=pyccvp
+uninstall
+
+mmfile=pyinfo
+uninstall
+
+mmfile=pypaths
+uninstall
+
+echo uninstalled.
