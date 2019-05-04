@@ -27,9 +27,11 @@ def _async_raise(tid, exctype):
         # and you should call it again with exc=NULL to revert the effect"""
         ctypes.pythonapi.PyThreadState_SetAsyncExc(tid, None)
         raise SystemError("PyThreadState_SetAsyncExc failed")
+    return
 
 def stopThread(thread):
     _async_raise(thread.ident, SystemExit)
+    return
 
 # read stdout pipe
 def read_thread_function(p):
@@ -78,6 +80,7 @@ def read_thread_function(p):
         #print (cmd_exit_flag)
         #print ("ccccccccc")
         #p.stdout.flush()
+    return
 
 
 # read stderr pipe
@@ -105,6 +108,7 @@ def read_stderr_thread_function(p):
         #print (cmd_exit_flag)
         #print ("dddddddddddddd")
         #stdout.flush()
+    return
 
 # auto command execute
 def write_command_thread_function(p, cmd_list):
@@ -132,6 +136,7 @@ def write_command_thread_function(p, cmd_list):
         # p.stdin.write("ping 127.0.0.1 -c 2 \n")
         # p.stdin.flush()
         cmd_event.wait()
+    return
 
 # user input
 def write_thread_function(p):
@@ -148,6 +153,7 @@ def write_thread_function(p):
             break
         p.stdin.write(line.encode(code))
         p.stdin.flush()
+    return
 
 # windows *unix
 def communicateWithCommandLine(list0):
@@ -194,7 +200,10 @@ def communicateWithCommandLine(list0):
     write_thread.start()
     # time.sleep(1)
 
-    p.wait()
+    try:
+        p.wait()
+    except (KeyboardInterrupt):
+        p.returncode = 1
 
     if (read_thread.isAlive()):
         stopThread(read_thread)

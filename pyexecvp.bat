@@ -7,7 +7,7 @@
 
 if "%1" == "" (
     echo "pyexecvp <cmd-name> [ <cmd-params> ] [<env-name>]"
-    echo "env name: current is suggested."
+    echo "<env name>: 'current' is suggested."
     echo please appoint a cmd name. & exit /b 0
 )
 set PYEXECNAME=%1
