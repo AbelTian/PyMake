@@ -18,6 +18,7 @@ Usage:
   pyinfo.py get datetime [ <timestamp1> <timestamp2> ] --timestamp --diff [ -t | -T ] [ -Y | -m | -d | -H | -M | -S ] [ -f <sep-character> <sep2-character> <sep3-character> ]
   pyinfo.py get timestamp [ <std-datetime-string> ] [ -t | -T ]
   pyinfo.py get platform
+  pyinfo.py get command list [ --pymake ]
   pyinfo.py (-h | --help)
   pyinfo.py --version
 
@@ -54,6 +55,9 @@ def main_function():
 
     args = docopt(__doc__, version='pyinfo.py v1.0')
     #print(args)
+
+    pyinfoworkpath = os.getcwd()
+    pyinfoprogrampath = os.path.split(os.path.realpath(__file__))[0]
 
     # get
     while (True):
@@ -300,6 +304,20 @@ def main_function():
                 else:
                     str0 = str("%s" % tuple_time.timestamp())
                     print(str0)
+            elif (args['command'] is True):
+                plat = getplatform()
+                for fi in os.listdir(pyinfoprogrampath):
+                    if(fi == "install.bat" or fi == "uninstall.bat"):
+                        continue
+
+                    postfix = ".sh"
+                    if(plat == "Windows"):
+                        postfix = '.bat'
+
+                    if(fi.endswith(postfix) is True):
+                        print(fi)
+
+                print("pycodec.py")
             else:
                 ''
             return

@@ -58,7 +58,7 @@ exit /b 0
 
 ::================================================================
 :install
-echo @echo off > %mmfile%
+echo @echo off > "%mmpath%\%mmfile%"
 echo call "%filepath%\%sourcefile%" %* >> "%mmpath%\%mmfile%"
-echo 安装 %mmpath%\%mmfile%
+echo 安装 %mmfile%
 goto :eof
