@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #!/usr/bin/env python
-"""PyMake 7.2.
+"""PyMake 7.2.1.
 
 Usage:
   pymake7.py source
@@ -534,7 +534,7 @@ def main_function():
     pymakedefaultsourcefile = 'pymake.json'
     #print( "pymake user default source file:", pymakedefaultsourcefile )
 
-    # record pymake user shell root [ dynamic work path ] [ ignored -> v7.2 ]
+    # record pymake user shell root [ dynamic work path ]
     pymakeshellroot = pymakesourceroot + os.path.sep + 'UserShell'
     if (not os.path.exists(pymakeshellroot)):
         os.makedirs(pymakeshellroot)
@@ -571,7 +571,7 @@ def main_function():
         conf.set('source', 'config', pymakedefaultsourcefile)
         conf.write(open(pymakeini, 'w'))
 
-    args = docopt(__doc__, version='pymake7.py v7.2')
+    args = docopt(__doc__, version='pymake7.py v7.2.1')
     #print(args)
 
     #initialize
