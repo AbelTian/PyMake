@@ -376,7 +376,7 @@ Update the command-line.
 ![command line screenshot](./screenshot/a1.PNG)  
 
 ## Screen shot  
-![using screenshot](./screenshot/a2.png)  
+![using screenshot](./screenshot/a7.png)  
 
 # Version 7.2  
 
