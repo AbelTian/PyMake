@@ -329,6 +329,56 @@
             "build=/home/abel/Develop/c0-buildstation/QQt/${QSYS}/${QTVERSION}/Release",
             "cd $build",
             "make clean"
+        ],
+        "qtdir": [
+            "echo $QTDIR"
+        ],
+        "test.2": [
+            "#echo $*",
+            "param=$*",
+            "ping 127.0.0.1 $param"
+        ],
+        "test.3": [
+            "#echo $*",
+            "ping $*"
+        ],
+        "test.4": [
+            "echo param1: $1",
+            "echo param2: $2",
+            "echo param3: $3",
+            "echo param4: $4"
+        ],
+        "build.pro": [
+            "while [ 1 ]",
+            "do",
+            "if [ -f \"$1.pro\" ]; then",
+            "   echo $1.pro existed.",
+            "else",
+            "   echo has $1.pro? please add here command to restrict.",
+            "   break",
+            "fi",
+            "src_path=$(pwd)",
+            "profilename=$1",
+            "src=$src_path/$profilename.pro",
+            "build=${root.build}/$profilename/${QSYS}/${QTVERSION}/Debug",
+            "mkdir -p $build",
+            "cd $build",
+            "echo src file: $src",
+            "echo build at: $build",
+            "echo ${QTSPEC} ${QTCONFIG}",
+            "qmake $src ${QTSPEC} CONFIG+=debug CONFIG+=qml_debug ${QTCONFIG} && make qmake_all",
+            "make -j4",
+            "echo build inf ${QTSPEC} ${QTCONFIG}",
+            "echo src file: $src",
+            "echo build at: $build",
+            "break",
+            "done"
+        ],
+        "open-dir": [
+            "open $1"
+        ],
+        "test.5": [
+            "exit 0"
         ]
     }
 }
