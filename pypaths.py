@@ -3,7 +3,7 @@
 """PyPaths 1.1.
 
 Usage:
-  pypaths.py list [ <abs-path> ] [ -d <deeps> ] [ --pymake=<substitute>:<substitute-value> ... ] [ --ignore=<ignore-keywords> ... ] [ --filter=<keywords> ... ]
+  pypaths.py list [ <abs-path> ] [ -d <deeps> ] [ --path+ ] [ --pymake=<substitute>:<substitute-value> ... ] [ --ignore=<ignore-keywords> ... ] [ --filter=<keywords> ... ]
   pypaths.py (-h | --help)
   pypaths.py --version
 
@@ -164,12 +164,13 @@ def main_function():
             allpath_list = []
             all_path = Depth_Ergodic_new(localabspath, allpath_list, deeps, True, all_keywords, all_ignore_keywords)
 
-            if(args['--pymake'] is not []):
+            #print(args['--pymake'])
+            if(args['--pymake'] != []):
                 all_new_path = copy.deepcopy(all_path)
 
                 for item in args['--pymake']:
                     sub0 = str(item).split(':')[0]
-                    sub1 = str(item).split(':')[1]
+                    sub1 = ':'.join(str(item).split(':')[1:])
                     #print(item)
                     #print(sub0,sub1)
                     if(sub0 != ''):
@@ -183,11 +184,15 @@ def main_function():
                             str0 = str(str0).replace(sub1, "${%s}" % sub0)
                         all_new_path[i] = str0
 
-                pos = 1
-                for path0 in all_new_path:
-                    print("\"P%d\": \"%s\"," % (pos, path0))
-                    pos += 1
+                if(args['--path+'] is True):
+                    pos = 1
+                    for path0 in all_new_path:
+                        print("\"P%d\": \"%s\"," % (pos, path0))
+                        pos += 1
+                    return
 
+                for path0 in all_new_path:
+                    print(path0)
             else:
                 for path0 in all_path:
                     print(path0)
