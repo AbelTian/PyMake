@@ -768,12 +768,27 @@ def main_function():
             print ("You can use source command to fix it.")
             return
 
+    #print(pymakeshellroot)
+    #default [ fixed ]
+    # add pymake default shell root to environ.
+    env = os.environ
+    env["PATH"] = pymakeshellroot + os.path.pathsep + env["PATH"]
+    # add pymake default source root to environ.
+    env["PATH"] = pymakesourceroot + os.path.pathsep + env["PATH"]
+
     # I set this,
     # pymake default execute user bat/sh in pymakeshellroot,
     # user can use here param to restrict exec action.
     # cd user shell root [ default shell execute path ]
     pymakeshellroot = sourceroot
     os.chdir(pymakeshellroot)
+    #print(pymakeshellroot)
+
+    #default [ movable, follow user source root ]
+    #add pymake default shell root to environ.
+    env = os.environ
+    if(pymakeshellroot != pymakesourceroot):
+        env["PATH"] = pymakeshellroot + os.path.pathsep + env["PATH"]
 
     #backup
     while (True):
