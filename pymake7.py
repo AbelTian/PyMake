@@ -604,10 +604,15 @@ def main_function():
     defaultsourceconfigfile = sourceroot + os.path.sep + pymakedefaultsourcefile
     #print ("root: %s, default config: %s" % (sourceroot, pymakedefaultsourcefile))
     #print("default source config: %s" % (defaultsourceconfigfile) )
+    #record user shell root directory
+    shellroot = sourceroot + os.path.sep + "UserShell"
+    #print("default execute directory: %s" % (shellroot) )
 
+    #prepare to user source root
     if (not os.path.exists(sourceroot)):
         os.makedirs(sourceroot)
     os.chdir(sourceroot)
+
     if (os.path.exists(sourceroot)):
         if (os.path.abspath(sourceroot) != os.path.abspath(pymakeroot)
             and os.path.abspath(sourceroot) != os.path.abspath(pymakefilepath)):
@@ -768,27 +773,14 @@ def main_function():
             print ("You can use source command to fix it.")
             return
 
-    #print(pymakeshellroot)
-    #default [ fixed ]
-    # add pymake default shell root to environ.
-    env = os.environ
-    env["PATH"] = pymakeshellroot + os.path.pathsep + env["PATH"]
-    # add pymake default source root to environ.
-    env["PATH"] = pymakesourceroot + os.path.pathsep + env["PATH"]
-
     # I set this,
-    # pymake default execute user bat/sh in pymakeshellroot,
+    # pymake default execute user bat/sh in shellroot,
     # user can use here param to restrict exec action.
     # cd user shell root [ default shell execute path ]
-    pymakeshellroot = sourceroot
-    os.chdir(pymakeshellroot)
-    #print(pymakeshellroot)
-
-    #default [ movable, follow user source root ]
-    #add pymake default shell root to environ.
-    env = os.environ
-    if(pymakeshellroot != pymakesourceroot):
-        env["PATH"] = pymakeshellroot + os.path.pathsep + env["PATH"]
+    #prepare to user shell root
+    if (not os.path.exists(shellroot)):
+        os.makedirs(shellroot)
+    os.chdir(shellroot)
 
     #backup
     while (True):
@@ -832,7 +824,7 @@ def main_function():
     portdefaultsourceconfig = pymakedefaultsourcefile
     portdefaulttargetconfig = 'temporary-target.json'
     portiniconfig = 'port.ini'
-    portinifile = os.path.join(pymakeshellroot, "port.ini")
+    portinifile = os.path.join(sourceroot, "port.ini")
     def init_portconf():
         portconf = MyConfigParser()
         portconf.read(portinifile)
@@ -2301,7 +2293,7 @@ def main_function():
                     return
                 else:
                    ""
-                print("%s" % (pymakeshellroot))
+                print("%s" % (shellroot))
                 return
             else:
                 ''
@@ -2453,6 +2445,157 @@ def main_function():
                             key_replace, rawconfig["environ"][current_env_var][key_from])
                         break
             step += 1
+
+    # custom path
+    def raw_path(pathgroup):
+        # replace path
+        for (key, value) in enumerate(pathgroup):
+            # print (key) #...
+
+            startpos = 0
+            while (True):
+                # print (startpos)
+
+                index = value.find('${', startpos)
+                if (index == -1):
+                    break
+
+                index2 = value.find('}', index)
+                startpos = index2
+
+                key_replace = value[index:index2 + 1]
+                # print ( key0 ) #${...}
+                key_from = key_replace.split('{')[1].split('}')[0].strip()
+                # print ( key1 ) #...
+
+                for (find_key, find_value) in rawconfig["path-assemblage"].items():
+                    if (key == find_key):
+                        break
+                    if (find_key == key_from):
+                        pathgroup[key] = pathgroup[key].replace(key_replace, rawconfig["path-assemblage"][key_from])
+                        # print("xxx %s" % pathgroup[key])
+                        break
+        return pathgroup
+
+    # set custom path+ to env.
+    # print(sourceroot)
+    # print(shellroot)
+    #init file
+    custompathfile = sourceroot + os.path.sep + "custom.path+.ini"
+    if (os.path.exists(custompathfile) is False):
+        with open(custompathfile, 'w', encoding='utf8') as f:
+            ''
+
+    #read all
+    custompaths = []
+    with open(custompathfile, 'r', encoding='utf8') as f:
+        for l in f.readlines():
+            l = l.strip(' ')
+            while (l.endswith('\r') or l.endswith('\n') or l.endswith('\r\n')):
+                l = l.rstrip('\r\n')
+                l = l.rstrip('\n')
+                l = l.rstrip('\r')
+            # if(l == ''):
+            #    continue
+            custompaths.append(l)
+    # if(custompaths.__contains__('') is True):
+    # custompaths.remove('')
+    # print(custompaths)
+    # print(os.linesep)
+    # for l in custompaths:
+    #    print("AAAA:" + l)
+
+    #write back
+    storecustompaths = copy.deepcopy(custompaths)
+
+    # default [ fixed ]
+    # add pymake default shell root to environ.
+    if (storecustompaths.__contains__(pymakeshellroot) is False):
+        storecustompaths.append(pymakeshellroot)
+    # add pymake default source root to environ.
+    if (storecustompaths.__contains__(pymakesourceroot) is False):
+        storecustompaths.append(pymakesourceroot)
+    # default [ movable, follow user source root ]
+    # add user shell root to environ.
+    if (shellroot != pymakeshellroot and storecustompaths.__contains__(shellroot) is False):
+        storecustompaths.append(shellroot)
+    # add user source root to environ.
+    if (sourceroot != pymakesourceroot and storecustompaths.__contains__(sourceroot) is False):
+        storecustompaths.append(sourceroot)
+
+    if (custompaths != storecustompaths):
+        with open(custompathfile, 'w', encoding='utf8') as f:
+            for l in storecustompaths:
+                f.write(l + '\n')
+
+    #set into env
+    envcustompaths = copy.deepcopy(storecustompaths)
+    envcustompaths = raw_path(envcustompaths)
+
+    env = os.environ
+    for l in envcustompaths:
+        if (l == ''):
+            continue
+        if(os.path.isabs(l) is False):
+            continue
+        env["PATH"] = l + os.path.pathsep + env["PATH"]
+
+    # set custom env+ to env.
+    customenvfile = sourceroot + os.path.sep + "custom.env+.ini"
+    #print(customenvfile)
+    #init
+    if (os.path.exists(customenvfile) is False):
+        with open(customenvfile, 'w', encoding='utf8') as f:
+            ''
+
+    #read all
+    customenvs = []
+    with open(customenvfile, 'r', encoding='utf8') as f:
+        for l in f.readlines():
+            l = l.strip(' ')
+            while (l.endswith('\r') or l.endswith('\n') or l.endswith('\r\n')):
+                l = l.rstrip('\r\n')
+                l = l.rstrip('\n')
+                l = l.rstrip('\r')
+            # if(l == ''):
+            #    continue
+            customenvs.append(l)
+
+    #write back
+    storecustomvars = copy.deepcopy(customenvs)
+    avarkeyvalue = "PYMAKEAUTHOR=T.D.R."
+    if (storecustomvars.__contains__(avarkeyvalue) is False):
+        storecustomvars.append(avarkeyvalue)
+    if (storecustomvars != customenvs):
+        with open(customenvfile, 'w', encoding='utf8') as f:
+            for l in storecustomvars:
+                f.write(l + '\n')
+
+    #set into env
+    envcustomvars = copy.deepcopy(storecustomvars)
+    envcustomvars = raw_path(envcustomvars)
+    env = os.environ
+    for l in envcustomvars:
+        if (l == ''):
+            continue
+        if(str(l).__contains__('=') is False):
+            continue
+        key = str(l).split('=')[0]
+        value = str(l).split('=')[1]
+        env[key] = value
+
+    # set into env [False]
+    while (False):
+        env = os.environ
+        current_var = rawconfig['environ']['current']
+        dict0 = copy.deepcopy(rawconfig['environ'][current_var])
+        for (key) in dict0["path+"]:
+            env["PATH"] = key + os.path.pathsep + env["PATH"]
+        for (key, value) in dict0.items():
+            if (key == 'path+'):
+                continue
+            env[key] = value
+        break
 
     # list show
     while (True):
@@ -2783,19 +2926,6 @@ def main_function():
             return
         else:
             ''
-        break
-
-    # set into env [False]
-    while (False):
-        env = os.environ
-        current_var = rawconfig['environ']['current']
-        dict0 = copy.deepcopy(rawconfig['environ'][current_var])
-        for (key) in dict0["path+"]:
-            env["PATH"] = key + os.path.pathsep + env["PATH"]
-        for (key, value) in dict0.items():
-            if (key == 'path+'):
-                continue
-            env[key] = value
         break
 
     # custom command function
