@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #!/usr/bin/env python
-"""PyMake 7.2.1.
+"""PyMake 7.3.
 
 Usage:
   pymake7.py source
@@ -571,7 +571,7 @@ def main_function():
         conf.set('source', 'config', pymakedefaultsourcefile)
         conf.write(open(pymakeini, 'w'))
 
-    args = docopt(__doc__, version='pymake7.py v7.2.1')
+    args = docopt(__doc__, version='pymake7.py v7.3')
     #print(args)
 
     #initialize
@@ -1838,7 +1838,8 @@ def main_function():
                         for fi in args['--filter']:
                             filterString += fi + '|'
                         filterList = filterString.split('|')
-                        filterList.remove('')
+                        if (filterList.__contains__('')):
+                            filterList.remove('')
                         #print(filterString)
                         #print(filterList)
                         for fil in filterList:
@@ -1915,7 +1916,8 @@ def main_function():
                         for fi in args['--filter']:
                             filterString += fi + '|'
                         filterList = filterString.split('|')
-                        filterList.remove('')
+                        if (filterList.__contains__('')):
+                            filterList.remove('')
                         # print(filterString)
                         # print(filterList)
                         for fil in filterList:
@@ -1976,7 +1978,8 @@ def main_function():
                             for fi in args['--filter']:
                                 filterString += fi + '|'
                             filterList = filterString.split('|')
-                            filterList.remove('')
+                            if(filterList.__contains__('')):
+                                filterList.remove('')
                             # print(filterString)
                             # print(filterList)
                             for fil in filterList:
