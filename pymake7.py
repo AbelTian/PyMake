@@ -101,12 +101,12 @@ Usage:
   pymake7.py translate section <section-name> [ to <target-section-name> ] [ -f | --force ]
   pymake7.py translate section [ -a | --all ] [ -f | --force ]
   pymake7.py -------------------------------------------------------------
-  pymake7.py exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ]
-  pymake7.py use <env-name> exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ]
-  pymake7.py here exec-with-params [ <command-name> ] [ --params=<command-params> ... ]
-  pymake7.py here use <env-name> exec-with-params [ <command-name> ] [ --params=<command-params> ... ]
-  pymake7.py hh exec-with-params [ <command-name> ] [ --params=<command-params> ... ]
-  pymake7.py hh use <env-name> exec-with-params [ <command-name> ] [ --params=<command-params> ... ]
+  pymake7.py exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py use <env-name> exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py here exec-with-params [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py here use <env-name> exec-with-params [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py hh exec-with-params [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py hh use <env-name> exec-with-params [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
   pymake7.py -------------------------------------------------------------
   pymake7.py execvp [ here | hh ] [ <command-name> ] [ <command-params> ... ]
   pymake7.py use <env-name> execvp [ here | hh ] [ <command-name> ] [ <command-params> ... ]
@@ -3804,11 +3804,10 @@ def main_function():
 
             if (current_env == 'current'
                 or rawconfig['environ'].__contains__(current_env) is False):
-                print(
-                    ".json file is broken, environ section current env config is lost, please use set command fix it.")
+                print(".json file is broken, environ section current env config is lost, please use set command fix it.")
                 return
 
-            if (args['execvp'] or args['ccvp'] is True):
+            if (args['exec-with-params'] or args['execvp'] or args['ccvp'] is True):
 
                 if (args['<command-name>'] is None):
                     print("please appoint your command")
@@ -3816,6 +3815,15 @@ def main_function():
 
                 if (args['here'] or args['hh'] is True):
                     os.chdir(pymakeworkpath)
+
+                # print(args['--workroot'])
+                if (args['--workroot'] is not None):
+                    if (os.path.isdir(args['--workroot'])
+                        and os.path.isabs(args['--workroot'])):
+                        os.chdir(args['--workroot'])
+                    else:
+                        print('please input a legal work root.')
+                        return
 
                 # create cmd_list
                 current_var = current_env
@@ -3894,6 +3902,15 @@ def main_function():
 
             if (args['here'] or args['hh'] is True):
                 os.chdir(pymakeworkpath)
+
+            #print(args['--workroot'])
+            if(args['--workroot'] is not None):
+                if(os.path.isdir(args['--workroot'])
+                   and os.path.isabs(args['--workroot'])):
+                    os.chdir(args['--workroot'])
+                else:
+                    print('please input a legal work root.')
+                    return
 
             #print ("group %s" % current_vars)
             dict0 = copy.deepcopy(rawconfig['command'])
