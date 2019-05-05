@@ -138,15 +138,15 @@ pyvc为用户设置VC环境提供便利。
 
 #### pyvc 的使用条件  
 1. 注意  
-在\<source-root>/\<source-file>.json，即\$\(mm source)文件里面添加，  
+在<source-root>/<source-file>.json，即$(mm source)文件里面添加，  
 在每个使用MSVC的ENV配置里必须加入两个环境变量，  
-"VCVARSALL"="\$\{vcvarsall-201x}"，\$\{vcvarsall-201x} 路径集保存到 path-assemblage。    
+"VCVARSALL"="${vcvarsall-201x}"，${vcvarsall-201x} 路径集保存到 path-assemblage。    
 "VCVARSALLPARAM"="amd64_x86"，这个环境变量根据ENV的目标决定。     
 只有这样，pyvc.bat 才能执行有效。   
 
 2. 注意  
 bat环境变量不区分大小写。  
-允许增加"RUN-VCVARSALL"="\"\$\{VCVARSALL}\" \$\{VCVARSALLPARAM}"。  
+允许增加"RUN-VCVARSALL"="\"${VCVARSALL}\" ${VCVARSALLPARAM}"。  
 用户自行决定配置"CLS-VCVARSALL"和"CLS-VCVARSALLPARAM"。  
 
 #### pyvc 使用注意    
