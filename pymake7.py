@@ -109,18 +109,18 @@ Usage:
   pymake7.py hh use <env-name> exec-with-params [ <command-name> ] [ --params=<command-params> ... ]
   pymake7.py -------------------------------------------------------------
   pymake7.py execvp [ here | hh ] [ <command-name> ] [ <command-params> ... ]
-  pymake7.py ccvp [ here | hh ] [ <command-name> ] [ <command-params> ... ]
   pymake7.py use <env-name> execvp [ here | hh ] [ <command-name> ] [ <command-params> ... ]
-  pymake7.py use <env-name> ccvp [ here | hh ] [ <command-name> ] [ <command-params> ... ]
-  pymake7.py *************************************************************
   pymake7.py here execvp [ <command-name> ] [ <command-params> ... ]
+  pymake7.py here use <env-name> ccvp [ <command-name> ] [ <command-params> ... ]
+  pymake7.py hh ccvp [ <command-name> ] [ <command-params> ... ]
+  pymake7.py hh use <env-name> ccvp [ <command-name> ] [ <command-params> ... ]
+  pymake7.py -------------------------------------------------------------
+  pymake7.py ccvp [ here | hh ] [ <command-name> ] [ <command-params> ... ]
+  pymake7.py use <env-name> ccvp [ here | hh ] [ <command-name> ] [ <command-params> ... ]
   pymake7.py here ccvp [ <command-name> ] [ <command-params> ... ]
   pymake7.py here use <env-name> execvp [ <command-name> ] [ <command-params> ... ]
-  pymake7.py here use <env-name> ccvp [ <command-name> ] [ <command-params> ... ]
   pymake7.py hh execvp [ <command-name> ] [ <command-params> ... ]
-  pymake7.py hh ccvp [ <command-name> ] [ <command-params> ... ]
   pymake7.py hh use <env-name> execvp [ <command-name> ] [ <command-params> ... ]
-  pymake7.py hh use <env-name> ccvp [ <command-name> ] [ <command-params> ... ]
   pymake7.py -------------------------------------------------------------
   pymake7.py backup [ here | hh ] [ <zip-file-name> ]
   pymake7.py here backup [ <zip-file-name> ]
@@ -2178,129 +2178,6 @@ def main_function():
             ''
         break
 
-    # need return, set return, default break.
-    # get
-    while (True):
-        if (args['get'] == True):
-            if (args['all'] is True):
-                if (args['stat'] is True):
-                    print("%s" % pymakeworkpath)
-                    print("%s" % os.getcwd())
-                    return
-                elif (args['status'] is True):
-                    print("EXECUTE ROOT [HERE   ]: %s" % pymakeworkpath)
-                    print("EXECUTE ROOT [DEFAULT]: %s" % os.getcwd())
-                    return
-                elif (args['info'] is True):
-                    if(config.__contains__("environ") is True):
-                        if (config['environ'].__contains__("current") is True):
-                            print("%s" % (config["environ"]["current"]))
-                        else:
-                            print("failed: .json file is broken, environ section lost current key, please use set command fix it.")
-                    else:
-                        print("failed: please check your .json file content, it is not now version .json.")
-
-                    r = conf.get('source', 'root')
-                    f = conf.get('source', 'config')
-                    print ("%s%s%s" % (r, os.path.sep, f))
-                    print ("%s" % (r))
-                    print ("%s" % (f))
-                    print("-----------------------------------------")
-                    print("%s" % os.path.realpath(__file__))
-                    print("%s" % os.path.split(os.path.realpath(__file__))[0])
-                    print("%s" % os.path.split(os.path.realpath(__file__))[1])
-                    print("-----------------------------------------")
-                    print("%s" % (pymakeini))
-                    print("%s" % (pymakeroot))
-                    print("%s" % (os.path.split(os.path.realpath(pymakeini))[1]))
-                    return
-                elif (args['information'] is True):
-                    if(config.__contains__("environ") is True):
-                        if (config['environ'].__contains__("current") is True):
-                            print("CURRENT ENVIRON %s" % (config["environ"]["current"]))
-                        else:
-                            print("CURRENT ENVIRON failed: .json file is broken, environ section lost current key, please use set command fix it.")
-                    else:
-                        print("CURRENT ENVIRON failed: please check your .json file content, it is not compatible version .json.")
-
-                    r = conf.get('source', 'root')
-                    f = conf.get('source', 'config')
-                    print ("SOURCE        : %s%s%s" % (r, os.path.sep, f))
-                    print ("SOURCE ROOT   : %s" % (r))
-                    print ("SOURCE CONFIG : %s" % (f))
-                    print("-----------------------------------------")
-                    print("PROGRAM       : %s" % os.path.realpath(__file__))
-                    print("PROGRAM ROOT  : %s" % os.path.split(os.path.realpath(__file__))[0])
-                    print("PROGRAM FILE  : %s" % os.path.split(os.path.realpath(__file__))[1])
-                    print("-----------------------------------------")
-                    print("CONFIGURE     : %s" % (pymakeini))
-                    print("CONFIGURE ROOT: %s" % (pymakeroot))
-                    print("CONFIGURE FILE: %s" % (os.path.split(os.path.realpath(pymakeini))[1]))
-                    return
-                elif (args['settings'] is True):
-                    #print('break to display backward.')
-                    break
-                else:
-                    if(config.__contains__("environ") is True):
-                        if (config['environ'].__contains__("current") is True):
-                            print("CURRENT ENVIRON %s" % (config["environ"]["current"]))
-                        else:
-                            print("CURRENT ENVIRON failed: .json file is broken, environ section lost current key, please use set command fix it.")
-                    else:
-                        print("CURRENT ENVIRON failed: please check your .json file content, it is not compatible version .json.")
-
-                    r = conf.get('source', 'root')
-                    f = conf.get('source', 'config')
-                    print("SOURCE        : %s%s%s" % (r, os.path.sep, f))
-                    print("SOURCE ROOT   : %s" % (r))
-                    print("SOURCE CONFIG : %s" % (f))
-                    print("-----------------------------------------")
-                    print("PROGRAM       : %s" % os.path.realpath(__file__))
-                    print("PROGRAM ROOT  : %s" % os.path.split(os.path.realpath(__file__))[0])
-                    print("PROGRAM FILE  : %s" % os.path.split(os.path.realpath(__file__))[1])
-                    print("-----------------------------------------")
-                    print("CONFIGURE     : %s" % (pymakeini))
-                    print("CONFIGURE ROOT: %s" % (pymakeroot))
-                    print("CONFIGURE FILE: %s" % (os.path.split(os.path.realpath(pymakeini))[1]))
-                    print("-----------------------------------------")
-                    print("PORT INI      : %s" % portinifile)
-                    print("PORT INI ROOT : %s" % os.path.split(os.path.realpath(portinifile))[0])
-                    print("PORT INI CONF : %s" % os.path.split(os.path.realpath(portinifile))[1])
-                    print("-----------------------------------------")
-                    print("EXECUTE ROOT [HERE   ]: %s" % pymakeworkpath)
-                    print("EXECUTE ROOT [DEFAULT]: %s" % os.getcwd())
-                    print("-----------------------------------------")
-                    plat = getplatform()
-                    if (plat == "Windows"):
-                        print("INSTALL ROOT  : %s" % "C:\Windows")
-                    else:
-                        print("INSTALL ROOT  : %s" % "/usr/local/bin")
-                    return
-            elif (args['env'] is True):
-                #if (args['default'] or args['current'] or args['cur'] is True):
-                #else:
-                #    ""
-                if (config['environ'].__contains__("current") is True):
-                    print("%s" % (config["environ"]["current"]))
-                    return
-                else:
-                    print("failed: .json file is broken, environ section lost current key, please use set command fix it.")
-                    return
-                return
-            elif (args['exec'] is True):
-                if (args['here'] is True):
-                    print("%s" % (pymakeworkpath))
-                    return
-                else:
-                   ""
-                print("%s" % (shellroot))
-                return
-            else:
-                ''
-        else:
-            ''
-        break
-
     ### config -> raw config
     rawconfig = copy.deepcopy(config)
     # print ( config )
@@ -2776,6 +2653,146 @@ def main_function():
             else:
                 print("please ensure your assemblage name.")
                 return
+        else:
+            ''
+        break
+
+    # need return, set return, default break.
+    # get
+    while (True):
+        if (args['get'] == True):
+            if (args['all'] is True):
+                if (args['stat'] is True):
+                    print("%s" % pymakeworkpath)
+                    print("%s" % os.getcwd())
+                    return
+                elif (args['status'] is True):
+                    print("EXECUTE ROOT [HERE   ]: %s" % pymakeworkpath)
+                    print("EXECUTE ROOT [DEFAULT]: %s" % os.getcwd())
+                    return
+                elif (args['info'] is True):
+                    if(config.__contains__("environ") is True):
+                        if (config['environ'].__contains__("current") is True):
+                            print("%s" % (config["environ"]["current"]))
+                        else:
+                            print("failed: .json file is broken, environ section lost current key, please use set command fix it.")
+                    else:
+                        print("failed: please check your .json file content, it is not now version .json.")
+
+                    r = conf.get('source', 'root')
+                    f = conf.get('source', 'config')
+                    print("%s%s%s" % (r, os.path.sep, f))
+                    print("%s" % (r))
+                    print("%s" % (f))
+                    print("-----------------------------------------")
+                    print("%s" % os.path.realpath(__file__))
+                    print("%s" % os.path.split(os.path.realpath(__file__))[0])
+                    print("%s" % os.path.split(os.path.realpath(__file__))[1])
+                    print("-----------------------------------------")
+                    print("%s" % (pymakeini))
+                    print("%s" % (pymakeroot))
+                    print("%s" % (os.path.split(os.path.realpath(pymakeini))[1]))
+                    print("-----------------------------------------")
+                    print("%s" % portinifile)
+                    print("%s" % os.path.split(os.path.realpath(portinifile))[0])
+                    print("%s" % os.path.split(os.path.realpath(portinifile))[1])
+                    print("-----------------------------------------")
+                    print("%s" % (customenvfile))
+                    print("%s" % (custompathfile))
+                    return
+                elif (args['information'] is True):
+                    if(config.__contains__("environ") is True):
+                        if (config['environ'].__contains__("current") is True):
+                            print("CURRENT ENVIRON %s" % (config["environ"]["current"]))
+                        else:
+                            print("CURRENT ENVIRON failed: .json file is broken, environ section lost current key, please use set command fix it.")
+                    else:
+                        print("CURRENT ENVIRON failed: please check your .json file content, it is not compatible version .json.")
+
+                    r = conf.get('source', 'root')
+                    f = conf.get('source', 'config')
+                    print("SOURCE        : %s%s%s" % (r, os.path.sep, f))
+                    print("SOURCE ROOT   : %s" % (r))
+                    print("SOURCE CONFIG : %s" % (f))
+                    print("-----------------------------------------")
+                    print("PROGRAM       : %s" % os.path.realpath(__file__))
+                    print("PROGRAM ROOT  : %s" % os.path.split(os.path.realpath(__file__))[0])
+                    print("PROGRAM FILE  : %s" % os.path.split(os.path.realpath(__file__))[1])
+                    print("-----------------------------------------")
+                    print("CONFIGURE     : %s" % (pymakeini))
+                    print("CONFIGURE ROOT: %s" % (pymakeroot))
+                    print("CONFIGURE FILE: %s" % (os.path.split(os.path.realpath(pymakeini))[1]))
+                    print("-----------------------------------------")
+                    print("PORT INI      : %s" % portinifile)
+                    print("PORT INI ROOT : %s" % os.path.split(os.path.realpath(portinifile))[0])
+                    print("PORT INI CONF : %s" % os.path.split(os.path.realpath(portinifile))[1])
+                    print("-----------------------------------------")
+                    print("CUSTOM ENV+   : %s" % (customenvfile))
+                    print("CUSTOM PATH+  : %s" % (custompathfile))
+                    return
+                elif (args['settings'] is True):
+                    #print('break to display backward.')
+                    break
+                else:
+                    if(config.__contains__("environ") is True):
+                        if (config['environ'].__contains__("current") is True):
+                            print("CURRENT ENVIRON %s" % (config["environ"]["current"]))
+                        else:
+                            print("CURRENT ENVIRON failed: .json file is broken, environ section lost current key, please use set command fix it.")
+                    else:
+                        print("CURRENT ENVIRON failed: please check your .json file content, it is not compatible version .json.")
+
+                    r = conf.get('source', 'root')
+                    f = conf.get('source', 'config')
+                    print("SOURCE        : %s%s%s" % (r, os.path.sep, f))
+                    print("SOURCE ROOT   : %s" % (r))
+                    print("SOURCE CONFIG : %s" % (f))
+                    print("-----------------------------------------")
+                    print("PROGRAM       : %s" % os.path.realpath(__file__))
+                    print("PROGRAM ROOT  : %s" % os.path.split(os.path.realpath(__file__))[0])
+                    print("PROGRAM FILE  : %s" % os.path.split(os.path.realpath(__file__))[1])
+                    print("-----------------------------------------")
+                    print("CONFIGURE     : %s" % (pymakeini))
+                    print("CONFIGURE ROOT: %s" % (pymakeroot))
+                    print("CONFIGURE FILE: %s" % (os.path.split(os.path.realpath(pymakeini))[1]))
+                    print("-----------------------------------------")
+                    print("PORT INI      : %s" % portinifile)
+                    print("PORT INI ROOT : %s" % os.path.split(os.path.realpath(portinifile))[0])
+                    print("PORT INI CONF : %s" % os.path.split(os.path.realpath(portinifile))[1])
+                    print("-----------------------------------------")
+                    print("CUSTOM ENV+   : %s" % (customenvfile))
+                    print("CUSTOM PATH+  : %s" % (custompathfile))
+                    print("-----------------------------------------")
+                    print("EXECUTE ROOT [HERE   ]: %s" % pymakeworkpath)
+                    print("EXECUTE ROOT [DEFAULT]: %s" % os.getcwd())
+                    print("-----------------------------------------")
+                    plat = getplatform()
+                    if (plat == "Windows"):
+                        print("INSTALL ROOT  : %s" % "C:\Windows")
+                    else:
+                        print("INSTALL ROOT  : %s" % "/usr/local/bin")
+                    return
+            elif (args['env'] is True):
+                #if (args['default'] or args['current'] or args['cur'] is True):
+                #else:
+                #    ""
+                if (config['environ'].__contains__("current") is True):
+                    print("%s" % (config["environ"]["current"]))
+                    return
+                else:
+                    print("failed: .json file is broken, environ section lost current key, please use set command fix it.")
+                    return
+                return
+            elif (args['exec'] is True):
+                if (args['here'] is True):
+                    print("%s" % (pymakeworkpath))
+                    return
+                else:
+                   ""
+                print("%s" % (shellroot))
+                return
+            else:
+                ''
         else:
             ''
         break
