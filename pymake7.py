@@ -2580,8 +2580,8 @@ def main_function():
             continue
         if(str(l).__contains__('=') is False):
             continue
-        key = str(l).split('=')[0]
-        value = str(l).split('=')[1]
+        key = str(l).split('=')[0].strip()
+        value = str(l).split('=')[1].strip()
         env[key] = value
 
     # set into env [False]
