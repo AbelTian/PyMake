@@ -81,6 +81,9 @@ pymake use <env> execvp
 #备份所有环境配置到zip。
 pymake backup
 
+#从zip还原所有的备份环境。
+pymake recovery
+
 #重置PyMake
 pymake initialize
 
@@ -105,12 +108,32 @@ pymake clean
 pymake program
 
 #其他的命令都是别名
-
+#pymm, mm是pymake的别名。  
 
 ```
 
-pymm, mm是pymake的别名。  
 
+``` shell
+
+#开启“在sourceroot里定义的”自定义环境
+pymake custom open
+
+#假设shellroot里有shat.bat，现在在随意的目录里打算执行他。  
+pymake exec shat
+
+#希望在当前目录执行他。
+pymake exec here shat
+
+#希望在某个任意的目录执行他。
+pymake exec-with-params shat --workroot "xxx-path"
+
+#希望带参数执行他。
+pymake exec-with-params shat --params "xxxx xxxx xxxx"  
+
+#希望满足多个条件执行他。
+pymake exec-with-params [ here ] shat --params="xxxx" --workroot="xxx"
+
+```
 ## pymake使用截图  
 ![命令行截图](./screenshot/a2.png)  
 
