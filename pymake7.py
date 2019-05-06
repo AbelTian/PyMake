@@ -134,11 +134,20 @@ Usage:
   pymake7.py hh import cmd [ <script-file> ] [ -a | --all ] [ -f | --force ] [ --recursive ] [ --encoding=<encoding-name> ] [ --filter=<name-filter> ... ]
   pymake7.py -------------------------------------------------------------
   pymeke7.py custom
-  pymake7.py custom clean
-  pymake7.py custom information
-  pymeke7.py custom export [ here | hh ] [ to <file-name> ]
+  pymake7.py custom [ open | close ]
+  pymake7.py custom [ information ]
+  pymake7.py custom export [ here | hh ] [ to <file-name> ]
+  pymake7.py custom exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py custom use <env-name> exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
   pymake7.py -------------------------------------------------------------
   pymake7.py powershell
+  pymake7.py powershell [ status | information]
+  pymake7.py powershell clean [ here | hh ]
+  pymake7.py powershell export [ here | hh ] [ <env-name> ] [ to <file-name> ]
+  pymake7.py powershell type [ here | hh ] [ <cmd-name> ] [ to <file-name> ]
+  pymake7.py powershell use <env-name> type [ here | hh ] [ <cmd-name> ]  [ to <file-name> ]
+  pymake7.py powershell exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py powershell use <env-name> exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
   pymake7.py -------------------------------------------------------------
   pymake7.py (-h | --help)
   pymake7.py --version
@@ -174,7 +183,7 @@ Command:
   backup            backup all env .json to a zip file.
   recovery          recovery all env .json from a zip file.
   import            import user path or env or cmd to env .json file. example, import cmd [ <script-file>: x.bat x.cmd x.sh x.ps1 ... ]
-  custom            extention environment in sourceroot, for large dimentions of scripts in computer.
+  custom            custom environment in sourceroot, for calling large dimentions of scripts in computer.
   powershell        environ for powershell, and to execute in powershell. [cross]
 
 Options:
@@ -2618,9 +2627,10 @@ def main_function():
 
     #print(args)
     #print(args['custom'])
+    #print(args['hh'])
     #custom
     while (True):
-        if( args['custom'] == 1 ):
+        if( args['custom'] is True ):
             #print('gggg')
             if(args['open'] is True):
                 ''
@@ -2648,6 +2658,7 @@ def main_function():
 
                 lines = ""
                 # export path
+                #print(envcustomlistpaths)
                 for (key) in envcustomlistpaths:
                     if (plat == "Windows"):
                         lines += (env_set + 'PATH=' + key + os.path.pathsep + '%PATH%' + '\n')
@@ -2663,6 +2674,8 @@ def main_function():
                     else:
                         lines += (env_set + key + '=\"' + value + '\"\n')
 
+                #print("------------------")
+                #print(lines)
                 with open(cmd_effect, 'w') as f:
                     f.write(cmd_header)
                     f.write(lines)
@@ -2689,11 +2702,15 @@ def main_function():
                         lines += ('set ' + key + '=' + '\n')
                     else:
                         lines += ('unset ' + key + '\n')
+
+                #print("------------------")
+                #print(lines)
                 with open(cmd_unset, 'w') as f:
                     f.write(cmd_header)
                     f.write(lines)
 
                 print("successed: export custom env to %s %s" % (cmd_effect, cmd_unset))
+                return
             elif(args['clean'] is True):
                 ''
             elif(args['information'] is True):
@@ -2702,6 +2719,13 @@ def main_function():
             else:
                 ''
         else:
+            ''
+        break
+
+    #print(args['powershell'])
+    #powershell
+    while(True):
+        if(args['powershell'] is True):
             ''
         break
 
