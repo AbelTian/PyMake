@@ -2367,6 +2367,7 @@ def main_function():
     custompaths = []
     with open(custompathfile, 'r', encoding='utf8') as f:
         for l in f.readlines():
+            #important format
             l = l.strip(' ')
             while (l.endswith('\r') or l.endswith('\n') or l.endswith('\r\n')):
                 l = l.rstrip('\r\n')
@@ -2409,12 +2410,22 @@ def main_function():
     envcustompaths = copy.deepcopy(storecustompaths)
     envcustompaths = raw_path(envcustompaths)
 
-    env = os.environ
+    clean_list = []
     for l in envcustompaths:
         if (l == ''):
+            clean_list.append(l)
             continue
         if(os.path.isabs(l) is False):
+            clean_list.append(l)
             continue
+    #print(clean_list)
+
+    for l in clean_list:
+        if(envcustompaths.__contains__(l) is True):
+            envcustompaths.remove(l)
+
+    env = os.environ
+    for l in envcustompaths:
         env["PATH"] = l + os.path.pathsep + env["PATH"]
 
     # set custom env+ to env.
@@ -2429,6 +2440,7 @@ def main_function():
     customenvs = []
     with open(customenvfile, 'r', encoding='utf8') as f:
         for l in f.readlines():
+            #important format
             l = l.strip(' ')
             while (l.endswith('\r') or l.endswith('\n') or l.endswith('\r\n')):
                 l = l.rstrip('\r\n')
@@ -2451,14 +2463,25 @@ def main_function():
     #set into env
     envcustomvars = copy.deepcopy(storecustomvars)
     envcustomvars = raw_path(envcustomvars)
-    env = os.environ
+
+    clean_list = []
     for l in envcustomvars:
         if (l == ''):
+            clean_list.append(l)
             continue
         if(str(l).__contains__('=') is False):
+            clean_list.append(l)
             continue
+    #print(clean_list)
+
+    for l in clean_list:
+        if(envcustomvars.__contains__(l) is True):
+            envcustomvars.remove(l)
+
+    env = os.environ
+    for l in envcustomvars:
         key = str(l).split('=')[0].strip()
-        value = str(l).split('=')[1].strip()
+        value = '='.join(str(l).split('=')[1:])
         env[key] = value
 
     # set into env [False]
@@ -3225,8 +3248,27 @@ def main_function():
             cmd_effect = file_name
         cmd_effect += '_effect' + cmd_suffix
 
-        #export path
         lines = ""
+
+        #export custom path
+        for (key) in envcustompaths:
+            if (plat == "Windows"):
+                lines += (env_set + 'PATH=' + key + os.path.pathsep + '%PATH%' + '\n')
+            else:
+                lines += (env_set + 'PATH=' + key + os.path.pathsep + '$PATH' + '\n')
+
+        #export custom env
+        for l in envcustomvars:
+            key = str(l).split('=')[0].strip()
+            value = '='.join(str(l).split('=')[1:])
+            if (key == 'path+'):
+                continue
+            if (plat == "Windows"):
+                lines += (env_set + key + '=' + value + '\n')
+            else:
+                lines += (env_set + key + '=\"' + value + '\"\n')
+
+        #export path
         for (key) in dict0["path+"]:
             if (plat == "Windows"):
                 lines += (env_set + 'PATH=' + key + os.path.pathsep + '%PATH%' + '\n')
