@@ -2447,7 +2447,7 @@ def main_function():
     switch0 = conf2['custom']['switch']
     if(switch0 != '0' and switch0 != '1'):
         switch0 = '0'
-        conf2.set('custom', 'switch', '0')
+        conf2.set('custom', 'switch', switch0)
         conf2.write(open(pymakecustomini, 'w'))
 
     custompathfile = sourceroot + os.path.sep + "custom.path+.ini"
@@ -2733,7 +2733,20 @@ def main_function():
                     print(Fore.GREEN + "  %-30s %s" % (key, value))
                 return
             else:
-                ''
+                status = "closed"
+                if(switch0 == '1'):
+                    status = "opened"
+                print("custom env: %s." % status)
+                if(switch0 == '1'):
+                    print(Fore.MAGENTA + "path+:")
+                    for (key) in envcustomlistpaths:
+                        print(Fore.BLUE + "  %s" % key)
+                    print(Fore.MAGENTA + "variable:")
+                    for (key, value) in envcustomlistvars.items():
+                        if (key == 'path+'):
+                            continue
+                        print(Fore.GREEN + "  %-30s %s" % (key, value))
+                return
         else:
             ''
         break
