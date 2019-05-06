@@ -396,7 +396,16 @@ Update the command-line.
 ![command line screenshot](./screenshot/a4.png)   
 ![command line screenshot](./screenshot/a5.png)   
 
-#### User Support   
+# Version 7.4  
+1. custom path and env variable, common to use.
+1. spread all over pc script.  
+2. any work root.
+3. high-quality executing ability.
+4. appoint environ.  
+5. abundant command in environ .json stored.
+5. **all are in user environment source root.**
+
+# User Support   
 [Readme](./SHELL.md)  
 
 # Language       
