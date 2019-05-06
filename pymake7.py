@@ -125,82 +125,57 @@ Usage:
   pymake7.py backup [ here | hh ] [ <zip-file-name> ]
   pymake7.py here backup [ <zip-file-name> ]
   pymake7.py hh backup [ <zip-file-name> ]
-  pymeke7.py restore [ here | hh ] [ <zip-file> ]
-  pymake7.py here restore [ <zip-file> ]
-  pymake7.py hh restore [ <zip-file> ]
+  pymake7.py recovery [ here | hh ] [ <zip-file-name> ]
+  pymake7.py here recovery [ <zip-file-name> ]
+  pymake7.py hh recovery [ <zip-file-name> ]
   pymake7.py -------------------------------------------------------------
   pymake7.py import cmd [ hh | here ] [ <script-file> ] [ -a | --all ] [ -f | --force ] [ --recursive ] [ --encoding=<encoding-name> ] [ --filter=<name-filter> ... ]
   pymake7.py here import cmd [ <script-file> ] [ -a | --all ] [ -f | --force ] [ --recursive ] [ --encoding=<encoding-name> ] [ --filter=<name-filter> ... ]
   pymake7.py hh import cmd [ <script-file> ] [ -a | --all ] [ -f | --force ] [ --recursive ] [ --encoding=<encoding-name> ] [ --filter=<name-filter> ... ]
   pymake7.py -------------------------------------------------------------
   pymeke7.py custom
-  pymeke7.py custom open
-  pymeke7.py custom close
-  pymeke7.py custom export [ to <file-name> ]
   pymake7.py custom clean
-  pymake7.py custom exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
-  pymake7.py custom use <env-name> exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
-  pymake7.py custom here exec-with-params [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
-  pymake7.py custom here use <env-name> exec-with-params [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
-  pymake7.py custom hh exec-with-params [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
-  pymake7.py custom hh use <env-name> exec-with-params [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py custom information
+  pymeke7.py custom export [ here | hh ] [ to <file-name> ]
   pymake7.py -------------------------------------------------------------
-  pymeke7.py powershell
-  pymake7.py powershell export [ here | hh ] [ <env-name> ] [ to <file-name> ]
-  pymake7.py powershell type [ here | hh ] [ <cmd-name> ] [ to <file-name> ]
-  pymake7.py powershell here export [ here | hh ] [ <env-name> ] [ to <file-name> ]
-  pymake7.py powershell here type [ here | hh ] [ <cmd-name> ] [ to <file-name> ]
-  pymake7.py powershell hh export [ here | hh ] [ <env-name> ] [ to <file-name> ]
-  pymake7.py powershell hh type [ here | hh ] [ <cmd-name> ] [ to <file-name> ]
-  pymake7.py powershell use <env-name> type [ here | hh ] [ <cmd-name> ]  [ to <file-name> ]
-  pymake7.py powershell here use <env-name> type [ <cmd-name> ]  [ to <file-name> ]
-  pymake7.py powershell hh use <env-name> type [ <cmd-name> ]  [ to <file-name> ]
-  pymake7.py powershell exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
-  pymake7.py powershell use <env-name> exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
-  pymake7.py powershell here exec-with-params [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
-  pymake7.py powershell here use <env-name> exec-with-params [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
-  pymake7.py powershell hh exec-with-params [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
-  pymake7.py powershell hh use <env-name> exec-with-params [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
-  pymake7.py powershell clean [ here | hh ]
-  pymake7.py powershell here clean
-  pymake7.py powershell hh clean
+  pymake7.py powershell
   pymake7.py -------------------------------------------------------------
   pymake7.py (-h | --help)
   pymake7.py --version
 
 Command:
-  source           switch to another source file
-  source root      config root directory
-  source config    config source conf file
-  set path         path assemblage
-  set env          set env variable
-  set cmd          set cmd stream
-  export           output private env variable to a bat file or sh file [default:current, env]
-  type             output command to a bat file or sh file [default:cmd]
-  see              check command stream
-  ss               check command stream
-  cmd              check command stream
-  list             list config values, show command also too.
-  set cur env      set default env, set current env.
-  use              use selected env exec commands
-  here             at here do exec commands e.g.
-  hh               at here do exec commands e.g.
-  exec             exec commands list.
-  cc               exec commands list.
-  have             check env or path or cmd item whether user has configured.
-  has              check env or path or cmd item whether user has configured.
-  clean            clean *_effect.sh *_unset.sh *_exec.sh, or .bat.
-  program          pymake.py program information.
-  get              lots of important information about pymake.py.
-  initialize       if program crashed, user can use this command to reset.
-  port             port from source to target .json file, configure source root and config file.
-  translate        translate section from source to target, and other section.
-  exec-with-params exec a command with params, it is also execvp and ccvp.
-  backup           backup all env .json to a zip file.
-  restore          restore all env .json from a zip file.
-  import           import user path or env or cmd to env .json file. example, import cmd [ <script-file>: x.bat x.cmd x.sh x.ps1 ... ]
-  custom           extention for pymake basic environ, and for large dimentions of scripts in computer.
-  powershell       environ for powershell, and to execute in powershell. [cross]
+  source            switch to another source file
+  source root       config root directory
+  source config     config source conf file
+  set path          path assemblage
+  set env           set env variable
+  set cmd           set cmd stream
+  export            output private env variable to a bat file or sh file [default:current, env]
+  type              output command to a bat file or sh file [default:cmd]
+  see               check command stream
+  ss                check command stream
+  cmd               check command stream
+  list              list config values, show command also too.
+  set cur env       set default env, set current env.
+  use               use selected env exec commands
+  here              at here do exec commands e.g.
+  hh                at here do exec commands e.g.
+  exec              exec commands list.
+  cc                exec commands list.
+  have              check env or path or cmd item whether user has configured.
+  has               check env or path or cmd item whether user has configured.
+  clean             clean *_effect.sh *_unset.sh *_exec.sh, or .bat.
+  program           pymake.py program information.
+  get               lots of important information about pymake.py.
+  initialize        if program crashed, user can use this command to reset.
+  port              port from source to target .json file, configure source root and config file.
+  translate         translate section from source to target, and other section.
+  exec-with-params  exec a command with params, it is also execvp and ccvp.
+  backup            backup all env .json to a zip file.
+  recovery          recovery all env .json from a zip file.
+  import            import user path or env or cmd to env .json file. example, import cmd [ <script-file>: x.bat x.cmd x.sh x.ps1 ... ]
+  custom            extention environment in sourceroot, for large dimentions of scripts in computer.
+  powershell        environ for powershell, and to execute in powershell. [cross]
 
 Options:
   -h --help     Show this screen.
@@ -863,23 +838,23 @@ def main_function():
             ''
         break
 
-    # restore
+    # recovery
     while (True):
-        if ( args['restore'] is True ):
+        if ( args['recovery'] is True ):
             import zipfile
             os.chdir(sourceroot)
             if(args['here'] or args['hh'] is True):
                 os.chdir(pymakeworkpath)
 
-            #print(args['<zip-file>'])
-            if(args['<zip-file>'] is None):
+            #print(args['<zip-file-name>'])
+            if(args['<zip-file-name>'] is None):
                 files = os.listdir(os.getcwd())
                 for f in files:
                     if (f.endswith('.zip')):
                         print(f)
                 return
 
-            file = os.path.realpath(args['<zip-file>'])
+            file = os.path.realpath(args['<zip-file-name>'])
             if (file.endswith('.zip') is False):
                 print("please use a .zip file name.")
                 return
@@ -2418,7 +2393,7 @@ def main_function():
                         break
             step += 1
 
-    # custom path
+    # raw path function, parse custom path tuple
     def raw_path(pathgroup):
         # replace path
         for (key, value) in enumerate(pathgroup):
@@ -2449,145 +2424,184 @@ def main_function():
                         break
         return pathgroup
 
-    # set custom path+ to env.
-    # print(sourceroot)
-    # print(shellroot)
-    #init file
+    pymakecustomini = sourceroot + os.path.sep + "custom.ini"
+    conf2 = MyConfigParser()
+    conf2.read(pymakecustomini)
+    if( not conf2.has_section('custom') ):
+        conf2.add_section('custom')
+        conf2.write(open(pymakecustomini, 'w'))
+    if( not conf2.has_option('custom', 'switch') ):
+        conf2.set('custom', 'switch', '0')
+        conf2.write(open(pymakecustomini, 'w'))
+
+    switch0 = conf2['custom']['switch']
+    if(switch0 != '0' and switch0 != '1'):
+        switch0 = '0'
+        conf2.set('custom', 'switch', '0')
+        conf2.write(open(pymakecustomini, 'w'))
+
     custompathfile = sourceroot + os.path.sep + "custom.path+.ini"
-    if (os.path.exists(custompathfile) is False):
-        with open(custompathfile, 'w', encoding='utf8') as f:
-            ''
-
-    #read all
-    custompaths = []
-    with open(custompathfile, 'r', encoding='utf8') as f:
-        for l in f.readlines():
-            #important format
-            #l = l.strip()
-            while (l.endswith('\r') or l.endswith('\n') or l.endswith('\r\n')):
-                l = l.rstrip('\r\n')
-                l = l.rstrip('\n')
-                l = l.rstrip('\r')
-            # if(l == ''):
-            #    continue
-            custompaths.append(l)
-    # if(custompaths.__contains__('') is True):
-    # custompaths.remove('')
-    # print(custompaths)
-    # print(os.linesep)
-    # for l in custompaths:
-    #    print("AAAA:" + l)
-
-    #write back
-    storecustompaths = copy.deepcopy(custompaths)
-    for (i, l) in enumerate(storecustompaths):
-        #import format
-        l = l.strip()
-        storecustompaths[i] = l
-
-    # default [ fixed ]
-    # add pymake default shell root to environ.
-    if (storecustompaths.__contains__(pymakeshellroot) is False):
-        storecustompaths.append(pymakeshellroot)
-    # add pymake default source root to environ.
-    if (storecustompaths.__contains__(pymakesourceroot) is False):
-        storecustompaths.append(pymakesourceroot)
-    # default [ movable, follow user source root ]
-    # add user shell root to environ.
-    if (shellroot != pymakeshellroot and storecustompaths.__contains__(shellroot) is False):
-        storecustompaths.append(shellroot)
-    # add user source root to environ.
-    if (sourceroot != pymakesourceroot and storecustompaths.__contains__(sourceroot) is False):
-        storecustompaths.append(sourceroot)
-
-    if (custompaths != storecustompaths):
-        with open(custompathfile, 'w', encoding='utf8') as f:
-            for l in storecustompaths:
-                f.write(l + '\n')
-
-    #set into env
-    envcustompaths = copy.deepcopy(storecustompaths)
-    envcustompaths = raw_path(envcustompaths)
-
-    clean_list = []
-    for l in envcustompaths:
-        if (l == ''):
-            clean_list.append(l)
-            continue
-        if(os.path.isabs(l) is False):
-            clean_list.append(l)
-            continue
-    #print(clean_list)
-
-    for l in clean_list:
-        if(envcustompaths.__contains__(l) is True):
-            envcustompaths.remove(l)
-
-    env = os.environ
-    for l in envcustompaths:
-        env["PATH"] = l + os.path.pathsep + env["PATH"]
-
-    # set custom env+ to env.
     customenvfile = sourceroot + os.path.sep + "custom.env+.ini"
-    #print(customenvfile)
-    #init
-    if (os.path.exists(customenvfile) is False):
-        with open(customenvfile, 'w', encoding='utf8') as f:
-            ''
 
-    #read all
-    customenvs = []
-    with open(customenvfile, 'r', encoding='utf8') as f:
-        for l in f.readlines():
-            # important format
-            #l = l.strip()
-            while (l.endswith('\r') or l.endswith('\n') or l.endswith('\r\n')):
-                l = l.rstrip('\r\n')
-                l = l.rstrip('\n')
-                l = l.rstrip('\r')
-            # if(l == ''):
-            #    continue
-            customenvs.append(l)
+    envcustomlistpaths = []
+    envcustomlistvars = {}
 
+    #custom environ
+    #user can use custom environ to effect pymake basic environment.
+    #it will effect every executing environment.
+    while (True):
+        if(int(switch0) == 0):
+            break
+        #print("open custom environ.")
 
-    #write back
-    storecustomvars = copy.deepcopy(customenvs)
-    for (i, l) in enumerate(storecustomvars):
-        #import format
-        l = l.strip()
-        storecustomvars[i] = l
+        # set custom path+ to env.
+        # print(sourceroot)
+        # print(shellroot)
+        # init file
+        #custompathfile = sourceroot + os.path.sep + "custom.path+.ini"
+        if (os.path.exists(custompathfile) is False):
+            with open(custompathfile, 'w', encoding='utf8') as f:
+                ''
 
-    avarkeyvalue = "PYMAKEAUTHOR=T.D.R."
-    if (storecustomvars.__contains__(avarkeyvalue) is False):
-        storecustomvars.append(avarkeyvalue)
-    if (storecustomvars != customenvs):
-        with open(customenvfile, 'w', encoding='utf8') as f:
-            for l in storecustomvars:
-                f.write(l + '\n')
+        # read all
+        custompaths = []
+        with open(custompathfile, 'r', encoding='utf8') as f:
+            for l in f.readlines():
+                # important format
+                # l = l.strip()
+                while (l.endswith('\r') or l.endswith('\n') or l.endswith('\r\n')):
+                    l = l.rstrip('\r\n')
+                    l = l.rstrip('\n')
+                    l = l.rstrip('\r')
+                # if(l == ''):
+                #    continue
+                custompaths.append(l)
+        # if(custompaths.__contains__('') is True):
+        # custompaths.remove('')
+        # print(custompaths)
+        # print(os.linesep)
+        # for l in custompaths:
+        #    print("AAAA:" + l)
 
-    #set into env
-    envcustomvars = copy.deepcopy(storecustomvars)
-    envcustomvars = raw_path(envcustomvars)
+        # write back
+        storecustompaths = copy.deepcopy(custompaths)
+        for (i, l) in enumerate(storecustompaths):
+            # import format
+            l = l.strip()
+            storecustompaths[i] = l
 
-    clean_list = []
-    for l in envcustomvars:
-        if (l == ''):
-            clean_list.append(l)
-            continue
-        if(str(l).__contains__('=') is False):
-            clean_list.append(l)
-            continue
-    #print(clean_list)
+        # default [ fixed ]
+        # add pymake default shell root to environ.
+        if (storecustompaths.__contains__(pymakeshellroot) is False):
+            storecustompaths.append(pymakeshellroot)
+        # add pymake default source root to environ.
+        if (storecustompaths.__contains__(pymakesourceroot) is False):
+            storecustompaths.append(pymakesourceroot)
+        # default [ movable, follow user source root ]
+        # add user shell root to environ.
+        if (shellroot != pymakeshellroot and storecustompaths.__contains__(shellroot) is False):
+            storecustompaths.append(shellroot)
+        # add user source root to environ.
+        if (sourceroot != pymakesourceroot and storecustompaths.__contains__(sourceroot) is False):
+            storecustompaths.append(sourceroot)
 
-    for l in clean_list:
-        if(envcustomvars.__contains__(l) is True):
-            envcustomvars.remove(l)
+        if (custompaths != storecustompaths):
+            with open(custompathfile, 'w', encoding='utf8') as f:
+                for l in storecustompaths:
+                    f.write(l + '\n')
 
-    env = os.environ
-    for l in envcustomvars:
-        key = str(l).split('=')[0].strip()
-        value = '='.join(str(l).split('=')[1:])
-        env[key] = value
+        # set into env
+        envcustompaths = copy.deepcopy(storecustompaths)
+        envcustompaths = raw_path(envcustompaths)
+
+        clean_list = []
+        for l in envcustompaths:
+            if (l == ''):
+                clean_list.append(l)
+                continue
+            if (os.path.isabs(l) is False):
+                clean_list.append(l)
+                continue
+        # print(clean_list)
+
+        for l in clean_list:
+            if (envcustompaths.__contains__(l) is True):
+                envcustompaths.remove(l)
+
+        env = os.environ
+        for l in envcustompaths:
+            env["PATH"] = l + os.path.pathsep + env["PATH"]
+
+        for l in envcustompaths:
+            envcustomlistpaths.append(l)
+
+        # set custom env+ to env.
+        #customenvfile = sourceroot + os.path.sep + "custom.env+.ini"
+        # print(customenvfile)
+        # init
+        if (os.path.exists(customenvfile) is False):
+            with open(customenvfile, 'w', encoding='utf8') as f:
+                ''
+
+        # read all
+        customenvs = []
+        with open(customenvfile, 'r', encoding='utf8') as f:
+            for l in f.readlines():
+                # important format
+                # l = l.strip()
+                while (l.endswith('\r') or l.endswith('\n') or l.endswith('\r\n')):
+                    l = l.rstrip('\r\n')
+                    l = l.rstrip('\n')
+                    l = l.rstrip('\r')
+                # if(l == ''):
+                #    continue
+                customenvs.append(l)
+
+        # write back
+        storecustomvars = copy.deepcopy(customenvs)
+        for (i, l) in enumerate(storecustomvars):
+            # import format
+            l = l.strip()
+            storecustomvars[i] = l
+
+        avarkeyvalue = "PYMAKEAUTHOR=T.D.R."
+        if (storecustomvars.__contains__(avarkeyvalue) is False):
+            storecustomvars.append(avarkeyvalue)
+        if (storecustomvars != customenvs):
+            with open(customenvfile, 'w', encoding='utf8') as f:
+                for l in storecustomvars:
+                    f.write(l + '\n')
+
+        # set into env
+        envcustomvars = copy.deepcopy(storecustomvars)
+        envcustomvars = raw_path(envcustomvars)
+
+        clean_list = []
+        for l in envcustomvars:
+            if (l == ''):
+                clean_list.append(l)
+                continue
+            if (str(l).__contains__('=') is False):
+                clean_list.append(l)
+                continue
+        # print(clean_list)
+
+        for l in clean_list:
+            if (envcustomvars.__contains__(l) is True):
+                envcustomvars.remove(l)
+
+        env = os.environ
+        for l in envcustomvars:
+            key = str(l).split('=')[0].strip()
+            value = '='.join(str(l).split('=')[1:])
+            env[key] = value
+
+        for l in envcustomvars:
+            key = str(l).split('=')[0].strip()
+            value = '='.join(str(l).split('=')[1:])
+            envcustomlistvars[key] = value
+
+        break
 
     # set into env [False]
     while (False):
@@ -2600,6 +2614,95 @@ def main_function():
             if (key == 'path+'):
                 continue
             env[key] = value
+        break
+
+    #print(args)
+    #print(args['custom'])
+    #custom
+    while (True):
+        if( args['custom'] == 1 ):
+            #print('gggg')
+            if(args['open'] is True):
+                ''
+            elif (args['close'] is True):
+                ''
+            elif (args['export'] is True):
+                if (args['here'] or args['hh'] is True):
+                    os.chdir(pymakeworkpath)
+
+                plat = getplatform()
+                if (plat == "Windows"):
+                    cmd_suffix = ".bat"
+                    cmd_header = "@echo off\n"
+                    env_set = 'set '
+                else:
+                    cmd_suffix = ".sh"
+                    cmd_header = "#!/usr/bin/env bash\n"
+                    env_set = 'export '
+
+                # export effect env
+                cmd_effect = 'custom.env'
+                if (args['<file-name>'] is not None):
+                    cmd_effect = "custom." + args['<file-name>']
+                cmd_effect += '_effect' + cmd_suffix
+
+                lines = ""
+                # export path
+                for (key) in envcustomlistpaths:
+                    if (plat == "Windows"):
+                        lines += (env_set + 'PATH=' + key + os.path.pathsep + '%PATH%' + '\n')
+                    else:
+                        lines += (env_set + 'PATH=' + key + os.path.pathsep + '$PATH' + '\n')
+
+                # export var
+                for (key, value) in envcustomlistvars.items():
+                    if (key == 'path+'):
+                        continue
+                    if (plat == "Windows"):
+                        lines += (env_set + key + '=' + value + '\n')
+                    else:
+                        lines += (env_set + key + '=\"' + value + '\"\n')
+
+                with open(cmd_effect, 'w') as f:
+                    f.write(cmd_header)
+                    f.write(lines)
+
+                # export unset env
+                cmd_unset = 'custom.env'
+                if (args['<file-name>'] is not None):
+                    cmd_unset = "custom." + args['<file-name>']
+                cmd_unset += '_unset' + cmd_suffix
+
+                # export unset path
+                lines = ""
+                for (key) in envcustomlistpaths:
+                    if (plat == "Windows"):
+                        lines += (env_set + 'PATH=%PATH:' + key + ';=%' + '\n')
+                    else:
+                        lines += (env_set + 'PATH=$(' + 'echo ${PATH//' + key.replace('/', '\/') + ':/})' + '\n')
+
+                # export unset env
+                for (key, value) in envcustomlistvars.items():
+                    if (key == 'path+'):
+                        continue
+                    if (plat == "Windows"):
+                        lines += ('set ' + key + '=' + '\n')
+                    else:
+                        lines += ('unset ' + key + '\n')
+                with open(cmd_unset, 'w') as f:
+                    f.write(cmd_header)
+                    f.write(lines)
+
+                print("successed: export custom env to %s %s" % (cmd_effect, cmd_unset))
+            elif(args['clean'] is True):
+                ''
+            elif(args['information'] is True):
+                print("CUSTOM ENV+   : %s" % (customenvfile))
+                print("CUSTOM PATH+  : %s" % (custompathfile))
+            else:
+                ''
+        else:
+            ''
         break
 
     # list show
@@ -2824,9 +2927,6 @@ def main_function():
                     print("%s" % portinifile)
                     print("%s" % os.path.split(os.path.realpath(portinifile))[0])
                     print("%s" % os.path.split(os.path.realpath(portinifile))[1])
-                    print("-----------------------------------------")
-                    print("%s" % (customenvfile))
-                    print("%s" % (custompathfile))
                     return
                 elif (args['information'] is True):
                     if(config.__contains__("environ") is True):
@@ -2854,9 +2954,6 @@ def main_function():
                     print("PORT INI      : %s" % portinifile)
                     print("PORT INI ROOT : %s" % os.path.split(os.path.realpath(portinifile))[0])
                     print("PORT INI CONF : %s" % os.path.split(os.path.realpath(portinifile))[1])
-                    print("-----------------------------------------")
-                    print("CUSTOM ENV+   : %s" % (customenvfile))
-                    print("CUSTOM PATH+  : %s" % (custompathfile))
                     return
                 elif (args['settings'] is True):
                     #print('break to display backward.')
@@ -2887,9 +2984,6 @@ def main_function():
                     print("PORT INI      : %s" % portinifile)
                     print("PORT INI ROOT : %s" % os.path.split(os.path.realpath(portinifile))[0])
                     print("PORT INI CONF : %s" % os.path.split(os.path.realpath(portinifile))[1])
-                    print("-----------------------------------------")
-                    print("CUSTOM ENV+   : %s" % (customenvfile))
-                    print("CUSTOM PATH+  : %s" % (custompathfile))
                     print("-----------------------------------------")
                     print("EXECUTE ROOT [HERE   ]: %s" % pymakeworkpath)
                     print("EXECUTE ROOT [DEFAULT]: %s" % os.getcwd())
@@ -3353,27 +3447,8 @@ def main_function():
             cmd_effect = file_name
         cmd_effect += '_effect' + cmd_suffix
 
-        lines = ""
-
-        #export custom path
-        for (key) in envcustompaths:
-            if (plat == "Windows"):
-                lines += (env_set + 'PATH=' + key + os.path.pathsep + '%PATH%' + '\n')
-            else:
-                lines += (env_set + 'PATH=' + key + os.path.pathsep + '$PATH' + '\n')
-
-        #export custom env
-        for l in envcustomvars:
-            key = str(l).split('=')[0].strip()
-            value = '='.join(str(l).split('=')[1:])
-            if (key == 'path+'):
-                continue
-            if (plat == "Windows"):
-                lines += (env_set + key + '=' + value + '\n')
-            else:
-                lines += (env_set + key + '=\"' + value + '\"\n')
-
         #export path
+        lines = ""
         for (key) in dict0["path+"]:
             if (plat == "Windows"):
                 lines += (env_set + 'PATH=' + key + os.path.pathsep + '%PATH%' + '\n')
@@ -3407,7 +3482,7 @@ def main_function():
             else:
                 lines += (env_set + 'PATH=$(' + 'echo ${PATH//' + key.replace('/', '\/') + ':/})' + '\n')
 
-        #export unset env
+        #export unset var
         for (key, value) in dict0.items():
             if (key == 'path+'):
                 continue
