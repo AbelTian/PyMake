@@ -136,6 +136,7 @@ Usage:
   pymeke7.py custom
   pymake7.py custom [ open | close ]
   pymake7.py custom [ information ]
+  pymake7.py custom list
   pymake7.py custom export [ here | hh ] [ to <file-name> ]
   pymake7.py custom exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
   pymake7.py custom use <env-name> exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
@@ -2633,9 +2634,15 @@ def main_function():
         if( args['custom'] is True ):
             #print('gggg')
             if(args['open'] is True):
-                ''
+                conf2.set('custom', 'switch', '1')
+                conf2.write(open(pymakecustomini, 'w'))
+                print('success: custom environment is opened, you can exec script at any path.')
+                return
             elif (args['close'] is True):
-                ''
+                conf2.set('custom', 'switch', '0')
+                conf2.write(open(pymakecustomini, 'w'))
+                print('success: custom environment is closed, you can use pymake .json environ.')
+                return
             elif (args['export'] is True):
                 if (args['here'] or args['hh'] is True):
                     os.chdir(pymakeworkpath)
@@ -2711,11 +2718,20 @@ def main_function():
 
                 print("successed: export custom env to %s %s" % (cmd_effect, cmd_unset))
                 return
-            elif(args['clean'] is True):
-                ''
             elif(args['information'] is True):
                 print("CUSTOM ENV+   : %s" % (customenvfile))
                 print("CUSTOM PATH+  : %s" % (custompathfile))
+            elif (args['list'] is True):
+                print (Fore.CYAN+ "custom env")
+                print(Fore.MAGENTA + "path+:")
+                for (key) in envcustomlistpaths:
+                    print(Fore.BLUE + "  %s" % key)
+                print(Fore.MAGENTA + "variable:")
+                for (key, value) in envcustomlistvars.items():
+                    if (key == 'path+'):
+                        continue
+                    print(Fore.GREEN + "  %-30s %s" % (key, value))
+                return
             else:
                 ''
         else:
