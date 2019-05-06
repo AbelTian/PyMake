@@ -125,10 +125,45 @@ Usage:
   pymake7.py backup [ here | hh ] [ <zip-file-name> ]
   pymake7.py here backup [ <zip-file-name> ]
   pymake7.py hh backup [ <zip-file-name> ]
+  pymeke7.py restore [ here | hh ] [ <zip-file> ]
+  pymake7.py here restore [ <zip-file> ]
+  pymake7.py hh restore [ <zip-file> ]
   pymake7.py -------------------------------------------------------------
   pymake7.py import cmd [ hh | here ] [ <script-file> ] [ -a | --all ] [ -f | --force ] [ --recursive ] [ --encoding=<encoding-name> ] [ --filter=<name-filter> ... ]
   pymake7.py here import cmd [ <script-file> ] [ -a | --all ] [ -f | --force ] [ --recursive ] [ --encoding=<encoding-name> ] [ --filter=<name-filter> ... ]
   pymake7.py hh import cmd [ <script-file> ] [ -a | --all ] [ -f | --force ] [ --recursive ] [ --encoding=<encoding-name> ] [ --filter=<name-filter> ... ]
+  pymake7.py -------------------------------------------------------------
+  pymeke7.py custom
+  pymeke7.py custom open
+  pymeke7.py custom close
+  pymeke7.py custom export [ to <file-name> ]
+  pymake7.py custom clean
+  pymake7.py custom exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py custom use <env-name> exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py custom here exec-with-params [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py custom here use <env-name> exec-with-params [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py custom hh exec-with-params [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py custom hh use <env-name> exec-with-params [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py -------------------------------------------------------------
+  pymeke7.py powershell
+  pymake7.py powershell export [ here | hh ] [ <env-name> ] [ to <file-name> ]
+  pymake7.py powershell type [ here | hh ] [ <cmd-name> ] [ to <file-name> ]
+  pymake7.py powershell here export [ here | hh ] [ <env-name> ] [ to <file-name> ]
+  pymake7.py powershell here type [ here | hh ] [ <cmd-name> ] [ to <file-name> ]
+  pymake7.py powershell hh export [ here | hh ] [ <env-name> ] [ to <file-name> ]
+  pymake7.py powershell hh type [ here | hh ] [ <cmd-name> ] [ to <file-name> ]
+  pymake7.py powershell use <env-name> type [ here | hh ] [ <cmd-name> ]  [ to <file-name> ]
+  pymake7.py powershell here use <env-name> type [ <cmd-name> ]  [ to <file-name> ]
+  pymake7.py powershell hh use <env-name> type [ <cmd-name> ]  [ to <file-name> ]
+  pymake7.py powershell exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py powershell use <env-name> exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py powershell here exec-with-params [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py powershell here use <env-name> exec-with-params [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py powershell hh exec-with-params [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py powershell hh use <env-name> exec-with-params [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py powershell clean [ here | hh ]
+  pymake7.py powershell here clean
+  pymake7.py powershell hh clean
   pymake7.py -------------------------------------------------------------
   pymake7.py (-h | --help)
   pymake7.py --version
@@ -162,7 +197,10 @@ Command:
   translate        translate section from source to target, and other section.
   exec-with-params exec a command with params, it is also execvp and ccvp.
   backup           backup all env .json to a zip file.
+  restore          restore all env .json from a zip file.
   import           import user path or env or cmd to env .json file. example, import cmd [ <script-file>: x.bat x.cmd x.sh x.ps1 ... ]
+  custom           extention for pymake basic environ, and for large dimentions of scripts in computer.
+  powershell       environ for powershell, and to execute in powershell. [cross]
 
 Options:
   -h --help     Show this screen.
@@ -176,7 +214,7 @@ Options:
   -r, --raw     expand editing config values
 
   --encoding=<encoding-name>    script file encoding, support utf8, gbk, ... and so on. [default:utf8]
-  --filter=<name-filter> ...    filter file name postfix, separated by |, example: .bat | .sh | .ps1.
+  --filter=<name-filter> ...    filter file name postfix, separated by |. example: .bat | .sh | .ps1.
 """
 
 import os
@@ -626,9 +664,13 @@ def main_function():
         if(args['source'] is True):
             if(args['root'] is True):
                 if ( args['<source-root-path>'] is not None):
-                    conf.set('source', 'root', args['<source-root-path>'])
+                    r = pymakeworkpath + os.path.sep + args['<source-root-path>']
+                    if(os.path.isdir(r) is False):
+                        print("failed: %s is not a dir." % args['<source-root-path>'])
+                        return
+                    conf.set('source', 'root', r)
                     conf.write(open(pymakeini, 'w'))
-                    print ("successed: change source root to %s" % args['<source-root-path>'])
+                    print ("successed: change source root to %s" % r)
                 else:
                     print ("%s" % conf.get('source', 'root'))
             elif(args['config'] is True):
@@ -790,6 +832,7 @@ def main_function():
             if(args['here'] or args['hh'] is True):
                 os.chdir(pymakeworkpath)
 
+            #print(args['<zip-file-name>'])
             if(args['<zip-file-name>'] is None):
                 files = os.listdir(os.getcwd())
                 for f in files:
@@ -814,6 +857,58 @@ def main_function():
                 if (f.endswith('.json')):
                     print(f)
                     ziphandle.write(f, compress_type=zipfile.ZIP_DEFLATED)
+            ziphandle.close()
+            return
+        else:
+            ''
+        break
+
+    # restore
+    while (True):
+        if ( args['restore'] is True ):
+            import zipfile
+            os.chdir(sourceroot)
+            if(args['here'] or args['hh'] is True):
+                os.chdir(pymakeworkpath)
+
+            #print(args['<zip-file>'])
+            if(args['<zip-file>'] is None):
+                files = os.listdir(os.getcwd())
+                for f in files:
+                    if (f.endswith('.zip')):
+                        print(f)
+                return
+
+            file = os.path.realpath(args['<zip-file>'])
+            if (file.endswith('.zip') is False):
+                print("please use a .zip file name.")
+                return
+
+            #ziphandle = zipfile.ZipFile(file, 'r')
+            #print(ziphandle.testzip())
+            #if(ziphandle.testzip() is None):
+            #    ziphandle.close()
+            #    print("it is not a valid zip file.")
+            #    return
+            #ziphandle.close()
+
+            os.chdir(sourceroot)
+
+            files = os.listdir(os.getcwd())
+            num = 0
+            for f in files:
+                if(f.endswith('.json')):
+                    num += 1
+            #print(num)
+            if ( num > 1 ):
+                print("there are %d .json files in %s" % ( num, sourceroot ) )
+                print("please remove them.")
+                return
+
+            ziphandle = zipfile.ZipFile(file, 'r')
+            ziphandle.extractall()
+            for f in ziphandle.namelist():
+                print(f)
             ziphandle.close()
             return
         else:
@@ -2368,7 +2463,7 @@ def main_function():
     with open(custompathfile, 'r', encoding='utf8') as f:
         for l in f.readlines():
             #important format
-            l = l.strip(' ')
+            #l = l.strip()
             while (l.endswith('\r') or l.endswith('\n') or l.endswith('\r\n')):
                 l = l.rstrip('\r\n')
                 l = l.rstrip('\n')
@@ -2385,6 +2480,10 @@ def main_function():
 
     #write back
     storecustompaths = copy.deepcopy(custompaths)
+    for (i, l) in enumerate(storecustompaths):
+        #import format
+        l = l.strip()
+        storecustompaths[i] = l
 
     # default [ fixed ]
     # add pymake default shell root to environ.
@@ -2440,8 +2539,8 @@ def main_function():
     customenvs = []
     with open(customenvfile, 'r', encoding='utf8') as f:
         for l in f.readlines():
-            #important format
-            l = l.strip(' ')
+            # important format
+            #l = l.strip()
             while (l.endswith('\r') or l.endswith('\n') or l.endswith('\r\n')):
                 l = l.rstrip('\r\n')
                 l = l.rstrip('\n')
@@ -2450,8 +2549,14 @@ def main_function():
             #    continue
             customenvs.append(l)
 
+
     #write back
     storecustomvars = copy.deepcopy(customenvs)
+    for (i, l) in enumerate(storecustomvars):
+        #import format
+        l = l.strip()
+        storecustomvars[i] = l
+
     avarkeyvalue = "PYMAKEAUTHOR=T.D.R."
     if (storecustomvars.__contains__(avarkeyvalue) is False):
         storecustomvars.append(avarkeyvalue)
