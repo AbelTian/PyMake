@@ -136,7 +136,7 @@ Usage:
   pymeke7.py custom
   pymake7.py custom [ open | close ]
   pymake7.py custom [ information ]
-  pymake7.py custom list
+  pymake7.py custom env
   pymake7.py custom export [ here | hh ] [ to <file-name> ]
   pymake7.py custom exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
   pymake7.py custom use <env-name> exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
@@ -184,7 +184,7 @@ Command:
   backup            backup all env .json to a zip file.
   recovery          recovery all env .json from a zip file.
   import            import user path or env or cmd to env .json file. example, import cmd [ <script-file>: x.bat x.cmd x.sh x.ps1 ... ]
-  custom            custom environment in sourceroot, for calling large dimentions of scripts in computer.
+  custom            custom environment is helpping for calling large dimentions of scripts in computer. manually in console. [ default: close ]
   powershell        environ for powershell, and to execute in powershell. [cross]
 
 Options:
@@ -2721,7 +2721,7 @@ def main_function():
             elif(args['information'] is True):
                 print("CUSTOM ENV+   : %s" % (customenvfile))
                 print("CUSTOM PATH+  : %s" % (custompathfile))
-            elif (args['list'] is True):
+            elif (args['env'] is True):
                 print (Fore.CYAN+ "custom env")
                 print(Fore.MAGENTA + "path+:")
                 for (key) in envcustomlistpaths:
