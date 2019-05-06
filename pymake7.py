@@ -122,16 +122,16 @@ Usage:
   pymake7.py hh execvp [ <command-name> ] [ <command-params> ... ]
   pymake7.py hh use <env-name> execvp [ <command-name> ] [ <command-params> ... ]
   pymake7.py -------------------------------------------------------------
+  pymake7.py import cmd [ hh | here ] [ <script-file> ] [ -a | --all ] [ -f | --force ] [ --recursive ] [ --encoding=<encoding-name> ] [ --filter=<name-filter> ... ]
+  pymake7.py here import cmd [ <script-file> ] [ -a | --all ] [ -f | --force ] [ --recursive ] [ --encoding=<encoding-name> ] [ --filter=<name-filter> ... ]
+  pymake7.py hh import cmd [ <script-file> ] [ -a | --all ] [ -f | --force ] [ --recursive ] [ --encoding=<encoding-name> ] [ --filter=<name-filter> ... ]
+  pymake7.py -------------------------------------------------------------
   pymake7.py backup [ here | hh ] [ <zip-file-name> ]
   pymake7.py here backup [ <zip-file-name> ]
   pymake7.py hh backup [ <zip-file-name> ]
   pymake7.py recovery [ here | hh ] [ <zip-file-name> ]
   pymake7.py here recovery [ <zip-file-name> ]
   pymake7.py hh recovery [ <zip-file-name> ]
-  pymake7.py -------------------------------------------------------------
-  pymake7.py import cmd [ hh | here ] [ <script-file> ] [ -a | --all ] [ -f | --force ] [ --recursive ] [ --encoding=<encoding-name> ] [ --filter=<name-filter> ... ]
-  pymake7.py here import cmd [ <script-file> ] [ -a | --all ] [ -f | --force ] [ --recursive ] [ --encoding=<encoding-name> ] [ --filter=<name-filter> ... ]
-  pymake7.py hh import cmd [ <script-file> ] [ -a | --all ] [ -f | --force ] [ --recursive ] [ --encoding=<encoding-name> ] [ --filter=<name-filter> ... ]
   pymake7.py -------------------------------------------------------------
   pymeke7.py custom
   pymake7.py custom [ open | close ]
@@ -184,7 +184,7 @@ Command:
   backup            backup all env .json to a zip file.
   recovery          recovery all env .json from a zip file.
   import            import user path or env or cmd to env .json file. example, import cmd [ <script-file>: x.bat x.cmd x.sh x.ps1 ... ]
-  custom            custom environment is helpping for calling large dimentions of scripts in computer. manually in console. [ default: close ]
+  custom            custom environment is helpping for calling large dimentions of scripts in computer, manually in console. defined in sourceroot. [ default: close ]
   powershell        environ for powershell, and to execute in powershell. [cross]
 
 Options:
