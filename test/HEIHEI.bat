@@ -1,0 +1,1 @@
+echo 你知道中文吗，Windows？
