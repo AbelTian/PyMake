@@ -2805,10 +2805,13 @@ def main_function():
 
     plat = getplatform()
     cmd_codec = "utf8"
-    # but windows, it is \r\n, python helpping me?
     cmd_return = "\n"
     if(plat == "Windows"):
         cmd_codec = "ansi"
+        # but windows, it is \r\n, python helpping me?
+        cmd_return = "\n"
+    else:
+        cmd_codec = "utf8"
         cmd_return = "\n"
 
     #custom environ
@@ -2827,12 +2830,12 @@ def main_function():
         # init file
         #custompathfile = sourceroot + os.path.sep + "custom.path+.ini"
         if (os.path.exists(custompathfile) is False):
-            with open(custompathfile, 'w', encoding='utf8') as f:
+            with open(custompathfile, 'w', encoding=cmd_codec) as f:
                 ''
 
         # read all
         custompaths = []
-        with open(custompathfile, 'r', encoding='utf8') as f:
+        with open(custompathfile, 'r', encoding=cmd_codec) as f:
             for l in f.readlines():
                 # important format
                 # l = l.strip()
@@ -2907,12 +2910,12 @@ def main_function():
         # print(customenvfile)
         # init
         if (os.path.exists(customenvfile) is False):
-            with open(customenvfile, 'w', encoding='utf8') as f:
+            with open(customenvfile, 'w', encoding=cmd_codec) as f:
                 ''
 
         # read all
         customenvs = []
-        with open(customenvfile, 'r', encoding='utf8') as f:
+        with open(customenvfile, 'r', encoding=cmd_codec) as f:
             for l in f.readlines():
                 # important format
                 # l = l.strip()
