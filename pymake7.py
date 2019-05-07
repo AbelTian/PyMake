@@ -134,7 +134,7 @@ Usage:
   pymake7.py hh recovery [ <zip-file-name> ]
   pymake7.py -------------------------------------------------------------
   pymeke7.py custom
-  pymake7.py custom [ open | close ]
+  pymake7.py custom [ open | close | status ]
   pymake7.py custom [ information ]
   pymake7.py custom env
   pymake7.py custom export [ here | hh ] [ to <file-name> ]
@@ -142,7 +142,7 @@ Usage:
   pymake7.py custom use <env-name> exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
   pymake7.py -------------------------------------------------------------
   pymake7.py powershell
-  pymake7.py powershell [ status | information]
+  pymake7.py powershell [ information | status ]
   pymake7.py powershell clean [ here | hh ]
   pymake7.py powershell export [ here | hh ] [ <env-name> ] [ to <file-name> ]
   pymake7.py powershell type [ here | hh ] [ <cmd-name> ] [ to <file-name> ]
@@ -2403,6 +2403,174 @@ def main_function():
                         break
             step += 1
 
+    # powershell [windows, unix]
+    def createCmdList03(local=True, list0=[], params0=[]):
+
+        cmd_list = []
+
+        name = uuid.uuid4().__str__()
+        name = name.split('-')[0]
+        # print (name)
+
+        plat = getplatform()
+
+        cmd_status = "echo pymake-command-status:$LASTEXITCODE"
+        cmd_sep = ';'
+        cmd_suffix = ".ps1"
+        cmd_exit = 'exit 0'
+        cmd_codec = 'ansi'
+        cmd_return = "\r\n"
+        cmd_header = "#!/usr/bin/env bash"
+        cmd_call = "./"
+        # cmd_list.append(cmd_header)
+        cmd_list.append("source %s_effect%s" % (name, cmd_suffix))
+
+        params_string = ""
+        for param in params0:
+            params_string += param + " "
+        # print(params_string)
+
+        if (local is True):
+            for cmd in list0:
+                cmd_list.append(cmd)
+        else:
+            for cmd in list0:
+                cmd_list.append(cmd + ' ' + params_string)
+
+        # append exit 0
+        cmd_list.append(cmd_exit)
+        # print( cmd_list )
+
+        cmd_execute = name + "_exec" + cmd_suffix
+        with open(cmd_execute, "w", encoding=cmd_codec) as f:
+            for line in cmd_list:
+                f.write(line + cmd_return)
+        # print(cmd_execute)
+
+        # if (plat == "Windows"):
+        #    ""
+        # else:
+        #    os.system("chmod +x " + cmd_execute)
+
+        cmd_list.clear()
+        cmd_list.append(cmd_call + cmd_execute + ' ' + params_string + cmd_sep + ' ' + cmd_status)
+        cmd_list.append(cmd_exit)
+
+        # print (cmd_list)
+        return cmd_list, name
+
+    # print(args['powershell'])
+    # powershell
+    while (True):
+        if (args['powershell'] is True):
+            if (args['export'] is True):
+                current_env = args['<env-name>']
+                if (args['<env-name>'] is None):
+                    current_env = rawconfig['environ']['current']
+                    print(Fore.CYAN + "%s" % current_env)
+                    for key in rawconfig['environ'].keys():
+                        if (key == 'current'):
+                            continue
+                        if (key == current_env):
+                            continue
+                        print("%s" % key)
+                    return
+
+                if (rawconfig['environ'].__contains__(current_env) is False):
+                    print("please ensure the environ is right")
+                    return
+
+                if (args['<env-name>'] == "current"):
+                    current_env = rawconfig['environ']['current']
+
+                if (rawconfig['environ'].__contains__(current_env) is False):
+                    print(".json file is broken, environ section current env config is lost, please use set command fix it.")
+                    return
+
+                if (args['here'] or args['hh'] is True):
+                    os.chdir(pymakeworkpath)
+
+                current_var = ""
+                cmd_effect = ""
+                cmd_unset = ""
+                #current_var, cmd_effect, cmd_unset = env_export(current_env, args['<file-name>'])
+                env_name = current_env
+                file_name = args['<file-name>']
+
+                # select env
+                current_var = rawconfig['environ']['current']
+                if (env_name is not None):
+                    current_var = env_name
+                dict0 = copy.deepcopy(rawconfig['environ'][current_var])
+
+                plat = getplatform()
+
+                cmd_suffix = ".ps1"
+                cmd_codec = 'ansi'
+                cmd_return = "\n"
+                cmd_header = "#!/usr/bin/env bash" + cmd_return
+                env_set = ''
+
+                # export effect env
+                cmd_effect = 'powershell.env'
+                if (file_name is not None):
+                    cmd_effect = "powershell." + file_name
+                cmd_effect += '_effect' + cmd_suffix
+
+                # export path
+                lines = ""
+                for (key) in dict0["path+"]:
+                    lines += ("$env:Path = $env:Path.Insert(0, \"%s;\")" % key) + cmd_return
+
+                # export var
+                for (key, value) in dict0.items():
+                    if (key == 'path+'):
+                        continue
+                    lines += ("$env:" + key + ' = \"' + value + '\"' + cmd_return)
+
+                with open(cmd_effect, 'w') as f:
+                    #f.write(cmd_header)
+                    f.write(lines)
+
+                # export unset env
+                cmd_unset = 'powershell.env'
+                if (file_name is not None):
+                    cmd_unset = "powershell." + file_name
+                cmd_unset += '_unset' + cmd_suffix
+
+                # export unset path
+                lines = ""
+                for (key) in dict0["path+"]:
+                    #lines += ("$env:Path = $env:Path.Replace(\"%s;\", \"\")" % key) + cmd_return
+                    lines += ("if ( $env:Path.Contains(\"%s;\" ) ) { $env:Path = $env:Path.Replace(\"%s;\", \"\") }" % (key, key) ) + cmd_return
+                # export unset var
+                for (key, value) in dict0.items():
+                    if (key == 'path+'):
+                        continue
+                    lines += ( "$env:%s = \"\"" % key ) + cmd_return
+
+                with open(cmd_unset, 'w') as f:
+                    #f.write(cmd_header)
+                    f.write(lines)
+
+                print("successed: export %s to %s %s" % (current_var, cmd_effect, cmd_unset))
+                return
+            elif (args['type'] is True):
+                ''
+            elif (args['exec-with-params'] is True):
+                ''
+            elif (args['clean'] is True):
+                ''
+            elif (args['information'] is True):
+                ''
+            elif (args['status'] is True):
+                ''
+            else:
+                ''
+        else:
+            ''
+        break
+
     # raw path function, parse custom path tuple
     def raw_path(pathgroup):
         # replace path
@@ -2451,7 +2619,7 @@ def main_function():
         conf2.write(open(pymakecustomini, 'w'))
 
     custompathfile = sourceroot + os.path.sep + "custom.path+.ini"
-    customenvfile = sourceroot + os.path.sep + "custom.env+.ini"
+    customenvfile = sourceroot + os.path.sep + "custom.var+.ini"
 
     envcustomlistpaths = []
     envcustomlistvars = {}
@@ -2460,8 +2628,10 @@ def main_function():
     #user can use custom environ to effect pymake basic environment.
     #it will effect every executing environment.
     while (True):
+
         if(int(switch0) == 0):
             break
+
         #print("open custom environ.")
 
         # set custom path+ to env.
@@ -2546,7 +2716,7 @@ def main_function():
             envcustomlistpaths.append(l)
 
         # set custom env+ to env.
-        #customenvfile = sourceroot + os.path.sep + "custom.env+.ini"
+        #customenvfile = sourceroot + os.path.sep + "custom.var+.ini"
         # print(customenvfile)
         # init
         if (os.path.exists(customenvfile) is False):
@@ -2732,6 +2902,21 @@ def main_function():
                         continue
                     print(Fore.GREEN + "  %-30s %s" % (key, value))
                 return
+            elif (args['status'] is True):
+                status = "closed"
+                if(switch0 == '1'):
+                    status = "opened"
+                print("custom env: %s." % status)
+                if(switch0 == '1'):
+                    print(Fore.MAGENTA + "path+:")
+                    for (key) in envcustomlistpaths:
+                        print(Fore.BLUE + "  %s" % key)
+                    print(Fore.MAGENTA + "variable:")
+                    for (key, value) in envcustomlistvars.items():
+                        if (key == 'path+'):
+                            continue
+                        print(Fore.GREEN + "  %-30s %s" % (key, value))
+                return
             else:
                 status = "closed"
                 if(switch0 == '1'):
@@ -2748,13 +2933,6 @@ def main_function():
                         print(Fore.GREEN + "  %-30s %s" % (key, value))
                 return
         else:
-            ''
-        break
-
-    #print(args['powershell'])
-    #powershell
-    while(True):
-        if(args['powershell'] is True):
             ''
         break
 
@@ -3010,6 +3188,7 @@ def main_function():
                     return
                 elif (args['settings'] is True):
                     #print('break to display backward.')
+                    #important break [ + get all settings ]
                     break
                 else:
                     if(config.__contains__("environ") is True):
@@ -3057,6 +3236,7 @@ def main_function():
                 else:
                     print("failed: .json file is broken, environ section lost current key, please use set command fix it.")
                     return
+                #import return [ - env command ]
                 return
             elif (args['exec'] is True):
                 if (args['here'] is True):
