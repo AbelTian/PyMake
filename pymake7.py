@@ -198,7 +198,7 @@ Options:
   --restore     reset to source config file pymake.json.
   -r, --raw     expand editing config values
 
-  --encoding=<encoding-name>    script file encoding, support utf8, gbk, ... and so on. [default:utf8]
+  --encoding=<encoding-name>    script file encoding, support utf8, gbk, ansi, ... and so on. [default:utf8]
   --filter=<name-filter> ...    filter file name postfix, separated by |. example: .bat | .sh | .ps1.
 """
 
@@ -1925,7 +1925,11 @@ def main_function():
                             command_content = []
                             with open(local_path, 'r', encoding=useencoding) as f:
                                 for l in f.readlines():
-                                    command_content.append(l.rstrip('\r').rstrip('\n'))
+                                    while (l.endswith('\r') or l.endswith('\n') or l.endswith('\r\n')):
+                                        l = l.rstrip('\r\n')
+                                        l = l.rstrip('\n')
+                                        l = l.rstrip('\r')
+                                    command_content.append(l)
                             config['command'][command_name] = command_content
                             writeJsonData(sourceconfigfile, config)
                             print("%-30s%-30s%s" % (command_name, "[SUCCESS][       ][     ]", key1))
@@ -1934,7 +1938,11 @@ def main_function():
                                 command_content = []
                                 with open(local_path, 'r', encoding=useencoding) as f:
                                     for l in f.readlines():
-                                        command_content.append(l.rstrip('\r').rstrip('\n'))
+                                        while (l.endswith('\r') or l.endswith('\n') or l.endswith('\r\n')):
+                                            l = l.rstrip('\r\n')
+                                            l = l.rstrip('\n')
+                                            l = l.rstrip('\r')
+                                        command_content.append(l)
                                 config['command'][command_name] = command_content
                                 writeJsonData(sourceconfigfile, config)
                                 print("%-30s%-30s%s" % (command_name, "[SUCCESS][EXISTED][FORCE]", key1))
@@ -2091,7 +2099,11 @@ def main_function():
                             command_content = []
                             with open(local_path, 'r', encoding=useencoding) as f:
                                 for l in f.readlines():
-                                    command_content.append(l.rstrip('\r').rstrip('\n'))
+                                    while (l.endswith('\r') or l.endswith('\n') or l.endswith('\r\n')):
+                                        l = l.rstrip('\r\n')
+                                        l = l.rstrip('\n')
+                                        l = l.rstrip('\r')
+                                    command_content.append(l)
                             config['command'][command_name] = command_content
                             writeJsonData(sourceconfigfile, config)
                             print('successed: %s' % command_name)
@@ -2103,7 +2115,11 @@ def main_function():
                     command_content = []
                     with open(local_path, 'r', encoding=useencoding) as f:
                         for l in f.readlines():
-                            command_content.append(l.rstrip('\r').rstrip('\n'))
+                            while (l.endswith('\r') or l.endswith('\n') or l.endswith('\r\n')):
+                                l = l.rstrip('\r\n')
+                                l = l.rstrip('\n')
+                                l = l.rstrip('\r')
+                            command_content.append(l)
                     config['command'][command_name] = command_content
                     writeJsonData(sourceconfigfile, config)
                     print('successed: %s' % command_name)
@@ -2386,6 +2402,52 @@ def main_function():
                         break
             step += 1
 
+    # custom command function
+    # custom command stream from rawconfig and custom environ
+    def raw_command(env_name=None):
+        command_dict = copy.deepcopy(config['command'])
+
+        # replace cmd
+        # from path env
+        for (cmd, stream) in command_dict.items():
+            # print (key) #...
+
+            step = 0
+            for value in stream:
+                startpos = 0
+                while (True):
+                    # print (startpos)
+                    # print (value)
+
+                    index = value.find('${', startpos)
+                    if (index == -1):
+                        break
+
+                    index2 = value.find('}', index)
+                    startpos = index2
+
+                    key_replace = value[index:index2 + 1]
+                    # print ( key0 ) #${...}
+                    key_from = key_replace.split('{')[1].split('}')[0].strip()
+                    # print ( key1 ) #...
+
+                    for (find_key, find_value) in rawconfig["path-assemblage"].items():
+                        if (find_key == key_from):
+                            command_dict[cmd][step] = command_dict[cmd][step].replace(
+                                key_replace, rawconfig["path-assemblage"][key_from])
+                            break
+
+                    current_env_var = env_name
+                    if (env_name is None):
+                        current_env_var = config["environ"]["current"]
+                    for (find_key, find_value) in rawconfig["environ"][current_env_var].items():
+                        if (find_key == key_from):
+                            command_dict[cmd][step] = command_dict[cmd][step].replace(
+                                key_replace, rawconfig["environ"][current_env_var][key_from])
+                            break
+                step += 1
+        return command_dict
+
     # powershell [windows, unix]
     def createCmdList03(local=True, list0=[], params0=[]):
 
@@ -2402,7 +2464,8 @@ def main_function():
         cmd_suffix = ".ps1"
         cmd_exit = 'exit 0'
         cmd_codec = 'ansi'
-        cmd_return = "\r\n"
+        # but windows, it is \r\n, python helpping me?
+        cmd_return = "\n"
         cmd_header = "#!/usr/bin/env bash"
         cmd_call = "./"
         # cmd_list.append(cmd_header)
@@ -2489,7 +2552,8 @@ def main_function():
                 plat = getplatform()
 
                 cmd_suffix = ".ps1"
-                cmd_codec = 'utf8'
+                cmd_codec = 'ansi'
+                # but windows, it is \r\n, python helpping me?
                 cmd_return = "\n"
                 cmd_header = "#!/usr/bin/env bash" + cmd_return
                 env_set = ''
@@ -2511,6 +2575,7 @@ def main_function():
                         continue
                     lines += ("$env:" + key + ' = \"' + value + '\"' + cmd_return)
 
+                #print(lines.split('\n'))
                 with open(cmd_effect, 'w', encoding=cmd_codec) as f:
                     #f.write(cmd_header)
                     f.write(lines)
@@ -2539,7 +2604,97 @@ def main_function():
                 print("successed: export %s to %s %s" % (current_var, cmd_effect, cmd_unset))
                 return
             elif (args['type'] is True):
-                ''
+                current_env = ""
+
+                if (args['use'] is True):
+                    if (args['<env-name>'] is None):
+                        print("please appoint a environ")
+                        return
+
+                    if (rawconfig['environ'].__contains__(args['<env-name>']) is False):
+                        print("please ensure the environ is right")
+                        return
+
+                    current_env = args['<env-name>']
+                    if (args['<env-name>'] == "current"):
+                        current_env = rawconfig['environ']['current']
+
+                    if (rawconfig['environ'].__contains__(current_env) is False):
+                        print(".json file is broken, environ section current env config is lost, please use set command fix it.")
+                        return
+                else:
+                    current_env = rawconfig['environ']['current']
+
+                if (args['here'] or args['hh'] is True):
+                    os.chdir(pymakeworkpath)
+
+                if (args['<cmd-name>'] is None):
+                    for (key, value) in rawconfig['command'].items():
+                        print(Fore.CYAN + "%s" % key)
+                    return
+
+                if (rawconfig['command'].__contains__(args['<cmd-name>']) is False):
+                    print("please check your command name")
+                    return
+
+                if (args['<file-name>'] is None):
+                    if (current_env == rawconfig['environ']['current']):
+                        list0 = copy.deepcopy(rawconfig['command'][args['<cmd-name>']])
+                    else:
+                        list0 = copy.deepcopy(raw_command(current_env)[args['<cmd-name>']])
+
+                    for cmd in list0:
+                        print(Fore.RED + "%s" % (cmd))
+                    return
+
+                cmd_exec = ""
+                #cmd_exec = cmd_type(args['<cmd-name>'], args['<file-name>'], current_env)
+                cmd_name = args['<cmd-name>']
+                file_name = args['<file-name>']
+                env_name = current_env
+
+                if (cmd_name is None):
+                    for (key, value) in rawconfig['command'].items():
+                        print(Fore.CYAN + "%s" % key)
+                    return
+
+                if (rawconfig['command'].__contains__(cmd_name) is False):
+                    print("please check your command name")
+                    return
+
+                if (env_name is None or env_name == rawconfig['environ']['current']):
+                    list0 = copy.deepcopy(rawconfig['command'][cmd_name])
+                else:
+                    list0 = copy.deepcopy(raw_command(env_name)[cmd_name])
+
+                # for cmd in list0:
+                #    print(Fore.RED + "%s" % (cmd))
+
+                temp_file_name = ""
+                if (file_name is None):
+                    temp_file_name = "powershell.cmd"
+                else:
+                    temp_file_name = "powershell." + file_name
+
+                cmd_header = "#!/usr/bin/env bash"
+                cmd_codec = "ansi"
+                # but windows, it is \r\n, python helpping me?
+                cmd_return = "\n"
+                cmd_suffix = "_exec.ps1"
+
+                cmd_exec = temp_file_name + cmd_suffix
+                with open(cmd_exec, 'w', encoding=cmd_codec) as f:
+                    #f.write(cmd_header + cmd_return)
+                    for cmd in list0:
+                        f.write(cmd + cmd_return)
+
+                #if (plat == "Windows"):
+                #    ""
+                #else:
+                #    os.system("chmod +x " + cmd_exec)
+
+                print("successed: use %s type %s to %s" % (current_env, args['<cmd-name>'], cmd_exec))
+                return
             elif (args['exec-with-params'] is True):
                 ''
             elif (args['clean'] is True):
@@ -2648,6 +2803,14 @@ def main_function():
     envcustomlistpaths = []
     envcustomlistvars = {}
 
+    plat = getplatform()
+    cmd_codec = "utf8"
+    # but windows, it is \r\n, python helpping me?
+    cmd_return = "\n"
+    if(plat == "Windows"):
+        cmd_codec = "ansi"
+        cmd_return = "\n"
+
     #custom environ
     #user can use custom environ to effect pymake basic environment.
     #it will effect every executing environment.
@@ -2710,9 +2873,9 @@ def main_function():
             storecustompaths.append(sourceroot)
 
         if (custompaths != storecustompaths):
-            with open(custompathfile, 'w', encoding='utf8') as f:
+            with open(custompathfile, 'w', encoding=cmd_codec) as f:
                 for l in storecustompaths:
-                    f.write(l + '\n')
+                    f.write(l + cmd_return)
 
         # set into env
         envcustompaths = copy.deepcopy(storecustompaths)
@@ -2772,9 +2935,9 @@ def main_function():
         if (storecustomvars.__contains__(avarkeyvalue) is False):
             storecustomvars.append(avarkeyvalue)
         if (storecustomvars != customenvs):
-            with open(customenvfile, 'w', encoding='utf8') as f:
+            with open(customenvfile, 'w', encoding=cmd_codec) as f:
                 for l in storecustomvars:
-                    f.write(l + '\n')
+                    f.write(l + cmd_return)
 
         # set into env
         envcustomvars = copy.deepcopy(storecustomvars)
@@ -2844,11 +3007,15 @@ def main_function():
                 plat = getplatform()
                 if (plat == "Windows"):
                     cmd_suffix = ".bat"
-                    cmd_header = "@echo off\n"
+                    cmd_codec = "ansi"
+                    cmd_return = "\n"
+                    cmd_header = "@echo off" + cmd_return
                     env_set = 'set '
                 else:
                     cmd_suffix = ".sh"
-                    cmd_header = "#!/usr/bin/env bash\n"
+                    cmd_codec = "utf8"
+                    cmd_return = "\n"
+                    cmd_header = "#!/usr/bin/env bash" + cmd_return
                     env_set = 'export '
 
                 # export effect env
@@ -2862,18 +3029,18 @@ def main_function():
                 #print(envcustomlistpaths)
                 for (key) in envcustomlistpaths:
                     if (plat == "Windows"):
-                        lines += (env_set + 'PATH=' + key + os.path.pathsep + '%PATH%' + '\n')
+                        lines += (env_set + 'PATH=' + key + os.path.pathsep + '%PATH%' + cmd_return)
                     else:
-                        lines += (env_set + 'PATH=' + key + os.path.pathsep + '$PATH' + '\n')
+                        lines += (env_set + 'PATH=' + key + os.path.pathsep + '$PATH' + cmd_return)
 
                 # export var
                 for (key, value) in envcustomlistvars.items():
                     if (key == 'path+'):
                         continue
                     if (plat == "Windows"):
-                        lines += (env_set + key + '=' + value + '\n')
+                        lines += (env_set + key + '=' + value + cmd_return)
                     else:
-                        lines += (env_set + key + '=\"' + value + '\"\n')
+                        lines += (env_set + key + '=\"' + value + '\"' + cmd_return)
 
                 #print("------------------")
                 #print(lines)
@@ -2891,18 +3058,18 @@ def main_function():
                 lines = ""
                 for (key) in envcustomlistpaths:
                     if (plat == "Windows"):
-                        lines += (env_set + 'PATH=%PATH:' + key + ';=%' + '\n')
+                        lines += (env_set + 'PATH=%PATH:' + key + ';=%' + cmd_return)
                     else:
-                        lines += (env_set + 'PATH=$(' + 'echo ${PATH//' + key.replace('/', '\/') + ':/})' + '\n')
+                        lines += (env_set + 'PATH=$(' + 'echo ${PATH//' + key.replace('/', '\/') + ':/})' + cmd_return)
 
                 # export unset env
                 for (key, value) in envcustomlistvars.items():
                     if (key == 'path+'):
                         continue
                     if (plat == "Windows"):
-                        lines += ('set ' + key + '=' + '\n')
+                        lines += ('set ' + key + '=' + cmd_return)
                     else:
-                        lines += ('unset ' + key + '\n')
+                        lines += ('unset ' + key + cmd_return)
 
                 #print("------------------")
                 #print(lines)
@@ -3441,52 +3608,6 @@ def main_function():
             ''
         break
 
-    # custom command function
-    # custom command stream from rawconfig and custom environ
-    def raw_command( env_name = None ):
-        command_dict = copy.deepcopy(config['command'])
-
-        # replace cmd
-        # from path env
-        for (cmd, stream) in command_dict.items():
-            # print (key) #...
-
-            step = 0
-            for value in stream:
-                startpos = 0
-                while (True):
-                    # print (startpos)
-                    # print (value)
-
-                    index = value.find('${', startpos)
-                    if (index == -1):
-                        break
-
-                    index2 = value.find('}', index)
-                    startpos = index2
-
-                    key_replace = value[index:index2 + 1]
-                    # print ( key0 ) #${...}
-                    key_from = key_replace.split('{')[1].split('}')[0].strip()
-                    # print ( key1 ) #...
-
-                    for (find_key, find_value) in rawconfig["path-assemblage"].items():
-                        if (find_key == key_from):
-                            command_dict[cmd][step] = command_dict[cmd][step].replace(
-                                key_replace, rawconfig["path-assemblage"][key_from])
-                            break
-
-                    current_env_var = env_name
-                    if (env_name is None):
-                        current_env_var = config["environ"]["current"]
-                    for (find_key, find_value) in rawconfig["environ"][current_env_var].items():
-                        if (find_key == key_from):
-                            command_dict[cmd][step] = command_dict[cmd][step].replace(
-                                key_replace, rawconfig["environ"][current_env_var][key_from])
-                            break
-                step += 1
-        return command_dict
-
     # cmd_type function
     def cmd_type (cmd_name = None, file_name = None, env_name = None):
         if (cmd_name is None):
@@ -3520,10 +3641,10 @@ def main_function():
             cmd_suffix = "_exec.sh"
 
         cmd_exec = temp_file_name + cmd_suffix
-        with open(cmd_exec, 'w') as f:
-            f.write(cmd_header + '\n')
+        with open(cmd_exec, 'w', encoding=cmd_codec) as f:
+            f.write(cmd_header + cmd_return)
             for cmd in list0:
-                f.write(cmd + '\n')
+                f.write(cmd + cmd_return)
 
         if (plat == "Windows"):
             ""
@@ -3708,11 +3829,15 @@ def main_function():
         plat = getplatform()
         if (plat == "Windows"):
             cmd_suffix = ".bat"
-            cmd_header = "@echo off\n"
+            cmd_codec = "ansi"
+            cmd_return = "\n"
+            cmd_header = "@echo off" + cmd_return
             env_set = 'set '
         else:
             cmd_suffix = ".sh"
-            cmd_header = "#!/usr/bin/env bash\n"
+            cmd_codec = "utf8"
+            cmd_return = "\n"
+            cmd_header = "#!/usr/bin/env bash" + cmd_return
             env_set = 'export '
 
         #export effect env
@@ -3725,20 +3850,20 @@ def main_function():
         lines = ""
         for (key) in dict0["path+"]:
             if (plat == "Windows"):
-                lines += (env_set + 'PATH=' + key + os.path.pathsep + '%PATH%' + '\n')
+                lines += (env_set + 'PATH=' + key + os.path.pathsep + '%PATH%' + cmd_return)
             else:
-                lines += (env_set + 'PATH=' + key + os.path.pathsep + '$PATH' + '\n')
+                lines += (env_set + 'PATH=' + key + os.path.pathsep + '$PATH' + cmd_return)
 
         #export var
         for (key, value) in dict0.items():
             if (key == 'path+'):
                 continue
             if (plat == "Windows"):
-                lines += (env_set + key + '=' + value + '\n')
+                lines += (env_set + key + '=' + value + cmd_return)
             else:
-                lines += (env_set + key + '=\"' + value + '\"\n')
+                lines += (env_set + key + '=\"' + value + '\"' + cmd_return)
 
-        with open(cmd_effect, 'w') as f:
+        with open(cmd_effect, 'w', encoding=cmd_codec) as f:
             f.write(cmd_header)
             f.write(lines)
 
@@ -3752,19 +3877,19 @@ def main_function():
         lines = ""
         for (key) in dict0["path+"]:
             if (plat == "Windows"):
-                lines += (env_set + 'PATH=%PATH:' + key + ';=%' + '\n')
+                lines += (env_set + 'PATH=%PATH:' + key + ';=%' + cmd_return)
             else:
-                lines += (env_set + 'PATH=$(' + 'echo ${PATH//' + key.replace('/', '\/') + ':/})' + '\n')
+                lines += (env_set + 'PATH=$(' + 'echo ${PATH//' + key.replace('/', '\/') + ':/})' + cmd_return)
 
         #export unset var
         for (key, value) in dict0.items():
             if (key == 'path+'):
                 continue
             if (plat == "Windows"):
-                lines += ('set ' + key + '=' + '\n')
+                lines += ('set ' + key + '=' + cmd_return)
             else:
-                lines += ('unset ' + key + '\n')
-        with open(cmd_unset, 'w') as f:
+                lines += ('unset ' + key + cmd_return)
+        with open(cmd_unset, 'w', encoding=cmd_codec) as f:
             f.write(cmd_header)
             f.write(lines)
 
@@ -3981,7 +4106,9 @@ def main_function():
         if (plat == "Windows"):
             cmd_status = "echo pymake-command-status:%ERRORLEVEL%"
             cmd_sep = '&'
-            cmd_return = "\r\n"
+            cmd_codec = "ansi"
+            # but windows, it is \r\n, python helpping me?
+            cmd_return = "\n"
             cmd_exit = 'exit /b 0'
             cmd_suffix = ".bat"
             cmd_header = "@echo off"
@@ -3994,6 +4121,7 @@ def main_function():
             cmd_sep = ';'
             cmd_suffix = ".sh"
             cmd_exit = 'exit 0'
+            cmd_codec = "utf8"
             cmd_return = "\n"
             cmd_header = "#!/usr/bin/env bash"
             cmd_list.append(cmd_header)
@@ -4009,9 +4137,9 @@ def main_function():
         # print( cmd_list )
 
         cmd_execute = name + "_exec" + cmd_suffix
-        with open(cmd_execute, "w") as f:
+        with open(cmd_execute, "w", encoding=cmd_codec) as f:
             for line in cmd_list:
-                f.write(line + "\n")
+                f.write(line + cmd_return)
 
         if (plat == "Windows"):
             ""
@@ -4221,7 +4349,9 @@ def main_function():
         if (plat == "Windows"):
             cmd_status = "echo pymake-command-status:%ERRORLEVEL%"
             cmd_sep = '&'
-            cmd_return = "\r\n"
+            cmd_codec = "ansi"
+            # but windows, it is \r\n, python helpping me?
+            cmd_return = "\n"
             cmd_exit = 'exit /b 0'
             cmd_suffix = ".bat"
             cmd_header = "@echo off"
@@ -4235,6 +4365,7 @@ def main_function():
             cmd_sep = ';'
             cmd_suffix = ".sh"
             cmd_exit = 'exit 0'
+            cmd_codec = "utf8"
             cmd_return = "\n"
             cmd_header = "#!/usr/bin/env bash"
             cmd_call = "./"
@@ -4258,9 +4389,9 @@ def main_function():
         #print( cmd_list )
 
         cmd_execute = name + "_exec" + cmd_suffix
-        with open(cmd_execute, "w") as f:
+        with open(cmd_execute, "w", encoding=cmd_codec) as f:
             for line in cmd_list:
-                f.write(line + "\n")
+                f.write(line + cmd_return)
         #print(cmd_execute)
 
         if (plat == "Windows"):
