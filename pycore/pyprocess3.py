@@ -13,6 +13,99 @@ import subprocess
 from .pybase import *
 from .pyprocess import *
 
+
+# read stdout pipe
+def powershell_read_thread_function(p):
+    ''
+    plat = getplatform()
+    if (plat == "Windows"):
+        p.stdout.readline()
+        p.stdout.readline()
+        p.stdout.readline()
+
+    cmd_codec = (codecs.lookup(locale.getpreferredencoding()).name)
+    cmd_codec = "ansi"
+    global cmd_event
+    global cmd_exit_flag
+    echo_line = 1
+    while (True):
+        l = p.stdout.readline().rstrip().decode(cmd_codec)
+        #print(l)
+        if(echo_line == 1):
+            echo_line = 0
+            #print(l)
+            if(str(l).__contains__('exit')):
+                break
+            continue
+
+        if (l is None):
+            #print ('cccc')
+            break
+
+        if (p.poll() is not None):
+            #print("bbbb")
+            break
+
+        #windows when p is closing, pipe write some blank line to parent
+        if (cmd_exit_flag == 1 and l is ''):
+            #print ("read thread: l is empty")
+            break
+
+        if ("pymake-command-status:" in l):
+            echo_line = 1
+            ret = int(l.split(':')[-1].strip())
+            # java windows return 0 or 1
+            #print (l)
+            #print("command status %d" % (ret))
+            if( ret != 0 ):
+                # cmd running fail, child process exit
+                cmd_exit_flag = 1
+                p.stdin.write(("exit %d\n".encode(cmd_codec) % (ret)))
+                p.stdin.flush()
+                print ("exit %d" % (ret))
+                #print ("read thread exit fail %d, i go" % (ret))
+                break
+            cmd_event.set()
+            continue
+
+        print (l)
+        #print (cmd_exit_flag)
+        #print ("ccccccccc")
+        #p.stdout.flush()
+    return
+
+
+# auto command execute
+def powershell_write_command_thread_function(p, cmd_list):
+    ''
+    cmd_codec = (codecs.lookup(locale.getpreferredencoding()).name)
+    cmd_codec = "ansi"
+    cmd_return = "\n"
+    global cmd_event
+    global cmd_exit_flag
+    while (True):
+        cmd_event.clear()
+        cmd = cmd_list.pop(0) + cmd_return
+        #print  ("command:%s" % cmd)
+
+        # the last or the mid exit exit flag = 1
+        if ("exit" in cmd):
+        #if(cmd.lstrip().startswith("exit")):
+            cmd_exit_flag = 1
+
+        p.stdin.write(cmd.encode(cmd_codec))
+        p.stdin.flush()
+
+        if ( cmd_exit_flag == 1 ):
+            #print ("write: i go")
+            ""
+            break
+
+        # p.stdin.write("ping 127.0.0.1 -c 2 \n")
+        # p.stdin.flush()
+        cmd_event.wait()
+    return
+
 # windows *unix
 def communicateWithCommandLine3(list0):
     shell = "powershell"
@@ -45,11 +138,11 @@ def communicateWithCommandLine3(list0):
                          #when split stdout and stderr, lots of app wont manager the output order
                          stderr=subprocess.STDOUT,
                          startupinfo=startupinfo, creationflags=createflags)
-    read_thread = threading.Thread(target=read_thread_function, args=(p,))
+    read_thread = threading.Thread(target=powershell_read_thread_function, args=(p,))
     read_thread.start()
     read_err_thread = threading.Thread(target=read_stderr_thread_function, args=(p,))
     #read_err_thread.start()
-    write_command_thread = threading.Thread(target=write_command_thread_function, args=(p, list0))
+    write_command_thread = threading.Thread(target=powershell_write_command_thread_function, args=(p, list0))
     write_command_thread.start()
     write_thread = threading.Thread(target=write_thread_function, args=(p,))
     write_thread.start()

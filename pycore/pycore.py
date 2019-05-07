@@ -22,3 +22,4 @@ from .colorama import init, Fore, Back, Style
 from .pybase import *
 from .pyprocess import *
 from .pyprocess2 import *
+from .pyprocess3 import *

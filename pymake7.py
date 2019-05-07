@@ -3,155 +3,155 @@
 """PyMake 7.4.2.
 
 Usage:
-  pymake7.py source
-  pymake7.py source file [ <source-path-file> ]
-  pymake7.py source root [ <source-root-path> ]
-  pymake7.py source config [ --add  ] [ <config-file-name> ]
-  pymake7.py source config [ --del  ] [ <config-file-name> ]
-  pymake7.py source config [ --mod  ] [ <config-file-name> ] [<new-config-file-name>]
-  pymake7.py source config [ --switch  ] [ <config-file-name> ]
-  pymake7.py source config [ --restore  ]
-  pymake7.py source config [ --show ]
-  pymake7.py -------------------------------------------------------------
-  pymake7.py set path ( --add | --del | --mod ) <name> [ <value> ]
-  pymake7.py set env [ path ] ( --add | --del | --mod ) <group> <name> [ <value> ]
-  pymake7.py set cmd (--add | --del | --mod ) <name> [ <values> ... ]
-  pymake7.py set cur env <name>
-  pymake7.py list [ path | env | cmd ] [<name>] [-r | --raw] [-a | --all]
-  pymake7.py env [<name>] [-p | --path] [-v | --var] [-r | --raw] [-a | --all]
-  pymake7.py -------------------------------------------------------------
-  pymake7.py here clean
-  pymake7.py here export [ <env-name> ] [ to <file-name> ]
-  pymake7.py here type [ <cmd-name> ]  [ to <file-name> ]
-  pymake7.py here use <env-name> exec [ <command-names> ... ]
-  pymake7.py here exec [ <command-names> ... ]
-  pymake7.py here use <env-name> cc [ <command-names> ... ]
-  pymake7.py here cc [ <command-names> ... ]
-  pymake7.py -------------------------------------------------------------
-  pymake7.py clean [ here | hh ]
-  pymake7.py export [ here | hh ] [ <env-name> ] [ to <file-name> ]
-  pymake7.py type [ here | hh ] [ <cmd-name> ] [ to <file-name> ]
-  pymake7.py exec [ here | hh ] [ <command-names> ... ]
-  pymake7.py cc [ here | hh ] [ <command-names> ... ]
-  pymake7.py use <env-name> type [ here | hh ] [ <cmd-name> ]  [ to <file-name> ]
-  pymake7.py use <env-name> exec [ here | hh ] [ <command-names> ... ]
-  pymake7.py use <env-name> cc [ here | hh ] [ <command-names> ... ]
-  pymake7.py -------------------------------------------------------------
-  pymake7.py set current env <name>
-  pymake7.py set default env <name>
-  pymake7.py show [ path | env | cmd ] [<name>] [-r | --raw] [-a | --all]
-  pymake7.py environ [<name>] [-p | --path] [-v | --var] [-r | --raw] [-a | --all]
-  pymake7.py see [ <cmd-name> ] [ use <env-name> ] [-r | --raw] [-a | --all]
-  pymake7.py ss [ <cmd-name> ] [ use <env-name> ] [-r | --raw] [-a | --all]
-  pymake7.py cmd [ <cmd-name> ] [ use <env-name> ] [-r | --raw] [-a | --all]
-  pymake7.py use <env-name> see [ <cmd-name> ] [-r | --raw] [-a | --all]
-  pymake7.py use <env-name> ss [ <cmd-name> ] [-r | --raw] [-a | --all]
-  pymake7.py use <env-name> cmd [ <cmd-name> ] [-r | --raw] [-a | --all]
-  pymake7.py -------------------------------------------------------------
-  pymake7.py hh clean
-  pymake7.py hh export [ <env-name> ] [ to <file-name> ]
-  pymake7.py hh type [ <cmd-name> ]  [ to <file-name> ]
-  pymake7.py hh use <env-name> exec [ <command-names> ... ]
-  pymake7.py hh exec [ <command-names> ... ]
-  pymake7.py hh use <env-name> cc [ <command-names> ... ]
-  pymake7.py hh cc [ <command-names> ... ]
-  pymake7.py -------------------------------------------------------------
-  pymake7.py have path <name> [-r | --raw]
-  pymake7.py have env [ path ] [ <group> ] [ <name> ] [-r | --raw]
-  pymake7.py have cmd <name> [-r | --raw]
-  pymake7.py has path <name> [-r | --raw]
-  pymake7.py has env [ path ] [ <group> ] [ <name> ] [-r | --raw]
-  pymake7.py has cmd <name> [-r | --raw]
-  pymake7.py -------------------------------------------------------------
-  pymake7.py get cur env
-  pymake7.py get current env
-  pymake7.py get default env
-  pymake7.py get env
-  pymake7.py get env ( cur | current | default )
-  pymake7.py -------------------------------------------------------------
-  pymake7.py program
-  pymake7.py program root
-  pymake7.py program file
-  pymake7.py program configure
-  pymake7.py program configure root
-  pymake7.py program configure file
-  pymake7.py get all
-  pymake7.py get all ( info | information )
-  pymake7.py get all ( stat | status )
-  pymake7.py get all settings [ path | env | cmd ] [<name>] [-r | --raw] [-a | --all]
-  pymake7.py get default exec root
-  pymake7.py get exec root [ default | here ]
-  pymake7.py initialize
-  pymake7.py -------------------------------------------------------------
-  pymake7.py port
-  pymake7.py port root [ <source-config-root> ] [ to <target-config-root> ]
-  pymake7.py port config [ <source-config-file> ] [ to <target-config-file> ]
-  pymake7.py port file [ <source-path-file> ] [ to <target-path-file> ]
-  pymake7.py port root ( --source | --target ) <config-root>
-  pymake7.py port config ( --source | --target ) <config-file>
-  pymake7.py port file ( --source | --target ) <path-file>
-  pymake7.py port reset
-  pymake7.py translate
-  pymake7.py translate ( path | env | cmd )
-  pymake7.py translate ( path | env | cmd ) <key-name> [ to <target-key-name> ] [ -f | --force ]
-  pymake7.py translate ( path | env | cmd ) [ -a | --all ] [ -f | --force ]
-  pymake7.py translate path-env-cmd [ -a | --all ] [ -f | --force ]
-  pymake7.py translate all [ -a | --all ] [ -f | --force ]
-  pymake7.py translate section
-  pymake7.py translate section <section-name> [ to <target-section-name> ] [ -f | --force ]
-  pymake7.py translate section [ -a | --all ] [ -f | --force ]
-  pymake7.py -------------------------------------------------------------
-  pymake7.py exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
-  pymake7.py use <env-name> exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
-  pymake7.py here exec-with-params [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
-  pymake7.py here use <env-name> exec-with-params [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
-  pymake7.py hh exec-with-params [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
-  pymake7.py hh use <env-name> exec-with-params [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
-  pymake7.py -------------------------------------------------------------
-  pymake7.py execvp [ here | hh ] [ <command-name> ] [ <command-params> ... ]
-  pymake7.py use <env-name> execvp [ here | hh ] [ <command-name> ] [ <command-params> ... ]
-  pymake7.py here execvp [ <command-name> ] [ <command-params> ... ]
-  pymake7.py here use <env-name> ccvp [ <command-name> ] [ <command-params> ... ]
-  pymake7.py hh ccvp [ <command-name> ] [ <command-params> ... ]
-  pymake7.py hh use <env-name> ccvp [ <command-name> ] [ <command-params> ... ]
-  pymake7.py -------------------------------------------------------------
-  pymake7.py ccvp [ here | hh ] [ <command-name> ] [ <command-params> ... ]
-  pymake7.py use <env-name> ccvp [ here | hh ] [ <command-name> ] [ <command-params> ... ]
-  pymake7.py here ccvp [ <command-name> ] [ <command-params> ... ]
-  pymake7.py here use <env-name> execvp [ <command-name> ] [ <command-params> ... ]
-  pymake7.py hh execvp [ <command-name> ] [ <command-params> ... ]
-  pymake7.py hh use <env-name> execvp [ <command-name> ] [ <command-params> ... ]
-  pymake7.py -------------------------------------------------------------
-  pymake7.py import cmd [ hh | here ] [ <script-file> ] [ -a | --all ] [ -f | --force ] [ --recursive ] [ --encoding=<encoding-name> ] [ --filter=<name-filter> ... ]
-  pymake7.py here import cmd [ <script-file> ] [ -a | --all ] [ -f | --force ] [ --recursive ] [ --encoding=<encoding-name> ] [ --filter=<name-filter> ... ]
-  pymake7.py hh import cmd [ <script-file> ] [ -a | --all ] [ -f | --force ] [ --recursive ] [ --encoding=<encoding-name> ] [ --filter=<name-filter> ... ]
-  pymake7.py -------------------------------------------------------------
-  pymake7.py backup [ here | hh ] [ <zip-file-name> ]
-  pymake7.py here backup [ <zip-file-name> ]
-  pymake7.py hh backup [ <zip-file-name> ]
-  pymake7.py recovery [ here | hh ] [ <zip-file-name> ]
-  pymake7.py here recovery [ <zip-file-name> ]
-  pymake7.py hh recovery [ <zip-file-name> ]
-  pymake7.py -------------------------------------------------------------
-  pymeke7.py custom
-  pymake7.py custom [ open | close | status ]
-  pymake7.py custom [ information ]
-  pymake7.py custom env
-  pymake7.py custom export [ here | hh ] [ to <file-name> ]
-  pymake7.py custom exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
-  pymake7.py custom use <env-name> exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
-  pymake7.py -------------------------------------------------------------
-  pymake7.py powershell
-  pymake7.py powershell [ information | status ]
-  pymake7.py powershell clean [ here | hh ]
-  pymake7.py powershell export [ here | hh ] [ <env-name> ] [ to <file-name> ]
-  pymake7.py powershell type [ here | hh ] [ <cmd-name> ] [ to <file-name> ]
-  pymake7.py powershell use <env-name> type [ here | hh ] [ <cmd-name> ]  [ to <file-name> ]
-  pymake7.py powershell exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
-  pymake7.py powershell use <env-name> exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
-  pymake7.py -------------------------------------------------------------
-  pymake7.py (-h | --help)
-  pymake7.py --version
+  pymake7.py  source
+  pymake7.py  source file [ <source-path-file> ]
+  pymake7.py  source root [ <source-root-path> ]
+  pymake7.py  source config [ --add  ] [ <config-file-name> ]
+  pymake7.py  source config [ --del  ] [ <config-file-name> ]
+  pymake7.py  source config [ --mod  ] [ <config-file-name> ] [<new-config-file-name>]
+  pymake7.py  source config [ --switch  ] [ <config-file-name> ]
+  pymake7.py  source config [ --restore  ]
+  pymake7.py  source config [ --show ]
+  pymake7.py  -------------------------------------------------------------
+  pymake7.py  set path ( --add | --del | --mod ) <name> [ <value> ]
+  pymake7.py  set env [ path ] ( --add | --del | --mod ) <group> <name> [ <value> ]
+  pymake7.py  set cmd (--add | --del | --mod ) <name> [ <values> ... ]
+  pymake7.py  set cur env <name>
+  pymake7.py  list [ path | env | cmd ] [<name>] [-r | --raw] [-a | --all]
+  pymake7.py  env [<name>] [-p | --path] [-v | --var] [-r | --raw] [-a | --all]
+  pymake7.py  -------------------------------------------------------------
+  pymake7.py  here clean
+  pymake7.py  here export [ <env-name> ] [ to <file-name> ]
+  pymake7.py  here type [ <cmd-name> ]  [ to <file-name> ]
+  pymake7.py  here use <env-name> exec [ <command-names> ... ]
+  pymake7.py  here exec [ <command-names> ... ]
+  pymake7.py  here use <env-name> cc [ <command-names> ... ]
+  pymake7.py  here cc [ <command-names> ... ]
+  pymake7.py  -------------------------------------------------------------
+  pymake7.py  clean [ here | hh ]
+  pymake7.py  export [ here | hh ] [ <env-name> ] [ to <file-name> ]
+  pymake7.py  type [ here | hh ] [ <cmd-name> ] [ to <file-name> ]
+  pymake7.py  exec [ here | hh ] [ <command-names> ... ]
+  pymake7.py  cc [ here | hh ] [ <command-names> ... ]
+  pymake7.py  use <env-name> type [ here | hh ] [ <cmd-name> ]  [ to <file-name> ]
+  pymake7.py  use <env-name> exec [ here | hh ] [ <command-names> ... ]
+  pymake7.py  use <env-name> cc [ here | hh ] [ <command-names> ... ]
+  pymake7.py  -------------------------------------------------------------
+  pymake7.py  set current env <name>
+  pymake7.py  set default env <name>
+  pymake7.py  show [ path | env | cmd ] [<name>] [-r | --raw] [-a | --all]
+  pymake7.py  environ [<name>] [-p | --path] [-v | --var] [-r | --raw] [-a | --all]
+  pymake7.py  see [ <cmd-name> ] [ use <env-name> ] [-r | --raw] [-a | --all]
+  pymake7.py  ss [ <cmd-name> ] [ use <env-name> ] [-r | --raw] [-a | --all]
+  pymake7.py  cmd [ <cmd-name> ] [ use <env-name> ] [-r | --raw] [-a | --all]
+  pymake7.py  use <env-name> see [ <cmd-name> ] [-r | --raw] [-a | --all]
+  pymake7.py  use <env-name> ss [ <cmd-name> ] [-r | --raw] [-a | --all]
+  pymake7.py  use <env-name> cmd [ <cmd-name> ] [-r | --raw] [-a | --all]
+  pymake7.py  -------------------------------------------------------------
+  pymake7.py  hh clean
+  pymake7.py  hh export [ <env-name> ] [ to <file-name> ]
+  pymake7.py  hh type [ <cmd-name> ]  [ to <file-name> ]
+  pymake7.py  hh use <env-name> exec [ <command-names> ... ]
+  pymake7.py  hh exec [ <command-names> ... ]
+  pymake7.py  hh use <env-name> cc [ <command-names> ... ]
+  pymake7.py  hh cc [ <command-names> ... ]
+  pymake7.py  -------------------------------------------------------------
+  pymake7.py  have path <name> [-r | --raw]
+  pymake7.py  have env [ path ] [ <group> ] [ <name> ] [-r | --raw]
+  pymake7.py  have cmd <name> [-r | --raw]
+  pymake7.py  has path <name> [-r | --raw]
+  pymake7.py  has env [ path ] [ <group> ] [ <name> ] [-r | --raw]
+  pymake7.py  has cmd <name> [-r | --raw]
+  pymake7.py  -------------------------------------------------------------
+  pymake7.py  get cur env
+  pymake7.py  get current env
+  pymake7.py  get default env
+  pymake7.py  get env
+  pymake7.py  get env ( cur | current | default )
+  pymake7.py  -------------------------------------------------------------
+  pymake7.py  program
+  pymake7.py  program root
+  pymake7.py  program file
+  pymake7.py  program configure
+  pymake7.py  program configure root
+  pymake7.py  program configure file
+  pymake7.py  get all
+  pymake7.py  get all ( info | information )
+  pymake7.py  get all ( stat | status )
+  pymake7.py  get all settings [ path | env | cmd ] [<name>] [-r | --raw] [-a | --all]
+  pymake7.py  get default exec root
+  pymake7.py  get exec root [ default | here ]
+  pymake7.py  initialize
+  pymake7.py  -------------------------------------------------------------
+  pymake7.py  port
+  pymake7.py  port root [ <source-config-root> ] [ to <target-config-root> ]
+  pymake7.py  port config [ <source-config-file> ] [ to <target-config-file> ]
+  pymake7.py  port file [ <source-path-file> ] [ to <target-path-file> ]
+  pymake7.py  port root ( --source | --target ) <config-root>
+  pymake7.py  port config ( --source | --target ) <config-file>
+  pymake7.py  port file ( --source | --target ) <path-file>
+  pymake7.py  port reset
+  pymake7.py  translate
+  pymake7.py  translate ( path | env | cmd )
+  pymake7.py  translate ( path | env | cmd ) <key-name> [ to <target-key-name> ] [ -f | --force ]
+  pymake7.py  translate ( path | env | cmd ) [ -a | --all ] [ -f | --force ]
+  pymake7.py  translate path-env-cmd [ -a | --all ] [ -f | --force ]
+  pymake7.py  translate all [ -a | --all ] [ -f | --force ]
+  pymake7.py  translate section
+  pymake7.py  translate section <section-name> [ to <target-section-name> ] [ -f | --force ]
+  pymake7.py  translate section [ -a | --all ] [ -f | --force ]
+  pymake7.py  -------------------------------------------------------------
+  pymake7.py  exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  use <env-name> exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  here exec-with-params [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  here use <env-name> exec-with-params [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  hh exec-with-params [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  hh use <env-name> exec-with-params [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  -------------------------------------------------------------
+  pymake7.py  execvp [ here | hh ] [ <command-name> ] [ <command-params> ... ]
+  pymake7.py  use <env-name> execvp [ here | hh ] [ <command-name> ] [ <command-params> ... ]
+  pymake7.py  here execvp [ <command-name> ] [ <command-params> ... ]
+  pymake7.py  here use <env-name> ccvp [ <command-name> ] [ <command-params> ... ]
+  pymake7.py  hh ccvp [ <command-name> ] [ <command-params> ... ]
+  pymake7.py  hh use <env-name> ccvp [ <command-name> ] [ <command-params> ... ]
+  pymake7.py  -------------------------------------------------------------
+  pymake7.py  ccvp [ here | hh ] [ <command-name> ] [ <command-params> ... ]
+  pymake7.py  use <env-name> ccvp [ here | hh ] [ <command-name> ] [ <command-params> ... ]
+  pymake7.py  here ccvp [ <command-name> ] [ <command-params> ... ]
+  pymake7.py  here use <env-name> execvp [ <command-name> ] [ <command-params> ... ]
+  pymake7.py  hh execvp [ <command-name> ] [ <command-params> ... ]
+  pymake7.py  hh use <env-name> execvp [ <command-name> ] [ <command-params> ... ]
+  pymake7.py  -------------------------------------------------------------
+  pymake7.py  import cmd [ hh | here ] [ <script-file> ] [ -a | --all ] [ -f | --force ] [ --recursive ] [ --encoding=<encoding-name> ] [ --filter=<name-filter> ... ]
+  pymake7.py  here import cmd [ <script-file> ] [ -a | --all ] [ -f | --force ] [ --recursive ] [ --encoding=<encoding-name> ] [ --filter=<name-filter> ... ]
+  pymake7.py  hh import cmd [ <script-file> ] [ -a | --all ] [ -f | --force ] [ --recursive ] [ --encoding=<encoding-name> ] [ --filter=<name-filter> ... ]
+  pymake7.py  -------------------------------------------------------------
+  pymake7.py  backup [ here | hh ] [ <zip-file-name> ]
+  pymake7.py  here backup [ <zip-file-name> ]
+  pymake7.py  hh backup [ <zip-file-name> ]
+  pymake7.py  recovery [ here | hh ] [ <zip-file-name> ]
+  pymake7.py  here recovery [ <zip-file-name> ]
+  pymake7.py  hh recovery [ <zip-file-name> ]
+  pymake7.py  -------------------------------------------------------------
+  pymeke7.py  custom
+  pymake7.py  custom [ open | close | status ]
+  pymake7.py  custom [ information ]
+  pymake7.py  custom env
+  pymake7.py  custom export [ here | hh ] [ to <file-name> ]
+  pymake7.py  custom exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  custom use <env-name> exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  -------------------------------------------------------------
+  pymake7.py  powershell
+  pymake7.py  powershell [ information | status ]
+  pymake7.py  powershell clean [ here | hh ]
+  pymake7.py  powershell export [ here | hh ] [ <env-name> ] [ to <file-name> ]
+  pymake7.py  powershell type [ here | hh ] [ <cmd-name> ] [ to <file-name> ]
+  pymake7.py  powershell use <env-name> type [ here | hh ] [ <cmd-name> ]  [ to <file-name> ]
+  pymake7.py  powershell exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  powershell use <env-name> exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  -------------------------------------------------------------
+  pymake7.py  (-h | --help)
+  pymake7.py  --version
 
 Command:
   source            switch to another source file
@@ -2448,6 +2448,68 @@ def main_function():
                 step += 1
         return command_dict
 
+    #powershell export env function
+    def powershell_environ_export(env_name = None, file_name = None):
+        # select env
+        current_var = rawconfig['environ']['current']
+        if (env_name is not None):
+            current_var = env_name
+        dict0 = copy.deepcopy(rawconfig['environ'][current_var])
+
+        plat = getplatform()
+
+        cmd_suffix = ".ps1"
+        cmd_codec = 'ansi'
+        # but windows, it is \r\n, python helpping me?
+        cmd_return = "\n"
+        cmd_header = "#!/usr/bin/env bash" + cmd_return
+        env_set = ''
+
+        # export effect env
+        cmd_effect = 'powershell.env'
+        if (file_name is not None):
+            cmd_effect = "powershell." + file_name
+        cmd_effect += '_effect' + cmd_suffix
+
+        # export path
+        lines = ""
+        for (key) in dict0["path+"]:
+            lines += ("if ( !$env:Path.Contains(\"%s;\" ) ) { $env:Path = $env:Path.Insert(0, \"%s;\") }" % (key, key)) + cmd_return
+
+        # export var
+        for (key, value) in dict0.items():
+            if (key == 'path+'):
+                continue
+            lines += ("$env:" + key + ' = \"' + value + '\"' + cmd_return)
+
+        # print(lines.split('\n'))
+        with open(cmd_effect, 'w', encoding=cmd_codec) as f:
+            # f.write(cmd_header)
+            f.write(lines)
+
+        # export unset env
+        cmd_unset = 'powershell.env'
+        if (file_name is not None):
+            cmd_unset = "powershell." + file_name
+        cmd_unset += '_unset' + cmd_suffix
+
+        # export unset path
+        lines = ""
+        for (key) in dict0["path+"]:
+            # lines += ("$env:Path = $env:Path.Replace(\"%s;\", \"\")" % key) + cmd_return
+            lines += ("if ( $env:Path.Contains(\"%s;\" ) ) { $env:Path = $env:Path.Replace(\"%s;\", \"\") }" % (key, key)) + cmd_return
+        # export unset var
+        for (key, value) in dict0.items():
+            if (key == 'path+'):
+                continue
+            lines += ("$env:%s = \"\"" % key) + cmd_return
+
+        with open(cmd_unset, 'w', encoding=cmd_codec) as f:
+            # f.write(cmd_header)
+            f.write(lines)
+
+        return current_var, cmd_effect, cmd_unset
+
     # powershell [windows, unix]
     def createCmdList03(local=True, list0=[], params0=[]):
 
@@ -2469,7 +2531,7 @@ def main_function():
         cmd_header = "#!/usr/bin/env bash"
         cmd_call = "./"
         # cmd_list.append(cmd_header)
-        cmd_list.append("source %s_effect%s" % (name, cmd_suffix))
+        cmd_list.append("./powershell.%s_effect%s" % (name, cmd_suffix))
 
         params_string = ""
         for param in params0:
@@ -2487,7 +2549,7 @@ def main_function():
         cmd_list.append(cmd_exit)
         # print( cmd_list )
 
-        cmd_execute = name + "_exec" + cmd_suffix
+        cmd_execute = "powershell." + name + "_exec" + cmd_suffix
         with open(cmd_execute, "w", encoding=cmd_codec) as f:
             for line in cmd_list:
                 f.write(line + cmd_return)
@@ -2505,7 +2567,8 @@ def main_function():
         # print (cmd_list)
         return cmd_list, name
 
-    # print(args['powershell'])
+    #print(args)
+    #print(args['powershell'])
     # powershell
     while (True):
         if (args['powershell'] is True):
@@ -2539,67 +2602,7 @@ def main_function():
                 current_var = ""
                 cmd_effect = ""
                 cmd_unset = ""
-                #current_var, cmd_effect, cmd_unset = env_export(current_env, args['<file-name>'])
-                env_name = current_env
-                file_name = args['<file-name>']
-
-                # select env
-                current_var = rawconfig['environ']['current']
-                if (env_name is not None):
-                    current_var = env_name
-                dict0 = copy.deepcopy(rawconfig['environ'][current_var])
-
-                plat = getplatform()
-
-                cmd_suffix = ".ps1"
-                cmd_codec = 'ansi'
-                # but windows, it is \r\n, python helpping me?
-                cmd_return = "\n"
-                cmd_header = "#!/usr/bin/env bash" + cmd_return
-                env_set = ''
-
-                # export effect env
-                cmd_effect = 'powershell.env'
-                if (file_name is not None):
-                    cmd_effect = "powershell." + file_name
-                cmd_effect += '_effect' + cmd_suffix
-
-                # export path
-                lines = ""
-                for (key) in dict0["path+"]:
-                    lines += ("if ( !$env:Path.Contains(\"%s;\" ) ) { $env:Path = $env:Path.Insert(0, \"%s;\") }" % (key, key) ) + cmd_return
-
-                # export var
-                for (key, value) in dict0.items():
-                    if (key == 'path+'):
-                        continue
-                    lines += ("$env:" + key + ' = \"' + value + '\"' + cmd_return)
-
-                #print(lines.split('\n'))
-                with open(cmd_effect, 'w', encoding=cmd_codec) as f:
-                    #f.write(cmd_header)
-                    f.write(lines)
-
-                # export unset env
-                cmd_unset = 'powershell.env'
-                if (file_name is not None):
-                    cmd_unset = "powershell." + file_name
-                cmd_unset += '_unset' + cmd_suffix
-
-                # export unset path
-                lines = ""
-                for (key) in dict0["path+"]:
-                    #lines += ("$env:Path = $env:Path.Replace(\"%s;\", \"\")" % key) + cmd_return
-                    lines += ("if ( $env:Path.Contains(\"%s;\" ) ) { $env:Path = $env:Path.Replace(\"%s;\", \"\") }" % (key, key) ) + cmd_return
-                # export unset var
-                for (key, value) in dict0.items():
-                    if (key == 'path+'):
-                        continue
-                    lines += ( "$env:%s = \"\"" % key ) + cmd_return
-
-                with open(cmd_unset, 'w', encoding=cmd_codec) as f:
-                    #f.write(cmd_header)
-                    f.write(lines)
+                current_var, cmd_effect, cmd_unset = powershell_environ_export(current_env, args['<file-name>'])
 
                 print("successed: export %s to %s %s" % (current_var, cmd_effect, cmd_unset))
                 return
@@ -2696,7 +2699,100 @@ def main_function():
                 print("successed: use %s type %s to %s" % (current_env, args['<cmd-name>'], cmd_exec))
                 return
             elif (args['exec-with-params'] is True):
-                ''
+                current_env = ""
+                if (args['use'] is True):
+                    if (args['<env-name>'] is None):
+                        print("please appoint a environ")
+                        return
+
+                    if (rawconfig['environ'].__contains__(args['<env-name>']) is False):
+                        print("please ensure the environ is right")
+                        return
+
+                    current_env = args['<env-name>']
+                    if (args['<env-name>'] == "current"):
+                        current_env = rawconfig['environ']['current']
+
+                    if (current_env == 'current'
+                        or rawconfig['environ'].__contains__(current_env) is False):
+                        print(".json file is broken, environ section current env config is lost, please use set command fix it.")
+                        return
+                else:
+                    current_env = rawconfig['environ']['current']
+
+                if (args['exec-with-params'] or args['execvp'] or args['ccvp'] is True):
+
+                    if (args['<command-name>'] is None):
+                        print("please appoint your command")
+                        return
+
+                    if (args['here'] or args['hh'] is True):
+                        os.chdir(pymakeworkpath)
+
+                    # print(args['--workroot'])
+                    if (args['--workroot'] is not None):
+                        if (os.path.isdir(args['--workroot'])
+                            and os.path.isabs(args['--workroot'])):
+                            os.chdir(args['--workroot'])
+                        else:
+                            print('please input a legal work root.')
+                            return
+
+                    # create cmd_list
+                    current_var = current_env
+                    local_command = raw_command(current_var)
+                    dict0 = copy.deepcopy(local_command)
+
+                    list0 = []
+                    local = True
+                    current_var = args['<command-name>']
+                    if (current_var in dict0):
+                        list0.extend(dict0[current_var])
+                        local = True
+                    else:
+                        list0.append(current_var)
+                        local = False
+
+                    params0 = []
+                    # print(args['--params'])
+                    # print(args['<command-params>'])
+                    for current_var in args['--params']:
+                        params0.append(current_var)
+                    for current_var in args['<command-params>']:
+                        params0.append(current_var)
+
+                    cmd_list = []
+                    temp_file_name = ""
+                    # if (getplatform() == "Windows"):
+                    #    cmd_list, temp_file_name = createCmdList0(list0)
+                    # else:
+                    #    cmd_list, temp_file_name = createCmdList01(list0)
+                    # good compatibility
+                    cmd_list, temp_file_name = createCmdList03(local, list0, params0)
+
+                    # export env
+                    current_var = current_env
+                    # print (current_var, temp_file_name)
+                    powershell_environ_export(current_var, temp_file_name)
+
+                    ret = communicateWithCommandLine3(cmd_list)
+
+                    # delete env file and cmd file
+                    temp_file = temp_file_name + "_exec.ps1"
+                    if (os.path.exists(temp_file)):
+                        os.remove(temp_file)
+                    temp_file = temp_file_name + "_effect.ps1"
+                    if (os.path.exists(temp_file)):
+                        os.remove(temp_file)
+                    temp_file = temp_file_name + "_unset.ps1"
+                    if (os.path.exists(temp_file)):
+                        os.remove(temp_file)
+
+                    os._exit(ret)
+                    return
+                else:
+                    ''
+                return
             elif (args['clean'] is True):
                 if (args['here'] or args['hh'] is True):
                     os.chdir(pymakeworkpath)

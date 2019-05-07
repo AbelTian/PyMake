@@ -33,6 +33,9 @@ def stopThread(thread):
     _async_raise(thread.ident, SystemExit)
     return
 
+cmd_event = threading.Event()
+cmd_exit_flag = 0
+
 # read stdout pipe
 def read_thread_function(p):
     ''
@@ -43,9 +46,11 @@ def read_thread_function(p):
         p.stdout.readline()
 
     code = (codecs.lookup(locale.getpreferredencoding()).name)
+    global cmd_event
     global cmd_exit_flag
     while (True):
         l = p.stdout.readline().rstrip().decode(code)
+        #print(l)
 
         if (l is None):
             #print ('cccc')
@@ -87,6 +92,8 @@ def read_thread_function(p):
 def read_stderr_thread_function(p):
     ''
     code = (codecs.lookup(locale.getpreferredencoding()).name)
+    global cmd_event
+    global cmd_exit_flag
     while (True):
         l = p.stderr.readline().rstrip().decode(code)
 
@@ -114,6 +121,7 @@ def read_stderr_thread_function(p):
 def write_command_thread_function(p, cmd_list):
     ''
     code = (codecs.lookup(locale.getpreferredencoding()).name)
+    global cmd_event
     global cmd_exit_flag
     while (True):
         cmd_event.clear()
