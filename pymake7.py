@@ -1830,23 +1830,6 @@ def main_function():
             ''
         break
 
-    # clean *_effect *_unset *_exec .bat[.sh]
-    while (True):
-        if (args['clean'] == True):
-            if (args['here'] or args['hh'] is True):
-                os.chdir(pymakeworkpath)
-
-            plat = getplatform()
-            if(plat == "Windows"):
-                os.system("@del /f /q *_effect.bat *_unset.bat *_exec.bat")
-            else:
-                os.system("rm -f *_effect.sh *_unset.sh *_exec.sh")
-
-            return
-        else:
-            ""
-        break
-
     config = readJsonData(sourceconfigfile)
     #print(config)
 
@@ -2506,7 +2489,7 @@ def main_function():
                 plat = getplatform()
 
                 cmd_suffix = ".ps1"
-                cmd_codec = 'ansi'
+                cmd_codec = 'utf8'
                 cmd_return = "\n"
                 cmd_header = "#!/usr/bin/env bash" + cmd_return
                 env_set = ''
@@ -2520,7 +2503,7 @@ def main_function():
                 # export path
                 lines = ""
                 for (key) in dict0["path+"]:
-                    lines += ("$env:Path = $env:Path.Insert(0, \"%s;\")" % key) + cmd_return
+                    lines += ("if ( !$env:Path.Contains(\"%s;\" ) ) { $env:Path = $env:Path.Insert(0, \"%s;\") }" % (key, key) ) + cmd_return
 
                 # export var
                 for (key, value) in dict0.items():
@@ -2528,7 +2511,7 @@ def main_function():
                         continue
                     lines += ("$env:" + key + ' = \"' + value + '\"' + cmd_return)
 
-                with open(cmd_effect, 'w') as f:
+                with open(cmd_effect, 'w', encoding=cmd_codec) as f:
                     #f.write(cmd_header)
                     f.write(lines)
 
@@ -2549,7 +2532,7 @@ def main_function():
                         continue
                     lines += ( "$env:%s = \"\"" % key ) + cmd_return
 
-                with open(cmd_unset, 'w') as f:
+                with open(cmd_unset, 'w', encoding=cmd_codec) as f:
                     #f.write(cmd_header)
                     f.write(lines)
 
@@ -2560,11 +2543,52 @@ def main_function():
             elif (args['exec-with-params'] is True):
                 ''
             elif (args['clean'] is True):
-                ''
+                if (args['here'] or args['hh'] is True):
+                    os.chdir(pymakeworkpath)
+
+                plat = getplatform()
+                if (plat == "Windows"):
+                    os.system("@del /f /q powershell.*_effect.ps1 powershell.*_unset.ps1 powershell.*_exec.ps1")
+                else:
+                    os.system("rm -f powershell.*_effect.ps1 powershell.*_unset.ps1 powershell.*_exec.ps1")
+
+                return
             elif (args['information'] is True):
-                ''
+                plat = getplatform()
+                env = os.environ
+                if(plat == "Windows"):
+                    print("powershell          : %s\system32\WindowsPowerShell\\v1.0\powershell.exe" % env["SystemRoot"])
+                    print("powershell ISE      : %s\system32\WindowsPowerShell\\v1.0\PowerShell_ISE.exe" % env["SystemRoot"])
+                    print("powershell(x86)     : %s\syswow64\WindowsPowerShell\\v1.0\powershell.exe" % env["SystemRoot"])
+                    print("powershell ISE (x86): %s\syswow64\WindowsPowerShell\\v1.0\PowerShell_ISE.exe" % env["SystemRoot"])
+                return
             elif (args['status'] is True):
-                ''
+                plat = getplatform()
+                env = os.environ
+                if(plat == "Windows"):
+                    powershell = ( "%s\system32\WindowsPowerShell\\v1.0\powershell.exe" % env["SystemRoot"])
+                    powershell_ise = ("%s\system32\WindowsPowerShell\\v1.0\powershell_ISE.exe" % env["SystemRoot"])
+                    powershell_x86 = ( "%s\syswow64\WindowsPowerShell\\v1.0\powershell.exe" % env["SystemRoot"])
+                    powershell_ise_x86 = ("%s\syswow64\WindowsPowerShell\\v1.0\powershell_ISE.exe" % env["SystemRoot"])
+                    if(os.path.exists(powershell)):
+                        print("powershell          : NORMAL.")
+                    else:
+                        print("powershell          : UNINSTALL.")
+                    if (os.path.exists(powershell_ise)):
+                        print("powershell ISE      : NORMAL.")
+                    else:
+                        print("powershell ISE      : UNINSTALL.")
+                    if (os.path.exists(powershell_x86)):
+                        print("powershell(x86)     : NORMAL.")
+                    else:
+                        print("powershell(x86)     : UNINSTALL.")
+                    if (os.path.exists(powershell_ise_x86)):
+                        print("powershell ISE (x86): NORMAL.")
+                    else:
+                        print("powershell ISE (x86): UNINSTALL.")
+                else:
+                    ''
+                return
             else:
                 ''
         else:
@@ -2934,6 +2958,23 @@ def main_function():
                 return
         else:
             ''
+        break
+
+    # clean *_effect *_unset *_exec .bat[.sh]
+    while (True):
+        if (args['clean'] == True):
+            if (args['here'] or args['hh'] is True):
+                os.chdir(pymakeworkpath)
+
+            plat = getplatform()
+            if(plat == "Windows"):
+                os.system("@del /f /q *_effect.bat *_unset.bat *_exec.bat")
+            else:
+                os.system("rm -f *_effect.sh *_unset.sh *_exec.sh")
+
+            return
+        else:
+            ""
         break
 
     # list show
