@@ -42,25 +42,24 @@ if not "%3" == "" (
     set PYENVNAME=%PYMMDEFAULTENVNAME%
 )
 for /F %%i in ('"%PYPROGRAMPATHNAME%" have env %PYENVNAME%') do ( set "PYEXECFLAG=%%i" )
-if %PYEXECFLAG% == "False" (
+if "%PYEXECFLAG%" == "False" (
     echo environme: [%PYENVNAME%] is not existed.
     exit /b 0
 )
 echo environme: [%PYENVNAME%] [%PYEXECFLAG%] [USED]
 
 for /F %%i in ('"%PYPROGRAMPATHNAME%" have cmd %PYEXECNAME%') do ( set "PYEXECFLAG=%%i" )
-if %PYEXECFLAG% == "False" (
-    echo command  : [%PYEXECNAME%] is not existed.
-    exit /b 0
+if "%PYEXECFLAG%" == "False" (
+    echo command  : [%PYEXECNAME%] is system wild command.
+) else (
+    echo command  : [%PYEXECNAME%] [%PYEXECFLAG%] [EXISTED]
 )
-echo command  : [%PYEXECNAME%] [%PYEXECFLAG%] [EXISTED]
 
 for /F %%i in ('"%PYPROGRAMPATHNAME%" get default exec root') do ( set "PYMMSHELLROOT=%%i" )
 echo exec root: [%PYMMSHELLROOT%] [default]
 
-call "%PYPROGRAMPATHNAME%" export %PYENVNAME% to %PYEXECINDEX%
-call "%PYPROGRAMPATHNAME%" use %PYENVNAME% type %PYEXECNAME% to %PYEXECINDEX%
-call "%PYMMSHELLROOT%\%PYEXECINDEX%_effect.bat"
-call "%PYMMSHELLROOT%\%PYEXECINDEX%_exec.bat" %PYEXECPARAM%
-del /q /f "%PYMMSHELLROOT%\%PYEXECINDEX%_exec.bat"
-del /q /f "%PYMMSHELLROOT%\%PYEXECINDEX%_effect.bat" "%PYMMSHELLROOT%\%PYEXECINDEX%_unset.bat"
+if not %PYEXECPARAM% == "" (
+    call "%PYPROGRAMPATHNAME%" use %PYENVNAME% exec-with-params here %PYEXECNAME% --params %PYEXECPARAM%
+) else (
+    call "%PYPROGRAMPATHNAME%" use %PYENVNAME% exec-with-params here %PYEXECNAME%
+)

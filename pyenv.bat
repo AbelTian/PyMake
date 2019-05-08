@@ -32,7 +32,7 @@ echo configure: [%PYMMSOURCECONFIG%] [1]
 for /F %%i in ('"%PYPROGRAMPATHNAME%" get current env') do ( set "PYMMDEFAULTENVNAME=%%i" )
 echo environme: [%PYMMDEFAULTENVNAME%] [default]
 for /F %%i in ('"%PYPROGRAMPATHNAME%" have env %PYENVNAME%') do ( set "PYENVEXISTEDFLAG=%%i" )
-if %PYENVEXISTEDFLAG% == "False" (
+if "%PYENVEXISTEDFLAG%" == "False" (
     echo environme: [%PYENVNAME%] is not existed.
     exit /b 0
 )
@@ -42,7 +42,7 @@ echo exec root: [%PYMMSHELLROOT%] [default]
 
 call "%PYPROGRAMPATHNAME%" export %PYENVNAME% %PYENVINDEX%
 
-if %PYENVFLAG% == "False" (
+if "%PYENVFLAG%" == "False" (
     call "%PYMMSHELLROOT%\%PYENVINDEX%_unset.bat"
     echo user env : [%PYENVNAME%] closed
 ) else (

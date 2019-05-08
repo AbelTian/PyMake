@@ -14,12 +14,25 @@ if "%1" == "" (
     echo please appoint a env name. & exit /b 0
 ) else if "%1" == "open" (
     if "%2" == "" ( echo please appoint a env name. & exit /b 0 )
+    set PYENVNAME=%2
 ) else if "%1" == "close" (
     if "%2" == "" ( echo please appoint a env name. & exit /b 0 )
+    set PYENVNAME=%2
+) else (
+    set PYENVNAME=%1
 )
 
+for /F %%i in ('"%PYPROGRAMPATHNAME%" get current env') do ( set "PYMMDEFAULTENVNAME=%%i" )
+echo environme: [%PYMMDEFAULTENVNAME%] [default]
+for /F %%i in ('"%PYPROGRAMPATHNAME%" have env %PYENVNAME%') do ( set "PYENVEXISTEDFLAG=%%i" )
+if "%PYENVEXISTEDFLAG%" == "False" (
+    echo environme: [%PYENVNAME%] is not existed.
+    exit /b 0
+)
+echo environme: [%PYENVNAME%] [%PYENVEXISTEDFLAG%] [USED]
+
 set PYPROGRAMPATH=%~dp0
-call %PYPROGRAMPATH%\pyenv.bat %*
+call "%PYPROGRAMPATH%"\pyenv.bat %PYENVNAME%
 
 if "%PYENVFLAG%" == "False" (
     echo pyvc env : CLS-VCVARSALL="%CLS-VCVARSALL:/=\%" %CLS-VCVARSALLPARAM%
