@@ -96,24 +96,16 @@ echo environme: \[$PYENVNAME\] \[$PYEXECFLAG\] \[USED\]
 
 export PYEXECFLAG=$("$PYPROGRAMPATHNAME" have cmd $PYEXECNAME)
 if [ "$PYEXECFLAG" = "False" ]; then
-    echo command\ \ : \[$PYEXECNAME\] is not existed.
-    break
+    echo command\ \ : \[$PYEXECNAME\] is system wild command.
+else
+    echo command\ \ : \[$PYEXECNAME\] \[$PYEXECFLAG\] \[EXISTED\]
 fi
-echo command\ \ : \[$PYEXECNAME\] \[$PYEXECFLAG\] \[EXISTED\]
 
 export PYMMSHELLROOT=$("$PYPROGRAMPATHNAME" get default exec root)
 echo exec root: \[$PYMMSHELLROOT\] \[default\]
 
-"$PYPROGRAMPATHNAME" export $PYENVNAME to $PYEXECINDEX
-"$PYPROGRAMPATHNAME" use $PYENVNAME type $PYEXECNAME to $PYEXECINDEX
-chmod +x "${PYMMSHELLROOT}/${PYEXECINDEX}_effect.sh"
-source "${PYMMSHELLROOT}/${PYEXECINDEX}_effect.sh"
-# I set this, sh it, but not .
-"${PYMMSHELLROOT}/${PYEXECINDEX}_exec.sh" $PYEXECPARAM
-
-#clean
-rm -f "${PYMMSHELLROOT}/${PYEXECINDEX}_exec.sh"
-rm -f "${PYMMSHELLROOT}/${PYEXECINDEX}_effect.sh" "${PYMMSHELLROOT}/${PYEXECINDEX}_unset.sh"
+#echo "$PYPROGRAMPATHNAME" use $PYENVNAME exec-with-params here $PYEXECNAME --params "$PYEXECPARAM"
+"$PYPROGRAMPATHNAME" use $PYENVNAME exec-with-params here $PYEXECNAME --params "$PYEXECPARAM"
 
 break
 done
