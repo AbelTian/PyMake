@@ -7,6 +7,7 @@ User support shell module, user can install them to share their functions.
 | pymake.py | pymake | mm, pymm |
 | pymake.py | pyenv | pyvc |
 | pymake.py | pycmd, pyexecvp | pyccvp |
+| pymake.py | pypowershell |  |
 | pyinfo.py | pyinfo || 
 | pypaths.py | pypaths || 
 | pycodec.py | | |
@@ -133,7 +134,18 @@ pymake exec-with-params shat --params "xxxx xxxx xxxx"
 #希望满足多个条件执行他。
 pymake exec-with-params [ here ] shat --params="xxxx" --workroot="xxx"
 
+``` 
+
+```powershell
+
+#希望使用powershell执行器执行命令
+pymake powershell 
+
+#命令别名
+pypowershell
+
 ```
+
 ## pymake使用截图  
 ![命令行截图](./screenshot/a2.png)  
 
@@ -181,3 +193,10 @@ bat环境变量不区分大小写。
 2. 环境变量 VCVARSALL VCVARSALLPARAM 已经被使用者设置进入确定的ENV，随时跟着ENV改变。  
 
 
+# pypowershell  
+
+pypowershell允许用户在PyMake提供的多环境里，使用powershell执行器执行命令，当然，执行的必然是powershell命令。  
+用户可以在一个目录里调用任何目录下的.ps1，而且，当作命令来调用，支持输入参数，支持任意工作目录。  
+支持pypowershell，是个开创性动作。   
+
+![命令行测试截图](./screenshot/c0.png)

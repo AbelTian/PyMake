@@ -405,6 +405,16 @@ Update the command-line.
 5. abundant command in environ .json stored.
 5. **all are in user environment source root.**
 
+# Version 7.5  
+1. add powershell command.
+    - all .json environ can be used in powershell environment.
+2. add custom environment.
+    - user can store temporary or common path and variable in custom.path+.ini or custom.var+.ini.  
+    - these environment can be used in powershell environment.
+    - you can open custom mobule or close it.
+
+[Command-line Screenshot](./command-line.txt)  
+
 # User Support   
 [Readme](./SHELL.md)  
 
