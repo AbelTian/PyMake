@@ -199,4 +199,4 @@ pypowershell允许用户在PyMake提供的多环境里，使用powershell执行�
 用户可以在一个目录里调用任何目录下的.ps1，而且，当作命令来调用，支持输入参数，支持任意工作目录。  
 支持pypowershell，是个开创性动作。   
 
-![命令行测试截图](./screenshot/c0.png)
+![命令行测试截图](./screenshot/c1.png)
