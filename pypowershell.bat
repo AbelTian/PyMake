@@ -1,19 +1,24 @@
 @echo off
 
-:: pycmd.bat 在当前环境执行pymake保存的命令，自带一个环境。
-:: pycmd.bat 使用pymake的默认环境导出命令，如果用户输入环境，那么使用用户输入的环境。
-:: pycmd.bat 会导出环境进行使用。
-:: pycmd.bat 用户应当留意，导出的是否是目标环境的命令。
+:: pypowershell.bat 在当前环境执行pymake保存的命令，自带一个环境，可以带参数。
+:: pypowershell.bat 使用pymake的默认环境导出命令，如果用户输入环境，那么使用用户输入的环境。
+:: pypowershell.bat 会导出环境进行使用。
+:: pypowershell.bat 用户应当留意，导出的是否是目标环境的命令。
 
 if "%1" == "" (
-    echo "pycmd <cmd-name> [ <env-name> ]"
+    echo "pypowershell <cmd-name> [ <cmd-params> ] [<env-name>]"
+    echo "<env name>: 'current' is suggested."
     echo please appoint a cmd name. & exit /b 0
 )
 set PYEXECNAME=%1
 
-if not "%2" == "" (
-    set PYENVNAME=%2
+if not "%3" == "" (
+    set PYENVNAME=%3
 )
+
+set PYEXECNAME=%1
+set PYEXECPARAM=%2
+set PYENVNAME=%3
 
 set PYPROGRAMPATH=%~dp0
 set PYPROGRAMNAME=pymake.bat
@@ -31,8 +36,8 @@ echo configure: [%PYMMSOURCECONFIG%] [1]
 
 for /F %%i in ('"%PYPROGRAMPATHNAME%" get current env') do ( set "PYMMDEFAULTENVNAME=%%i" )
 echo environme: [%PYMMDEFAULTENVNAME%] [default]
-if not "%2" == "" (
-    set PYENVNAME=%2
+if not "%3" == "" (
+    set PYENVNAME=%3
 ) else (
     set PYENVNAME=%PYMMDEFAULTENVNAME%
 )
@@ -45,17 +50,16 @@ echo environme: [%PYENVNAME%] [%PYEXECFLAG%] [USED]
 
 for /F %%i in ('"%PYPROGRAMPATHNAME%" have cmd %PYEXECNAME%') do ( set "PYEXECFLAG=%%i" )
 if %PYEXECFLAG% == "False" (
-    echo command  : [%PYEXECNAME%] is not existed.
-    exit /b 0
+    echo command  : [%PYEXECNAME%] is system wild command.
+) else (
+    echo command  : [%PYEXECNAME%] [%PYEXECFLAG%] [EXISTED]
 )
-echo command  : [%PYEXECNAME%] [%PYEXECFLAG%] [EXISTED]
 
 for /F %%i in ('"%PYPROGRAMPATHNAME%" get default exec root') do ( set "PYMMSHELLROOT=%%i" )
 echo exec root: [%PYMMSHELLROOT%] [default]
 
-call "%PYPROGRAMPATHNAME%" export %PYENVNAME% to %PYEXECINDEX%
-call "%PYPROGRAMPATHNAME%" use %PYENVNAME% type %PYEXECNAME% to %PYEXECINDEX%
-call "%PYMMSHELLROOT%\%PYEXECINDEX%_effect.bat"
-call "%PYMMSHELLROOT%\%PYEXECINDEX%_exec.bat"
-del /q /f "%PYMMSHELLROOT%\%PYEXECINDEX%_exec.bat"
-del /q /f "%PYMMSHELLROOT%\%PYEXECINDEX%_effect.bat" "%PYMMSHELLROOT%\%PYEXECINDEX%_unset.bat"
+if not %PYEXECPARAM% == "" (
+    call "%PYPROGRAMPATHNAME%" powershell use %PYENVNAME% exec-with-params here %PYEXECNAME% --params %PYEXECPARAM%
+) else (
+    call "%PYPROGRAMPATHNAME%" powershell use %PYENVNAME% exec-with-params here %PYEXECNAME%
+)

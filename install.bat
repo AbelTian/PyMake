@@ -43,6 +43,11 @@ set filepath=%~dp0
 set sourcefile=pyccvp.bat
 call :install %*
 
+set mmfile=pypowershell.bat
+set filepath=%~dp0
+set sourcefile=pypowershell.bat
+call :install %*
+
 set mmfile=pyinfo.bat
 set filepath=%~dp0
 set sourcefile=pyinfo.bat

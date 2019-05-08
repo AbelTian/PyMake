@@ -35,6 +35,10 @@ set sourcefile=pyccvp.bat
 set mmfile=pyccvp.bat
 call :uninstall
 
+set sourcefile=pypowershell.bat
+set mmfile=pypowershell.bat
+call :uninstall
+
 set sourcefile=pyinfo.bat
 set mmfile=pyinfo.bat
 call :uninstall
