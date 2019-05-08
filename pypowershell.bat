@@ -10,15 +10,19 @@ if "%1" == "" (
     echo "<env name>: 'current' is suggested."
     echo please appoint a cmd name. & exit /b 0
 )
-set PYEXECNAME=%1
-
-if not "%3" == "" (
-    set PYENVNAME=%3
-)
 
 set PYEXECNAME=%1
 set PYEXECPARAM=%2
 set PYENVNAME=%3
+if "%1" == "" (
+    set PYEXECNAME=
+)
+if ""%2"" == """" (
+    set PYEXECPARAM=
+)
+if "%3" == "" (
+    set PYENVNAME=
+)
 
 set PYPROGRAMPATH=%~dp0
 set PYPROGRAMNAME=pymake.bat
@@ -58,7 +62,7 @@ if "%PYEXECFLAG%" == "False" (
 for /F %%i in ('"%PYPROGRAMPATHNAME%" get default exec root') do ( set "PYMMSHELLROOT=%%i" )
 echo exec root: [%PYMMSHELLROOT%] [default]
 
-if not %PYEXECPARAM% == "" (
+if not ""%PYEXECPARAM%"" == """" (
     call "%PYPROGRAMPATHNAME%" powershell use %PYENVNAME% exec-with-params here %PYEXECNAME% --params %PYEXECPARAM%
 ) else (
     call "%PYPROGRAMPATHNAME%" powershell use %PYENVNAME% exec-with-params here %PYEXECNAME%

@@ -6,19 +6,21 @@
 :: pyexecvp.bat 用户应当留意，导出的是否是目标环境的命令。
 
 if "%1" == "" (
-    echo "pyexecvp <cmd-name> [ <cmd-params> ] [<env-name>]"
+    echo "pyexecvp <cmd-name> [ ""<cmd-params>"" ] [<env-name>]"
     echo "<env name>: 'current' is suggested."
     echo please appoint a cmd name. & exit /b 0
 )
 set PYEXECNAME=%1
 
-if not "%3" == "" (
-    set PYENVNAME=%3
+set PYEXECPARAM=%2
+if ""%2"" == """" (
+    set PYEXECPARAM=""
 )
 
-set PYEXECNAME=%1
-set PYEXECPARAM=%2
 set PYENVNAME=%3
+if "%3" == "" (
+    set PYENVNAME=
+)
 
 set PYPROGRAMPATH=%~dp0
 set PYPROGRAMNAME=pymake.bat
@@ -58,7 +60,7 @@ if "%PYEXECFLAG%" == "False" (
 for /F %%i in ('"%PYPROGRAMPATHNAME%" get default exec root') do ( set "PYMMSHELLROOT=%%i" )
 echo exec root: [%PYMMSHELLROOT%] [default]
 
-if not %PYEXECPARAM% == "" (
+if not ""%PYEXECPARAM%"" == """" (
     call "%PYPROGRAMPATHNAME%" use %PYENVNAME% exec-with-params here %PYEXECNAME% --params %PYEXECPARAM%
 ) else (
     call "%PYPROGRAMPATHNAME%" use %PYENVNAME% exec-with-params here %PYEXECNAME%
