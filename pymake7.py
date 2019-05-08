@@ -2820,6 +2820,7 @@ def main_function():
 
                     # none? a powershell command, or powershell command-line.
                     powershellexecfile = cmd
+                    break
 
                 #print(powershellexecfile)
                 cmd_list.append(powershellexecfile + ' ' + params_string)

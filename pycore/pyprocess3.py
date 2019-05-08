@@ -54,7 +54,7 @@ def powershell_read_thread_function(p):
             break
 
         #windows powershell, echo line maybe echoed as a normal output line. [not]
-        #windows powershell, a command finished, maybe write one blank line to parent, forward catched, continuted to here.
+        #windows powershell, a command finished, maybe write some blank line to parent, forward catched, continuted to here.
         if(cmd_exit_flag == 1):
             if(str(l).startswith("PS")):
                 if(str(l).split(">")[1].lstrip().startswith("exit")):
@@ -64,8 +64,8 @@ def powershell_read_thread_function(p):
                     #print("PPPPPPPPPPPPPPPPPPPPP")
                     break
             else:
-                print(l)
-                print("if you catched, please push a issue.")
+                #print(l)
+                #print("if you catched, please push a issue.")
                 break
 
         #windows cmd, when p is closing, pipe write some blank line to parent
@@ -134,7 +134,7 @@ def powershell_write_command_thread_function(p, cmd_list):
 
 # windows *unix
 def communicateWithCommandLine3(list0):
-    shell = "powershell"
+    shell = "powershell -Sta"
 
     plat = getplatform()
     #if(plat == "Windows"):
