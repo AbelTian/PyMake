@@ -13,6 +13,8 @@ import subprocess
 from .pybase import *
 from .pyprocess import *
 
+#no necessary
+cmd_echo_line = 1
 
 # read stdout pipe
 def powershell_read_thread_function(p):
@@ -27,13 +29,18 @@ def powershell_read_thread_function(p):
     cmd_codec = "ansi"
     global cmd_event
     global cmd_exit_flag
-    echo_line = 1
+    global cmd_echo_line
     while (True):
         l = p.stdout.readline().rstrip().decode(cmd_codec)
         #print(l)
-        if(echo_line == 1):
-            echo_line = 0
+
+        if(cmd_echo_line == 1):
+            cmd_echo_line = 0
+            #print(cmd_echo_line)
+            #print(cmd_exit_flag)
             #print(l)
+            #print("BBBBBBBBBBBBBBBBBBBBBBBB")
+            #some case, it is a empty line, I think it should be a "PS xxx>exit 0" string. continue.
             if(str(l).__contains__('exit')):
                 break
             continue
@@ -46,13 +53,32 @@ def powershell_read_thread_function(p):
             #print("bbbb")
             break
 
-        #windows when p is closing, pipe write some blank line to parent
+        #windows powershell, echo line maybe echoed as a normal output line. [not]
+        #windows powershell, a command finished, maybe write one blank line to parent, forward catched, continuted to here.
+        if(cmd_exit_flag == 1):
+            if(str(l).startswith("PS")):
+                if(str(l).split(">")[1].lstrip().startswith("exit")):
+                    #print(cmd_echo_line)
+                    #print(cmd_exit_flag)
+                    #print(l)
+                    #print("PPPPPPPPPPPPPPPPPPPPP")
+                    break
+            else:
+                print(l)
+                print("if you catched, please push a issue.")
+                break
+
+        #windows cmd, when p is closing, pipe write some blank line to parent
         if (cmd_exit_flag == 1 and l is ''):
             #print ("read thread: l is empty")
             break
 
         if ("pymake-command-status:" in l):
-            echo_line = 1
+            cmd_echo_line = 1
+            #print(cmd_echo_line)
+            #print(cmd_exit_flag)
+            #print(l)
+            #print("EEEEEEEEEEEEEEEEEEEEEEEE")
             ret = int(l.split(':')[-1].strip())
             # java windows return 0 or 1
             #print (l)
