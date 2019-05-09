@@ -2,8 +2,10 @@ call :IF_EXIST
 exit /b 0
 
 
-:IF_EXIST BY chenall QQ:366840202 2009-09-29
+:IF_EXIST
+rem  BY chenall QQ:366840202 2009-09-29
 SETLOCAL&PATH %PATH%;%~dp0;%cd%
 if "%~$PATH:1"=="" exit /b 1
 echo %~$PATH:1
-exit /b 0 http://www.chenall.com
+exit /b 0
+rem  http://www.chenall.com
