@@ -1,9 +1,10 @@
 不影响当前执行器环境
     pymake.bat pymm.bat mm.bat
-    pyinfo.bat
+    pyinfo.bat pypaths.bat
+    pycmd.bat pyexecvp.bat pyccvp.bat
+    pypowershell.bat
     
 影响当前执行器环境
     pyenv.bat pyvc.bat
-    pycmd.bat
     
 *Unix下，后缀为.sh，一样的功能。
