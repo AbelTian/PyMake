@@ -3,6 +3,7 @@
         "root": "/home/tdr/Develop",
         "root.src": "${root}/a0-develop",
         "root.prod": "${root}/d0-product",
+        "root.sdk": "${root}/d1-sdk",
         "root.tool": "${root}/b0-toolkits",
         "root.build": "${root}/c0-buildstation",
         "root.test": "${root}/e3-test",
@@ -68,61 +69,10 @@
         "ndk.x86.bin": "${ndk.x86}/bin",
         "ndk.x86_64.bin": "${ndk.x86_64}/bin"
     },
-    "variable-assemblage": {
-        "qt.sys.mac": "MacOS",
-        "qt.sys.android.x86_64": "Android-x86_64",
-        "qt.sys.android.x86": "Android",
-        "qt.sys.android.arm": "Android-arm",
-        "build.debug": "Debug",
-        "build.release": "Release",
-        "qqt.prod.name": "QQt",
-        "qqt.proj.name": "a0-qqtfoundation",
-        "qqt.build.path": "${root.build}/${qqt.proj.name}/${qt.sys.mac}/${build.release}",
-        "qqt.source.path": "${root.src}/${qqt.proj.name}",
-        "qqt.proj.qmake": "${qqt.proj.name}.pro",
-        "qqt.prod.path": "${qqt.build.path}/src/bin",
-        "qqt.install.path": "${root.prod}/QQt",
-        "qqtframe.prod.name": "qqtframe",
-        "qqtframe.bin.path": "${qqt.build.path}/examples/${qqtframe.prod.name}/bin",
-        "qqtframe.dep1": "${qqt.build.path}/src/bin/QQt.framework",
-        "qqtframe.dep1.name": "QQt.framework/Versions/1/QQt",
-        "qt5.source": "${root.tool}/Source/qt5",
-        "qt5.build.path": "${root.build}/qt5",
-        "mac.app": "${prod.name}.app",
-        "mac.app.content": "${mac.app}/Contents",
-        "mac.app.macos": "${mac.app.content}/MacOS",
-        "mac.app.framework": "${mac.app.content}/Frameworks",
-        "mac.app.res": "${mac.app.content}/Resources",
-        "mac.app.plugin": "${mac.app.content}/PlugIns",
-        "mac.framework": "${prod.name}.framework",
-        "mac.framework.ver": "${prod.name}.framework/Versions",
-        "mac.framework.res": "${prod.name}.framework/Resources",
-        "qt.deploy.android": "androiddeployqt",
-        "qt.deploy.mac": "macdeployqt"
-    },
-    "command-assemblage": [
-        "I'm not similar to these command, so list them here, rather than forgotten them",
-        "cl-command, sys-command",
-        "replace? no, append? easy!",
-        "help you to remeber these command.",
-        "mkdir -p ${qqt.build.path}",
-        "cd ${build-path}",
-        "cmake -G\"Unix Makefiles\" -DCMAKE_INSTALL_PREFIX=${prod-root} ${source-path}",
-        "cmake -GXCode -DCMAKE_INSTALL_PREFIX=${prod-root} ${source-path}",
-        "rm -f CMakeCache.txt",
-        "qmake ${source-path}/${qmake-file} -spec ${QTSPEC} CONFIG+=${QTCONFIG} && make qmake_all",
-        "make -j4",
-        "make clean in ${build-path}",
-        "make install",
-        "${deployqt} ${bin-path}/${app-bundle} -verbose=1",
-        "${deployqt} -dmg",
-        "${deployqt} --help",
-        "cp -fr ${lib-dep} ${lib-native}",
-        "install_name_tool -change ${lib-dep-name} @rpath/${lib-dep-name} ${app-native}/${prod-name} ",
-        "install_name_tool -change $LibDep @rpath/$LibDep ${app-native}/${prod-name} ",
-        "${source-path}/configure -prefix ${install-path} -hostprefix ${install-path} -xplatform android-g++ -release -nomake tests -nomake examples -android-ndk $ANDROID_NDK_ROOT -android-sdk $ANDROID_SDK_ROOT -android-ndk-host $ANDROID_NDK_HOST -android-toolchain-version $ANDROID_NDK_TOOLCHAIN_VERSION -skip qtwebkit-examples -no-warnings-are-errors"
-    ],
     "environ": {
+        "default": {
+            "path+": []
+        },
         "android.mobile": {
             "path+": [
                 "${cmake.bin}",
@@ -343,10 +293,114 @@
             "done"
         ],
         "open-dir": [
-            "open $1"
+            "nautilus $*"
         ],
         "test.5": [
             "exit 0"
+        ],
+        "prod": [
+            "prod=ProductExecTool",
+            "cd ${root.prod}/$prod/Linux64",
+            "${root.prod}/$prod/Linux64/$prod"
+        ],
+        "prod-debug": [
+            "prod=ProductExecTool",
+            "cd ${root.prod}/$prod/Linux64",
+            "${root.prod}/$prod/Linux64/${prod}d"
+        ],
+        "qt": [
+            "${root.tool}/Qt/Tools/QtCreator/bin/qtcreator.sh"
+        ],
+        "build.qt5": [
+            "src=${root.tool}/z0-Source/qt",
+            "build=${root.build}/qt",
+            "install=${root.tool}/macLibraries/Qt/5.9.2/android_CUSTOM",
+            "mkdir -p $build",
+            "cd $build",
+            "echo build $(pwd)",
+            "${src}/configure -prefix ${install} -hostprefix ${install} -xplatform android-g++ -release -nomake tests -nomake examples -android-ndk $ANDROID_NDK_ROOT -android-sdk $ANDROID_SDK_ROOT -android-ndk-host $ANDROID_NDK_HOST -android-toolchain-version $ANDROID_NDK_TOOLCHAIN_VERSION -skip qtwebkit-examples -no-warnings-are-errors",
+            "make -j4",
+            "make install"
+        ],
+        "open-build": [
+            "cd ${root.build}",
+            "dir=${root.build}",
+            "if [ \"$1\" != \"\" ]; then",
+            "   dir=$dir/$1/${QSYS}/${QTVERSION}/Debug",
+            "   echo $dir",
+            "fi",
+            "nautilus $dir"
+        ],
+        "addlibrary": [
+            "prod=AddLibraryTool",
+            "cd ${root.prod}/$prod/Linux64",
+            "${root.prod}/$prod/Linux64/$prod"
+        ],
+        "open-sdk": [
+            "cd ${root.sdk}",
+            "dir=${root.sdk}",
+            "if [ \"$1\" != \"\" ]; then",
+            "   dir=$dir/$1/${QSYS}",
+            "   echo $dir",
+            "fi",
+            "nautilus $dir"
+        ],
+        "cloc": [
+            "perl ${pymake}/demo/cloc-1.74.pl .",
+            "date"
+        ],
+        "clean.pro": [
+            "while [ 1 ]",
+            "do",
+            "if [ -f \"$1.pro\" ]; then",
+            "   echo $1.pro existed.",
+            "else",
+            "   echo has $1.pro? please add here command to restrict.",
+            "   break",
+            "fi",
+            "src_path=$(pwd)",
+            "profilename=$1",
+            "src=$src_path/$profilename.pro",
+            "build=${root.build}/$profilename/${QSYS}/${QTVERSION}/Debug",
+            "cd $build",
+            "echo src file: $src",
+            "echo build at: $build",
+            "echo ${QTSPEC} ${QTCONFIG}",
+            "make clean",
+            "echo build inf ${QTSPEC} ${QTCONFIG}",
+            "echo src file: $src",
+            "echo build at: $build",
+            "break",
+            "done"
+        ],
+        "cmake": [
+            "open ${root.tool}/macCompilers/CMake.app"
+        ],
+        "current-dir": [
+            "echo $(pwd)"
+        ],
+        "android.sdk": [
+            "${root.tool}/macAndroidLibraries/android-sdk-macosx/tools/android"
+        ],
+        "open-prod": [
+            "open ${root.prod}"
+        ],
+        "build.qt4": [
+            "src=${root.tool}/z0-Source/qt",
+            "build=${root.build}/qt",
+            "install=${root.tool}/macLibraries/Qt/4.8/gcc_64_CUSTOM",
+            "mkdir -p $build",
+            "cd $build",
+            "echo build $(pwd)",
+            "CXXFLAGS=-stdlib=libc++",
+            "${src}/configure -prefix ${install}",
+            "make -j4",
+            "make install"
+        ],
+        "sdklist": [
+            "prod=SdkListTool",
+            "cd ${root.prod}/$prod/Linux64",
+            "${root.prod}/$prod/Linux64/$prod"
         ]
     }
 }
