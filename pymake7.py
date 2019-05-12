@@ -374,10 +374,10 @@ def main_function():
                 "QTDIR": "${qt4.8.clang}",
                 "QTSPEC": "-spec macx-llvm",
                 "QTCONFIG": "CONFIG+=x86_64",
-                "QKIT": "macOS",
+                "QKIT": "MacOS",
                 "QSYS": "MacOS"
             },
-            "macos": {
+            "qt5": {
                 "path+": [
                     "${cmake.bin}",
                     "${qt5.9.clang.bin}"
@@ -389,81 +389,14 @@ def main_function():
                 "QKIT": "macOS",
                 "QSYS": "macOS"
             },
-            "current": "macos"
+            "current": "qt5"
         },
-        "variable-assemblage": [
-            "QQt",
-            "LibQQt",
-            "${root.build}/${qqt.proj.name}/${qt.sys.mac}/${build.release}",
-            "${root.src}/${qqt.proj.name}",
-            "${qqt.proj.name}.pro",
-            "${qqt.build.path}/src/bin",
-            "${root.prod}/QQt",
-            "qqtframe",
-            "${qqt.build.path}/examples/${qqtframe.prod.name}/bin",
-            "${qqt.build.path}/src/bin/QQt.framework",
-            "QQt.framework/Versions/1/QQt",
-            "${root.tool}/Source/qt5",
-            "${root.build}/qt5",
-            "androiddeployqt",
-            "macdeployqt",
-            "DownloadQueue",
-            "/Users/abel/Develop/c1-webrc/DownloadQueue/DownloadQueue.pro",
-            "${root.build}/${app.name}",
-            "macdeployqt ${app.path.build}/${app.name}.app",
-            "${prod.name}.app",
-            "${mac.app}/Contents",
-            "${mac.app.content}/MacOS",
-            "${mac.app.content}/Frameworks",
-            "${mac.app.content}/Resources",
-            "${mac.app.content}/PlugIns",
-            "${prod.name}.framework",
-            "${prod.name}.framework/Versions",
-            "${prod.name}.framework/Resources",
-            "macdeployqt ${}"
-        ],
-        "command-assemblage": [
-            "I'm not similar to these command, so list them here, rather than forgotten them",
-            "cl-command, sys-command",
-            "replace? no, append? easy!",
-            "help you to remeber these command.",
-            "mkdir -p ${qqt.build.path}",
-            "cd ${build-path}",
-            "cmake -G\"Unix Makefiles\" -DCMAKE_INSTALL_PREFIX=${prod-root} ${source-path}",
-            "cmake -GXCode -DCMAKE_INSTALL_PREFIX=${prod-root} ${source-path}",
-            "rm -f CMakeCache.txt",
-            "qmake ${source-path}/${qmake-file} -spec ${QTSPEC} CONFIG+=${QTCONFIG} && make qmake_all",
-            "make -j4",
-            "make clean in ${build-path}",
-            "make install",
-            "${deployqt} ${bin-path}/${app-bundle} -verbose=1",
-            "${deployqt} -dmg",
-            "${deployqt} --help",
-            "cp -fr ${lib-dep} ${lib-native}",
-            "install_name_tool -change ${lib-dep-name} @rpath/${lib-dep-name} ${app-native}/${prod-name} ",
-            "install_name_tool -change $LibDep @rpath/$LibDep ${app-native}/${prod-name} ",
-            "${source-path}/configure -prefix ${install-path} -hostprefix ${install-path} -xplatform android-g++ -release -nomake tests -nomake examples -android-ndk $ANDROID_NDK_ROOT -android-sdk $ANDROID_SDK_ROOT -android-ndk-host $ANDROID_NDK_HOST -android-toolchain-version $ANDROID_NDK_TOOLCHAIN_VERSION -skip qtwebkit-examples -no-warnings-are-errors",
-            "${qt5.path.source}/configure -prefix ${qt5.path.install} -hostprefix ${qt5.path.install} -xplatform android-g++ -release -nomake tests -nomake examples -android-ndk $ANDROID_NDK_ROOT -android-sdk $ANDROID_SDK_ROOT -android-ndk-host $ANDROID_NDK_HOST -android-toolchain-version $ANDROID_NDK_TOOLCHAIN_VERSION -skip qtwebkit-examples -no-warnings-are-errors"
-        ],
         "command": {
-            "test":[
+            "current-dir":[
                 "echo $(pwd)"
             ],
-            "qqt.build": [
-                "src_path=${root.src}/LibQQt",
-                "src=${root.src}/LibQQt/QQt.pro",
-                "build=${root.build}/QQt/${QSYS}/${QTVERSION}/Debug",
-                "mkdir -p $build",
-                "cd $build",
-                "echo build $(pwd)",
-                "qmake ${src} ${QTSPEC} CONFIG+=debug CONFIG+=qml_debug ${QTCONFIG} && make qmake_all",
-                "make -j4"
-            ],
-            "qqt.clean": [
-                "src=${root.src}/LibQQt/QQt.pro",
-                "build=${root.build}/QQt/${QSYS}/${QTVERSION}/Debug",
-                "cd $build",
-                "make clean"
+            "open-dir": [
+                "open $*"
             ],
             "qt": [
                 "open \"/Applications/Qt Creator.app\""
@@ -472,24 +405,81 @@ def main_function():
                 "open ${root.tool}/macCompilers/CMake.app"
             ],
             "prod": [
+                "open ${root.prod}/ProductExecTool/macOS/ProductExecTool.app"
+            ],
+            "prod-debug": [
                 "open ${root.prod}/ProductExecTool/macOS/ProductExecTool_debug.app"
             ],
-            "libtool": [
+            "addlibrarytool": [
                 "open ${root.prod}/AddLibraryTool/macOS/AddLibraryTool_debug.app"
             ],
-            "qt.check": [
-                "src=${root.tool}/z0-Source/qt-everywhere-opensource-src-4.8.7",
-                "build=${root.build}/qt4.8.7",
-                "install=${root.tool}/macLibraries/Qt/4.8.7/gcc_64",
+            "open-prod": [
+                "open ${root.prod}"
+            ],
+            "open-sdk": [
+                "open ${root.sdk}"
+            ],
+            "open-build": [
+                "open ${root.build}"
+            ],
+            "cloc": [
+                "perl ${pymake}/demo/cloc-1.74.pl .",
+                "date"
+            ],
+            "build.pro": [
+                "while [ 1 ]",
+                "do",
+                "if [ -f \"$1.pro\" ]; then",
+                "   echo $1.pro existed.",
+                "else",
+                "   echo has $1.pro? please add here command to restrict.",
+                "   break",
+                "fi",
+                "src_path=$(pwd)",
+                "profilename=$1",
+                "src=$src_path/$profilename.pro",
+                "build=${root.build}/$profilename/${QSYS}/${QTVERSION}/Debug",
                 "mkdir -p $build",
                 "cd $build",
-                "echo build $(pwd)",
-                "${src}/configure --help"
+                "echo src file: $src",
+                "echo build at: $build",
+                "echo ${QTSPEC} ${QTCONFIG}",
+                "qmake $src ${QTSPEC} CONFIG+=debug CONFIG+=qml_debug ${QTCONFIG} && make qmake_all",
+                "make -j4",
+                "echo build inf ${QTSPEC} ${QTCONFIG}",
+                "echo src file: $src",
+                "echo build at: $build",
+                "break",
+                "done"
             ],
-            "qt4.build": [
+            "clean.pro": [
+                "while [ 1 ]",
+                "do",
+                "if [ -f \"$1.pro\" ]; then",
+                "   echo $1.pro existed.",
+                "else",
+                "   echo has $1.pro? please add here command to restrict.",
+                "   break",
+                "fi",
+                "src_path=$(pwd)",
+                "profilename=$1",
+                "src=$src_path/$profilename.pro",
+                "build=${root.build}/$profilename/${QSYS}/${QTVERSION}/Debug",
+                "cd $build",
+                "echo src file: $src",
+                "echo build at: $build",
+                "echo ${QTSPEC} ${QTCONFIG}",
+                "make clean",
+                "echo build inf ${QTSPEC} ${QTCONFIG}",
+                "echo src file: $src",
+                "echo build at: $build",
+                "break",
+                "done"
+            ],
+            "build.qt4": [
                 "src=${root.tool}/z0-Source/qt",
                 "build=${root.build}/qt",
-                "install=${root.tool}/macLibraries/Qt/4.8/gcc_64",
+                "install=${root.tool}/macLibraries/Qt/4.8/gcc_64_CUSTOM",
                 "mkdir -p $build",
                 "cd $build",
                 "echo build $(pwd)",
@@ -498,40 +488,16 @@ def main_function():
                 "make -j4",
                 "make install"
             ],
-            "qt4.8.7.build": [
-                "src=${root.tool}/z0-Source/qt-everywhere-opensource-src-4.8.7",
-                "build=${root.build}/qt4.8.7",
-                "install=${root.tool}/macLibraries/Qt/4.8.7/gcc_64",
+            "build.qt5": [
+                "src=${root.tool}/z0-Source/qt",
+                "build=${root.build}/qt",
+                "install=${root.tool}/macLibraries/Qt/5.9.2/android_CUSTOM",
                 "mkdir -p $build",
                 "cd $build",
                 "echo build $(pwd)",
-                "${src}/configure -prefix ${install}",
+                "${src}/configure -prefix ${install} -hostprefix ${install} -xplatform android-g++ -release -nomake tests -nomake examples -android-ndk $ANDROID_NDK_ROOT -android-sdk $ANDROID_SDK_ROOT -android-ndk-host $ANDROID_NDK_HOST -android-toolchain-version $ANDROID_NDK_TOOLCHAIN_VERSION -skip qtwebkit-examples -no-warnings-are-errors",
                 "make -j4",
                 "make install"
-            ],
-            "qtsoap.build": [
-                "src=/Users/abel/Develop/c1-webrc/qt-solutions/qtsoap",
-                "build=${root.build}/qtsoap",
-                "install=/Users/abel/Develop/d1-product/QtSoap",
-                "cd $build",
-                "${src}/configure -library"
-            ],
-            "qqt.push": [
-                "src=${root.src}/LibQQt",
-                "cd $src",
-                "git push",
-                "git push --tag"
-            ],
-            "qqt.pull": [
-                "src=${root.src}/LibQQt",
-                "cd $src",
-                "git pull"
-            ],
-            "qqt.cloc": [
-                "src=${root.src}/LibQQt",
-                "cd $src",
-                "perl ${pymake}/demo/cloc-1.74.pl  .",
-                "date"
             ],
             "android.sdk": [
                 "${root.tool}/macAndroidLibraries/android-sdk-macosx/tools/android"
