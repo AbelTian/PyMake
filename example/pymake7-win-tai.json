@@ -106,6 +106,7 @@
     "environ": {
         "android.mobile": {
             "path+": [
+                "${cmake.bin}",
                 "${qt5.9.android_arm.bin}",
                 "${mingw32.bin}",
                 "${java1.8.bin}",
@@ -138,6 +139,7 @@
         },
         "android.x86": {
             "path+": [
+                "${cmake.bin}",
                 "${qt5.9.android_x86.bin}",
                 "${mingw32.bin}",
                 "${java1.8.bin}",
@@ -171,6 +173,7 @@
         },
         "armhf32": {
             "path+": [
+                "${cmake.bin}",
                 "${qt5.armhf32.bin}",
                 "${armhf32.bin}"
             ],
@@ -183,6 +186,7 @@
         },
         "qt4": {
             "path+": [
+                "${cmake.bin}",
                 "${mingw32.bin}",
                 "${qt4.8.mingw32.bin}"
             ],
@@ -195,6 +199,7 @@
         },
         "qt5": {
             "path+": [
+                "${cmake.bin}",
                 "${mingw32.bin}",
                 "${qt5.9.mingw32.bin}"
             ],
@@ -207,6 +212,7 @@
         },
         "qt5.x64": {
             "path+": [
+                "${cmake.bin}",
                 "${mingw64.bin}",
                 "${qt5.12.mingw64.bin}"
             ],
