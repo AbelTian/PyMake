@@ -10,8 +10,20 @@
         "root.build": "${root2}/c0-buildstation",
         "root.test": "${root}/e3-test",
         "root.webrc": "${root}/e2-webrc",
-        "cc": "${root.tool}/a0-Compiler",
+        "cc": "${root.tool}/a0-compiler",
+        "pymake":"${cc}/PyMake",
+        "pymake.env":"${pymake}/UserSource",
+        "pymake.shell":"${pymake.env}/UserShell",
         "wincc": "${root.tool}/winCompilers",
+        "xmake": "${wincc}/xmake",
+        "watcom": "${wincc}/watcom1.9",
+        "watcom.bin": "${watcom}/binw;${watcom}/binnt",
+        "watcom.include": "${watcom}/h;${watcom}/h/nt;${watcom}/h/nt/directx;${watcom}/h/nt/ddk",
+        "watcom.edpath": "${watcom}/eddat",
+        "watcom.help": "${watcom}/binnt/help",
+        "watcom.wipfc": "${watcom}/wipfc",
+        "perl": "${wincc}/perl_5.26.0.1_64",
+        "perl.bin": "${perl}/perl/bin",
         "cmake": "${wincc}/cmake3.9.1_64",
         "cmake.bin": "${cmake}/bin",
         "msys.bin": "${root.tool}/winCompilers/mSys/bin",
@@ -94,7 +106,6 @@
     "environ": {
         "android.mobile": {
             "path+": [
-                "${cmake.bin}",
                 "${qt5.9.android_arm.bin}",
                 "${mingw32.bin}",
                 "${java1.8.bin}",
@@ -127,7 +138,6 @@
         },
         "android.x86": {
             "path+": [
-                "${cmake.bin}",
                 "${qt5.9.android_x86.bin}",
                 "${mingw32.bin}",
                 "${java1.8.bin}",
@@ -161,10 +171,8 @@
         },
         "armhf32": {
             "path+": [
-                "${cmake.bin}",
-                "${armhf32.bin}",
                 "${qt5.armhf32.bin}",
-                "${mingw32.bin}"
+                "${armhf32.bin}"
             ],
             "QTVERSION": "${qt5.version}",
             "QTDIR": "${qt5.armhf32}",
@@ -175,7 +183,6 @@
         },
         "qt4": {
             "path+": [
-                "${cmake.bin}",
                 "${mingw32.bin}",
                 "${qt4.8.mingw32.bin}"
             ],
@@ -188,9 +195,6 @@
         },
         "qt5": {
             "path+": [
-                "${doxygen.bin}",
-                "${graphviz.bin}",
-                "${cmake.bin}",
                 "${mingw32.bin}",
                 "${qt5.9.mingw32.bin}"
             ],
@@ -203,9 +207,6 @@
         },
         "qt5.x64": {
             "path+": [
-                "${doxygen.bin}",
-                "${graphviz.bin}",
-                "${cmake.bin}",
                 "${mingw64.bin}",
                 "${qt5.12.mingw64.bin}"
             ],
@@ -215,6 +216,25 @@
             "QTCONFIG": "",
             "QKIT": "WIN64",
             "QSYS": "Win64"
+        },
+        "msys": {
+            "path+": [
+                "${msys.bin}"
+            ]
+        },
+        "other": {
+            "path+": [
+                "${watcom.bin}",
+                "${perl.bin}",
+                "${doxygen.bin}",
+                "${graphviz.bin}",
+                "${cmake.bin}"
+            ],
+            "WATCOM": "${watcom}",
+            "EDPATH": "${watcom.edpath}",
+            "WHTMLHELP": "${watcom.help}",
+            "WIPFC": "${watcom.wipfc}",
+            "INCLUDE": "${watcom.include}"
         },
         "current": "qt5"
     },
@@ -344,13 +364,13 @@
             "cd /d R:/Develop/c0-buildstation/qwt/5.9.2/Windows/Debug",
             "mingw32-make install"
         ],
-        "make": [
+        "make0": [
             "mingw32-make"
         ],
         "deployqt": [
             "echo need %1."
         ],
-        "android.sdk.manager": [
+        "android.sdk": [
             "${android.sdk}/\"SDK Manager.exe\""
         ],
         "libtool2": [
