@@ -41,12 +41,12 @@ Usage:
   pymake7.py  set default env <name>
   pymake7.py  show [ path | env | cmd ] [<name>] [-r | --raw] [-a | --all]
   pymake7.py  environ [<name>] [-p | --path] [-v | --var] [-r | --raw] [-a | --all]
-  pymake7.py  see [ <cmd-name> ] [ use <env-name> ] [-r | --raw] [-a | --all]
-  pymake7.py  ss [ <cmd-name> ] [ use <env-name> ] [-r | --raw] [-a | --all]
-  pymake7.py  cmd [ <cmd-name> ] [ use <env-name> ] [-r | --raw] [-a | --all]
-  pymake7.py  use <env-name> see [ <cmd-name> ] [-r | --raw] [-a | --all]
-  pymake7.py  use <env-name> ss [ <cmd-name> ] [-r | --raw] [-a | --all]
-  pymake7.py  use <env-name> cmd [ <cmd-name> ] [-r | --raw] [-a | --all]
+  pymake7.py  see [ <cmd-name> ] [ use <env-name> ] [-r | --raw] [-a | --all] [ -l | --linenumber ]
+  pymake7.py  ss [ <cmd-name> ] [ use <env-name> ] [-r | --raw] [-a | --all] [ -l | --linenumber ]
+  pymake7.py  cmd [ <cmd-name> ] [ use <env-name> ] [-r | --raw] [-a | --all] [ -l | --linenumber ]
+  pymake7.py  use <env-name> see [ <cmd-name> ] [-r | --raw] [-a | --all] [ -l | --linenumber ]
+  pymake7.py  use <env-name> ss [ <cmd-name> ] [-r | --raw] [-a | --all] [ -l | --linenumber ]
+  pymake7.py  use <env-name> cmd [ <cmd-name> ] [-r | --raw] [-a | --all] [ -l | --linenumber ]
   pymake7.py  -------------------------------------------------------------
   pymake7.py  hh clean
   pymake7.py  hh export [ <env-name> ] [ to <file-name> ]
@@ -4481,7 +4481,10 @@ def main_function():
                     value = local_command[args['<cmd-name>']]
                     step = 1
                     for cmd in value:
-                        print(Fore.RED + "%-3s %s" % (step, cmd))
+                        if(args['-l'] or args['--linenumber'] is True):
+                            print(Fore.RED + "%-3s %s" % (step, cmd))
+                        else:
+                            print(Fore.RED + "%s" % (cmd))
                         step += 1
                     return
         else:
@@ -4514,7 +4517,10 @@ def main_function():
                 value = list_config['command'][args['<cmd-name>']]
                 step = 1
                 for cmd in value:
-                    print(Fore.RED + "%-3s %s" % (step, cmd))
+                    if (args['-l'] or args['--linenumber'] is True):
+                        print(Fore.RED + "%-3s %s" % (step, cmd))
+                    else:
+                        print(Fore.RED + "%s" % (cmd))
                     step += 1
                 return
         else:
