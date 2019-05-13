@@ -617,7 +617,9 @@ def main_function():
         if(args['source'] is True):
             if(args['root'] is True):
                 if ( args['<source-root-path>'] is not None):
-                    r = pymakeworkpath + os.path.sep + args['<source-root-path>']
+                    r = args['<source-root-path>']
+                    if(os.path.isabs(r) is False):
+                        r = pymakeworkpath + os.path.sep + args['<source-root-path>']
                     if(os.path.isdir(r) is False):
                         print("failed: %s is not a dir." % args['<source-root-path>'])
                         return

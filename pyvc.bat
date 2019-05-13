@@ -22,24 +22,27 @@ if "%1" == "" (
     set PYENVNAME=%1
 )
 
+set PYPROGRAMPATH=%~dp0
+set PYPROGRAMNAME=pymake.bat
+set PYPROGRAMPATHNAME=%PYPROGRAMPATH%%PYPROGRAMNAME%
+
 for /F %%i in ('"%PYPROGRAMPATHNAME%" get current env') do ( set "PYMMDEFAULTENVNAME=%%i" )
-echo environme: [%PYMMDEFAULTENVNAME%] [default]
+rem echo environme: [%PYMMDEFAULTENVNAME%] [default]
 for /F %%i in ('"%PYPROGRAMPATHNAME%" have env %PYENVNAME%') do ( set "PYENVEXISTEDFLAG=%%i" )
 if "%PYENVEXISTEDFLAG%" == "False" (
     echo environme: [%PYENVNAME%] is not existed.
     exit /b 0
 )
-echo environme: [%PYENVNAME%] [%PYENVEXISTEDFLAG%] [USED]
+rem echo environme: [%PYENVNAME%] [%PYENVEXISTEDFLAG%] [USED]
 
-set PYPROGRAMPATH=%~dp0
-call "%PYPROGRAMPATH%"\pyenv.bat %PYENVNAME%
+call "%PYPROGRAMPATH%\pyenv.bat" %PYENVNAME%
 
 if "%PYENVFLAG%" == "False" (
     echo pyvc env : CLS-VCVARSALL="%CLS-VCVARSALL:/=\%" %CLS-VCVARSALLPARAM%
     call "%CLS-VCVARSALL:/=\%" %CLS-VCVARSALLPARAM%
     echo pyvc env : [%PYENVNAME%] closed, but you should use new vcvarsall overlap it.
 ) else (
-    echo pyvc env : VCVARSALL="%VCVARSALL:/=\%" %VCVARSALLPARAM%
+    echo pyvc env : RUN-VCVARSALL="%VCVARSALL:/=\%" %VCVARSALLPARAM%
     call "%VCVARSALL:/=\%" %VCVARSALLPARAM%
     echo pyvc env : [%PYENVNAME%] opened, sure.
 )

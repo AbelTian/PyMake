@@ -1,17 +1,5 @@
 # User Support  
-
 User support shell module, user can install them to share their functions.   
-
-|Program|Shortcut|Shortcut(Level 2)|
-|----|----|----|  
-| pymake.py | pymake | mm, pymm |
-| pymake.py | pyenv | pyvc |
-| pymake.py | pycmd, pyexecvp | pyccvp |
-| pymake.py | pypowershell |  |
-| pyinfo.py | pyinfo || 
-| pypaths.py | pypaths || 
-| pycodec.py | | |
-|  |  | install,uninstall |  
 
 # pymake  
 
@@ -68,6 +56,9 @@ pymake set cur env
 
 #导出一个环境
 pymake export
+
+#导出一个带“在sourceroot里自定义的”环境的环境
+pymake export2
 
 #导出一个命令（其实是个命令步的集合）
 pymake type
@@ -192,11 +183,13 @@ bat环境变量不区分大小写。
 一般不需要。   
 2. 环境变量 VCVARSALL VCVARSALLPARAM 已经被使用者设置进入确定的ENV，随时跟着ENV改变。  
 
+## pyvc 使用截图  
+![命令行截图](./screenshot/b6.png)  
 
 # pypowershell  
 
 pypowershell允许用户在PyMake提供的多环境里，使用powershell执行器执行命令，当然，执行的必然是powershell命令。  
 用户可以在一个目录里调用任何目录下的.ps1，而且，当作命令来调用，支持输入参数，支持任意工作目录。  
-支持pypowershell，是个开创性动作。   
+支持powershell，是个开创性动作。   
 
-![命令行测试截图](./screenshot/c1.png)
+![命令行测试截图](./screenshot/c1.png)  

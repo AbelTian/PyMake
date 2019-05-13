@@ -413,10 +413,24 @@ Update the command-line.
     - these environment can be used in powershell environment.
     - you can open custom mobule or close it.
 
-[Command-line Screenshot](./command-line.txt)  
+## Command-line  
+[Link to Command-line Screenshot](./command-line.txt)  
 
 # User Support   
-[Readme](./SHELL.md)  
+User support shell module, user can install them to share their functions.   
+
+|Program|Shortcut|Shortcut(Level 2)|
+|----|----|----|  
+| pymake.py | pymake | mm, pymm |
+| pymake.py | pyenv | pyvc |
+| pymake.py | pycmd, pyexecvp | pyccvp |
+| pymake.py | pypowershell |  |
+| pyinfo.py | pyinfo || 
+| pypaths.py | pypaths || 
+| pycodec.py | | |
+| ... |  | install,uninstall |  
+
+[Detailed information](./SHELL.md)  
 
 # Language       
 [PyMake Language](./LANGUAGE.md)  
