@@ -11,9 +11,9 @@
         "root.test": "${root}/e3-test",
         "root.webrc": "${root}/e2-webrc",
         "cc": "${root.tool}/a0-compiler",
-        "pymake":"${cc}/PyMake",
-        "pymake.env":"${pymake}/UserSource",
-        "pymake.shell":"${pymake.env}/UserShell",
+        "pymake": "${cc}/PyMake",
+        "pymake.env": "${pymake}/UserSource",
+        "pymake.shell": "${pymake.env}/UserShell",
         "wincc": "${root.tool}/winCompilers",
         "xmake": "${wincc}/xmake",
         "watcom": "${wincc}/watcom1.9",
@@ -295,7 +295,18 @@
             "adb devices"
         ],
         "cmake": [
-            "start ${cmake.bin}/cmake-gui.exe"
+            "if not exist \"CMakeLists.txt\" ( echo has any CMakeLists.txt? please add here command to restrict. & exit /b 0 )",
+            "set src_path=%CD%",
+            "set profilename=%1",
+            "if \"\"%profilename%\"\" == \"\"\"\" ( echo please input a project name. & exit /b 0 )",
+            "::set src=%src_path%/%profilename%.pro",
+            "set build=${root.build}/%profilename%/${QSYS}/${QTVERSION}/Debug",
+            "md %build:/=\\%",
+            "cd /d %build%",
+            "echo src path: %src_path:\\=/%",
+            "echo build at: %build:\\=/%",
+            "start ${cmake.bin}/cmake-gui.exe",
+            "cd /d %src_path%"
         ],
         "libtool": [
             "cd /d ${root.prod}/AddLibraryTool/Windows",
@@ -324,15 +335,17 @@
             "echo %cd%"
         ],
         "test.2": [
-            "rem echo %*",
+            "echo %*",
             "set param=%*",
-            "ping 127.0.0.1 \"%param%\""
+            "echo %param%",
+            "ping 127.0.0.1 %param%",
+            "rem exit /b 0"
         ],
         "test.3": [
             "rem echo %*",
-            "ping \"%*\""
+            "ping %*"
         ],
-        "build.pro": [
+        "build.qmake": [
             "if not exist \"*.pro\" ( echo has any .pro? please add here command to restrict. & exit /b 0 )",
             "set src_path=%CD%",
             "set profilename=%1",
@@ -341,14 +354,14 @@
             "md %build:/=\\%",
             "cd /d %build%",
             "rem del /f /q demo examples src test",
-            "echo src file: %src%",
-            "echo build at: %build%",
+            "echo src file: %src:\\=/%",
+            "echo build at: %build:\\=/%",
             "echo ${QTSPEC} ${QTCONFIG}",
             "qmake %src% ${QTSPEC} CONFIG+=debug CONFIG+=qml_debug ${QTCONFIG} && mingw32-make qmake_all",
             "mingw32-make -j10",
             "echo build inf ${QTSPEC} ${QTCONFIG}",
-            "echo src file: %src%",
-            "echo build at: %build%",
+            "echo src file: %src:\\=/%",
+            "echo build at: %build:\\=/%",
             "cd /d %src_path%"
         ],
         "open-dir": [
@@ -377,26 +390,70 @@
             "cd /d ${root.prod}/AddLibraryTool-Multiple/Windows",
             "start ${root.prod}/AddLibraryTool-Multiple/Windows/AddLibraryTool-Multiple.exe"
         ],
-        "openprod": [
+        "test.4": [
+            "exit /b 0"
+        ],
+        "open-prod": [
             "set prod=%1",
             "cd /d ${root.prod}/%prod%/Windows",
             "start ${root.prod}/%prod%/Windows/%prod%.exe"
         ],
-        "openprodd": [
+        "open-prodd": [
             "set prod=%1",
             "cd /d ${root.prod}/%prod%/Windows",
             "start ${root.prod}/%prod%/Windows/%prod%d.exe"
         ],
-        "opensdk": [
+        "open-sdk": [
             "set sdk=%1",
             "start ${root.sdk}/%sdk%"
         ],
-        "openbuild": [
+        "open-build": [
             "set build=%1",
             "start ${root.build}/%build%"
         ],
-        "test.4": [
-            "exit /b 0"
+        "run": [
+            "if not exist \"*.pro\" ( echo has any .pro? please add here command to restrict. & exit /b 0 )",
+            "set src_path=%CD%",
+            "set profilename=%1",
+            "set src=%src_path%/%profilename%.pro",
+            "set build=${root.build}/%profilename%/${QSYS}/${QTVERSION}/Debug",
+            "md %build:/=\\%",
+            "cd /d %build%",
+            "rem del /f /q demo examples src test",
+            "echo src file: %src:\\=/%",
+            "echo build at: %build:\\=/%",
+            "echo ${QTSPEC} ${QTCONFIG}",
+            "start %build%\\debug\\%profilename%.exe",
+            "echo build inf ${QTSPEC} ${QTCONFIG}",
+            "echo src file: %src:\\=/%",
+            "echo build at: %build:\\=/%",
+            "cd /d %src_path%"
+        ],
+        "build.cmake": [
+            "if not exist \"CMakeLists.txt\" ( echo has any CMakeLists.txt? please add here command to restrict. & exit /b 0 )",
+            "set src_path=%CD%",
+            "set profilename=%1",
+            "if \"\"%profilename%\"\" == \"\"\"\" ( echo please input a project name. & exit /b 0 )",
+            "set src=%src_path%/CMakeLists.txt",
+            "set build=${root.build}/%profilename%/${QSYS}/${QTVERSION}/Debug",
+            "md %build:/=\\%",
+            "cd /d %build%",
+            "rem del /f /q demo examples src test",
+            "echo Qt spec: ${QTSPEC} ${QTCONFIG}",
+            "echo src file: %src:\\=/%",
+            "echo build at: %build%",
+            "mingw32-make -j10",
+            "echo Qt inf  : ${QTSPEC} ${QTCONFIG}",
+            "echo src file: %src:\\=/%",
+            "echo build at: %build:\\=/%",
+            "cd /d %src_path%"
+        ],
+        "open-tool": [
+            "start ${root.tools}/%1.exe.lnk"
+        ],
+        "qqtsh": [
+            "cd ${root.src}",
+            "call %1"
         ]
     }
 }
