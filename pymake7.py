@@ -136,7 +136,7 @@ Usage:
   pymeke7.py  custom
   pymake7.py  custom [ open | close | status ]
   pymake7.py  custom [ information ]
-  pymake7.py  custom env
+  pymake7.py  custom env [ -r | --raw ]
   pymake7.py  custom export [ here | hh ] [ to <file-name> ]
   pymake7.py  custom exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
   pymake7.py  custom use <env-name> exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
@@ -2373,7 +2373,9 @@ def main_function():
             step += 1
 
     # raw path function, parse custom path tuple
-    def raw_path(pathgroup):
+    def raw_path(pathgroup0):
+        pathgroup = copy.deepcopy(pathgroup0)
+
         # replace path
         for (key, value) in enumerate(pathgroup):
             # print (key) #...
@@ -2475,6 +2477,9 @@ def main_function():
     envcustomlistpaths = []
     envcustomlistvars = {}
 
+    envcustomlistrawpaths = []
+    envcustomlistrawvars = {}
+
     plat = getplatform()
     cmd_codec = "utf8"
     cmd_return = "\n"
@@ -2554,10 +2559,19 @@ def main_function():
 
         # set into env
         envcustompaths = copy.deepcopy(storecustompaths)
-        envcustompaths = raw_path(envcustompaths)
+        envcustomrawpaths = raw_path(envcustompaths)
+        #print(envcustompaths)
+        #print(envcustomrawpaths)
+
+        for (key,l) in zip(envcustompaths, envcustomrawpaths):
+            if (l == ''):
+                continue
+            if (os.path.isabs(l) is False):
+                continue
+            envcustomlistpaths.append(key)
 
         clean_list = []
-        for l in envcustompaths:
+        for l in envcustomrawpaths:
             if (l == ''):
                 clean_list.append(l)
                 continue
@@ -2567,15 +2581,15 @@ def main_function():
         # print(clean_list)
 
         for l in clean_list:
-            if (envcustompaths.__contains__(l) is True):
-                envcustompaths.remove(l)
+            if (envcustomrawpaths.__contains__(l) is True):
+                envcustomrawpaths.remove(l)
 
         env = os.environ
-        for l in envcustompaths:
+        for l in envcustomrawpaths:
             env["PATH"] = l + os.path.pathsep + env["PATH"]
 
-        for l in envcustompaths:
-            envcustomlistpaths.append(l)
+        for l in envcustomrawpaths:
+            envcustomlistrawpaths.append(l)
 
         # set custom env+ to env.
         #customenvfile = sourceroot + os.path.sep + "custom.var+.ini"
@@ -2602,7 +2616,7 @@ def main_function():
         # write back
         storecustomvars = copy.deepcopy(customenvs)
         for (i, l) in enumerate(storecustomvars):
-            # import format
+            # important format
             l = l.strip()
             storecustomvars[i] = l
 
@@ -2616,10 +2630,20 @@ def main_function():
 
         # set into env
         envcustomvars = copy.deepcopy(storecustomvars)
-        envcustomvars = raw_path(envcustomvars)
+        envcustomrawvars = raw_path(envcustomvars)
+        #print(envcustomvars)
+        #print(envcustomrawvars)
+        for (key0,l) in zip(envcustomvars, envcustomrawvars):
+            if (l == ''):
+                continue
+            if (str(l).__contains__('=') is False):
+                continue
+            key = str(key0).split('=')[0].strip()
+            value = '='.join(str(key0).split('=')[1:])
+            envcustomlistvars[key] = value
 
         clean_list = []
-        for l in envcustomvars:
+        for l in envcustomrawvars:
             if (l == ''):
                 clean_list.append(l)
                 continue
@@ -2629,19 +2653,19 @@ def main_function():
         # print(clean_list)
 
         for l in clean_list:
-            if (envcustomvars.__contains__(l) is True):
-                envcustomvars.remove(l)
+            if (envcustomrawvars.__contains__(l) is True):
+                envcustomrawvars.remove(l)
 
         env = os.environ
-        for l in envcustomvars:
+        for l in envcustomrawvars:
             key = str(l).split('=')[0].strip()
             value = '='.join(str(l).split('=')[1:])
             env[key] = value
 
-        for l in envcustomvars:
+        for l in envcustomrawvars:
             key = str(l).split('=')[0].strip()
             value = '='.join(str(l).split('=')[1:])
-            envcustomlistvars[key] = value
+            envcustomlistrawvars[key] = value
 
         break
 
@@ -3143,15 +3167,15 @@ def main_function():
 
                 lines = ""
                 # export path
-                #print(envcustomlistpaths)
-                for (key) in envcustomlistpaths:
+                #print(envcustomlistrawpaths)
+                for (key) in envcustomlistrawpaths:
                     if (plat == "Windows"):
                         lines += (env_set + 'PATH=' + key + os.path.pathsep + '%PATH%' + cmd_return)
                     else:
                         lines += (env_set + 'PATH=' + key + os.path.pathsep + '$PATH' + cmd_return)
 
                 # export var
-                for (key, value) in envcustomlistvars.items():
+                for (key, value) in envcustomlistrawvars.items():
                     if (key == 'path+'):
                         continue
                     if (plat == "Windows"):
@@ -3173,14 +3197,14 @@ def main_function():
 
                 # export unset path
                 lines = ""
-                for (key) in envcustomlistpaths:
+                for (key) in envcustomlistrawpaths:
                     if (plat == "Windows"):
                         lines += (env_set + 'PATH=%PATH:' + key + ';=%' + cmd_return)
                     else:
                         lines += (env_set + 'PATH=$(' + 'echo ${PATH//' + key.replace('/', '\/') + ':/})' + cmd_return)
 
                 # export unset env
-                for (key, value) in envcustomlistvars.items():
+                for (key, value) in envcustomlistrawvars.items():
                     if (key == 'path+'):
                         continue
                     if (plat == "Windows"):
@@ -3200,15 +3224,24 @@ def main_function():
                 print("CUSTOM ENV+   : %s" % (customenvfile))
                 print("CUSTOM PATH+  : %s" % (custompathfile))
             elif (args['env'] is True):
+                #print(args)
                 print (Fore.CYAN+ "custom env")
+
+                envcustomlist0 = envcustomlistpaths
+                envcustomlist1 = envcustomlistvars
+                if(args['--raw'] is True):
+                    envcustomlist0 = envcustomlistrawpaths
+                    envcustomlist1 = envcustomlistrawvars
+
                 print(Fore.MAGENTA + "path+:")
-                for (key) in envcustomlistpaths:
+                for (key) in envcustomlist0:
                     print(Fore.BLUE + "  %s" % key)
                 print(Fore.MAGENTA + "variable:")
-                for (key, value) in envcustomlistvars.items():
+                for (key, value) in envcustomlist1.items():
                     if (key == 'path+'):
                         continue
                     print(Fore.GREEN + "  %-30s %s" % (key, value))
+
                 return
             elif (args['status'] is True):
                 status = "closed"
@@ -3217,10 +3250,10 @@ def main_function():
                 print("custom env: %s." % status)
                 if(switch0 == '1'):
                     print(Fore.MAGENTA + "path+:")
-                    for (key) in envcustomlistpaths:
+                    for (key) in envcustomlistrawpaths:
                         print(Fore.BLUE + "  %s" % key)
                     print(Fore.MAGENTA + "variable:")
-                    for (key, value) in envcustomlistvars.items():
+                    for (key, value) in envcustomlistrawvars.items():
                         if (key == 'path+'):
                             continue
                         print(Fore.GREEN + "  %-30s %s" % (key, value))
@@ -3232,10 +3265,10 @@ def main_function():
                 print("custom env: %s." % status)
                 if(switch0 == '1'):
                     print(Fore.MAGENTA + "path+:")
-                    for (key) in envcustomlistpaths:
+                    for (key) in envcustomlistrawpaths:
                         print(Fore.BLUE + "  %s" % key)
                     print(Fore.MAGENTA + "variable:")
-                    for (key, value) in envcustomlistvars.items():
+                    for (key, value) in envcustomlistrawvars.items():
                         if (key == 'path+'):
                             continue
                         print(Fore.GREEN + "  %-30s %s" % (key, value))
@@ -3268,15 +3301,15 @@ def main_function():
 
         lines = ""
         # export path
-        # print(envcustomlistpaths)
-        for (key) in envcustomlistpaths:
+        # print(envcustomlistrawpaths)
+        for (key) in envcustomlistrawpaths:
             if (plat == "Windows"):
                 lines += (env_set + 'PATH=' + key + os.path.pathsep + '%PATH%' + cmd_return)
             else:
                 lines += (env_set + 'PATH=' + key + os.path.pathsep + '$PATH' + cmd_return)
 
         # export var
-        for (key, value) in envcustomlistvars.items():
+        for (key, value) in envcustomlistrawvars.items():
             if (key == 'path+'):
                 continue
             if (plat == "Windows"):
@@ -3298,14 +3331,14 @@ def main_function():
 
         # export unset path
         lines = ""
-        for (key) in envcustomlistpaths:
+        for (key) in envcustomlistrawpaths:
             if (plat == "Windows"):
                 lines += (env_set + 'PATH=%PATH:' + key + ';=%' + cmd_return)
             else:
                 lines += (env_set + 'PATH=$(' + 'echo ${PATH//' + key.replace('/', '\/') + ':/})' + cmd_return)
 
         # export unset env
-        for (key, value) in envcustomlistvars.items():
+        for (key, value) in envcustomlistrawvars.items():
             if (key == 'path+'):
                 continue
             if (plat == "Windows"):
@@ -3348,7 +3381,7 @@ def main_function():
 
         lines = ""
         # export path
-        # print(envcustomlistpaths)
+        # print(envcustomlistrawpaths)
         for (key) in pymakesystemenviron['PATH'].split(';'):
             if (plat == "Windows"):
                 lines += (env_set + 'PATH=' + key + os.path.pathsep + '%PATH%' + cmd_return)
@@ -3512,7 +3545,7 @@ def main_function():
                 if(args['-p'] or args['--path'] is True):
                     ''
                     # export path
-                    # print(envcustomlistpaths)
+                    # print(envcustomlistrawpaths)
                     for (key) in pymakesystemenviron['PATH'].split(';'):
                         if (plat == "Windows"):
                             lines += (env_set + 'PATH=' + key + os.path.pathsep + '%PATH%' + cmd_return)
@@ -3535,7 +3568,7 @@ def main_function():
                 else:
                     ''
                     # export path
-                    # print(envcustomlistpaths)
+                    # print(envcustomlistrawpaths)
                     for (key) in pymakesystemenviron['PATH'].split(';'):
                         if (plat == "Windows"):
                             lines += (env_set + 'PATH=' + key + os.path.pathsep + '%PATH%' + cmd_return)
@@ -3559,8 +3592,8 @@ def main_function():
                 if(args['-p'] or args['--path'] is True):
                     ''
                     # export path
-                    # print(envcustomlistpaths)
-                    for (key) in envcustomlistpaths:
+                    # print(envcustomlistrawpaths)
+                    for (key) in envcustomlistrawpaths:
                         if (plat == "Windows"):
                             lines += (env_set + 'PATH=' + key + os.path.pathsep + '%PATH%' + cmd_return)
                         else:
@@ -3569,7 +3602,7 @@ def main_function():
                 elif(args['-v'] or args['--var'] is True):
                     ''
                     # export var
-                    for (key, value) in envcustomlistvars.items():
+                    for (key, value) in envcustomlistrawvars.items():
                         if (key == 'path+'):
                             continue
                         if (plat == "Windows"):
@@ -3580,15 +3613,15 @@ def main_function():
                 else:
                     ''
                     # export path
-                    # print(envcustomlistpaths)
-                    for (key) in envcustomlistpaths:
+                    # print(envcustomlistrawpaths)
+                    for (key) in envcustomlistrawpaths:
                         if (plat == "Windows"):
                             lines += (env_set + 'PATH=' + key + os.path.pathsep + '%PATH%' + cmd_return)
                         else:
                             lines += (env_set + 'PATH=' + key + os.path.pathsep + '$PATH' + cmd_return)
 
                     # export var
-                    for (key, value) in envcustomlistvars.items():
+                    for (key, value) in envcustomlistrawvars.items():
                         if (key == 'path+'):
                             continue
                         if (plat == "Windows"):
@@ -3601,15 +3634,15 @@ def main_function():
                 if (args['-p'] or args['--path'] is True):
                     ''
                     # export path
-                    # print(envcustomlistpaths)
-                    for (key) in envcustomlistpaths:
+                    # print(envcustomlistrawpaths)
+                    for (key) in envcustomlistrawpaths:
                         if (plat == "Windows"):
                             lines += (env_set + 'PATH=' + key + os.path.pathsep + '%PATH%' + cmd_return)
                         else:
                             lines += (env_set + 'PATH=' + key + os.path.pathsep + '$PATH' + cmd_return)
 
                     # export path
-                    # print(envcustomlistpaths)
+                    # print(envcustomlistrawpaths)
                     for (key) in pymakesystemenviron['PATH'].split(';'):
                         if (plat == "Windows"):
                             lines += (env_set + 'PATH=' + key + os.path.pathsep + '%PATH%' + cmd_return)
@@ -3618,7 +3651,7 @@ def main_function():
                 elif (args['-v'] or args['--var'] is True):
                     ''
                     # export var
-                    for (key, value) in envcustomlistvars.items():
+                    for (key, value) in envcustomlistrawvars.items():
                         if (key == 'path+'):
                             continue
                         if (plat == "Windows"):
@@ -3639,15 +3672,15 @@ def main_function():
                 else:
                     ''
                     # export path
-                    # print(envcustomlistpaths)
-                    for (key) in envcustomlistpaths:
+                    # print(envcustomlistrawpaths)
+                    for (key) in envcustomlistrawpaths:
                         if (plat == "Windows"):
                             lines += (env_set + 'PATH=' + key + os.path.pathsep + '%PATH%' + cmd_return)
                         else:
                             lines += (env_set + 'PATH=' + key + os.path.pathsep + '$PATH' + cmd_return)
 
                     # export var
-                    for (key, value) in envcustomlistvars.items():
+                    for (key, value) in envcustomlistrawvars.items():
                         if (key == 'path+'):
                             continue
                         if (plat == "Windows"):
@@ -3656,7 +3689,7 @@ def main_function():
                             lines += (env_set + key + '=\"' + value + '\"' + cmd_return)
 
                     # export path
-                    # print(envcustomlistpaths)
+                    # print(envcustomlistrawpaths)
                     for (key) in pymakesystemenviron['PATH'].split(';'):
                         if (plat == "Windows"):
                             lines += (env_set + 'PATH=' + key + os.path.pathsep + '%PATH%' + cmd_return)
@@ -3777,7 +3810,7 @@ def main_function():
                 if(args['-p'] or args['--path'] is True):
                     ''
                     # export unset path
-                    for (key) in envcustomlistpaths:
+                    for (key) in envcustomlistrawpaths:
                         if (plat == "Windows"):
                             lines += (env_set + 'PATH=%PATH:' + key + ';=%' + cmd_return)
                         else:
@@ -3785,7 +3818,7 @@ def main_function():
                 elif(args['-v'] or args['--var'] is True):
                     ''
                     # export unset env
-                    for (key, value) in envcustomlistvars.items():
+                    for (key, value) in envcustomlistrawvars.items():
                         if (key == 'path+'):
                             continue
                         if (plat == "Windows"):
@@ -3795,14 +3828,14 @@ def main_function():
                 else:
                     ''
                     # export unset path
-                    for (key) in envcustomlistpaths:
+                    for (key) in envcustomlistrawpaths:
                         if (plat == "Windows"):
                             lines += (env_set + 'PATH=%PATH:' + key + ';=%' + cmd_return)
                         else:
                             lines += (env_set + 'PATH=$(' + 'echo ${PATH//' + key.replace('/', '\/') + ':/})' + cmd_return)
 
                     # export unset env
-                    for (key, value) in envcustomlistvars.items():
+                    for (key, value) in envcustomlistrawvars.items():
                         if (key == 'path+'):
                             continue
                         if (plat == "Windows"):
@@ -3815,7 +3848,7 @@ def main_function():
                 if (args['-p'] or args['--path'] is True):
                     ''
                     # export unset path
-                    for (key) in envcustomlistpaths:
+                    for (key) in envcustomlistrawpaths:
                         if (plat == "Windows"):
                             lines += (env_set + 'PATH=%PATH:' + key + ';=%' + cmd_return)
                         else:
@@ -3831,7 +3864,7 @@ def main_function():
                 elif (args['-v'] or args['--var'] is True):
                     ''
                     # export unset env
-                    for (key, value) in envcustomlistvars.items():
+                    for (key, value) in envcustomlistrawvars.items():
                         if (key == 'path+'):
                             continue
                         if (plat == "Windows"):
@@ -3853,14 +3886,14 @@ def main_function():
                 else:
                     ''
                     # export unset path
-                    for (key) in envcustomlistpaths:
+                    for (key) in envcustomlistrawpaths:
                         if (plat == "Windows"):
                             lines += (env_set + 'PATH=%PATH:' + key + ';=%' + cmd_return)
                         else:
                             lines += (env_set + 'PATH=$(' + 'echo ${PATH//' + key.replace('/', '\/') + ':/})' + cmd_return)
 
                     # export unset env
-                    for (key, value) in envcustomlistvars.items():
+                    for (key, value) in envcustomlistrawvars.items():
                         if (key == 'path+'):
                             continue
                         if (plat == "Windows"):
