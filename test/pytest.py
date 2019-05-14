@@ -48,6 +48,10 @@ def main_function():
 
 
     myenv.del_key("SITPATH")
+    myenv.del_key('bbb')
+    myenv.del_key('ccc')
+
+    myenv.refresh()
 
     return
 

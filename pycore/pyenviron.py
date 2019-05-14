@@ -8,6 +8,8 @@ import inspect
 import codecs
 import locale
 import copy
+import subprocess
+from subprocess import check_call
 
 from .pybase import *
 
@@ -140,9 +142,12 @@ class MyWin32Environ():
         return value1
 
     def refresh(self):
+        return 0
+
         HWND_BROADCAST = 0xFFFF
         WM_SETTINGCHANGE = 0x1A
 
+        SMTO_NORMAL = 0x0000
         SMTO_ABORTIFHUNG = 0x0002
 
         result = ctypes.c_long()
