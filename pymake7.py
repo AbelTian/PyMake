@@ -136,6 +136,8 @@ Usage:
   pymeke7.py  custom
   pymake7.py  custom [ open | close | status ]
   pymake7.py  custom [ information ]
+  pymake7.py  custom path ( --add | --del | --mod ) [ <value> ]
+  pymake7.py  custom var ( --add | --del | --mod ) [ <key> ] [ <value> ]
   pymake7.py  custom env [ -r | --raw ]
   pymake7.py  custom export [ here | hh ] [ to <file-name> ]
   pymake7.py  custom exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
@@ -3119,7 +3121,7 @@ def main_function():
                     ''
                 return
             else:
-                ''
+                print('OK')
         else:
             ''
         break
@@ -3223,6 +3225,13 @@ def main_function():
             elif(args['information'] is True):
                 print("CUSTOM ENV+   : %s" % (customenvfile))
                 print("CUSTOM PATH+  : %s" % (custompathfile))
+            elif (args['exec-with-params'] is True):
+                print("you can\'t use custom environ to execute command.")
+                return
+            elif (args['path'] is True):
+                ''
+            elif (args['var'] is True):
+                ''
             elif (args['env'] is True):
                 #print(args)
                 print (Fore.CYAN+ "custom env")
