@@ -136,8 +136,8 @@ Usage:
   pymeke7.py  custom
   pymake7.py  custom [ open | close | status ]
   pymake7.py  custom [ information ]
-  pymake7.py  custom path ( --add | --del | --mod ) [ <value> ]
-  pymake7.py  custom var ( --add | --del | --mod ) [ <key> ] [ <value> ]
+  pymake7.py  custom path ( --add | --del ) [ <value> ]
+  pymake7.py  custom var ( --add | --del ) [ <key> ] [ <value> ]
   pymake7.py  custom env [ -r | --raw ]
   pymake7.py  custom export [ here | hh ] [ to <file-name> ]
   pymake7.py  custom exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
@@ -2476,6 +2476,9 @@ def main_function():
     custompathfile = sourceroot + os.path.sep + "custom.path+.ini"
     customenvfile = sourceroot + os.path.sep + "custom.var+.ini"
 
+    storecustompaths = []
+    storecustomvars = []
+
     envcustomlistpaths = []
     envcustomlistvars = {}
 
@@ -3229,9 +3232,89 @@ def main_function():
                 print("you can\'t use custom environ to execute command.")
                 return
             elif (args['path'] is True):
-                ''
+                if(args['<value>'] is None):
+                    print(Fore.MAGENTA + "path+:")
+                    for (key) in envcustomlistpaths:
+                        print(Fore.BLUE + "  %s" % key)
+                    return
+
+                usingcustomenvpaths = copy.deepcopy(storecustompaths)
+
+                if(args['--add'] is True):
+                    if(not usingcustomenvpaths.__contains__(args['<value>'])):
+                        usingcustomenvpaths.append(args['<value>'])
+                        with open(custompathfile, 'w', encoding=cmd_codec) as f:
+                            for l in usingcustomenvpaths:
+                                f.write(l + cmd_return)
+                        print("successed: %s" % args['<value>'])
+                    else:
+                        print('failed: %s is existed.' % args['<value>'])
+                elif(args['--del'] is True):
+                    if(usingcustomenvpaths.__contains__(args['<value>'])):
+                        usingcustomenvpaths.remove(args['<value>'])
+                        with open(custompathfile, 'w', encoding=cmd_codec) as f:
+                            for l in usingcustomenvpaths:
+                                f.write(l + cmd_return)
+                        print("successed: %s" % args['<value>'])
+                    else:
+                        print('failed: %s is existed.' % args['<value>'])
+                else:
+                    ''
+                return
             elif (args['var'] is True):
-                ''
+                usingcustomenvvars = copy.deepcopy(storecustomvars)
+                #print(args)
+                #print(args['<key>'])
+                #print(args['<value>'])
+                #print(storecustompaths)
+                #print(storecustomvars)
+                if(args['--add'] is True):
+                    if (args['<key>'] is None or args['<value>'] is None):
+                        print(Fore.MAGENTA + "variable:")
+                        for (key, value) in envcustomlistvars.items():
+                            if (key == 'path+'):
+                                continue
+                            print(Fore.GREEN + "  %-30s %s" % (key, value))
+                        return
+
+                    varkeyvaluestring = args['<key>'] + '=' + args['<value>']
+                    if(not usingcustomenvvars.__contains__(varkeyvaluestring)):
+                        usingcustomenvvars.append(varkeyvaluestring)
+                        with open(customenvfile, 'w', encoding=cmd_codec) as f:
+                            for l in usingcustomenvvars:
+                                f.write(l + cmd_return)
+                        print("successed: %s" % varkeyvaluestring)
+                    else:
+                        print('failed: %s is existed.' % varkeyvaluestring)
+                elif(args['--del'] is True):
+                    if (args['<key>'] is None):
+                        print(Fore.MAGENTA + "variable:")
+                        for (key, value) in envcustomlistvars.items():
+                            if (key == 'path+'):
+                                continue
+                            print(Fore.GREEN + "  %-30s %s" % (key, value))
+                        return
+
+                    varkeystring = args['<key>']
+
+                    clean_list = []
+                    for l in usingcustomenvvars:
+                        if(str(l).split('=')[0] == varkeystring):
+                            clean_list.append(l)
+                    for l in clean_list:
+                        if(usingcustomenvvars.__contains__(l)):
+                            usingcustomenvvars.remove(l)
+
+                    if(usingcustomenvvars != storecustomvars):
+                        with open(customenvfile, 'w', encoding=cmd_codec) as f:
+                            for l in usingcustomenvvars:
+                                f.write(l + cmd_return)
+                        print("successed: %s" % varkeystring)
+                    else:
+                        print('failed: %s is not existed.' % varkeystring)
+                else:
+                    ''
+                return
             elif (args['env'] is True):
                 #print(args)
                 print (Fore.CYAN+ "custom env")
