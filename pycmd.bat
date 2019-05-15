@@ -6,7 +6,9 @@
 :: pycmd.bat 用户应当留意，导出的是否是目标环境的命令。
 
 if "%1" == "" (
-    echo "pycmd <cmd-name> [ <env-name> ]"
+    echo usage:
+    echo "  pycmd <cmd-name> [ <env-name> ]"
+    echo ------
     echo please appoint a cmd name. & exit /b 0
 )
 set PYEXECNAME=%1

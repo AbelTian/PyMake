@@ -5,13 +5,34 @@
 
 set PYENVFLAG=True
 if "%1" == "" (
-    echo "pyenv <env-name>"
+    echo usage:
+    echo "  pyenv <env-name>"
+    echo "  pyenv open <env-name>"
+    echo "  pyenv close <env-name>"
+    echo "  <env name>: 'current' is suggested."
+    echo ------
     echo please appoint a env name. & exit /b 0
 ) else if "%1" == "open" (
-    if "%2" == "" ( echo please appoint a env name. & exit /b 0 )
+    if "%2" == "" (
+        echo usage:
+        echo "  pyenv <env-name>"
+        echo "  pyenv open <env-name>"
+        echo "  pyenv close <env-name>"
+        echo "  <env name>: 'current' is suggested."
+        echo ------
+        echo please appoint a env name. & exit /b 0
+    )
     set PYENVNAME=%2
 ) else if "%1" == "close" (
-    if "%2" == "" ( echo please appoint a env name. & exit /b 0 )
+    if "%2" == "" (
+        echo usage:
+        echo "  pyenv <env-name>"
+        echo "  pyenv open <env-name>"
+        echo "  pyenv close <env-name>"
+        echo "  <env name>: 'current' is suggested."
+        echo ------
+        echo please appoint a env name. & exit /b 0
+    )
     set PYENVNAME=%2
     set PYENVFLAG=False
 ) else (

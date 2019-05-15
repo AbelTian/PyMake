@@ -11,12 +11,34 @@
 :: 用户自行决定配置"CLS-VCVARSALL"和"CLS-VCVARSALLPARAM"。
 
 if "%1" == "" (
+    echo usage:
+    echo "  pyvc <env-name>"
+    echo "  pyvc open <env-name>"
+    echo "  pyvc close <env-name>"
+    echo "  <env name>: 'current' is suggested."
+    echo ------
     echo please appoint a env name. & exit /b 0
 ) else if "%1" == "open" (
-    if "%2" == "" ( echo please appoint a env name. & exit /b 0 )
+    if "%2" == "" (
+        echo usage:
+        echo "  pyvc <env-name>"
+        echo "  pyvc open <env-name>"
+        echo "  pyvc close <env-name>"
+        echo "  <env name>: 'current' is suggested."
+        echo ------
+        echo please appoint a env name. & exit /b 0
+    )
     set PYENVNAME=%2
 ) else if "%1" == "close" (
-    if "%2" == "" ( echo please appoint a env name. & exit /b 0 )
+    if "%2" == "" (
+        echo usage:
+        echo "  pyvc <env-name>"
+        echo "  pyvc open <env-name>"
+        echo "  pyvc close <env-name>"
+        echo "  <env name>: 'current' is suggested."
+        echo ------
+        echo please appoint a env name. & exit /b 0
+    )
     set PYENVNAME=%2
 ) else (
     set PYENVNAME=%1

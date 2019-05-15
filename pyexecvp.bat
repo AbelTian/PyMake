@@ -6,8 +6,10 @@
 :: pyexecvp.bat 用户应当留意，导出的是否是目标环境的命令。
 
 if "%1" == "" (
-    echo "pyexecvp <cmd-name> [ ""<cmd-params>"" ] [<env-name>]"
-    echo "<env name>: 'current' is suggested."
+    echo usage:
+    echo "  pyexecvp <cmd-name> [ <cmd-params> ] [<env-name>]"
+    echo "  <env name>: 'current' is suggested."
+    echo -----
     echo please appoint a cmd name. & exit /b 0
 )
 set PYEXECNAME=%1
