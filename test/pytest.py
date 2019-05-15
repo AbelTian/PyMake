@@ -13,7 +13,14 @@ from pycore.pycore import *
 from pycore.pyenviron import *
 
 def main_function():
-    myenv = MyWin32Environ('user')
+    plat = getplatform()
+    if(plat == "Windows"):
+        myenv = MyWin32Environ('user')
+    else:
+        myenv = MyUnixEnviron('user')
+        print(1, myenv.search_key("HOME"))
+        return
+
     print(1, myenv.search_key("windir"))
     print(2, myenv.search_key('bbb'))
     print(2.1, myenv.search_key('BBB'))
