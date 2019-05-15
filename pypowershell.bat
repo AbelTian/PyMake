@@ -6,9 +6,14 @@
 :: pypowershell.bat 用户应当留意，导出的是否是目标环境的命令。
 
 if "%1" == "" (
-    echo "pypowershell <cmd-name> [ <cmd-params> ] [<env-name>]"
-    echo "<env name>: 'current' is suggested."
-    echo please appoint a cmd name. & exit /b 0
+    echo usage:
+    echo "  pypowershell <cmd-name> [ <cmd-params> ] [<env-name>]"
+    echo "  <env name>: 'current' is suggested."
+    echo "  please appoint a cmd name."
+    echo usage 2:
+    echo "  pypowershell open <env-name>"
+    echo "  pypowershell close <env-name>"
+    echo "  please appoint a env name." & exit /b 0
 )
 
 set PYEXECNAME=%1
@@ -22,6 +27,17 @@ if ""%2"" == """" (
 )
 if "%3" == "" (
     set PYENVNAME=
+)
+
+set PYENVFLAG=None
+if "%1" == "open" (
+    if "%2" == "" ( echo please appoint a env name. & exit /b 0 )
+    set PYENVNAME=%2
+    set PYENVFLAG=True
+) else if "%1" == "close" (
+    if "%2" == "" ( echo please appoint a env name. & exit /b 0 )
+    set PYENVNAME=%2
+    set PYENVFLAG=False
 )
 
 set PYPROGRAMPATH=%~dp0
@@ -52,15 +68,29 @@ if "%PYEXECFLAG%" == "False" (
 )
 echo environme: [%PYENVNAME%] [%PYEXECFLAG%] [USED]
 
+for /F %%i in ('"%PYPROGRAMPATHNAME%" get default exec root') do ( set "PYMMSHELLROOT=%%i" )
+echo exec root: [%PYMMSHELLROOT%] [default]
+echo exec root: [%CD%] [here]
+
+if not "%PYENVFLAG%" == "None" (
+    call "%PYPROGRAMPATHNAME%" powershell export %PYENVNAME% to %PYEXECINDEX%
+    if "%PYENVFLAG%" == "False" (
+        "%PYMMSHELLROOT%\powershell.%PYEXECINDEX%_unset.ps1"
+        echo user env : [%PYENVNAME%] closed. [powershell]
+        exit /b 0
+    ) else (
+        "%PYMMSHELLROOT%\powershell.%PYEXECINDEX%_effect.ps1"
+        echo user env : [%PYENVNAME%] opened. [powershell]
+        exit /b 0
+    )
+)
+
 for /F %%i in ('"%PYPROGRAMPATHNAME%" have cmd %PYEXECNAME%') do ( set "PYEXECFLAG=%%i" )
 if "%PYEXECFLAG%" == "False" (
     echo command  : [%PYEXECNAME%] is system wild command.
 ) else (
     echo command  : [%PYEXECNAME%] [%PYEXECFLAG%] [EXISTED]
 )
-
-for /F %%i in ('"%PYPROGRAMPATHNAME%" get default exec root') do ( set "PYMMSHELLROOT=%%i" )
-echo exec root: [%PYMMSHELLROOT%] [default]
 
 if not ""%PYEXECPARAM%"" == """" (
     call "%PYPROGRAMPATHNAME%" powershell use %PYENVNAME% exec-with-params here %PYEXECNAME% --params %PYEXECPARAM%
