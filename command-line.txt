@@ -1,4 +1,4 @@
-PyMake 7.5.
+PyMake 7.5.2.
 
 Usage:
   pymake7.py  source
@@ -39,12 +39,12 @@ Usage:
   pymake7.py  set default env <name>
   pymake7.py  show [ path | env | cmd ] [<name>] [-r | --raw] [-a | --all]
   pymake7.py  environ [<name>] [-p | --path] [-v | --var] [-r | --raw] [-a | --all]
-  pymake7.py  see [ <cmd-name> ] [ use <env-name> ] [-r | --raw] [-a | --all]
-  pymake7.py  ss [ <cmd-name> ] [ use <env-name> ] [-r | --raw] [-a | --all]
-  pymake7.py  cmd [ <cmd-name> ] [ use <env-name> ] [-r | --raw] [-a | --all]
-  pymake7.py  use <env-name> see [ <cmd-name> ] [-r | --raw] [-a | --all]
-  pymake7.py  use <env-name> ss [ <cmd-name> ] [-r | --raw] [-a | --all]
-  pymake7.py  use <env-name> cmd [ <cmd-name> ] [-r | --raw] [-a | --all]
+  pymake7.py  see [ <cmd-name> ] [ use <env-name> ] [-r | --raw] [-a | --all] [ -l | --linenumber ]
+  pymake7.py  ss [ <cmd-name> ] [ use <env-name> ] [-r | --raw] [-a | --all] [ -l | --linenumber ]
+  pymake7.py  cmd [ <cmd-name> ] [ use <env-name> ] [-r | --raw] [-a | --all] [ -l | --linenumber ]
+  pymake7.py  use <env-name> see [ <cmd-name> ] [-r | --raw] [-a | --all] [ -l | --linenumber ]
+  pymake7.py  use <env-name> ss [ <cmd-name> ] [-r | --raw] [-a | --all] [ -l | --linenumber ]
+  pymake7.py  use <env-name> cmd [ <cmd-name> ] [-r | --raw] [-a | --all] [ -l | --linenumber ]
   pymake7.py  -------------------------------------------------------------
   pymake7.py  hh clean
   pymake7.py  hh export [ <env-name> ] [ to <file-name> ]
@@ -131,13 +131,22 @@ Usage:
   pymake7.py  here recovery [ <zip-file-name> ]
   pymake7.py  hh recovery [ <zip-file-name> ]
   pymake7.py  -------------------------------------------------------------
+  pymake7.py  system
+  pymake7.py  system [ status | information ]
+  pymake7.py  system path [ --add | --del ] [ <value> ]
+  pymake7.py  system var [ --add | --del ] [ <key> ] [ <value> ]
+  pymake7.py  system env [ -r | --raw ]
+  pymake7.py  -------------------------------------------------------------
   pymeke7.py  custom
-  pymake7.py  custom [ open | close | status ]
-  pymake7.py  custom [ information ]
-  pymake7.py  custom env
+  pymake7.py  custom [ open | close ]
+  pymake7.py  custom [ status | information ]
+  pymake7.py  custom path [ --add | --del ] [ <value> ]
+  pymake7.py  custom var [ --add | --del ] [ <key> ] [ <value> ]
+  pymake7.py  custom env [ -r | --raw ]
   pymake7.py  custom export [ here | hh ] [ to <file-name> ]
   pymake7.py  custom exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
   pymake7.py  custom use <env-name> exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  export2 [ here | hh ] [ <env-name> ] [ to <file-name> ] [ --private ] [ -s | --system ] [ -c | --custom ] [ -a | --all ] [ -p | --path ] [ -v | --var ]
   pymake7.py  -------------------------------------------------------------
   pymake7.py  powershell
   pymake7.py  powershell [ information | status ]
@@ -158,7 +167,7 @@ Command:
   set path          path assemblage
   set env           set env variable
   set cmd           set cmd stream
-  export            output private env variable to a bat file or sh file [default:current, env]
+  export            output private env variable and paths to a bat file or sh file [default:current, env]
   type              output command to a bat file or sh file [default:cmd]
   see               check command stream
   ss                check command stream
@@ -183,6 +192,7 @@ Command:
   recovery          recovery all env .json from a zip file.
   import            import user path or env or cmd to env .json file. example, import cmd [ <script-file>: x.bat x.cmd x.sh x.ps1 ... ]
   custom            custom environment is helpping for calling large dimentions of scripts in computer, manually in console. defined in sourceroot. [ default: close ]
+  export2           output private environ and custom environ to a bat file or sh file, a powerfull function from export. [default:current, env]
   powershell        environ for powershell, and to execute in powershell. [cross]
 
 Options:

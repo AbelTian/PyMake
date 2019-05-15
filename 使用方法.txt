@@ -13,7 +13,7 @@ install安装的是对壳子程序的快捷方式，一般为同名安装。
 我把程序追加安装为mm，pymm，pymake等命令，
 如果命令不能用了，重新执行安装器即可。
 
-PyMake v8
+PyMake v7.5
 我更新了用户程序默认的执行目录，<PYSRC CODE>/USERSOURCE/USERSHELL，请关注。
 这会导致用户的脚本当中，获取默认运行路径的代码必须修改。
 $(mm source root)/xxx_exec.bat->$(mm get default exec root)/xxx_exec.bat

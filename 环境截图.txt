@@ -1,0 +1,108 @@
+Microsoft Windows [版本 10.0.17134.706]
+(c) 2018 Microsoft Corporation。保留所有权利。
+
+R:\Develop\b0-toolkits\a0-compiler\PyMake>pymake system
+system env
+path+:
+  C:\WINDOWS\system32
+  C:\WINDOWS
+  C:\WINDOWS\System32\Wbem
+  C:\WINDOWS\System32\WindowsPowerShell\v1.0\
+  C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common
+  C:\Program Files\TortoiseGit\bin
+  C:\WINDOWS\system32
+  C:\WINDOWS
+  C:\WINDOWS\System32\Wbem
+  C:\WINDOWS\System32\WindowsPowerShell\v1.0\
+  C:\WINDOWS\System32\OpenSSH\
+  C:\Program Files\Microsoft Network Monitor 3\
+  D:\HsuHelper\TZWebPdf
+  D:\HsuHelper\TZKey
+  C:\Program Files\Git\cmd
+  C:\Users\Administrator\AppData\Local\Microsoft\WindowsApps
+variable:
+  ALLUSERSPROFILE                C:\ProgramData
+  APPDATA                        C:\Users\Administrator\AppData\Roaming
+  COMMONPROGRAMFILES             C:\Program Files\Common Files
+  COMMONPROGRAMFILES(X86)        C:\Program Files (x86)\Common Files
+  COMMONPROGRAMW6432             C:\Program Files\Common Files
+  COMPUTERNAME                   SC-201803271727
+  COMSPEC                        C:\WINDOWS\system32\cmd.exe
+  DRIVERDATA                     C:\Windows\System32\Drivers\DriverData
+  FILEPATH                       R:\Develop\b0-toolkits\a0-compiler\PyMake\
+  FPS_BROWSER_APP_PROFILE_STRING Internet Explorer
+  FPS_BROWSER_USER_PROFILE_STRING Default
+  HOMEDRIVE                      C:
+  HOMEPATH                       \Users\Administrator
+  LOCALAPPDATA                   C:\Users\Administrator\AppData\Local
+  LOGONSERVER                    \\SC-201803271727
+  NUMBER_OF_PROCESSORS           20
+  ONEDRIVE                       C:\Users\Administrator\OneDrive
+  OS                             Windows_NT
+  PATHEXT                        .COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC
+  PROCESSOR_ARCHITECTURE         AMD64
+  PROCESSOR_IDENTIFIER           Intel64 Family 6 Model 62 Stepping 4, GenuineIntel
+  PROCESSOR_LEVEL                6
+  PROCESSOR_REVISION             3e04
+  PROGRAMDATA                    C:\ProgramData
+  PROGRAMFILES                   C:\Program Files
+  PROGRAMFILES(X86)              C:\Program Files (x86)
+  PROGRAMW6432                   C:\Program Files
+  PROMPT                         $P$G
+  PSMODULEPATH                   C:\Program Files\WindowsPowerShell\Modules;C:\WINDOWS\system32\WindowsPowerShell\v1.0\Modules
+  PUBLIC                         C:\Users\Public
+  SESSIONNAME                    Console
+  SYSTEMDRIVE                    C:
+  SYSTEMROOT                     C:\WINDOWS
+  TEMP                           C:\Users\ADMINI~1\AppData\Local\Temp
+  TMP                            C:\Users\ADMINI~1\AppData\Local\Temp
+  USERDOMAIN                     SC-201803271727
+  USERDOMAIN_ROAMINGPROFILE      SC-201803271727
+  USERNAME                       Administrator
+  USERPROFILE                    C:\Users\Administrator
+  WINDIR                         C:\WINDOWS
+
+R:\Develop\b0-toolkits\a0-compiler\PyMake>pymake custom
+custom env: opened.
+path+:
+  R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource\UserShell
+  R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource
+  C:\Users\Administrator\Desktop\ENVCONFIG\UserShell
+  C:\Users\Administrator\Desktop\ENVCONFIG
+  R:/Develop/a0-develop
+  R:/Develop/e0-tools/doxygen/bin
+  R:/Develop/e0-tools/doxygen/graphviz-2.38/bin
+  R:/Develop/b0-toolkits/winCompilers/cmake3.9.1_64/bin
+  R:/Develop/b0-toolkits/winCompilers/perl_5.26.0.1_64/perl/bin
+  R:/Develop/b0-toolkits/winCompilers/xmake
+  R:/Develop/b0-toolkits/winCompilers/watcom1.9/binw;R:/Develop/b0-toolkits/winCompilers/watcom1.9/binnt
+  R:/Develop/b0-toolkits/a0-compiler/PyMake/demo
+  R:/Develop/b0-toolkits/a0-compiler/PyMake/test
+  R:\一个中文路径
+variable:
+  PYMAKEAUTHOR                   T.D.R.
+  PYMMXXX                        一个中文变量
+  WATCOM                         R:/Develop/b0-toolkits/winCompilers/watcom1.9
+  EDPATH                         R:/Develop/b0-toolkits/winCompilers/watcom1.9/eddat
+  WHTMLHELP                      R:/Develop/b0-toolkits/winCompilers/watcom1.9/binnt/help
+  WIPFC                          R:/Develop/b0-toolkits/winCompilers/watcom1.9/wipfc
+  INCLUDE                        R:/Develop/b0-toolkits/winCompilers/watcom1.9/h;R:/Develop/b0-toolkits/winCompilers/watcom1.9/h/nt;R:/Develop/b0-toolkits/winCompilers/watcom1.9/h/nt/directx;R:/Develop/b0-toolkits/winCompilers/watcom1.9/h/nt/ddk
+
+R:\Develop\b0-toolkits\a0-compiler\PyMake>pymake env current -r
+env qt5
+path+:
+  R:/Develop/b0-toolkits/winCompilers/cmake3.9.1_64/bin
+  R:/Develop/b0-toolkits/winLibraries/Qt/Tools/mingw530_32/bin
+  R:/Develop/b0-toolkits/winLibraries/Qt/5.9.2/mingw53_32/bin
+  R:/一个中文路径
+variable:
+  make0                          mingw32-make -j10
+  QTVERSION                      5.9.2
+  QTDIR                          R:/Develop/b0-toolkits/winLibraries/Qt/5.9.2/mingw53_32
+  QTSPEC                         -spec win32-g++
+  QTCONFIG
+  QKIT                           WIN32
+  QSYS                           Windows
+  QBBE                           一个中文变量
+
+R:\Develop\b0-toolkits\a0-compiler\PyMake>

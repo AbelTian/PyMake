@@ -1,1 +1,4 @@
-把当前路径加入电脑的环境即可。
+方法1：
+    把当前路径加入电脑的环境即可。
+方法2：
+    修改install.bat & uninstall.bat，修改里面的mmpath，然后install.bat %*

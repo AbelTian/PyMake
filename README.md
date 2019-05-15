@@ -415,6 +415,7 @@ Update the command-line.
 
 ## Command-line  
 [Link to Command-line Screenshot](./command-line.txt)  
+<p><iframe style="width: 100%; height: 120px;" src="command-line.txt" frameborder="1" width="100%" height="480"></iframe></p>
 
 # User Support   
 User support shell module, user can install them to share their functions.   
