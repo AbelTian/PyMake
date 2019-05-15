@@ -140,8 +140,8 @@ Usage:
   pymake7.py  system env [ -r | --raw ]
   pymake7.py  -------------------------------------------------------------
   pymeke7.py  custom
-  pymake7.py  custom [ open | close | status ]
-  pymake7.py  custom [ information ]
+  pymake7.py  custom [ open | close ]
+  pymake7.py  custom [ status | information ]
   pymake7.py  custom path [ --add | --del ] [ <value> ]
   pymake7.py  custom var [ --add | --del ] [ <key> ] [ <value> ]
   pymake7.py  custom env [ -r | --raw ]
@@ -4049,6 +4049,45 @@ def main_function():
             else:
                 ''
 
+        else:
+            ''
+        break
+
+    #system command
+    while (True):
+        if(args['system'] is True):
+            ''
+            if(args['status'] is True):
+                ''
+            elif(args['information'] is True):
+                ''
+                plat = getplatform()
+                if(plat == "Windows"):
+                    from pycore.pyenviron import MyWin32Environ
+                    sysenv = MyWin32Environ()
+                    root0, root1 = sysenv.information()
+                    print(Fore.LIGHTGREEN_EX + "system:")
+                    for value in root0:
+                        print(Fore.LIGHTRED_EX + "  %s" % value)
+                    print(Fore.LIGHTGREEN_EX + 'user:')
+                    for value in root1:
+                        print(Fore.LIGHTRED_EX + "  %s" % value)
+                else:
+                    from pycore.pyenviron import MyUnixEnviron
+                    sysenv = MyUnixEnviron()
+                    root0, root1 = sysenv.information()
+                    print(Fore.LIGHTGREEN_EX + "system:")
+                    for value in root0:
+                        print(Fore.LIGHTRED_EX + "  %s" % value)
+                    print(Fore.LIGHTGREEN_EX + 'user:')
+                    for value in root1:
+                        print(Fore.LIGHTRED_EX + "  %s" % value)
+            elif (args['path'] is True):
+                ''
+            elif(args['var'] is True):
+                ''
+            else:
+                ''
         else:
             ''
         break

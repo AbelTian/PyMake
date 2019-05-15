@@ -26,15 +26,24 @@ if(plat == "Windows"):
     cmd_return = "\n"
 
 class MyWin32Environ(object):
-    def __init__(self, scope):
+    def __init__(self, scope = 'user'):
         # assert scope in ('user', 'system')
         self.scope = scope
-        if scope == 'user':
+        if(scope == 'user'):
             self.root = winreg.HKEY_CURRENT_USER
             self.subkey = 'Environment'
         else:
             self.root = winreg.HKEY_LOCAL_MACHINE
             self.subkey = r'SYSTEM\CurrentControlSet\Control\Session Manager\Environment'
+
+    def information(self):
+        root0 = [
+            "[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment]"
+        ]
+        root1 = [
+            "[HKEY_CURRENT_USER\Environment]"
+        ]
+        return root0, root1
 
     def search_key(self, name):
         regkey = winreg.OpenKey(self.root, self.subkey, 0, winreg.KEY_READ)
@@ -162,10 +171,10 @@ class MyWin32Environ(object):
 
 
 class MyUnixEnviron(object):
-    def __init__(self, scope):
+    def __init__(self, scope = 'user'):
         # assert scope in ('user', 'system')
         self.scope = scope
-        if scope == 'user':
+        if(scope == 'user'):
             userhome = getuserroot()
             plat = getplatform()
             self.root = userhome + os.path.sep + '.bashrc'
@@ -173,6 +182,36 @@ class MyUnixEnviron(object):
                 self.root = userhome + os.path.sep + '.bash_profile'
         else:
             self.root = '/etc/profile'
+
+    def information(self):
+        #unix
+        root0 = [
+            "/etc/profile",
+            "/etc/paths",
+            "/etc/paths.d/*"
+        ]
+        userhome = getuserroot()
+        root1 = [
+            userhome + os.path.sep + '.bash_profile',
+            userhome + os.path.sep + '.inputrc'
+        ]
+
+        #linux
+        root01 = [
+            "/etc/profile",
+            "/etc/profile.d/*.sh"
+        ]
+        root11 = [
+            userhome + os.path.sep + '.profile',
+            userhome + os.path.sep + '.bashrc',
+            userhome + os.path.sep + '.inputrc'
+        ]
+
+        plat = getplatform()
+        if(plat == "Darwin"):
+            return root0, root1
+
+        return root01, root11
 
     def search_key(self, name):
         value = ''
