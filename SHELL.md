@@ -137,6 +137,17 @@ pypowershell
 
 ```
 
+```cmd
+#查看系统环境 [system]
+pymake system
+
+#查看自定义环境 [custom]
+pymake custom
+
+#查看独立环境 [separate]
+pymake env current -r
+
+```
 ## pymake使用截图  
 ![命令行截图](./screenshot/a2.png)  
 

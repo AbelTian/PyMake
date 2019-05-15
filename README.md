@@ -414,8 +414,330 @@ Update the command-line.
     - you can open custom mobule or close it.
 
 ## Command-line  
-[Link to Command-line Screenshot](./command-line.txt)  
-<p><iframe style="width: 100%; height: 120px;" src="./command-line.txt" frameborder="1" width="100%" height="480"></iframe></p>
+```commandline
+PyMake 7.5.2.
+
+Usage:
+  pymake7.py  source
+  pymake7.py  source file [ <source-path-file> ]
+  pymake7.py  source root [ <source-root-path> ]
+  pymake7.py  source config [ --add  ] [ <config-file-name> ]
+  pymake7.py  source config [ --del  ] [ <config-file-name> ]
+  pymake7.py  source config [ --mod  ] [ <config-file-name> ] [<new-config-file-name>]
+  pymake7.py  source config [ --switch  ] [ <config-file-name> ]
+  pymake7.py  source config [ --restore  ]
+  pymake7.py  source config [ --show ]
+  pymake7.py  -------------------------------------------------------------
+  pymake7.py  set path ( --add | --del | --mod ) <name> [ <value> ]
+  pymake7.py  set env [ path ] ( --add | --del | --mod ) <group> <name> [ <value> ]
+  pymake7.py  set cmd (--add | --del | --mod ) <name> [ <values> ... ]
+  pymake7.py  set cur env <name>
+  pymake7.py  list [ path | env | cmd ] [<name>] [-r | --raw] [-a | --all]
+  pymake7.py  env [<name>] [-p | --path] [-v | --var] [-r | --raw] [-a | --all]
+  pymake7.py  -------------------------------------------------------------
+  pymake7.py  here clean
+  pymake7.py  here export [ <env-name> ] [ to <file-name> ]
+  pymake7.py  here type [ <cmd-name> ]  [ to <file-name> ]
+  pymake7.py  here use <env-name> exec [ <command-names> ... ]
+  pymake7.py  here exec [ <command-names> ... ]
+  pymake7.py  here use <env-name> cc [ <command-names> ... ]
+  pymake7.py  here cc [ <command-names> ... ]
+  pymake7.py  -------------------------------------------------------------
+  pymake7.py  clean [ here | hh ]
+  pymake7.py  export [ here | hh ] [ <env-name> ] [ to <file-name> ]
+  pymake7.py  type [ here | hh ] [ <cmd-name> ] [ to <file-name> ]
+  pymake7.py  exec [ here | hh ] [ <command-names> ... ]
+  pymake7.py  cc [ here | hh ] [ <command-names> ... ]
+  pymake7.py  use <env-name> type [ here | hh ] [ <cmd-name> ]  [ to <file-name> ]
+  pymake7.py  use <env-name> exec [ here | hh ] [ <command-names> ... ]
+  pymake7.py  use <env-name> cc [ here | hh ] [ <command-names> ... ]
+  pymake7.py  -------------------------------------------------------------
+  pymake7.py  set current env <name>
+  pymake7.py  set default env <name>
+  pymake7.py  show [ path | env | cmd ] [<name>] [-r | --raw] [-a | --all]
+  pymake7.py  environ [<name>] [-p | --path] [-v | --var] [-r | --raw] [-a | --all]
+  pymake7.py  see [ <cmd-name> ] [ use <env-name> ] [-r | --raw] [-a | --all] [ -l | --linenumber ]
+  pymake7.py  ss [ <cmd-name> ] [ use <env-name> ] [-r | --raw] [-a | --all] [ -l | --linenumber ]
+  pymake7.py  cmd [ <cmd-name> ] [ use <env-name> ] [-r | --raw] [-a | --all] [ -l | --linenumber ]
+  pymake7.py  use <env-name> see [ <cmd-name> ] [-r | --raw] [-a | --all] [ -l | --linenumber ]
+  pymake7.py  use <env-name> ss [ <cmd-name> ] [-r | --raw] [-a | --all] [ -l | --linenumber ]
+  pymake7.py  use <env-name> cmd [ <cmd-name> ] [-r | --raw] [-a | --all] [ -l | --linenumber ]
+  pymake7.py  -------------------------------------------------------------
+  pymake7.py  hh clean
+  pymake7.py  hh export [ <env-name> ] [ to <file-name> ]
+  pymake7.py  hh type [ <cmd-name> ]  [ to <file-name> ]
+  pymake7.py  hh use <env-name> exec [ <command-names> ... ]
+  pymake7.py  hh exec [ <command-names> ... ]
+  pymake7.py  hh use <env-name> cc [ <command-names> ... ]
+  pymake7.py  hh cc [ <command-names> ... ]
+  pymake7.py  -------------------------------------------------------------
+  pymake7.py  have path <name> [-r | --raw]
+  pymake7.py  have env [ path ] [ <group> ] [ <name> ] [-r | --raw]
+  pymake7.py  have cmd <name> [-r | --raw]
+  pymake7.py  has path <name> [-r | --raw]
+  pymake7.py  has env [ path ] [ <group> ] [ <name> ] [-r | --raw]
+  pymake7.py  has cmd <name> [-r | --raw]
+  pymake7.py  -------------------------------------------------------------
+  pymake7.py  get cur env
+  pymake7.py  get current env
+  pymake7.py  get default env
+  pymake7.py  get env
+  pymake7.py  get env ( cur | current | default )
+  pymake7.py  -------------------------------------------------------------
+  pymake7.py  program
+  pymake7.py  program root
+  pymake7.py  program file
+  pymake7.py  program configure
+  pymake7.py  program configure root
+  pymake7.py  program configure file
+  pymake7.py  get all
+  pymake7.py  get all ( info | information )
+  pymake7.py  get all ( stat | status )
+  pymake7.py  get all settings [ path | env | cmd ] [<name>] [-r | --raw] [-a | --all]
+  pymake7.py  get default exec root
+  pymake7.py  get exec root [ default | here ]
+  pymake7.py  initialize
+  pymake7.py  -------------------------------------------------------------
+  pymake7.py  port
+  pymake7.py  port root [ <source-config-root> ] [ to <target-config-root> ]
+  pymake7.py  port config [ <source-config-file> ] [ to <target-config-file> ]
+  pymake7.py  port file [ <source-path-file> ] [ to <target-path-file> ]
+  pymake7.py  port root ( --source | --target ) <config-root>
+  pymake7.py  port config ( --source | --target ) <config-file>
+  pymake7.py  port file ( --source | --target ) <path-file>
+  pymake7.py  port reset
+  pymake7.py  translate
+  pymake7.py  translate ( path | env | cmd )
+  pymake7.py  translate ( path | env | cmd ) <key-name> [ to <target-key-name> ] [ -f | --force ]
+  pymake7.py  translate ( path | env | cmd ) [ -a | --all ] [ -f | --force ]
+  pymake7.py  translate path-env-cmd [ -a | --all ] [ -f | --force ]
+  pymake7.py  translate all [ -a | --all ] [ -f | --force ]
+  pymake7.py  translate section
+  pymake7.py  translate section <section-name> [ to <target-section-name> ] [ -f | --force ]
+  pymake7.py  translate section [ -a | --all ] [ -f | --force ]
+  pymake7.py  -------------------------------------------------------------
+  pymake7.py  exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  use <env-name> exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  here exec-with-params [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  here use <env-name> exec-with-params [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  hh exec-with-params [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  hh use <env-name> exec-with-params [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  -------------------------------------------------------------
+  pymake7.py  execvp [ here | hh ] [ <command-name> ] [ <command-params> ... ]
+  pymake7.py  use <env-name> execvp [ here | hh ] [ <command-name> ] [ <command-params> ... ]
+  pymake7.py  here execvp [ <command-name> ] [ <command-params> ... ]
+  pymake7.py  here use <env-name> ccvp [ <command-name> ] [ <command-params> ... ]
+  pymake7.py  hh ccvp [ <command-name> ] [ <command-params> ... ]
+  pymake7.py  hh use <env-name> ccvp [ <command-name> ] [ <command-params> ... ]
+  pymake7.py  -------------------------------------------------------------
+  pymake7.py  ccvp [ here | hh ] [ <command-name> ] [ <command-params> ... ]
+  pymake7.py  use <env-name> ccvp [ here | hh ] [ <command-name> ] [ <command-params> ... ]
+  pymake7.py  here ccvp [ <command-name> ] [ <command-params> ... ]
+  pymake7.py  here use <env-name> execvp [ <command-name> ] [ <command-params> ... ]
+  pymake7.py  hh execvp [ <command-name> ] [ <command-params> ... ]
+  pymake7.py  hh use <env-name> execvp [ <command-name> ] [ <command-params> ... ]
+  pymake7.py  -------------------------------------------------------------
+  pymake7.py  import cmd [ hh | here ] [ <script-file> ] [ -a | --all ] [ -f | --force ] [ --recursive ] [ --encoding=<encoding-name> ] [ --filter=<name-filter> ... ]
+  pymake7.py  here import cmd [ <script-file> ] [ -a | --all ] [ -f | --force ] [ --recursive ] [ --encoding=<encoding-name> ] [ --filter=<name-filter> ... ]
+  pymake7.py  hh import cmd [ <script-file> ] [ -a | --all ] [ -f | --force ] [ --recursive ] [ --encoding=<encoding-name> ] [ --filter=<name-filter> ... ]
+  pymake7.py  -------------------------------------------------------------
+  pymake7.py  backup [ here | hh ] [ <zip-file-name> ]
+  pymake7.py  here backup [ <zip-file-name> ]
+  pymake7.py  hh backup [ <zip-file-name> ]
+  pymake7.py  recovery [ here | hh ] [ <zip-file-name> ]
+  pymake7.py  here recovery [ <zip-file-name> ]
+  pymake7.py  hh recovery [ <zip-file-name> ]
+  pymake7.py  -------------------------------------------------------------
+  pymake7.py  system
+  pymake7.py  system [ status | information ]
+  pymake7.py  system path [ --add | --del ] [ <value> ]
+  pymake7.py  system var [ --add | --del ] [ <key> ] [ <value> ]
+  pymake7.py  system env [ -r | --raw ]
+  pymake7.py  -------------------------------------------------------------
+  pymeke7.py  custom
+  pymake7.py  custom [ open | close ]
+  pymake7.py  custom [ status | information ]
+  pymake7.py  custom path [ --add | --del ] [ <value> ]
+  pymake7.py  custom var [ --add | --del ] [ <key> ] [ <value> ]
+  pymake7.py  custom env [ -r | --raw ]
+  pymake7.py  custom export [ here | hh ] [ to <file-name> ]
+  pymake7.py  custom exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  custom use <env-name> exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  export2 [ here | hh ] [ <env-name> ] [ to <file-name> ] [ --private ] [ -s | --system ] [ -c | --custom ] [ -a | --all ] [ -p | --path ] [ -v | --var ]
+  pymake7.py  -------------------------------------------------------------
+  pymake7.py  powershell
+  pymake7.py  powershell [ information | status ]
+  pymake7.py  powershell clean [ here | hh ]
+  pymake7.py  powershell export [ here | hh ] [ <env-name> ] [ to <file-name> ]
+  pymake7.py  powershell type [ here | hh ] [ <cmd-name> ] [ to <file-name> ]
+  pymake7.py  powershell use <env-name> type [ here | hh ] [ <cmd-name> ]  [ to <file-name> ]
+  pymake7.py  powershell exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  powershell use <env-name> exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  -------------------------------------------------------------
+  pymake7.py  (-h | --help)
+  pymake7.py  --version
+
+Command:
+  source            switch to another source file
+  source root       config root directory
+  source config     config source conf file
+  set path          path assemblage
+  set env           set env variable
+  set cmd           set cmd stream
+  export            output private env variable and paths to a bat file or sh file [default:current, env]
+  type              output command to a bat file or sh file [default:cmd]
+  see               check command stream
+  ss                check command stream
+  cmd               check command stream
+  list              list config values, show command also too.
+  set cur env       set default env, set current env.
+  use               use selected env exec commands
+  here              at here do exec commands e.g.
+  hh                at here do exec commands e.g.
+  exec              exec commands list.
+  cc                exec commands list.
+  have              check env or path or cmd item whether user has configured.
+  has               check env or path or cmd item whether user has configured.
+  clean             clean *_effect.sh *_unset.sh *_exec.sh, or .bat.
+  program           pymake.py program information.
+  get               lots of important information about pymake.py.
+  initialize        if program crashed, user can use this command to reset.
+  port              port from source to target .json file, configure source root and config file.
+  translate         translate section from source to target, and other section.
+  exec-with-params  exec a command with params, it is also execvp and ccvp.
+  backup            backup all env .json to a zip file.
+  recovery          recovery all env .json from a zip file.
+  import            import user path or env or cmd to env .json file. example, import cmd [ <script-file>: x.bat x.cmd x.sh x.ps1 ... ]
+  custom            custom environment is helpping for calling large dimentions of scripts in computer, manually in console. defined in sourceroot. [ default: close ]
+  export2           output private environ and custom environ to a bat file or sh file, a powerfull function from export. [default:current, env]
+  powershell        environ for powershell, and to execute in powershell. [cross]
+
+Options:
+  -h --help     Show this screen.
+  --version     Show version.
+  --add
+  --del
+  --mod         add or delete or modify a config or path
+  --switch      switch to another source
+  --show        display source config files
+  --restore     reset to source config file pymake.json.
+  -r, --raw     expand editing config values
+
+  --encoding=<encoding-name>    script file encoding, support utf8, gbk, ansi, ... and so on. [default:utf8]
+  --filter=<name-filter> ...    filter file name postfix, separated by |. example: .bat | .sh | .ps1.
+
+```
+## Environment    
+```commandline
+Microsoft Windows [版本 10.0.17134.706]
+(c) 2018 Microsoft Corporation。保留所有权利。
+
+R:\Develop\b0-toolkits\a0-compiler\PyMake>pymake system
+system env
+path+:
+  C:\WINDOWS\system32
+  C:\WINDOWS
+  C:\WINDOWS\System32\Wbem
+  C:\WINDOWS\System32\WindowsPowerShell\v1.0\
+  C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common
+  C:\Program Files\TortoiseGit\bin
+  C:\WINDOWS\system32
+  C:\WINDOWS
+  C:\WINDOWS\System32\Wbem
+  C:\WINDOWS\System32\WindowsPowerShell\v1.0\
+  C:\WINDOWS\System32\OpenSSH\
+  C:\Program Files\Microsoft Network Monitor 3\
+  D:\HsuHelper\TZWebPdf
+  D:\HsuHelper\TZKey
+  C:\Program Files\Git\cmd
+  C:\Users\Administrator\AppData\Local\Microsoft\WindowsApps
+variable:
+  ALLUSERSPROFILE                C:\ProgramData
+  APPDATA                        C:\Users\Administrator\AppData\Roaming
+  COMMONPROGRAMFILES             C:\Program Files\Common Files
+  COMMONPROGRAMFILES(X86)        C:\Program Files (x86)\Common Files
+  COMMONPROGRAMW6432             C:\Program Files\Common Files
+  COMPUTERNAME                   SC-201803271727
+  COMSPEC                        C:\WINDOWS\system32\cmd.exe
+  DRIVERDATA                     C:\Windows\System32\Drivers\DriverData
+  FILEPATH                       R:\Develop\b0-toolkits\a0-compiler\PyMake\
+  FPS_BROWSER_APP_PROFILE_STRING Internet Explorer
+  FPS_BROWSER_USER_PROFILE_STRING Default
+  HOMEDRIVE                      C:
+  HOMEPATH                       \Users\Administrator
+  LOCALAPPDATA                   C:\Users\Administrator\AppData\Local
+  LOGONSERVER                    \\SC-201803271727
+  NUMBER_OF_PROCESSORS           20
+  ONEDRIVE                       C:\Users\Administrator\OneDrive
+  OS                             Windows_NT
+  PATHEXT                        .COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC
+  PROCESSOR_ARCHITECTURE         AMD64
+  PROCESSOR_IDENTIFIER           Intel64 Family 6 Model 62 Stepping 4, GenuineIntel
+  PROCESSOR_LEVEL                6
+  PROCESSOR_REVISION             3e04
+  PROGRAMDATA                    C:\ProgramData
+  PROGRAMFILES                   C:\Program Files
+  PROGRAMFILES(X86)              C:\Program Files (x86)
+  PROGRAMW6432                   C:\Program Files
+  PROMPT                         $P$G
+  PSMODULEPATH                   C:\Program Files\WindowsPowerShell\Modules;C:\WINDOWS\system32\WindowsPowerShell\v1.0\Modules
+  PUBLIC                         C:\Users\Public
+  SESSIONNAME                    Console
+  SYSTEMDRIVE                    C:
+  SYSTEMROOT                     C:\WINDOWS
+  TEMP                           C:\Users\ADMINI~1\AppData\Local\Temp
+  TMP                            C:\Users\ADMINI~1\AppData\Local\Temp
+  USERDOMAIN                     SC-201803271727
+  USERDOMAIN_ROAMINGPROFILE      SC-201803271727
+  USERNAME                       Administrator
+  USERPROFILE                    C:\Users\Administrator
+  WINDIR                         C:\WINDOWS
+
+R:\Develop\b0-toolkits\a0-compiler\PyMake>pymake custom
+custom env: opened.
+path+:
+  R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource\UserShell
+  R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource
+  C:\Users\Administrator\Desktop\ENVCONFIG\UserShell
+  C:\Users\Administrator\Desktop\ENVCONFIG
+  R:/Develop/a0-develop
+  R:/Develop/e0-tools/doxygen/bin
+  R:/Develop/e0-tools/doxygen/graphviz-2.38/bin
+  R:/Develop/b0-toolkits/winCompilers/cmake3.9.1_64/bin
+  R:/Develop/b0-toolkits/winCompilers/perl_5.26.0.1_64/perl/bin
+  R:/Develop/b0-toolkits/winCompilers/xmake
+  R:/Develop/b0-toolkits/winCompilers/watcom1.9/binw;R:/Develop/b0-toolkits/winCompilers/watcom1.9/binnt
+  R:/Develop/b0-toolkits/a0-compiler/PyMake/demo
+  R:/Develop/b0-toolkits/a0-compiler/PyMake/test
+  R:\一个中文路径
+variable:
+  PYMAKEAUTHOR                   T.D.R.
+  PYMMXXX                        一个中文变量
+  WATCOM                         R:/Develop/b0-toolkits/winCompilers/watcom1.9
+  EDPATH                         R:/Develop/b0-toolkits/winCompilers/watcom1.9/eddat
+  WHTMLHELP                      R:/Develop/b0-toolkits/winCompilers/watcom1.9/binnt/help
+  WIPFC                          R:/Develop/b0-toolkits/winCompilers/watcom1.9/wipfc
+  INCLUDE                        R:/Develop/b0-toolkits/winCompilers/watcom1.9/h;R:/Develop/b0-toolkits/winCompilers/watcom1.9/h/nt;R:/Develop/b0-toolkits/winCompilers/watcom1.9/h/nt/directx;R:/Develop/b0-toolkits/winCompilers/watcom1.9/h/nt/ddk
+
+R:\Develop\b0-toolkits\a0-compiler\PyMake>pymake env current -r
+env qt5
+path+:
+  R:/Develop/b0-toolkits/winCompilers/cmake3.9.1_64/bin
+  R:/Develop/b0-toolkits/winLibraries/Qt/Tools/mingw530_32/bin
+  R:/Develop/b0-toolkits/winLibraries/Qt/5.9.2/mingw53_32/bin
+  R:/一个中文路径
+variable:
+  make0                          mingw32-make -j10
+  QTVERSION                      5.9.2
+  QTDIR                          R:/Develop/b0-toolkits/winLibraries/Qt/5.9.2/mingw53_32
+  QTSPEC                         -spec win32-g++
+  QTCONFIG
+  QKIT                           WIN32
+  QSYS                           Windows
+  QBBE                           一个中文变量
+
+R:\Develop\b0-toolkits\a0-compiler\PyMake>
+```
 
 # User Support   
 User support shell module, user can install them to share their functions.   
