@@ -4087,7 +4087,19 @@ def main_function():
             elif(args['var'] is True):
                 ''
             else:
-                ''
+                print (Fore.CYAN+ "system env")
+                sysenv = copy.deepcopy(pymakesystemenviron)
+                print(Fore.LIGHTGREEN_EX + "path+:")
+                for (key) in sysenv['PATH'].split(os.path.pathsep):
+                    print(Fore.LIGHTRED_EX + "  %s" % key)
+                print(Fore.LIGHTGREEN_EX + "variable:")
+                for (key, value) in sysenv.items():
+                    if (key == 'path+'):
+                        continue
+                    if( str(key).lower() == "path"):
+                        continue
+                    print(Fore.LIGHTRED_EX + "  %-30s %s" % (key, value))
+                return
         else:
             ''
         break
