@@ -3239,9 +3239,9 @@ def main_function():
                 return
             elif (args['path'] is True):
                 if(args['<value>'] is None):
-                    print(Fore.MAGENTA + "path+:")
+                    print(Fore.LIGHTGREEN_EX + "path+:")
                     for (key) in envcustomlistpaths:
-                        print(Fore.BLUE + "  %s" % key)
+                        print(Fore.LIGHTMAGENTA_EX + "  %s" % key)
                     return
 
                 usingcustomenvpaths = copy.deepcopy(storecustompaths)
@@ -3269,7 +3269,7 @@ def main_function():
                 return
             elif (args['var'] is True):
                 if (args['<key>'] is None):
-                    print(Fore.MAGENTA + "variable:")
+                    print(Fore.LIGHTGREEN_EX + "variable:")
                     for (key, value) in envcustomlistvars.items():
                         if (key == 'path+'):
                             continue
@@ -3284,7 +3284,7 @@ def main_function():
                 #print(storecustomvars)
                 if(args['--add'] is True):
                     if (args['<key>'] is None or args['<value>'] is None):
-                        print(Fore.MAGENTA + "variable:")
+                        print(Fore.LIGHTGREEN_EX + "variable:")
                         for (key, value) in envcustomlistvars.items():
                             if (key == 'path+'):
                                 continue
@@ -3302,7 +3302,7 @@ def main_function():
                         print('failed: %s is existed.' % varkeyvaluestring)
                 elif(args['--del'] is True):
                     if (args['<key>'] is None):
-                        print(Fore.MAGENTA + "variable:")
+                        print(Fore.LIGHTGREEN_EX + "variable:")
                         for (key, value) in envcustomlistvars.items():
                             if (key == 'path+'):
                                 continue
@@ -3339,10 +3339,10 @@ def main_function():
                     envcustomlist0 = envcustomlistrawpaths
                     envcustomlist1 = envcustomlistrawvars
 
-                print(Fore.MAGENTA + "path+:")
+                print(Fore.LIGHTGREEN_EX + "path+:")
                 for (key) in envcustomlist0:
-                    print(Fore.BLUE + "  %s" % key)
-                print(Fore.MAGENTA + "variable:")
+                    print(Fore.LIGHTMAGENTA_EX + "  %s" % key)
+                print(Fore.LIGHTGREEN_EX + "variable:")
                 for (key, value) in envcustomlist1.items():
                     if (key == 'path+'):
                         continue
@@ -3355,10 +3355,10 @@ def main_function():
                     status = "opened"
                 print("custom env: %s." % status)
                 if(switch0 == '1'):
-                    print(Fore.MAGENTA + "path+:")
+                    print(Fore.LIGHTGREEN_EX + "path+:")
                     for (key) in envcustomlistrawpaths:
-                        print(Fore.BLUE + "  %s" % key)
-                    print(Fore.MAGENTA + "variable:")
+                        print(Fore.LIGHTMAGENTA_EX + "  %s" % key)
+                    print(Fore.LIGHTGREEN_EX + "variable:")
                     for (key, value) in envcustomlistrawvars.items():
                         if (key == 'path+'):
                             continue
@@ -3370,10 +3370,10 @@ def main_function():
                     status = "opened"
                 print("custom env: %s." % status)
                 if(switch0 == '1'):
-                    print(Fore.MAGENTA + "path+:")
+                    print(Fore.LIGHTGREEN_EX + "path+:")
                     for (key) in envcustomlistrawpaths:
-                        print(Fore.BLUE + "  %s" % key)
-                    print(Fore.MAGENTA + "variable:")
+                        print(Fore.LIGHTMAGENTA_EX + "  %s" % key)
+                    print(Fore.LIGHTGREEN_EX + "variable:")
                     for (key, value) in envcustomlistrawvars.items():
                         if (key == 'path+'):
                             continue
@@ -4087,7 +4087,7 @@ def main_function():
             elif(args['var'] is True):
                 ''
             else:
-                print (Fore.CYAN+ "system env")
+                print (Fore.CYAN + "system env")
                 sysenv = copy.deepcopy(pymakesystemenviron)
                 print(Fore.LIGHTGREEN_EX + "path+:")
                 for (key) in sysenv['PATH'].split(os.path.pathsep):
@@ -4532,16 +4532,16 @@ def main_function():
 
             if( args['-p'] or args['--path'] is True):
                 print (Fore.CYAN+ "env %s" % current_var)
-                print(Fore.MAGENTA + "path+:")
+                print(Fore.LIGHTGREEN_EX + "path+:")
                 for (key) in dict0["path+"]:
-                    print(Fore.BLUE + "  %s" % key)
+                    print(Fore.LIGHTMAGENTA_EX + "  %s" % key)
                 if(args['-a'] or args['--all'] is True):
                     for path in env["PATH"].split(os.path.pathsep):
-                        print(Fore.BLUE + "  %s" % path)
+                        print(Fore.LIGHTMAGENTA_EX + "  %s" % path)
 
             elif (args['-v'] or args['--var'] is True):
                 print (Fore.CYAN+ "env %s" % current_var)
-                print(Fore.MAGENTA + "variable:")
+                print(Fore.LIGHTGREEN_EX + "variable:")
                 for (key, value) in dict0.items():
                     if (key == 'path+'):
                         continue
@@ -4554,13 +4554,13 @@ def main_function():
 
             elif (args['<name>'] is not None):
                 print (Fore.CYAN+ "env %s" % current_var)
-                print(Fore.MAGENTA + "path+:")
+                print(Fore.LIGHTGREEN_EX + "path+:")
                 for (key) in dict0["path+"]:
-                    print(Fore.BLUE + "  %s" % key)
+                    print(Fore.LIGHTMAGENTA_EX + "  %s" % key)
                 if(args['-a'] or args['--all'] is True):
                     for path in env["PATH"].split(os.path.pathsep):
-                        print(Fore.BLUE + "  %s" % path)
-                print(Fore.MAGENTA + "variable:")
+                        print(Fore.LIGHTMAGENTA_EX + "  %s" % path)
+                print(Fore.LIGHTGREEN_EX + "variable:")
                 for (key, value) in dict0.items():
                     if (key == 'path+'):
                         continue
