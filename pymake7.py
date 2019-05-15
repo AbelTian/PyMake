@@ -133,11 +133,17 @@ Usage:
   pymake7.py  here recovery [ <zip-file-name> ]
   pymake7.py  hh recovery [ <zip-file-name> ]
   pymake7.py  -------------------------------------------------------------
+  pymake7.py  system
+  pymake7.py  system [ status | information ]
+  pymake7.py  system path [ --add | --del ] [ <value> ]
+  pymake7.py  system var [ --add | --del ] [ <key> ] [ <value> ]
+  pymake7.py  system env [ -r | --raw ]
+  pymake7.py  -------------------------------------------------------------
   pymeke7.py  custom
   pymake7.py  custom [ open | close | status ]
   pymake7.py  custom [ information ]
-  pymake7.py  custom path ( --add | --del ) [ <value> ]
-  pymake7.py  custom var ( --add | --del ) [ <key> ] [ <value> ]
+  pymake7.py  custom path [ --add | --del ] [ <value> ]
+  pymake7.py  custom var [ --add | --del ] [ <key> ] [ <value> ]
   pymake7.py  custom env [ -r | --raw ]
   pymake7.py  custom export [ here | hh ] [ to <file-name> ]
   pymake7.py  custom exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
@@ -3262,6 +3268,14 @@ def main_function():
                     ''
                 return
             elif (args['var'] is True):
+                if (args['<key>'] is None):
+                    print(Fore.MAGENTA + "variable:")
+                    for (key, value) in envcustomlistvars.items():
+                        if (key == 'path+'):
+                            continue
+                        print(Fore.GREEN + "  %-30s %s" % (key, value))
+                    return
+
                 usingcustomenvvars = copy.deepcopy(storecustomvars)
                 #print(args)
                 #print(args['<key>'])
