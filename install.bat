@@ -58,6 +58,11 @@ set filepath=%~dp0
 set sourcefile=pypaths.bat
 call :install %*
 
+set mmfile=pyenv.ps1
+set filepath=%~dp0
+set sourcefile=pyenv.ps1
+call :install_powershell %*
+
 echo 安装成功。
 exit /b 0
 
@@ -65,5 +70,10 @@ exit /b 0
 :install
 echo @echo off > "%mmpath%\%mmfile%"
 echo call "%filepath%\%sourcefile%" %* >> "%mmpath%\%mmfile%"
+echo 安装 %mmfile%
+goto :eof
+
+:install_powershell
+echo . "%filepath%\%sourcefile%" @args > "%mmpath%\%mmfile%"
 echo 安装 %mmfile%
 goto :eof

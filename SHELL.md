@@ -148,7 +148,7 @@ pymake custom
 pymake env current -r
 
 ```
-## pymake使用截图  
+#### pymake使用截图  
 ![命令行截图](./screenshot/a2.png)  
 
 
@@ -161,7 +161,7 @@ pymake能够给用户提供一个不会干扰系统环境、并且互不干扰�
 pyenv在被安装后也可以随处运行，他的特点在于，用户可以在命令行里随意开关（即更换）自有的环境。    
 pyenv为用户提供了影响当前运行器的环境！这又是一个创举。      
 
-## pyenv 使用截图  
+#### pyenv 使用截图  
 ![命令行截图](./screenshot/b1.png)  
 ![命令行截图](./screenshot/b2.png)  
 ![命令行截图](./screenshot/b3.png)  
@@ -194,13 +194,27 @@ bat环境变量不区分大小写。
 一般不需要。   
 2. 环境变量 VCVARSALL VCVARSALLPARAM 已经被使用者设置进入确定的ENV，随时跟着ENV改变。  
 
-## pyvc 使用截图  
+#### pyvc 使用截图  
 ![命令行截图](./screenshot/b6.png)  
 
 # pypowershell  
 
-pypowershell允许用户在PyMake提供的多环境里，使用powershell执行器执行命令，当然，执行的必然是powershell命令。  
+pypowershell允许用户在PyMake提供的多个环境里，使用powershell执行命令。  
+pypowershell提供pypowershell.bat，用户既可以使用CMD执行器，也可以使用powershell执行器。  
+pypowershell还提供pypowershell.sh，可以跨平台使用。      
 用户可以在一个目录里调用任何目录下的.ps1，而且，当作命令来调用，支持输入参数，支持任意工作目录。  
 支持powershell，是个开创性动作。   
 
 ![命令行测试截图](./screenshot/c1.png)  
+
+# pyenv [.ps1]  
+
+pypowershell允许用户在CMD、POWERSHELL等环境里执行powershell命令，但是，pypowershell执行时不会影响当前执行器的环境。  
+
+pyenv提供三个Shortcut来影响当前执行器的环境，  
+pyenv.bat来影响CMD执行器的环境，  
+pyenv.sh来影响SHELL执行器的环境，  
+pyenv.ps1就是来影响powershell执行器的环境的，能够跨平台使用。  
+
+#### pyenv [.ps1] 使用截图  
+![命令行测试截图](./screenshot/c2.png)  

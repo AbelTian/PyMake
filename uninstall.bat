@@ -47,6 +47,10 @@ set sourcefile=pypaths.bat
 set mmfile=pypaths.bat
 call :uninstall
 
+set sourcefile=pyenv.ps1
+set mmfile=pyenv.ps1
+call :uninstall
+
 echo –∂‘ÿ≥…π¶°£
 exit /b 0
 

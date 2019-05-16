@@ -748,6 +748,7 @@ User support shell module, user can install them to share their functions.
 | pymake.py | pyenv | pyvc |
 | pymake.py | pycmd, pyexecvp | pyccvp |
 | pymake.py | pypowershell |  |
+| pymake.py | pyenv [.ps1] |  |
 | pyinfo.py | pyinfo || 
 | pypaths.py | pypaths || 
 | pycodec.py | | |
