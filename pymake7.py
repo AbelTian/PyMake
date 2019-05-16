@@ -694,9 +694,9 @@ def main_function():
                     elif (plat == "Darwin"):
                         cmd0 = "open " + file0
                     else:
-                        cmd0 = "gedit " + file0 + "&"
+                        cmd0 = "xdg-open " + file0
                     os.system(cmd0)
-                    print('opened: %s' % file0)
+                    print('successed: %s' % file0)
                     return
                 elif(args['--restore'] is True):
                     conf.set('source', 'config', 'pymake.json')
