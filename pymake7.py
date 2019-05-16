@@ -10,6 +10,7 @@ Usage:
   pymake7.py  source config [ --del  ] [ <config-file-name> ]
   pymake7.py  source config [ --mod  ] [ <config-file-name> ] [<new-config-file-name>]
   pymake7.py  source config [ --switch  ] [ <config-file-name> ]
+  pymake7.py  source config [ --edit  ] [ <config-file-name> ]
   pymake7.py  source config [ --restore  ]
   pymake7.py  source config [ --show ]
   pymake7.py  -------------------------------------------------------------
@@ -675,6 +676,28 @@ def main_function():
                     for f in files:
                         if (f.endswith(pymakesuffix)):
                             print(f)
+                    return
+                elif (args['--edit'] is True):
+                    file0 = 'pymake.json'
+                    if(args['<config-file-name>'] is None):
+                        file0 = sourcefile
+                    else:
+                        if(os.path.isfile(args['<config-file-name>']) is False):
+                            print ('please input an existed .json file.')
+                            return
+                        file0 = args['<config-file-name>']
+
+                    plat = getplatform()
+                    cmd0 = ''
+                    if(plat == "Windows"):
+                        cmd0 = "start " + file0
+                    elif (plat == "Darwin"):
+                        cmd0 = "open " + file0
+                    else:
+                        cmd0 = "nautilus " + file0
+                    os.system(cmd0)
+                    print('opened: %s' % file0)
+                    return
                 elif(args['--restore'] is True):
                     conf.set('source', 'config', 'pymake.json')
                     conf.write(open(pymakeini, 'w'))
@@ -693,7 +716,10 @@ def main_function():
                     print ("%s" % conf.get("source", "config"))
             elif (args['file'] is True):
                 if(args['<source-path-file>'] is None):
-                    print("please input an abspath .json file.")
+                    #print("please input an abspath .json file.")
+                    r = conf.get('source', 'root')
+                    f = conf.get('source', 'config')
+                    print("%s%s%s" % (r, os.path.sep, f))
                     return
                 #path0 = args['<source-path-file>']
                 #path1 = os.path.relpath(args['<source-path-file>'], pymakeworkpath)
@@ -3232,6 +3258,7 @@ def main_function():
                 print("successed: export custom env to %s %s" % (cmd_effect, cmd_unset))
                 return
             elif(args['information'] is True):
+                print("CUSTOM SETTING: %s" % (pymakecustomini))
                 print("CUSTOM ENV+   : %s" % (customenvfile))
                 print("CUSTOM PATH+  : %s" % (custompathfile))
             elif (args['exec-with-params'] is True):
