@@ -164,10 +164,10 @@ def main_function():
             allpath_list = []
             all_path = Depth_Ergodic_new(localabspath, allpath_list, deeps, True, all_keywords, all_ignore_keywords)
 
+            all_new_path = copy.deepcopy(all_path)
+
             #print(args['--pymake'])
             if(args['--pymake'] != []):
-                all_new_path = copy.deepcopy(all_path)
-
                 for item in args['--pymake']:
                     sub0 = str(item).split(':')[0]
                     sub1 = ':'.join(str(item).split(':')[1:])
@@ -184,18 +184,15 @@ def main_function():
                             str0 = str(str0).replace(sub1, "${%s}" % sub0)
                         all_new_path[i] = str0
 
-                if(args['--path+'] is True):
-                    pos = 1
-                    for path0 in all_new_path:
-                        print("\"P%d\": \"%s\"," % (pos, path0))
-                        pos += 1
-                    return
-
+            if(args['--path+'] is True):
+                pos = 1
                 for path0 in all_new_path:
-                    print(path0)
-            else:
-                for path0 in all_path:
-                    print(path0)
+                    print("\"P%d\": \"%s\"," % (pos, path0))
+                    pos += 1
+                return
+
+            for path0 in all_new_path:
+                print(path0)
 
         else:
             ''
