@@ -2749,7 +2749,7 @@ def main_function():
         for (key, value) in dict0.items():
             if (key == 'path+'):
                 continue
-            lines += ("$env:" + key + ' = \"' + value + '\"' + cmd_return)
+            lines += ("${env:" + key + '} = \"' + value + '\"' + cmd_return)
 
         # print(lines.split('\n'))
         with open(cmd_effect, 'w', encoding=cmd_codec) as f:
@@ -2771,7 +2771,7 @@ def main_function():
         for (key, value) in dict0.items():
             if (key == 'path+'):
                 continue
-            lines += ("$env:%s = \"\"" % key) + cmd_return
+            lines += ("${env:%s} = \"\"" % key) + cmd_return
 
         with open(cmd_unset, 'w', encoding=cmd_codec) as f:
             # f.write(cmd_header)
@@ -3635,7 +3635,7 @@ def main_function():
                 for (key, value) in dict0.items():
                     if (key == 'path+'):
                         continue
-                    lines += ("$env:" + key + ' = \"' + value + '\"' + cmd_return)
+                    lines += ("${env:" + key + '} = \"' + value + '\"' + cmd_return)
 
                 # +custom
                 if (args['-c'] or args['--custom'] is True):
@@ -3648,7 +3648,7 @@ def main_function():
                     for (key, value) in envcustomlistrawvars.items():
                         if (key == 'path+'):
                             continue
-                        lines += ("$env:" + key + ' = \"' + value + '\"' + cmd_return)
+                        lines += ("${env:" + key + '} = \"' + value + '\"' + cmd_return)
                 else:
                     ''
 
@@ -3665,7 +3665,7 @@ def main_function():
                             continue
                         if (str(key).lower() == "path"):
                             continue
-                        lines += ("$env:" + key + ' = \"' + value + '\"' + cmd_return)
+                        lines += ("${env:" + key + '} = \"' + value + '\"' + cmd_return)
                 else:
                     ''
 
@@ -3689,7 +3689,7 @@ def main_function():
                 for (key, value) in dict0.items():
                     if (key == 'path+'):
                         continue
-                    lines += ("$env:%s = \"\"" % key) + cmd_return
+                    lines += ("${env:%s} = \"\"" % key) + cmd_return
 
                 # +custom
                 if (args['-c'] or args['--custom'] is True):
@@ -3701,7 +3701,7 @@ def main_function():
                     for (key, value) in envcustomlistrawvars.items():
                         if (key == 'path+'):
                             continue
-                        lines += ("$env:%s = \"\"" % key) + cmd_return
+                        lines += ("${env:%s} = \"\"" % key) + cmd_return
                 else:
                     ''
 
@@ -3717,7 +3717,7 @@ def main_function():
                             continue
                         if (str(key).lower() == "path"):
                             continue
-                        lines += ("$env:%s = \"\"" % key) + cmd_return
+                        lines += ("${env:%s} = \"\"" % key) + cmd_return
                 else:
                     ''
 
