@@ -149,7 +149,7 @@ Usage:
   pymake7.py  custom export [ here | hh ] [ to <file-name> ]
   pymake7.py  custom exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
   pymake7.py  custom use <env-name> exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
-  pymake7.py  export2 [ here | hh ] [ <env-name> ] [ to <file-name> ] [ --private ] [ -s | --system ] [ -c | --custom ] [ -a | --all ] [ -p | --path ] [ -v | --var ]
+  pymake7.py  export2 [ powershell ] [ here | hh ] [ <env-name> ] [ to <file-name> ] [ -c | --custom ] [ -s | --system ]
   pymake7.py  -------------------------------------------------------------
   pymake7.py  powershell
   pymake7.py  powershell [ information | status ]
@@ -195,7 +195,7 @@ Command:
   recovery          recovery all env .json from a zip file.
   import            import user path or env or cmd to env .json file. example, import cmd [ <script-file>: x.bat x.cmd x.sh x.ps1 ... ]
   custom            custom environment is helpping for calling large dimentions of scripts in computer, manually in console. defined in sourceroot. [ default: close ]
-  export2           output private environ and custom environ to a bat file or sh file, a powerfull function from export. [default:current, env]
+  export2           output private environ and custom environ to a bat file or sh file, a powerfull function from export, support powershell also. [default:current, env]
   powershell        environ for powershell, and to execute in powershell. [cross]
 
 Options:
@@ -2727,8 +2727,6 @@ def main_function():
             current_var = env_name
         dict0 = copy.deepcopy(rawconfig['environ'][current_var])
 
-        plat = getplatform()
-
         cmd_suffix = ".ps1"
         cmd_codec = 'ansi'
         # but windows, it is \r\n, python helpping me?
@@ -3156,7 +3154,7 @@ def main_function():
                     ''
                 return
             else:
-                print('OK')
+                ''
         else:
             ''
         break
@@ -3240,7 +3238,7 @@ def main_function():
                     else:
                         lines += (env_set + 'PATH=$(' + 'echo ${PATH//' + key.replace('/', '\/') + ':/})' + cmd_return)
 
-                # export unset env
+                # export unset var
                 for (key, value) in envcustomlistrawvars.items():
                     if (key == 'path+'):
                         continue
@@ -3470,7 +3468,7 @@ def main_function():
             else:
                 lines += (env_set + 'PATH=$(' + 'echo ${PATH//' + key.replace('/', '\/') + ':/})' + cmd_return)
 
-        # export unset env
+        # export unset var
         for (key, value) in envcustomlistrawvars.items():
             if (key == 'path+'):
                 continue
@@ -3552,7 +3550,7 @@ def main_function():
             else:
                 lines += (env_set + 'PATH=$(' + 'echo ${PATH//' + key.replace('/', '\/') + ':/})' + cmd_return)
 
-        # export unset env
+        # export unset var
         for (key, value) in pymakesystemenviron.items():
             if (key == 'path+'):
                 continue
@@ -3614,6 +3612,133 @@ def main_function():
                 current_var = env_name
             dict0 = copy.deepcopy(rawconfig['environ'][current_var])
 
+            if(args['powershell'] is True):
+                cmd_suffix = ".ps1"
+                cmd_codec = 'ansi'
+                # but windows, it is \r\n, python helpping me?
+                cmd_return = "\n"
+                cmd_header = "#!/usr/bin/env bash" + cmd_return
+                env_set = ''
+
+                # export effect env
+                cmd_effect = 'powershell.env'
+                if (file_name is not None):
+                    cmd_effect = "powershell." + file_name
+                cmd_effect += '_effect' + cmd_suffix
+
+                lines = ""
+                # export path
+                for (key) in dict0["path+"]:
+                    lines += ("if ( !$env:Path.Contains(\"%s;\" ) ) { $env:Path = $env:Path.Insert(0, \"%s;\") }" % (key, key)) + cmd_return
+
+                # export var
+                for (key, value) in dict0.items():
+                    if (key == 'path+'):
+                        continue
+                    lines += ("$env:" + key + ' = \"' + value + '\"' + cmd_return)
+
+                # +custom
+                if (args['-c'] or args['--custom'] is True):
+                    # export path
+                    # print(envcustomlistrawpaths)
+                    for (key) in envcustomlistrawpaths:
+                        lines += ("if ( !$env:Path.Contains(\"%s;\" ) ) { $env:Path = $env:Path.Insert(0, \"%s;\") }" % (key, key)) + cmd_return
+
+                    # export var
+                    for (key, value) in envcustomlistrawvars.items():
+                        if (key == 'path+'):
+                            continue
+                        lines += ("$env:" + key + ' = \"' + value + '\"' + cmd_return)
+                else:
+                    ''
+
+                # +system
+                if (args['-s'] or args['--system'] is True):
+                    # export path
+                    # print(envcustomlistrawpaths)
+                    for (key) in pymakesystemenviron['PATH'].split(';'):
+                        lines += ("if ( !$env:Path.Contains(\"%s;\" ) ) { $env:Path = $env:Path.Insert(0, \"%s;\") }" % (key, key)) + cmd_return
+
+                    # export var
+                    for (key, value) in pymakesystemenviron.items():
+                        if (key == 'path+'):
+                            continue
+                        if (str(key).lower() == "path"):
+                            continue
+                        lines += ("$env:" + key + ' = \"' + value + '\"' + cmd_return)
+                else:
+                    ''
+
+                # print(lines.split('\n'))
+                with open(cmd_effect, 'w', encoding=cmd_codec) as f:
+                    # f.write(cmd_header)
+                    f.write(lines)
+
+                # export unset env
+                cmd_unset = 'powershell.env'
+                if (file_name is not None):
+                    cmd_unset = "powershell." + file_name
+                cmd_unset += '_unset' + cmd_suffix
+
+                lines = ""
+                # export unset path
+                for (key) in dict0["path+"]:
+                    # lines += ("$env:Path = $env:Path.Replace(\"%s;\", \"\")" % key) + cmd_return
+                    lines += ("if ( $env:Path.Contains(\"%s;\" ) ) { $env:Path = $env:Path.Replace(\"%s;\", \"\") }" % (key, key)) + cmd_return
+                # export unset var
+                for (key, value) in dict0.items():
+                    if (key == 'path+'):
+                        continue
+                    lines += ("$env:%s = \"\"" % key) + cmd_return
+
+                # +custom
+                if (args['-c'] or args['--custom'] is True):
+                    # export unset path
+                    for (key) in envcustomlistrawpaths:
+                        lines += ("if ( $env:Path.Contains(\"%s;\" ) ) { $env:Path = $env:Path.Replace(\"%s;\", \"\") }" % (key, key)) + cmd_return
+
+                    # export unset var
+                    for (key, value) in envcustomlistrawvars.items():
+                        if (key == 'path+'):
+                            continue
+                        lines += ("$env:%s = \"\"" % key) + cmd_return
+                else:
+                    ''
+
+                # +system
+                if (args['-s'] or args['--system'] is True):
+                    # export unset path
+                    for (key) in pymakesystemenviron['PATH'].split(';'):
+                        lines += ("if ( $env:Path.Contains(\"%s;\" ) ) { $env:Path = $env:Path.Replace(\"%s;\", \"\") }" % (key, key)) + cmd_return
+
+                    # export unset var
+                    for (key, value) in pymakesystemenviron.items():
+                        if (key == 'path+'):
+                            continue
+                        if (str(key).lower() == "path"):
+                            continue
+                        lines += ("$env:%s = \"\"" % key) + cmd_return
+                else:
+                    ''
+
+                with open(cmd_unset, 'w', encoding=cmd_codec) as f:
+                    # f.write(cmd_header)
+                    f.write(lines)
+
+                print("successed: export %s to %s %s" % (current_var, cmd_effect, cmd_unset))
+                # +custom
+                if (args['-c'] or args['--custom'] is True):
+                    print("successed: export custom env to %s %s" % (cmd_effect, cmd_unset))
+                else:
+                    ''
+                # +system
+                if (args['-s'] or args['--system'] is True):
+                    print("successed: export system env to %s %s" % (cmd_effect, cmd_unset))
+                else:
+                    ''
+
+                return
+
             plat = getplatform()
             if (plat == "Windows"):
                 cmd_suffix = ".bat"
@@ -3635,19 +3760,34 @@ def main_function():
             cmd_effect += '_effect' + cmd_suffix
 
             lines = ""
+            # export path
+            for (key) in dict0["path+"]:
+                if (plat == "Windows"):
+                    lines += (env_set + 'PATH=' + key + os.path.pathsep + '%PATH%' + cmd_return)
+                else:
+                    lines += (env_set + 'PATH=' + key + os.path.pathsep + '$PATH' + cmd_return)
 
-            if (args['-p'] or args['--path'] is True):
-                ''
+            # export var
+            for (key, value) in dict0.items():
+                if (key == 'path+'):
+                    continue
+                if (plat == "Windows"):
+                    lines += (env_set + key + '=' + value + cmd_return)
+                else:
+                    lines += (env_set + key + '=\"' + value + '\"' + cmd_return)
+
+            # +custom
+            if(args['-c'] or args['--custom'] is True):
                 # export path
-                for (key) in dict0["path+"]:
+                # print(envcustomlistrawpaths)
+                for (key) in envcustomlistrawpaths:
                     if (plat == "Windows"):
                         lines += (env_set + 'PATH=' + key + os.path.pathsep + '%PATH%' + cmd_return)
                     else:
                         lines += (env_set + 'PATH=' + key + os.path.pathsep + '$PATH' + cmd_return)
-            elif (args['-v'] or args['--var'] is True):
-                ''
+
                 # export var
-                for (key, value) in dict0.items():
+                for (key, value) in envcustomlistrawvars.items():
                     if (key == 'path+'):
                         continue
                     if (plat == "Windows"):
@@ -3656,191 +3796,27 @@ def main_function():
                         lines += (env_set + key + '=\"' + value + '\"' + cmd_return)
             else:
                 ''
+
+            # +system
+            if(args['-s'] or args['--system'] is True):
                 # export path
-                for (key) in dict0["path+"]:
+                # print(envcustomlistrawpaths)
+                for (key) in pymakesystemenviron['PATH'].split(';'):
                     if (plat == "Windows"):
                         lines += (env_set + 'PATH=' + key + os.path.pathsep + '%PATH%' + cmd_return)
                     else:
                         lines += (env_set + 'PATH=' + key + os.path.pathsep + '$PATH' + cmd_return)
 
                 # export var
-                for (key, value) in dict0.items():
+                for (key, value) in pymakesystemenviron.items():
                     if (key == 'path+'):
+                        continue
+                    if (str(key).lower() == "path"):
                         continue
                     if (plat == "Windows"):
                         lines += (env_set + key + '=' + value + cmd_return)
                     else:
                         lines += (env_set + key + '=\"' + value + '\"' + cmd_return)
-
-            # +system
-            if(args['-s'] or args['--system'] is True):
-                ''
-                if(args['-p'] or args['--path'] is True):
-                    ''
-                    # export path
-                    # print(envcustomlistrawpaths)
-                    for (key) in pymakesystemenviron['PATH'].split(';'):
-                        if (plat == "Windows"):
-                            lines += (env_set + 'PATH=' + key + os.path.pathsep + '%PATH%' + cmd_return)
-                        else:
-                            lines += (env_set + 'PATH=' + key + os.path.pathsep + '$PATH' + cmd_return)
-
-                elif(args['-v'] or args['--var'] is True):
-                    ''
-                    # export var
-                    for (key, value) in pymakesystemenviron.items():
-                        if (key == 'path+'):
-                            continue
-                        if (str(key).lower() == "path"):
-                            continue
-                        if (plat == "Windows"):
-                            lines += (env_set + key + '=' + value + cmd_return)
-                        else:
-                            lines += (env_set + key + '=\"' + value + '\"' + cmd_return)
-
-                else:
-                    ''
-                    # export path
-                    # print(envcustomlistrawpaths)
-                    for (key) in pymakesystemenviron['PATH'].split(';'):
-                        if (plat == "Windows"):
-                            lines += (env_set + 'PATH=' + key + os.path.pathsep + '%PATH%' + cmd_return)
-                        else:
-                            lines += (env_set + 'PATH=' + key + os.path.pathsep + '$PATH' + cmd_return)
-
-                    # export var
-                    for (key, value) in pymakesystemenviron.items():
-                        if (key == 'path+'):
-                            continue
-                        if (str(key).lower() == "path"):
-                            continue
-                        if (plat == "Windows"):
-                            lines += (env_set + key + '=' + value + cmd_return)
-                        else:
-                            lines += (env_set + key + '=\"' + value + '\"' + cmd_return)
-
-            # +custom
-            elif(args['-c'] or args['--custom'] is True):
-                ''
-                if(args['-p'] or args['--path'] is True):
-                    ''
-                    # export path
-                    # print(envcustomlistrawpaths)
-                    for (key) in envcustomlistrawpaths:
-                        if (plat == "Windows"):
-                            lines += (env_set + 'PATH=' + key + os.path.pathsep + '%PATH%' + cmd_return)
-                        else:
-                            lines += (env_set + 'PATH=' + key + os.path.pathsep + '$PATH' + cmd_return)
-
-                elif(args['-v'] or args['--var'] is True):
-                    ''
-                    # export var
-                    for (key, value) in envcustomlistrawvars.items():
-                        if (key == 'path+'):
-                            continue
-                        if (plat == "Windows"):
-                            lines += (env_set + key + '=' + value + cmd_return)
-                        else:
-                            lines += (env_set + key + '=\"' + value + '\"' + cmd_return)
-
-                else:
-                    ''
-                    # export path
-                    # print(envcustomlistrawpaths)
-                    for (key) in envcustomlistrawpaths:
-                        if (plat == "Windows"):
-                            lines += (env_set + 'PATH=' + key + os.path.pathsep + '%PATH%' + cmd_return)
-                        else:
-                            lines += (env_set + 'PATH=' + key + os.path.pathsep + '$PATH' + cmd_return)
-
-                    # export var
-                    for (key, value) in envcustomlistrawvars.items():
-                        if (key == 'path+'):
-                            continue
-                        if (plat == "Windows"):
-                            lines += (env_set + key + '=' + value + cmd_return)
-                        else:
-                            lines += (env_set + key + '=\"' + value + '\"' + cmd_return)
-
-            elif(args['-a'] or args['--all'] is True):
-                ''
-                if (args['-p'] or args['--path'] is True):
-                    ''
-                    # export path
-                    # print(envcustomlistrawpaths)
-                    for (key) in envcustomlistrawpaths:
-                        if (plat == "Windows"):
-                            lines += (env_set + 'PATH=' + key + os.path.pathsep + '%PATH%' + cmd_return)
-                        else:
-                            lines += (env_set + 'PATH=' + key + os.path.pathsep + '$PATH' + cmd_return)
-
-                    # export path
-                    # print(envcustomlistrawpaths)
-                    for (key) in pymakesystemenviron['PATH'].split(';'):
-                        if (plat == "Windows"):
-                            lines += (env_set + 'PATH=' + key + os.path.pathsep + '%PATH%' + cmd_return)
-                        else:
-                            lines += (env_set + 'PATH=' + key + os.path.pathsep + '$PATH' + cmd_return)
-                elif (args['-v'] or args['--var'] is True):
-                    ''
-                    # export var
-                    for (key, value) in envcustomlistrawvars.items():
-                        if (key == 'path+'):
-                            continue
-                        if (plat == "Windows"):
-                            lines += (env_set + key + '=' + value + cmd_return)
-                        else:
-                            lines += (env_set + key + '=\"' + value + '\"' + cmd_return)
-
-                    # export var
-                    for (key, value) in pymakesystemenviron.items():
-                        if (key == 'path+'):
-                            continue
-                        if (str(key).lower() == "path"):
-                            continue
-                        if (plat == "Windows"):
-                            lines += (env_set + key + '=' + value + cmd_return)
-                        else:
-                            lines += (env_set + key + '=\"' + value + '\"' + cmd_return)
-                else:
-                    ''
-                    # export path
-                    # print(envcustomlistrawpaths)
-                    for (key) in envcustomlistrawpaths:
-                        if (plat == "Windows"):
-                            lines += (env_set + 'PATH=' + key + os.path.pathsep + '%PATH%' + cmd_return)
-                        else:
-                            lines += (env_set + 'PATH=' + key + os.path.pathsep + '$PATH' + cmd_return)
-
-                    # export var
-                    for (key, value) in envcustomlistrawvars.items():
-                        if (key == 'path+'):
-                            continue
-                        if (plat == "Windows"):
-                            lines += (env_set + key + '=' + value + cmd_return)
-                        else:
-                            lines += (env_set + key + '=\"' + value + '\"' + cmd_return)
-
-                    # export path
-                    # print(envcustomlistrawpaths)
-                    for (key) in pymakesystemenviron['PATH'].split(';'):
-                        if (plat == "Windows"):
-                            lines += (env_set + 'PATH=' + key + os.path.pathsep + '%PATH%' + cmd_return)
-                        else:
-                            lines += (env_set + 'PATH=' + key + os.path.pathsep + '$PATH' + cmd_return)
-
-                    # export var
-                    for (key, value) in pymakesystemenviron.items():
-                        if (key == 'path+'):
-                            continue
-                        if (str(key).lower() == "path"):
-                            continue
-                        if (plat == "Windows"):
-                            lines += (env_set + key + '=' + value + cmd_return)
-                        else:
-                            lines += (env_set + key + '=\"' + value + '\"' + cmd_return)
-
-            # --private, default
             else:
                 ''
 
@@ -3855,204 +3831,61 @@ def main_function():
             cmd_unset += '_unset' + cmd_suffix
 
             lines = ""
-            if (args['-p'] or args['--path'] is True):
-                ''
+            # export unset path
+            for (key) in dict0["path+"]:
+                if (plat == "Windows"):
+                    lines += (env_set + 'PATH=%PATH:' + key + ';=%' + cmd_return)
+                else:
+                    lines += (env_set + 'PATH=$(' + 'echo ${PATH//' + key.replace('/', '\/') + ':/})' + cmd_return)
+
+            # export unset var
+            for (key, value) in dict0.items():
+                if (key == 'path+'):
+                    continue
+                if (plat == "Windows"):
+                    lines += ('set ' + key + '=' + cmd_return)
+                else:
+                    lines += ('unset ' + key + cmd_return)
+
+            # +custom
+            if(args['-c'] or args['--custom'] is True):
                 # export unset path
-                lines = ""
-                for (key) in dict0["path+"]:
+                for (key) in envcustomlistrawpaths:
                     if (plat == "Windows"):
                         lines += (env_set + 'PATH=%PATH:' + key + ';=%' + cmd_return)
                     else:
                         lines += (env_set + 'PATH=$(' + 'echo ${PATH//' + key.replace('/', '\/') + ':/})' + cmd_return)
 
-            elif (args['-v'] or args['--var'] is True):
-                ''
                 # export unset var
-                for (key, value) in dict0.items():
+                for (key, value) in envcustomlistrawvars.items():
                     if (key == 'path+'):
                         continue
                     if (plat == "Windows"):
                         lines += ('set ' + key + '=' + cmd_return)
                     else:
                         lines += ('unset ' + key + cmd_return)
-
             else:
                 ''
-                # export unset path
-                for (key) in dict0["path+"]:
-                    if (plat == "Windows"):
-                        lines += (env_set + 'PATH=%PATH:' + key + ';=%' + cmd_return)
-                    else:
-                        lines += (env_set + 'PATH=$(' + 'echo ${PATH//' + key.replace('/', '\/') + ':/})' + cmd_return)
-
-                # export unset var
-                for (key, value) in dict0.items():
-                    if (key == 'path+'):
-                        continue
-                    if (plat == "Windows"):
-                        lines += ('set ' + key + '=' + cmd_return)
-                    else:
-                        lines += ('unset ' + key + cmd_return)
 
             # +system
             if(args['-s'] or args['--system'] is True):
-                ''
-                if(args['-p'] or args['--path'] is True):
-                    ''
-                    # export unset path
-                    for (key) in pymakesystemenviron['PATH'].split(';'):
-                        if (plat == "Windows"):
-                            lines += (env_set + 'PATH=%PATH:' + key + ';=%' + cmd_return)
-                        else:
-                            lines += (env_set + 'PATH=$(' + 'echo ${PATH//' + key.replace('/', '\/') + ':/})' + cmd_return)
-                elif(args['-v'] or args['--var'] is True):
-                    ''
-                    # export unset env
-                    for (key, value) in pymakesystemenviron.items():
-                        if (key == 'path+'):
-                            continue
-                        if (str(key).lower() == "path"):
-                            continue
-                        if (plat == "Windows"):
-                            lines += ('set ' + key + '=' + cmd_return)
-                        else:
-                            lines += ('unset ' + key + cmd_return)
-                else:
-                    ''
-                    # export unset path
-                    for (key) in pymakesystemenviron['PATH'].split(';'):
-                        if (plat == "Windows"):
-                            lines += (env_set + 'PATH=%PATH:' + key + ';=%' + cmd_return)
-                        else:
-                            lines += (env_set + 'PATH=$(' + 'echo ${PATH//' + key.replace('/', '\/') + ':/})' + cmd_return)
+                # export unset path
+                for (key) in pymakesystemenviron['PATH'].split(';'):
+                    if (plat == "Windows"):
+                        lines += (env_set + 'PATH=%PATH:' + key + ';=%' + cmd_return)
+                    else:
+                        lines += (env_set + 'PATH=$(' + 'echo ${PATH//' + key.replace('/', '\/') + ':/})' + cmd_return)
 
-                    # export unset env
-                    for (key, value) in pymakesystemenviron.items():
-                        if (key == 'path+'):
-                            continue
-                        if (str(key).lower() == "path"):
-                            continue
-                        if (plat == "Windows"):
-                            lines += ('set ' + key + '=' + cmd_return)
-                        else:
-                            lines += ('unset ' + key + cmd_return)
-
-            # +custom
-            elif(args['-c'] or args['--custom'] is True):
-                ''
-                if(args['-p'] or args['--path'] is True):
-                    ''
-                    # export unset path
-                    for (key) in envcustomlistrawpaths:
-                        if (plat == "Windows"):
-                            lines += (env_set + 'PATH=%PATH:' + key + ';=%' + cmd_return)
-                        else:
-                            lines += (env_set + 'PATH=$(' + 'echo ${PATH//' + key.replace('/', '\/') + ':/})' + cmd_return)
-                elif(args['-v'] or args['--var'] is True):
-                    ''
-                    # export unset env
-                    for (key, value) in envcustomlistrawvars.items():
-                        if (key == 'path+'):
-                            continue
-                        if (plat == "Windows"):
-                            lines += ('set ' + key + '=' + cmd_return)
-                        else:
-                            lines += ('unset ' + key + cmd_return)
-                else:
-                    ''
-                    # export unset path
-                    for (key) in envcustomlistrawpaths:
-                        if (plat == "Windows"):
-                            lines += (env_set + 'PATH=%PATH:' + key + ';=%' + cmd_return)
-                        else:
-                            lines += (env_set + 'PATH=$(' + 'echo ${PATH//' + key.replace('/', '\/') + ':/})' + cmd_return)
-
-                    # export unset env
-                    for (key, value) in envcustomlistrawvars.items():
-                        if (key == 'path+'):
-                            continue
-                        if (plat == "Windows"):
-                            lines += ('set ' + key + '=' + cmd_return)
-                        else:
-                            lines += ('unset ' + key + cmd_return)
-
-            elif(args['-a'] or args['--all'] is True):
-                ''
-                if (args['-p'] or args['--path'] is True):
-                    ''
-                    # export unset path
-                    for (key) in envcustomlistrawpaths:
-                        if (plat == "Windows"):
-                            lines += (env_set + 'PATH=%PATH:' + key + ';=%' + cmd_return)
-                        else:
-                            lines += (env_set + 'PATH=$(' + 'echo ${PATH//' + key.replace('/', '\/') + ':/})' + cmd_return)
-
-                    # export unset path
-                    for (key) in pymakesystemenviron['PATH'].split(';'):
-                        if (plat == "Windows"):
-                            lines += (env_set + 'PATH=%PATH:' + key + ';=%' + cmd_return)
-                        else:
-                            lines += (env_set + 'PATH=$(' + 'echo ${PATH//' + key.replace('/', '\/') + ':/})' + cmd_return)
-
-                elif (args['-v'] or args['--var'] is True):
-                    ''
-                    # export unset env
-                    for (key, value) in envcustomlistrawvars.items():
-                        if (key == 'path+'):
-                            continue
-                        if (plat == "Windows"):
-                            lines += ('set ' + key + '=' + cmd_return)
-                        else:
-                            lines += ('unset ' + key + cmd_return)
-
-                    # export unset env
-                    for (key, value) in pymakesystemenviron.items():
-                        if (key == 'path+'):
-                            continue
-                        if (str(key).lower() == "path"):
-                            continue
-                        if (plat == "Windows"):
-                            lines += ('set ' + key + '=' + cmd_return)
-                        else:
-                            lines += ('unset ' + key + cmd_return)
-
-                else:
-                    ''
-                    # export unset path
-                    for (key) in envcustomlistrawpaths:
-                        if (plat == "Windows"):
-                            lines += (env_set + 'PATH=%PATH:' + key + ';=%' + cmd_return)
-                        else:
-                            lines += (env_set + 'PATH=$(' + 'echo ${PATH//' + key.replace('/', '\/') + ':/})' + cmd_return)
-
-                    # export unset env
-                    for (key, value) in envcustomlistrawvars.items():
-                        if (key == 'path+'):
-                            continue
-                        if (plat == "Windows"):
-                            lines += ('set ' + key + '=' + cmd_return)
-                        else:
-                            lines += ('unset ' + key + cmd_return)
-
-                    # export unset path
-                    for (key) in pymakesystemenviron['PATH'].split(';'):
-                        if (plat == "Windows"):
-                            lines += (env_set + 'PATH=%PATH:' + key + ';=%' + cmd_return)
-                        else:
-                            lines += (env_set + 'PATH=$(' + 'echo ${PATH//' + key.replace('/', '\/') + ':/})' + cmd_return)
-
-                    # export unset env
-                    for (key, value) in pymakesystemenviron.items():
-                        if (key == 'path+'):
-                            continue
-                        if (str(key).lower() == "path"):
-                            continue
-                        if (plat == "Windows"):
-                            lines += ('set ' + key + '=' + cmd_return)
-                        else:
-                            lines += ('unset ' + key + cmd_return)
-
-            # --private, default
+                # export unset var
+                for (key, value) in pymakesystemenviron.items():
+                    if (key == 'path+'):
+                        continue
+                    if (str(key).lower() == "path"):
+                        continue
+                    if (plat == "Windows"):
+                        lines += ('set ' + key + '=' + cmd_return)
+                    else:
+                        lines += ('unset ' + key + cmd_return)
             else:
                 ''
 
@@ -4061,18 +3894,14 @@ def main_function():
                 f.write(lines)
 
             print("successed: export %s to %s %s" % (current_var, cmd_effect, cmd_unset))
+            # +custom
+            if(args['-c'] or args['--custom'] is True):
+                print("successed: export custom env to %s %s" % (cmd_effect, cmd_unset))
+            else:
+                ''
             # +system
             if(args['-s'] or args['--system'] is True):
-                ''
                 print("successed: export system env to %s %s" % (cmd_effect, cmd_unset))
-            # +custom
-            elif(args['-c'] or args['--custom'] is True):
-                print("successed: export custom env to %s %s" % (cmd_effect, cmd_unset))
-            elif(args['-a'] or args['--all'] is True):
-                ''
-                print("successed: export custom env to %s %s" % (cmd_effect, cmd_unset))
-                print("successed: export system env to %s %s" % (cmd_effect, cmd_unset))
-            # --private, default
             else:
                 ''
 
