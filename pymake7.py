@@ -2850,7 +2850,7 @@ def main_function():
                     # find in basic environ [+custom]
                     env = os.environ
                     find_flag = 0
-                    for path0 in env["PATH"].split(';'):
+                    for path0 in env["PATH"].split(os.path.pathsep):
                         powershellexecfile = path0 + os.path.sep + cmd + cmd_suffix
                         if (os.path.exists(powershellexecfile)):
                             find_flag = 1
@@ -5020,7 +5020,7 @@ def main_function():
                     # find in basic environ [+custom]
                     env = os.environ
                     find_flag = 0
-                    for path0 in env["PATH"].split(';'):
+                    for path0 in env["PATH"].split(os.path.pathsep):
                         pythonexecfile = path0 + os.path.sep + cmd + cmd_suffix_python
                         #print(2, pythonexecfile)
                         if (os.path.exists(pythonexecfile)):
@@ -5040,7 +5040,7 @@ def main_function():
         if(plat == "Windows"):
             cmd_list.append("call py \"%s\" %s" % (pythonexecfile, '%*'))
         else:
-            cmd_list.append("python3 \"%s\" %s" % (pythonexecfile, '%*'))
+            cmd_list.append("python3 \"%s\" %s" % (pythonexecfile, '$*'))
 
         # append exit 0
         cmd_list.append(cmd_exit)
@@ -5088,18 +5088,18 @@ def main_function():
                     print("installed.")
                     return
                 else:
-                    ''
+                    print('python: %s' % subprocess.getoutput('which python'))
+                    print('python2: %s' % subprocess.getoutput('which python2'))
+                    print('python3: %s' % subprocess.getoutput('which python3'))
+                return
             elif (args['info'] or args['information'] is True):
                 if(plat == "Windows"):
                     print(Fore.CYAN + 'py: %s\py.exe' % pymakesystemenviron['windir'])
                     os.system('py --list-paths')
                 else:
-                    print('python: ', end='')
-                    os.system('which python')
-                    print('python2: ', end='')
-                    os.system('which python2')
-                    print('python3: ', end='')
-                    os.system('which python3')
+                    os.system('find /bin | grep -i python')
+                    os.system('find /usr/bin | grep -i python')
+                    os.system('find /usr/local/bin | grep -i python')
             elif (args['clean'] is True):
                 if (args['here'] or args['hh'] is True):
                     os.chdir(pymakeworkpath)

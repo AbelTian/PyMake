@@ -317,6 +317,9 @@ def main_function():
                     if(fi.endswith(postfix) is True):
                         print(fi)
 
+                    if(fi.endswith('.ps1') is True):
+                        print(fi)
+
                 print("pycodec.py")
             else:
                 ''
