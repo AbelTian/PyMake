@@ -61,8 +61,8 @@ else {
 }
 
 Set-Variable PYPROGRAMPATH $(Split-Path -Parent $MyInvocation.MyCommand.Definition)
-Set-Variable PYPROGRAMNAME pymake
-Set-Variable PYPROGRAMPATHNAME $PYPROGRAMPATH/$PYPROGRAMNAME
+Set-Variable PYPROGRAMNAME pymake.bat
+Set-Variable PYPROGRAMPATHNAME pymake
 #Write-Output "$(Split-Path -Parent $MyInvocation.MyCommand.Definition)"
 #$PYPROGRAMPATHNAME
 
