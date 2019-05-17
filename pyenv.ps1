@@ -90,7 +90,7 @@ Write-Output "environme: [$PYENVNAME] [$PYENVEXISTEDFLAG] [USED]"
 & "$PYPROGRAMPATHNAME" get default exec root | Set-Variable PYMMSHELLROOT
 Write-Output "exec root: [$PYMMSHELLROOT] [default]"
 
-& "$PYPROGRAMPATHNAME" powershell export $PYENVNAME to $PYENVINDEX
+& "$PYPROGRAMPATHNAME" export2 powershell $PYENVNAME to $PYENVINDEX --custom
 
 if ("$PYENVFLAG" -eq "False") {
     . "$PYMMSHELLROOT/powershell.${PYENVINDEX}_unset.ps1"
