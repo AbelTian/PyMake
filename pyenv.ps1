@@ -93,15 +93,15 @@ Write-Output "exec root: [$PYMMSHELLROOT] [default]"
 & "$PYPROGRAMPATHNAME" export2 powershell $PYENVNAME to $PYENVINDEX --custom
 
 if ("$PYENVFLAG" -eq "False") {
-    . "$PYMMSHELLROOT/powershell.${PYENVINDEX}_unset.ps1"
+    . "$PYMMSHELLROOT/${PYENVINDEX}_unset.ps1"
     Write-Output "user env : [$PYENVNAME] closed"
 } 
 else {
-    . "$PYMMSHELLROOT/powershell.${PYENVINDEX}_effect.ps1"
+    . "$PYMMSHELLROOT/${PYENVINDEX}_effect.ps1"
     Write-Output "user env : [$PYENVNAME] opened"
 }
 
 #clean
-Remove-Item -Force "$PYMMSHELLROOT/powershell.${PYENVINDEX}_effect.ps1","$PYMMSHELLROOT/powershell.${PYENVINDEX}_unset.ps1"
+Remove-Item -Force "$PYMMSHELLROOT/${PYENVINDEX}_effect.ps1","$PYMMSHELLROOT/${PYENVINDEX}_unset.ps1"
 
 exit 0

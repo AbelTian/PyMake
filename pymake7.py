@@ -164,6 +164,8 @@ Usage:
   pymake7.py  python [ info | information ]
   pymake7.py  python [ status | stat ]
   pymake7.py  python clean [ here | hh ]
+  pymake7.py  python type [ here | hh ] [ <cmd-name> ] [ to <file-name> ]
+  pymake7.py  python use <env-name> type [ here | hh ] [ <cmd-name> ]  [ to <file-name> ]
   pymake7.py  python exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
   pymake7.py  python use <env-name> exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
   pymake7.py  -------------------------------------------------------------
@@ -2743,9 +2745,9 @@ def main_function():
         env_set = ''
 
         # export effect env
-        cmd_effect = 'powershell.env'
+        cmd_effect = 'env'
         if (file_name is not None):
-            cmd_effect = "powershell." + file_name
+            cmd_effect = "" + file_name
         cmd_effect += '_effect' + cmd_suffix
 
         # export path
@@ -2765,9 +2767,9 @@ def main_function():
             f.write(lines)
 
         # export unset env
-        cmd_unset = 'powershell.env'
+        cmd_unset = 'env'
         if (file_name is not None):
-            cmd_unset = "powershell." + file_name
+            cmd_unset = "" + file_name
         cmd_unset += '_unset' + cmd_suffix
 
         # export unset path
@@ -2811,7 +2813,7 @@ def main_function():
         cmd_header = "#!/usr/bin/env bash"
         cmd_call = "./"
         # cmd_list.append(cmd_header)
-        cmd_list.append("./powershell.%s_effect%s" % (name, cmd_suffix))
+        cmd_list.append("./%s_effect%s" % (name, cmd_suffix))
 
         params_string = ""
         for param in params0:
@@ -2871,7 +2873,7 @@ def main_function():
         cmd_list.append(cmd_exit)
         # print( cmd_list )
 
-        cmd_execute = "powershell." + name + "_exec" + cmd_suffix
+        cmd_execute = "" + name + "_exec" + cmd_suffix
         with open(cmd_execute, "w", encoding=cmd_codec) as f:
             for line in cmd_list:
                 f.write(line + cmd_return)
@@ -2998,9 +3000,9 @@ def main_function():
 
                 temp_file_name = ""
                 if (file_name is None):
-                    temp_file_name = "powershell.cmd"
+                    temp_file_name = "cmd"
                 else:
-                    temp_file_name = "powershell." + file_name
+                    temp_file_name = "" + file_name
 
                 cmd_header = "#!/usr/bin/env bash"
                 cmd_codec = "ansi"
@@ -3101,13 +3103,13 @@ def main_function():
                     ret = communicateWithCommandLine3(cmd_list)
 
                     # delete env file and cmd file
-                    temp_file = "powershell." + temp_file_name + "_exec.ps1"
+                    temp_file = "" + temp_file_name + "_exec.ps1"
                     if (os.path.exists(temp_file)):
                         os.remove(temp_file)
-                    temp_file = "powershell." + temp_file_name + "_effect.ps1"
+                    temp_file = "" + temp_file_name + "_effect.ps1"
                     if (os.path.exists(temp_file)):
                         os.remove(temp_file)
-                    temp_file = "powershell." + temp_file_name + "_unset.ps1"
+                    temp_file = "" + temp_file_name + "_unset.ps1"
                     if (os.path.exists(temp_file)):
                         os.remove(temp_file)
 
@@ -3122,9 +3124,9 @@ def main_function():
 
                 plat = getplatform()
                 if (plat == "Windows"):
-                    os.system("@del /f /q powershell.*_effect.ps1 powershell.*_unset.ps1 powershell.*_exec.ps1")
+                    os.system("@del /f /q *_effect.ps1 *_unset.ps1 *_exec.ps1")
                 else:
-                    os.system("rm -f powershell.*_effect.ps1 powershell.*_unset.ps1 powershell.*_exec.ps1")
+                    os.system("rm -f *_effect.ps1 *_unset.ps1 *_exec.ps1")
 
                 return
             elif (args['information'] is True):
@@ -3162,6 +3164,141 @@ def main_function():
                         print("powershell ISE (x86): UNINSTALL.")
                 else:
                     ''
+                return
+            else:
+                ''
+        else:
+            ''
+        break
+
+    #python command
+    while(True):
+        if(args['python'] is True):
+            plat = getplatform()
+            if(args['stat'] or args['status'] is True):
+                if(plat == "Windows"):
+                    #print('py: %s\py.exe' % pymakesystemenviron['windir'])
+                    if(os.path.exists("%s\py.exe" % pymakesystemenviron['windir']) is False):
+                        print('please install python3.')
+                        return
+                    #os.system('py --list-paths')
+                    print("installed.")
+                    return
+                else:
+                    print('python: %s' % subprocess.getoutput('which python'))
+                    print('python2: %s' % subprocess.getoutput('which python2'))
+                    print('python3: %s' % subprocess.getoutput('which python3'))
+                return
+            elif (args['info'] or args['information'] is True):
+                if(plat == "Windows"):
+                    print(Fore.CYAN + 'py: %s\py.exe' % pymakesystemenviron['windir'])
+                    os.system('py --list-paths')
+                else:
+                    os.system('find /bin | grep -i python')
+                    os.system('find /usr/bin | grep -i python')
+                    os.system('find /usr/local/bin | grep -i python')
+            elif (args['clean'] is True):
+                if (args['here'] or args['hh'] is True):
+                    os.chdir(pymakeworkpath)
+
+                plat = getplatform()
+                if (plat == "Windows"):
+                    os.system("@del /f /q *_exec.py *_effect.bat *_unset.bat *_exec.bat")
+                else:
+                    os.system("rm -f *_exec.py *_effect.sh *_unset.sh *_exec.sh")
+
+                return
+            elif (args['type'] is True):
+                current_env = ""
+
+                if (args['use'] is True):
+                    if (args['<env-name>'] is None):
+                        print("please appoint a environ")
+                        return
+
+                    if (rawconfig['environ'].__contains__(args['<env-name>']) is False):
+                        print("please ensure the environ is right")
+                        return
+
+                    current_env = args['<env-name>']
+                    if (args['<env-name>'] == "current"):
+                        current_env = rawconfig['environ']['current']
+
+                    if (rawconfig['environ'].__contains__(current_env) is False):
+                        print(".json file is broken, environ section current env config is lost, please use set command fix it.")
+                        return
+                else:
+                    current_env = rawconfig['environ']['current']
+
+                if (args['here'] or args['hh'] is True):
+                    os.chdir(pymakeworkpath)
+
+                if (args['<cmd-name>'] is None):
+                    for (key, value) in rawconfig['command'].items():
+                        print(Fore.CYAN + "%s" % key)
+                    return
+
+                if (rawconfig['command'].__contains__(args['<cmd-name>']) is False):
+                    print("please check your command name")
+                    return
+
+                if (args['<file-name>'] is None):
+                    if (current_env == rawconfig['environ']['current']):
+                        list0 = copy.deepcopy(rawconfig['command'][args['<cmd-name>']])
+                    else:
+                        list0 = copy.deepcopy(raw_command(current_env)[args['<cmd-name>']])
+
+                    for cmd in list0:
+                        print(Fore.RED + "%s" % (cmd))
+                    return
+
+                cmd_exec = ""
+                # cmd_exec = cmd_type(args['<cmd-name>'], args['<file-name>'], current_env)
+                cmd_name = args['<cmd-name>']
+                file_name = args['<file-name>']
+                env_name = current_env
+
+                if (cmd_name is None):
+                    for (key, value) in rawconfig['command'].items():
+                        print(Fore.CYAN + "%s" % key)
+                    return
+
+                if (rawconfig['command'].__contains__(cmd_name) is False):
+                    print("please check your command name")
+                    return
+
+                if (env_name is None or env_name == rawconfig['environ']['current']):
+                    list0 = copy.deepcopy(rawconfig['command'][cmd_name])
+                else:
+                    list0 = copy.deepcopy(raw_command(env_name)[cmd_name])
+
+                # for cmd in list0:
+                #    print(Fore.RED + "%s" % (cmd))
+
+                temp_file_name = ""
+                if (file_name is None):
+                    temp_file_name = "cmd"
+                else:
+                    temp_file_name = "" + file_name
+
+                cmd_header = ""
+                cmd_codec = "utf8"
+                # but windows, it is \r\n, python helpping me?
+                cmd_return = "\n"
+                cmd_suffix = "_exec.py"
+
+                cmd_exec = temp_file_name + cmd_suffix
+                with open(cmd_exec, 'w', encoding=cmd_codec) as f:
+                    # f.write(cmd_header + cmd_return)
+                    for cmd in list0:
+                        f.write(cmd + cmd_return)
+
+                # if (plat == "Windows"):
+                #    ""
+                # else:
+                #    os.system("chmod +x " + cmd_exec)
+
+                print("successed: use %s type %s to %s" % (current_env, args['<cmd-name>'], cmd_exec))
                 return
             else:
                 ''
@@ -3622,9 +3759,9 @@ def main_function():
                 env_set = ''
 
                 # export effect env
-                cmd_effect = 'powershell.env'
+                cmd_effect = 'env'
                 if (file_name is not None):
-                    cmd_effect = "powershell." + file_name
+                    cmd_effect = "" + file_name
                 cmd_effect += '_effect' + cmd_suffix
 
                 lines = ""
@@ -3676,9 +3813,9 @@ def main_function():
                     f.write(lines)
 
                 # export unset env
-                cmd_unset = 'powershell.env'
+                cmd_unset = 'env'
                 if (file_name is not None):
-                    cmd_unset = "powershell." + file_name
+                    cmd_unset = "" + file_name
                 cmd_unset += '_unset' + cmd_suffix
 
                 lines = ""
@@ -4476,7 +4613,13 @@ def main_function():
 
         cmd_exec = temp_file_name + cmd_suffix
         with open(cmd_exec, 'w', encoding=cmd_codec) as f:
-            f.write(cmd_header + cmd_return)
+            cmd = ''
+            #add shebang line
+            if(list(list0).__len__()>0):
+                cmd = list0[0]
+            #print(".....")
+            if (cmd != cmd_header):
+                f.write(cmd_header + cmd_return)
             for cmd in list0:
                 f.write(cmd + cmd_return)
 
@@ -5077,41 +5220,7 @@ def main_function():
     # python
     while (True):
         if(args['python'] is True):
-            plat = getplatform()
-            if(args['stat'] or args['status'] is True):
-                if(plat == "Windows"):
-                    #print('py: %s\py.exe' % pymakesystemenviron['windir'])
-                    if(os.path.exists("%s\py.exe" % pymakesystemenviron['windir']) is False):
-                        print('please install python3.')
-                        return
-                    #os.system('py --list-paths')
-                    print("installed.")
-                    return
-                else:
-                    print('python: %s' % subprocess.getoutput('which python'))
-                    print('python2: %s' % subprocess.getoutput('which python2'))
-                    print('python3: %s' % subprocess.getoutput('which python3'))
-                return
-            elif (args['info'] or args['information'] is True):
-                if(plat == "Windows"):
-                    print(Fore.CYAN + 'py: %s\py.exe' % pymakesystemenviron['windir'])
-                    os.system('py --list-paths')
-                else:
-                    os.system('find /bin | grep -i python')
-                    os.system('find /usr/bin | grep -i python')
-                    os.system('find /usr/local/bin | grep -i python')
-            elif (args['clean'] is True):
-                if (args['here'] or args['hh'] is True):
-                    os.chdir(pymakeworkpath)
-
-                plat = getplatform()
-                if (plat == "Windows"):
-                    os.system("@del /f /q *_effect.bat *_unset.bat *_exec.bat *_exec.py")
-                else:
-                    os.system("rm -f *_effect.sh *_unset.sh *_exec.sh *_exec.py")
-
-                return
-            elif (args['exec-with-params'] is True):
+            if (args['exec-with-params'] is True):
                 current_env = ""
                 if (args['use'] is True):
                     if (args['<env-name>'] is None):
