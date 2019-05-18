@@ -135,14 +135,16 @@ Usage:
   pymake7.py  hh recovery [ <zip-file-name> ]
   pymake7.py  -------------------------------------------------------------
   pymake7.py  system
-  pymake7.py  system [ status | information ]
+  pymake7.py  system [ stat | status ]
+  pymake7.py  system [ info | information ]
   pymake7.py  system path [ --add | --del ] [ <value> ]
   pymake7.py  system var [ --add | --del ] [ <key> ] [ <value> ]
   pymake7.py  system env [ -r | --raw ]
   pymake7.py  -------------------------------------------------------------
   pymeke7.py  custom
   pymake7.py  custom [ open | close ]
-  pymake7.py  custom [ status | information ]
+  pymake7.py  custom [ stat | status ]
+  pymake7.py  custom [ info | information ]
   pymake7.py  custom path [ --add | --del ] [ <value> ]
   pymake7.py  custom var [ --add | --del ] [ <key> ] [ <value> ]
   pymake7.py  custom env [ -r | --raw ]
@@ -152,7 +154,8 @@ Usage:
   pymake7.py  export2 [ powershell ] [ here | hh ] [ <env-name> ] [ to <file-name> ] [ -c | --custom ] [ -s | --system ]
   pymake7.py  -------------------------------------------------------------
   pymake7.py  powershell
-  pymake7.py  powershell [ information | status ]
+  pymake7.py  powershell [ info | information ]
+  pymake7.py  powershell [ stat | status ]
   pymake7.py  powershell clean [ here | hh ]
   pymake7.py  powershell export [ here | hh ] [ <env-name> ] [ to <file-name> ]
   pymake7.py  powershell type [ here | hh ] [ <cmd-name> ] [ to <file-name> ]
@@ -162,7 +165,7 @@ Usage:
   pymake7.py  -------------------------------------------------------------
   pymake7.py  python
   pymake7.py  python [ info | information ]
-  pymake7.py  python [ status | stat ]
+  pymake7.py  python [ stat | status ]
   pymake7.py  python clean [ here | hh ]
   pymake7.py  python type [ here | hh ] [ <cmd-name> ] [ to <file-name> ]
   pymake7.py  python use <env-name> type [ here | hh ] [ <cmd-name> ]  [ to <file-name> ]
@@ -3129,7 +3132,7 @@ def main_function():
                     os.system("rm -f *_effect.ps1 *_unset.ps1 *_exec.ps1")
 
                 return
-            elif (args['information'] is True):
+            elif (args['info'] or args['information'] is True):
                 plat = getplatform()
                 env = os.environ
                 if(plat == "Windows"):
@@ -3138,7 +3141,7 @@ def main_function():
                     print("powershell(x86)     : %s\syswow64\WindowsPowerShell\\v1.0\powershell.exe" % env["SystemRoot"])
                     print("powershell ISE (x86): %s\syswow64\WindowsPowerShell\\v1.0\PowerShell_ISE.exe" % env["SystemRoot"])
                 return
-            elif (args['status'] is True):
+            elif (args['stat'] or args['status'] is True):
                 plat = getplatform()
                 env = os.environ
                 if(plat == "Windows"):
@@ -3166,7 +3169,14 @@ def main_function():
                     ''
                 return
             else:
-                ''
+                plat = getplatform()
+                env = os.environ
+                if(plat == "Windows"):
+                    print("powershell          : %s\system32\WindowsPowerShell\\v1.0\powershell.exe" % env["SystemRoot"])
+                    print("powershell ISE      : %s\system32\WindowsPowerShell\\v1.0\PowerShell_ISE.exe" % env["SystemRoot"])
+                    print("powershell(x86)     : %s\syswow64\WindowsPowerShell\\v1.0\powershell.exe" % env["SystemRoot"])
+                    print("powershell ISE (x86): %s\syswow64\WindowsPowerShell\\v1.0\PowerShell_ISE.exe" % env["SystemRoot"])
+                return
         else:
             ''
         break
@@ -3175,7 +3185,7 @@ def main_function():
     while(True):
         if(args['python'] is True):
             plat = getplatform()
-            if(args['stat'] or args['status'] is True):
+            if(args['info'] or args['information'] is True):
                 if(plat == "Windows"):
                     #print('py: %s\py.exe' % pymakesystemenviron['windir'])
                     if(os.path.exists("%s\py.exe" % pymakesystemenviron['windir']) is False):
@@ -3189,7 +3199,7 @@ def main_function():
                     print('python2: %s' % subprocess.getoutput('which python2'))
                     print('python3: %s' % subprocess.getoutput('which python3'))
                 return
-            elif (args['info'] or args['information'] is True):
+            elif (args['stat'] or args['status'] is True):
                 if(plat == "Windows"):
                     print(Fore.CYAN + 'py: %s\py.exe' % pymakesystemenviron['windir'])
                     os.system('py --list-paths')
@@ -3197,6 +3207,7 @@ def main_function():
                     os.system('find /bin | grep -i python')
                     os.system('find /usr/bin | grep -i python')
                     os.system('find /usr/local/bin | grep -i python')
+                return
             elif (args['clean'] is True):
                 if (args['here'] or args['hh'] is True):
                     os.chdir(pymakeworkpath)
@@ -3402,7 +3413,7 @@ def main_function():
 
                 print("successed: export custom env to %s %s" % (cmd_effect, cmd_unset))
                 return
-            elif(args['information'] is True):
+            elif(args['info'] or args['information'] is True):
                 print("CUSTOM SETTING: %s" % (pymakecustomini))
                 print("CUSTOM ENV+   : %s" % (customenvfile))
                 print("CUSTOM PATH+  : %s" % (custompathfile))
@@ -3521,7 +3532,7 @@ def main_function():
                     print(Fore.GREEN + "  %-30s %s" % (key, value))
 
                 return
-            elif (args['status'] is True):
+            elif (args['stat'] or args['status'] is True):
                 status = "closed"
                 if(switch0 == '1'):
                     status = "opened"
@@ -4051,9 +4062,21 @@ def main_function():
     while (True):
         if(args['system'] is True):
             ''
-            if(args['status'] is True):
-                ''
-            elif(args['information'] is True):
+            if(args['stat'] or args['status'] is True):
+                plat = getplatform()
+                if(plat == "Windows"):
+                    print("Normal")
+                else:
+                    from pycore.pyenviron import MyUnixEnviron
+                    sysenv = MyUnixEnviron()
+                    root0, root1 = sysenv.information()
+                    print(Fore.LIGHTGREEN_EX + "system:")
+                    for value in root0:
+                        print(Fore.LIGHTRED_EX + "  %-30s [%s]" % (value, os.path.exists(value)))
+                    print(Fore.LIGHTGREEN_EX + 'user:')
+                    for value in root1:
+                        print(Fore.LIGHTRED_EX + "  %-30s [%s]" % (value, os.path.exists(value)))
+            elif(args['info'] or args['information'] is True):
                 ''
                 plat = getplatform()
                 if(plat == "Windows"):
@@ -5327,7 +5350,19 @@ def main_function():
                 os._exit(ret)
                 return
             else:
-                ''
+                if (plat == "Windows"):
+                    # print('py: %s\py.exe' % pymakesystemenviron['windir'])
+                    if (os.path.exists("%s\py.exe" % pymakesystemenviron['windir']) is False):
+                        print('please install python3.')
+                        return
+                    # os.system('py --list-paths')
+                    print("installed.")
+                    return
+                else:
+                    print('python: %s' % subprocess.getoutput('which python'))
+                    print('python2: %s' % subprocess.getoutput('which python2'))
+                    print('python3: %s' % subprocess.getoutput('which python3'))
+                return
         else:
             ''
         break
