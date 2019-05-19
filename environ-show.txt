@@ -76,9 +76,13 @@ path+:
   R:/Develop/b0-toolkits/winCompilers/perl_5.26.0.1_64/perl/bin
   R:/Develop/b0-toolkits/winCompilers/xmake
   R:/Develop/b0-toolkits/winCompilers/watcom1.9/binw;R:/Develop/b0-toolkits/winCompilers/watcom1.9/binnt
+  R:/Develop/b0-toolkits/a0-compiler/PyMake
   R:/Develop/b0-toolkits/a0-compiler/PyMake/demo
   R:/Develop/b0-toolkits/a0-compiler/PyMake/test
+  R:/Develop/b0-toolkits/a0-compiler/PyMake/test/带 空格路径
+  R:/Develop/b0-toolkits/a0-compiler/PyMake/UserSource/带 空格
   R:\一个中文路径
+  R:/Develop/b0-toolkits/winCompilers/ninja
 variable:
   PYMAKEAUTHOR                   T.D.R.
   PYMMXXX                        一个中文变量

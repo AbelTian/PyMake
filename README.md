@@ -414,8 +414,13 @@ Update the command-line.
     - you can open custom mobule or close it.
 
 ## Command-line  
+
 ```commandline
-PyMake 7.5.2.
+Microsoft Windows [版本 10.0.17134.706]
+(c) 2018 Microsoft Corporation。保留所有权利。
+
+R:\Develop\b0-toolkits\a0-compiler\PyMake>pymake -h
+PyMake 7.5.5.
 
 Usage:
   pymake7.py  source
@@ -425,6 +430,7 @@ Usage:
   pymake7.py  source config [ --del  ] [ <config-file-name> ]
   pymake7.py  source config [ --mod  ] [ <config-file-name> ] [<new-config-file-name>]
   pymake7.py  source config [ --switch  ] [ <config-file-name> ]
+  pymake7.py  source config [ --edit  ] [ <config-file-name> ]
   pymake7.py  source config [ --restore  ]
   pymake7.py  source config [ --show ]
   pymake7.py  -------------------------------------------------------------
@@ -549,30 +555,42 @@ Usage:
   pymake7.py  hh recovery [ <zip-file-name> ]
   pymake7.py  -------------------------------------------------------------
   pymake7.py  system
-  pymake7.py  system [ status | information ]
+  pymake7.py  system [ stat | status ]
+  pymake7.py  system [ info | information ]
   pymake7.py  system path [ --add | --del ] [ <value> ]
   pymake7.py  system var [ --add | --del ] [ <key> ] [ <value> ]
   pymake7.py  system env [ -r | --raw ]
   pymake7.py  -------------------------------------------------------------
   pymeke7.py  custom
   pymake7.py  custom [ open | close ]
-  pymake7.py  custom [ status | information ]
+  pymake7.py  custom [ stat | status ]
+  pymake7.py  custom [ info | information ]
   pymake7.py  custom path [ --add | --del ] [ <value> ]
   pymake7.py  custom var [ --add | --del ] [ <key> ] [ <value> ]
   pymake7.py  custom env [ -r | --raw ]
   pymake7.py  custom export [ here | hh ] [ to <file-name> ]
   pymake7.py  custom exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
   pymake7.py  custom use <env-name> exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
-  pymake7.py  export2 [ here | hh ] [ <env-name> ] [ to <file-name> ] [ --private ] [ -s | --system ] [ -c | --custom ] [ -a | --all ] [ -p | --path ] [ -v | --var ]
+  pymake7.py  export2 [ powershell ] [ here | hh ] [ <env-name> ] [ to <file-name> ] [ -c | --custom ] [ -s | --system ]
   pymake7.py  -------------------------------------------------------------
   pymake7.py  powershell
-  pymake7.py  powershell [ information | status ]
+  pymake7.py  powershell [ info | information ]
+  pymake7.py  powershell [ stat | status ]
   pymake7.py  powershell clean [ here | hh ]
   pymake7.py  powershell export [ here | hh ] [ <env-name> ] [ to <file-name> ]
   pymake7.py  powershell type [ here | hh ] [ <cmd-name> ] [ to <file-name> ]
   pymake7.py  powershell use <env-name> type [ here | hh ] [ <cmd-name> ]  [ to <file-name> ]
   pymake7.py  powershell exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
   pymake7.py  powershell use <env-name> exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  -------------------------------------------------------------
+  pymake7.py  python
+  pymake7.py  python [ info | information ]
+  pymake7.py  python [ stat | status ]
+  pymake7.py  python clean [ here | hh ]
+  pymake7.py  python type [ here | hh ] [ <cmd-name> ] [ to <file-name> ]
+  pymake7.py  python use <env-name> type [ here | hh ] [ <cmd-name> ]  [ to <file-name> ]
+  pymake7.py  python exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  python use <env-name> exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
   pymake7.py  -------------------------------------------------------------
   pymake7.py  (-h | --help)
   pymake7.py  --version
@@ -609,8 +627,9 @@ Command:
   recovery          recovery all env .json from a zip file.
   import            import user path or env or cmd to env .json file. example, import cmd [ <script-file>: x.bat x.cmd x.sh x.ps1 ... ]
   custom            custom environment is helpping for calling large dimentions of scripts in computer, manually in console. defined in sourceroot. [ default: close ]
-  export2           output private environ and custom environ to a bat file or sh file, a powerfull function from export. [default:current, env]
+  export2           output private environ and custom environ to a bat file or sh file, a powerfull function from export, support powershell also. [default:current, env]
   powershell        environ for powershell, and to execute in powershell. [cross]
+  python            list python information, and execute python script.
 
 Options:
   -h --help     Show this screen.
@@ -626,9 +645,14 @@ Options:
   --encoding=<encoding-name>    script file encoding, support utf8, gbk, ansi, ... and so on. [default:utf8]
   --filter=<name-filter> ...    filter file name postfix, separated by |. example: .bat | .sh | .ps1.
 
+R:\Develop\b0-toolkits\a0-compiler\PyMake>
 ```
+
+
 ## Environment    
+
 ```commandline
+
 Microsoft Windows [版本 10.0.17134.706]
 (c) 2018 Microsoft Corporation。保留所有权利。
 
@@ -707,9 +731,13 @@ path+:
   R:/Develop/b0-toolkits/winCompilers/perl_5.26.0.1_64/perl/bin
   R:/Develop/b0-toolkits/winCompilers/xmake
   R:/Develop/b0-toolkits/winCompilers/watcom1.9/binw;R:/Develop/b0-toolkits/winCompilers/watcom1.9/binnt
+  R:/Develop/b0-toolkits/a0-compiler/PyMake
   R:/Develop/b0-toolkits/a0-compiler/PyMake/demo
   R:/Develop/b0-toolkits/a0-compiler/PyMake/test
+  R:/Develop/b0-toolkits/a0-compiler/PyMake/test/带 空格路径
+  R:/Develop/b0-toolkits/a0-compiler/PyMake/UserSource/带 空格
   R:\一个中文路径
+  R:/Develop/b0-toolkits/winCompilers/ninja
 variable:
   PYMAKEAUTHOR                   T.D.R.
   PYMMXXX                        一个中文变量
@@ -737,6 +765,7 @@ variable:
   QBBE                           一个中文变量
 
 R:\Develop\b0-toolkits\a0-compiler\PyMake>
+
 ```
 
 # User Support   
