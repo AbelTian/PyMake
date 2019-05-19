@@ -792,6 +792,6 @@ User support shell module, user can install them to share their functions.
 # Dependencies  
 
 *This program edited by python, support python 2.7 -> 3.6 (tested).You need install python, only python in path, configured.*    
-*After pymake.py v7.0, PyMake use file encoding params in open(), then this program support python3 only, I suggest you install python 3.7.*    
+*PyMake v7 uses file encoding params in open(), then it support python3 only, I suggest you install python 3.7.*    
 *At last, it will work itself, I wish you would like it.*  
 
