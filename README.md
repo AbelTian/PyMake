@@ -747,8 +747,8 @@ User support shell module, user can install them to share their functions.
 | pymake.py | pymake | mm, pymm |
 | pymake.py | pyenv | pyvc |
 | pymake.py | pycmd, pyexecvp | pyccvp |
-| pymake.py | pypowershell |  |
-| pymake.py | pyenv [.ps1] |  |
+| pymake.py | pypowershell.bat |  |
+| pymake.py | pyenv.ps1 |  |
 | pyinfo.py | pyinfo || 
 | pypaths.py | pypaths || 
 | pycodec.py | | |
@@ -762,6 +762,7 @@ User support shell module, user can install them to share their functions.
 
 # Dependencies  
 
-*This program edited by python, support python 2.7 -> 3.6 (tested).You need install python, only python in path. configured.*  
+*This program edited by python, support python 2.7 -> 3.6 (tested).You need install python, only python in path, configured.*    
+*After pymake.py v7.0, PyMake use file encoding params in open(), then this program support python3 only, I suggest you install python 3.7.*    
 *At last, it will work itself, I wish you would like it.*  
 
