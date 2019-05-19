@@ -62,6 +62,8 @@ finally:
     
 def main_function():
     print(BBB)
+    print(__file__)
+    print(os.getcwd())
     return
 
 if __name__ == '__main__':

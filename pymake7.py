@@ -3526,12 +3526,8 @@ def main_function():
             plat = getplatform()
             if(args['info'] or args['information'] is True):
                 if(plat == "Windows"):
-                    #print('py: %s\py.exe' % pymakesystemenviron['windir'])
-                    if(os.path.exists("%s\py.exe" % pymakesystemenviron['windir']) is False):
-                        print('please install python3.')
-                        return
-                    #os.system('py --list-paths')
-                    print("installed.")
+                    print(Fore.CYAN + 'py: %s\py.exe' % pymakesystemenviron['windir'])
+                    os.system('py --list-paths')
                     return
                 else:
                     print('python: %s' % subprocess.getoutput('which python'))
@@ -3540,8 +3536,12 @@ def main_function():
                 return
             elif (args['stat'] or args['status'] is True):
                 if(plat == "Windows"):
-                    print(Fore.CYAN + 'py: %s\py.exe' % pymakesystemenviron['windir'])
-                    os.system('py --list-paths')
+                    # print('py: %s\py.exe' % pymakesystemenviron['windir'])
+                    if (os.path.exists("%s\py.exe" % pymakesystemenviron['windir']) is False):
+                        print('please install python3.')
+                        return
+                    # os.system('py --list-paths')
+                    print("installed.")
                 else:
                     os.system('find /bin | grep -i python')
                     os.system('find /usr/bin | grep -i python')
@@ -5350,13 +5350,10 @@ def main_function():
                 os._exit(ret)
                 return
             else:
-                if (plat == "Windows"):
-                    # print('py: %s\py.exe' % pymakesystemenviron['windir'])
-                    if (os.path.exists("%s\py.exe" % pymakesystemenviron['windir']) is False):
-                        print('please install python3.')
-                        return
-                    # os.system('py --list-paths')
-                    print("installed.")
+                plat = getplatform()
+                if(plat == "Windows"):
+                    print(Fore.CYAN + 'py: %s\py.exe' % pymakesystemenviron['windir'])
+                    os.system('py --list-paths')
                     return
                 else:
                     print('python: %s' % subprocess.getoutput('which python'))
