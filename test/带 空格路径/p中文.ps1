@@ -53,5 +53,8 @@ if ( !$env:Path.Contains("V:/Develop;" ) ) {
     echo ........... 
 }
 
+$PWD
+Get-Location
+
 echo 这里是中文，请不要乱码。
 Write-Host "Hello,$args"

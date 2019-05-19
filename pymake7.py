@@ -3387,78 +3387,75 @@ def main_function():
                 else:
                     current_env = rawconfig['environ']['current']
 
-                if (args['exec-with-params'] or args['execvp'] or args['ccvp'] is True):
+                if (args['<command-name>'] is None):
+                    print("please appoint your command")
+                    return
 
-                    if (args['<command-name>'] is None):
-                        print("please appoint your command")
+                #print(args['hh'])
+                #print(args['here'])
+                if (args['here'] or args['hh'] is True):
+                    os.chdir(pymakeworkpath)
+
+                #print(args['--workroot'])
+                if (args['--workroot'] is not None):
+                    if (os.path.isdir(args['--workroot'])
+                        and os.path.isabs(args['--workroot'])):
+                        os.chdir(args['--workroot'])
+                    else:
+                        print('please input an existed and legal work root.')
                         return
 
-                    if (args['here'] or args['hh'] is True):
-                        os.chdir(pymakeworkpath)
+                # create cmd_list
+                current_var = current_env
+                local_command = raw_command(current_var)
+                dict0 = copy.deepcopy(local_command)
 
-                    # print(args['--workroot'])
-                    if (args['--workroot'] is not None):
-                        if (os.path.isdir(args['--workroot'])
-                            and os.path.isabs(args['--workroot'])):
-                            os.chdir(args['--workroot'])
-                        else:
-                            print('please input an existed and legal work root.')
-                            return
-
-                    # create cmd_list
-                    current_var = current_env
-                    local_command = raw_command(current_var)
-                    dict0 = copy.deepcopy(local_command)
-
-                    list0 = []
+                list0 = []
+                local = True
+                current_var = args['<command-name>']
+                if (current_var in dict0):
+                    list0.extend(dict0[current_var])
                     local = True
-                    current_var = args['<command-name>']
-                    if (current_var in dict0):
-                        list0.extend(dict0[current_var])
-                        local = True
-                    else:
-                        list0.append(current_var)
-                        local = False
-
-                    params0 = []
-                    # print(args['--params'])
-                    # print(args['<command-params>'])
-                    for current_var in args['--params']:
-                        params0.append(current_var)
-                    for current_var in args['<command-params>']:
-                        params0.append(current_var)
-
-                    cmd_list = []
-                    temp_file_name = ""
-                    # if (getplatform() == "Windows"):
-                    #    cmd_list, temp_file_name = createCmdList0(list0)
-                    # else:
-                    #    cmd_list, temp_file_name = createCmdList01(list0)
-                    # good compatibility
-                    cmd_list, temp_file_name = createCmdList03(current_env, local, list0, params0)
-
-                    # export env
-                    current_var = current_env
-                    # print (current_var, temp_file_name)
-                    powershell_environ_export(current_var, temp_file_name)
-
-                    ret = communicateWithCommandLine3(cmd_list)
-
-                    # delete env file and cmd file
-                    temp_file = "" + temp_file_name + "_exec.ps1"
-                    if (os.path.exists(temp_file)):
-                        os.remove(temp_file)
-                    temp_file = "" + temp_file_name + "_effect.ps1"
-                    if (os.path.exists(temp_file)):
-                        os.remove(temp_file)
-                    temp_file = "" + temp_file_name + "_unset.ps1"
-                    if (os.path.exists(temp_file)):
-                        os.remove(temp_file)
-
-                    os._exit(ret)
-                    return
                 else:
-                    ''
+                    list0.append(current_var)
+                    local = False
+
+                params0 = []
+                # print(args['--params'])
+                # print(args['<command-params>'])
+                for current_var in args['--params']:
+                    params0.append(current_var)
+                for current_var in args['<command-params>']:
+                    params0.append(current_var)
+
+                cmd_list = []
+                temp_file_name = ""
+                # if (getplatform() == "Windows"):
+                #    cmd_list, temp_file_name = createCmdList0(list0)
+                # else:
+                #    cmd_list, temp_file_name = createCmdList01(list0)
+                # good compatibility
+                cmd_list, temp_file_name = createCmdList03(current_env, local, list0, params0)
+
+                # export env
+                current_var = current_env
+                # print (current_var, temp_file_name)
+                powershell_environ_export(current_var, temp_file_name)
+
+                ret = communicateWithCommandLine3(cmd_list)
+
+                # delete env file and cmd file
+                temp_file = "" + temp_file_name + "_exec.ps1"
+                if (os.path.exists(temp_file)):
+                    os.remove(temp_file)
+                temp_file = "" + temp_file_name + "_effect.ps1"
+                if (os.path.exists(temp_file)):
+                    os.remove(temp_file)
+                temp_file = "" + temp_file_name + "_unset.ps1"
+                if (os.path.exists(temp_file)):
+                    os.remove(temp_file)
+
+                os._exit(ret)
                 return
             elif (args['clean'] is True):
                 if (args['here'] or args['hh'] is True):
