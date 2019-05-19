@@ -32,7 +32,7 @@ set command=pymake python use current type
 echo %command%
 call %command%
 
-for /F %%i in ('"pymake get default exec root"') do ( set "WORKROOT=%%i" )
+for /F %%i in ('"pymake source root"') do ( set "WORKROOT=%%i" )
 set WORKROOT=%WORKROOT%\MyShell
 set WORKROOT=%WORKROOT:/=\\%
 md %WORKROOT%
