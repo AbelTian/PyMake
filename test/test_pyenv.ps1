@@ -1,0 +1,3 @@
+& pyenv current
+
+ls env:
