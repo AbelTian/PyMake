@@ -54,5 +54,6 @@ if "%PYEXECFLAG%" == "False" (
 
 for /F %%i in ('"%PYPROGRAMPATHNAME%" get default exec root') do ( set "PYMMSHELLROOT=%%i" )
 echo exec root: [%PYMMSHELLROOT%] [default]
+echo exec root: [%CD%] [here]
 
 call "%PYPROGRAMPATHNAME%" use %PYENVNAME% exec here %PYEXECNAME%

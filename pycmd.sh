@@ -97,6 +97,7 @@ fi
 
 export PYMMSHELLROOT=$("$PYPROGRAMPATHNAME" get default exec root)
 echo exec root: \[$PYMMSHELLROOT\] \[default\]
+echo exec root: \[$(pwd)\] \[here\]
 
 "$PYPROGRAMPATHNAME" use $PYENVNAME exec here $PYEXECNAME
 

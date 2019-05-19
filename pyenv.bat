@@ -60,6 +60,7 @@ if "%PYENVEXISTEDFLAG%" == "False" (
 echo environme: [%PYENVNAME%] [%PYENVEXISTEDFLAG%] [USED]
 for /F %%i in ('"%PYPROGRAMPATHNAME%" get default exec root') do ( set "PYMMSHELLROOT=%%i" )
 echo exec root: [%PYMMSHELLROOT%] [default]
+echo exec root: [%CD%] [here]
 
 call "%PYPROGRAMPATHNAME%" export2 %PYENVNAME% to %PYENVINDEX% --custom
 

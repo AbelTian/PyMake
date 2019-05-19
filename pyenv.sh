@@ -108,6 +108,7 @@ echo environme: \[$PYENVNAME\] \[$PYENVEXISTEDFLAG\] \[USED\]
 
 export PYMMSHELLROOT=$("$PYPROGRAMPATHNAME" get default exec root)
 echo exec root: \[$PYMMSHELLROOT\] \[default\]
+echo exec root: \[$(pwd)\] \[here\]
 
 "$PYPROGRAMPATHNAME" export $PYENVNAME $PYENVINDEX
 
