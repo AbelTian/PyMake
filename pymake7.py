@@ -4638,8 +4638,12 @@ def main_function():
             if(list(list0).__len__()>0):
                 cmd = list0[0]
             #print(".....")
-            if (cmd != cmd_header):
-                f.write(cmd_header + cmd_return)
+            if(getplatform() == "Windows"):
+                if (cmd.startswith('@echo') is False):
+                    f.write(cmd_header + cmd_return)
+            else:
+                if (cmd.startswith('#!') is False):
+                    f.write(cmd_header + cmd_return)
             for cmd in list0:
                 f.write(cmd + cmd_return)
 
