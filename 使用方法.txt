@@ -17,3 +17,20 @@ PyMake v7.5
 我更新了用户程序默认的执行目录，<PYSRC CODE>/USERSOURCE/USERSHELL，请关注。
 这会导致用户的脚本当中，获取默认运行路径的代码必须修改。
 $(mm source root)/xxx_exec.bat->$(mm get default exec root)/xxx_exec.bat
+
+
+开启使用之路：
+1. 把源码放到合理的位置。PyMake的产品定义为编译工具，也可以作为平常的运行工具，不带路径运行全电脑程序、脚本。
+2. 按照安装说明安装程序。PyMake会安装启动器到系统路径，用户就可以随处使用他执行任意环境，任意命令。pymake就是为了少切换目录、应付各种冲突的环境而研发的。
+3. 使用pymake get all找到Source Config文件，对其进行修改，配置成自己电脑的环境。用户从example里的选取拷贝到自己的Source Root即可，主要修改path-assemblage，留意environ、command是不是自己想要的content。
+4. 以后，就从这一步开启使用吧。pymake xxx，通过pymake --help获得。
+    A. pymake ccvp here build.qmake xxx，在源码目录，用here，编译下xxx.pro。
+    B. pymake ccvp open.build xxx，查看下编译结果。
+    C. pymake ccvp open.run xxx，运行下编译结果。
+    D. pymake ccvp open.src xxx，打开source目录。
+    E. pymake ccvp open.sdk xxx，打开sdk目录。
+    F. pymake ccvp open.prod xxx，打开product，xxx.exe。
+    G. pymake就是为了少切换目录、应付各种冲突的环境而研发的。
+    H. pymake ccvp cmake，打开cmake-gui.exe。
+    I. pymake ccvp here build.cmake，在源码目录，用here，编译CMakeLists.txt。
+    J. 这些是我经常干的事情。用户可以通过帮助获得更多的命令。
