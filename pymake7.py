@@ -146,6 +146,10 @@ Usage:
   pymake7.py  system env [ -r | --raw ]
   pymake7.py  system exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
   pymake7.py  system use <env-name> exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  system execvp [ here | hh ] [ <command-name> ] [ <command-params> ... ]
+  pymake7.py  system use <env-name> execvp [ here | hh ] [ <command-name> ] [ <command-params> ... ]
+  pymake7.py  system ccvp [ here | hh ] [ <command-name> ] [ <command-params> ... ]
+  pymake7.py  system use <env-name> ccvp [ here | hh ] [ <command-name> ] [ <command-params> ... ]
   pymake7.py  -------------------------------------------------------------
   pymeke7.py  custom
   pymake7.py  custom [ open | close ]
@@ -157,6 +161,10 @@ Usage:
   pymake7.py  custom export [ here | hh ] [ to <file-name> ]
   pymake7.py  custom exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
   pymake7.py  custom use <env-name> exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  custom execvp [ here | hh ] [ <command-name> ] [ <command-params> ... ]
+  pymake7.py  custom use <env-name> execvp [ here | hh ] [ <command-name> ] [ <command-params> ... ]
+  pymake7.py  custom ccvp [ here | hh ] [ <command-name> ] [ <command-params> ... ]
+  pymake7.py  custom use <env-name> ccvp [ here | hh ] [ <command-name> ] [ <command-params> ... ]
   pymake7.py  export2 [ powershell ] [ here | hh ] [ <env-name> ] [ to <file-name> ] [ -c | --custom ] [ -s | --system ]
   pymake7.py  -------------------------------------------------------------
   pymake7.py  powershell
@@ -168,6 +176,10 @@ Usage:
   pymake7.py  powershell use <env-name> type [ here | hh ] [ <cmd-name> ]  [ to <file-name> ]
   pymake7.py  powershell exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
   pymake7.py  powershell use <env-name> exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  powershell execvp [ here | hh ] [ <command-name> ] [ <command-params> ... ]
+  pymake7.py  powershell use <env-name> execvp [ here | hh ] [ <command-name> ] [ <command-params> ... ]
+  pymake7.py  powershell ccvp [ here | hh ] [ <command-name> ] [ <command-params> ... ]
+  pymake7.py  powershell use <env-name> ccvp [ here | hh ] [ <command-name> ] [ <command-params> ... ]
   pymake7.py  -------------------------------------------------------------
   pymake7.py  python
   pymake7.py  python [ info | information ]
@@ -177,6 +189,10 @@ Usage:
   pymake7.py  python use <env-name> type [ here | hh ] [ <cmd-name> ]  [ to <file-name> ]
   pymake7.py  python exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
   pymake7.py  python use <env-name> exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  python execvp [ here | hh ] [ <command-name> ] [ <command-params> ... ]
+  pymake7.py  python use <env-name> execvp [ here | hh ] [ <command-name> ] [ <command-params> ... ]
+  pymake7.py  python ccvp [ here | hh ] [ <command-name> ] [ <command-params> ... ]
+  pymake7.py  python use <env-name> ccvp [ here | hh ] [ <command-name> ] [ <command-params> ... ]
   pymake7.py  -------------------------------------------------------------
   pymake7.py  (-h | --help)
   pymake7.py  --version
@@ -2711,7 +2727,7 @@ def main_function():
     while (True):
         if(args['system'] is True):
             # print('system ccvp command.')
-            if(args['exec-with-params'] is True):
+            if(args['ccvp'] or args['execvp'] or args['exec-with-params'] is True):
                 current_env = ""
                 if (args['use'] is True):
                     if (args['<env-name>'] is None):
@@ -3692,7 +3708,7 @@ def main_function():
 
                 print("successed: use %s type %s to %s" % (current_env, args['<cmd-name>'], cmd_exec))
                 return
-            elif (args['exec-with-params'] is True):
+            elif (args['ccvp'] or args['execvp'] or args['exec-with-params'] is True):
                 current_env = ""
                 if (args['use'] is True):
                     if (args['<env-name>'] is None):
@@ -4080,7 +4096,7 @@ def main_function():
                 print("CUSTOM SETTING: %s" % (pymakecustomini))
                 print("CUSTOM ENV+   : %s" % (customenvfile))
                 print("CUSTOM PATH+  : %s" % (custompathfile))
-            elif (args['exec-with-params'] is True):
+            elif (args['ccvp'] or args['execvp'] or args['exec-with-params'] is True):
                 # print('custom ccvp command.')
                 current_env = ""
                 if (args['use'] is True):
@@ -5515,7 +5531,7 @@ def main_function():
     # python
     while (True):
         if(args['python'] is True):
-            if (args['exec-with-params'] is True):
+            if (args['ccvp'] or args['execvp'] or args['exec-with-params'] is True):
                 current_env = ""
                 if (args['use'] is True):
                     if (args['<env-name>'] is None):
