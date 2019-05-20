@@ -144,6 +144,8 @@ Usage:
   pymake7.py  system path [ --add | --del ] [ <value> ]
   pymake7.py  system var [ --add | --del ] [ <key> ] [ <value> ]
   pymake7.py  system env [ -r | --raw ]
+  pymake7.py  system exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  system use <env-name> exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
   pymake7.py  -------------------------------------------------------------
   pymeke7.py  custom
   pymake7.py  custom [ open | close ]
@@ -2113,7 +2115,7 @@ def main_function():
 
                     command_name = os.path.splitext(os.path.basename(local_path))[0]
 
-                    print(args['<command-name>'])
+                    #print(args['<command-name>'])
                     if (args['<command-name>'] is not None):
                         command_name = args['<command-name>']
 
@@ -2462,7 +2464,7 @@ def main_function():
         return pathgroup
 
     # custom command function
-    # custom command stream from rawconfig and custom environ
+    # custom command stream from rawconfig
     def raw_command(env_name=None):
         command_dict = copy.deepcopy(config['command'])
 
@@ -2506,6 +2508,322 @@ def main_function():
                             break
                 step += 1
         return command_dict
+
+    # system command function
+    # system command stream from rawconfig path-assemblage
+    def raw_command_system():
+        command_dict = copy.deepcopy(config['command'])
+
+        # replace cmd
+        # from path env
+        for (cmd, stream) in command_dict.items():
+            # print (key) #...
+
+            step = 0
+            for value in stream:
+                startpos = 0
+                while (True):
+                    # print (startpos)
+                    # print (value)
+
+                    index = value.find('${', startpos)
+                    if (index == -1):
+                        break
+
+                    index2 = value.find('}', index)
+                    startpos = index2
+
+                    key_replace = value[index:index2 + 1]
+                    # print ( key0 ) #${...}
+                    key_from = key_replace.split('{')[1].split('}')[0].strip()
+                    # print ( key1 ) #...
+
+                    for (find_key, find_value) in rawconfig["path-assemblage"].items():
+                        if (find_key == key_from):
+                            command_dict[cmd][step] = command_dict[cmd][step].replace(
+                                key_replace, rawconfig["path-assemblage"][key_from])
+                            break
+
+                step += 1
+        return command_dict
+
+    #windows, unix
+    def createCmdList06(env_name = None, local = True, list0 = [], params0 = []):
+        cmd_list = []
+
+        name = uuid.uuid4().__str__()
+        name = name.split('-')[0]
+        #print (name)
+
+        plat = getplatform()
+        if (plat == "Windows"):
+            cmd_status = "echo pymake-command-status:%ERRORLEVEL%"
+            cmd_sep = '&'
+            cmd_codec = "ansi"
+            # but windows, it is \r\n, python helpping me?
+            cmd_return = "\n"
+            cmd_exit = 'exit /b 0'
+            cmd_suffix = ".bat"
+            cmd_header = "@echo off"
+            cmd_call = "call "
+            # window close echo, close promot
+            cmd_list.append(cmd_header)
+            # os.system("type env_effect.bat > cmd_exec.bat")
+            if(env_name != None):
+                cmd_list.append("call %s_effect.bat" % name)
+        else:
+            cmd_status = "echo pymake-command-status:$?"
+            cmd_sep = ';'
+            cmd_suffix = ".sh"
+            cmd_exit = 'exit 0'
+            cmd_codec = "utf8"
+            cmd_return = "\n"
+            cmd_header = "#!/usr/bin/env bash"
+            cmd_call = "./"
+            cmd_list.append(cmd_header)
+            if(env_name != None):
+                cmd_list.append("source %s_effect.sh" % name)
+
+        params_string = ""
+        for param in params0:
+            params_string += param + " "
+        #print(params_string)
+
+        if ( local is True):
+            for cmd in list0:
+                cmd_list.append(cmd)
+        else:
+            for cmd in list0:
+                cmd_list.append(cmd + ' ' + params_string)
+
+        # append exit 0
+        cmd_list.append(cmd_exit)
+        #print( cmd_list )
+
+        cmd_execute = name + "_exec" + cmd_suffix
+        with open(cmd_execute, "w", encoding=cmd_codec) as f:
+            for line in cmd_list:
+                f.write(line + cmd_return)
+        #print(cmd_execute)
+
+        if (plat == "Windows"):
+            ""
+        else:
+            os.system("chmod +x " + cmd_execute)
+
+        cmd_list.clear()
+        if (plat == "Windows"):
+            cmd_list.append(cmd_header + ' ' + cmd_sep + ' ' + cmd_status)
+            #cmd_list.append("call " + cmd_execute + cmd_sep + ' ' + cmd_status)
+            cmd_list.append("call " + cmd_execute + ' ' + params_string + cmd_sep + ' ' + cmd_status)
+        else:
+            # cmd_list.append(cmd_header + ' ' + cmd_sep + ' ' + cmd_status)
+            #cmd_list.append("./" + cmd_execute + cmd_sep + ' ' + cmd_status)
+            cmd_list.append("./" + cmd_execute + ' ' + params_string + cmd_sep + ' ' + cmd_status)
+
+        cmd_list.append(cmd_exit)
+
+        # print (cmd_list)
+        return cmd_list, name
+
+    # system export function
+    def system_env_export (env_name = None, file_name = None):
+        if(env_name == None):
+            return env_name, '', ''
+
+        #select env
+        current_var = rawconfig['environ']['current']
+        if( env_name is not None ):
+            current_var = env_name
+        dict0 = copy.deepcopy(rawconfig['environ'][current_var])
+
+        plat = getplatform()
+        if (plat == "Windows"):
+            cmd_suffix = ".bat"
+            cmd_codec = "ansi"
+            cmd_return = "\n"
+            cmd_header = "@echo off" + cmd_return
+            env_set = 'set '
+        else:
+            cmd_suffix = ".sh"
+            cmd_codec = "utf8"
+            cmd_return = "\n"
+            cmd_header = "#!/usr/bin/env bash" + cmd_return
+            env_set = 'export '
+
+        #export effect env
+        cmd_effect = 'env'
+        if (file_name is not None):
+            cmd_effect = file_name
+        cmd_effect += '_effect' + cmd_suffix
+
+        #export path
+        lines = ""
+        for (key) in dict0["path+"]:
+            if (plat == "Windows"):
+                lines += (env_set + 'PATH=' + key + os.path.pathsep + '%PATH%' + cmd_return)
+            else:
+                lines += (env_set + 'PATH=' + key + os.path.pathsep + '$PATH' + cmd_return)
+
+        #export var
+        for (key, value) in dict0.items():
+            if (key == 'path+'):
+                continue
+            if (plat == "Windows"):
+                lines += (env_set + key + '=' + value + cmd_return)
+            else:
+                lines += (env_set + key + '=\"' + value + '\"' + cmd_return)
+
+        with open(cmd_effect, 'w', encoding=cmd_codec) as f:
+            f.write(cmd_header)
+            f.write(lines)
+
+        #export unset env
+        cmd_unset = 'env'
+        if (file_name is not None):
+            cmd_unset = file_name
+        cmd_unset += '_unset' + cmd_suffix
+
+        #export unset path
+        lines = ""
+        for (key) in dict0["path+"]:
+            if (plat == "Windows"):
+                lines += (env_set + 'PATH=%PATH:' + key + ';=%' + cmd_return)
+            else:
+                lines += (env_set + 'PATH=$(' + 'echo ${PATH//' + key.replace('/', '\/') + ':/})' + cmd_return)
+
+        #export unset var
+        for (key, value) in dict0.items():
+            if (key == 'path+'):
+                continue
+            if (plat == "Windows"):
+                lines += ('set ' + key + '=' + cmd_return)
+            else:
+                lines += ('unset ' + key + cmd_return)
+        with open(cmd_unset, 'w', encoding=cmd_codec) as f:
+            f.write(cmd_header)
+            f.write(lines)
+
+        #return file name
+        return current_var, cmd_effect, cmd_unset
+
+    # system ccvp
+    while (True):
+        if(args['system'] is True):
+            # print('system ccvp command.')
+            if(args['exec-with-params'] is True):
+                current_env = ""
+                if (args['use'] is True):
+                    if (args['<env-name>'] is None):
+                        print("please appoint a environ")
+                        return
+
+                    if (rawconfig['environ'].__contains__(args['<env-name>']) is False):
+                        print("please ensure the environ is right")
+                        return
+
+                    current_env = args['<env-name>']
+                    if (args['<env-name>'] == "current"):
+                        current_env = rawconfig['environ']['current']
+
+                    if (current_env == 'current'
+                        or rawconfig['environ'].__contains__(current_env) is False):
+                        print(".json file is broken, environ section current env config is lost, please use set command fix it.")
+                        return
+                else:
+                    current_env = None
+
+                if (args['<command-name>'] is None):
+                    print("please appoint your command")
+                    return
+
+                #print(args['hh'])
+                #print(args['here'])
+                if (args['here'] or args['hh'] is True):
+                    os.chdir(pymakeworkpath)
+
+                #print(args['--workroot'])
+                if (args['--workroot'] is not None):
+                    if (os.path.isdir(args['--workroot'])
+                        and os.path.isabs(args['--workroot'])):
+                        os.chdir(args['--workroot'])
+                    else:
+                        print('please input an existed and legal work root.')
+                        return
+
+                # create cmd_list
+                current_var = current_env
+                local_command = ''
+                if(current_var == None):
+                    local_command = raw_command_system()
+                else:
+                    local_command = raw_command(current_var)
+                dict0 = copy.deepcopy(local_command)
+
+                list0 = []
+                local = True
+                current_var = args['<command-name>']
+                if (current_var in dict0):
+                    list0.extend(dict0[current_var])
+                    local = True
+                else:
+                    list0.append(current_var)
+                    local = False
+
+                params0 = []
+                # print(args['--params'])
+                # print(args['<command-params>'])
+                for current_var in args['--params']:
+                    params0.append(current_var)
+                for current_var in args['<command-params>']:
+                    params0.append(current_var)
+
+                current_var = current_env
+                cmd_list = []
+                temp_file_name = ""
+                # if (getplatform() == "Windows"):
+                #    cmd_list, temp_file_name = createCmdList0(list0)
+                # else:
+                #    cmd_list, temp_file_name = createCmdList01(list0)
+                # good compatibility
+                cmd_list, temp_file_name = createCmdList06(current_var, local, list0, params0)
+
+                # export env
+                current_var = current_env
+                # print (current_var, temp_file_name)
+                system_env_export(current_var, temp_file_name)
+
+                ret = communicateWithCommandLine(cmd_list)
+
+                # delete env file and cmd file
+                if (getplatform() == "Windows"):
+                    temp_file = temp_file_name + "_exec.bat"
+                    if (os.path.exists(temp_file)):
+                        os.remove(temp_file)
+                    temp_file = temp_file_name + "_effect.bat"
+                    if (os.path.exists(temp_file)):
+                        os.remove(temp_file)
+                    temp_file = temp_file_name + "_unset.bat"
+                    if (os.path.exists(temp_file)):
+                        os.remove(temp_file)
+                else:
+                    temp_file = temp_file_name + "_exec.sh"
+                    if (os.path.exists(temp_file)):
+                        os.remove(temp_file)
+                    temp_file = temp_file_name + "_effect.sh"
+                    if (os.path.exists(temp_file)):
+                        os.remove(temp_file)
+                    temp_file = temp_file_name + "_unset.sh"
+                    if (os.path.exists(temp_file)):
+                        os.remove(temp_file)
+
+                os._exit(ret)
+                return
+            else:
+                ''
+        else:
+            ''
+        break
 
     # record system environ
     pymakesystemenviron = copy.deepcopy(os.environ)
@@ -3763,7 +4081,113 @@ def main_function():
                 print("CUSTOM ENV+   : %s" % (customenvfile))
                 print("CUSTOM PATH+  : %s" % (custompathfile))
             elif (args['exec-with-params'] is True):
-                print("you can\'t use custom environ to execute command.")
+                # print('custom ccvp command.')
+                current_env = ""
+                if (args['use'] is True):
+                    if (args['<env-name>'] is None):
+                        print("please appoint a environ")
+                        return
+
+                    if (rawconfig['environ'].__contains__(args['<env-name>']) is False):
+                        print("please ensure the environ is right")
+                        return
+
+                    current_env = args['<env-name>']
+                    if (args['<env-name>'] == "current"):
+                        current_env = rawconfig['environ']['current']
+
+                    if (current_env == 'current'
+                        or rawconfig['environ'].__contains__(current_env) is False):
+                        print(".json file is broken, environ section current env config is lost, please use set command fix it.")
+                        return
+                else:
+                    current_env = None
+
+                if (args['<command-name>'] is None):
+                    print("please appoint your command")
+                    return
+
+                # print(args['hh'])
+                # print(args['here'])
+                if (args['here'] or args['hh'] is True):
+                    os.chdir(pymakeworkpath)
+
+                # print(args['--workroot'])
+                if (args['--workroot'] is not None):
+                    if (os.path.isdir(args['--workroot'])
+                        and os.path.isabs(args['--workroot'])):
+                        os.chdir(args['--workroot'])
+                    else:
+                        print('please input an existed and legal work root.')
+                        return
+
+                # create cmd_list
+                current_var = current_env
+                local_command = ''
+                if (current_var == None):
+                    local_command = raw_command_system()
+                else:
+                    local_command = raw_command(current_var)
+                dict0 = copy.deepcopy(local_command)
+
+                list0 = []
+                local = True
+                current_var = args['<command-name>']
+                if (current_var in dict0):
+                    list0.extend(dict0[current_var])
+                    local = True
+                else:
+                    list0.append(current_var)
+                    local = False
+
+                params0 = []
+                # print(args['--params'])
+                # print(args['<command-params>'])
+                for current_var in args['--params']:
+                    params0.append(current_var)
+                for current_var in args['<command-params>']:
+                    params0.append(current_var)
+
+                current_var = current_env
+                cmd_list = []
+                temp_file_name = ""
+                # if (getplatform() == "Windows"):
+                #    cmd_list, temp_file_name = createCmdList0(list0)
+                # else:
+                #    cmd_list, temp_file_name = createCmdList01(list0)
+                # good compatibility
+                cmd_list, temp_file_name = createCmdList06(current_var, local, list0, params0)
+
+                # export env
+                current_var = current_env
+                # print (current_var, temp_file_name)
+                system_env_export(current_var, temp_file_name)
+
+                ret = communicateWithCommandLine(cmd_list)
+
+                # delete env file and cmd file
+                if (getplatform() == "Windows"):
+                    temp_file = temp_file_name + "_exec.bat"
+                    if (os.path.exists(temp_file)):
+                        os.remove(temp_file)
+                    temp_file = temp_file_name + "_effect.bat"
+                    if (os.path.exists(temp_file)):
+                        os.remove(temp_file)
+                    temp_file = temp_file_name + "_unset.bat"
+                    if (os.path.exists(temp_file)):
+                        os.remove(temp_file)
+                else:
+                    temp_file = temp_file_name + "_exec.sh"
+                    if (os.path.exists(temp_file)):
+                        os.remove(temp_file)
+                    temp_file = temp_file_name + "_effect.sh"
+                    if (os.path.exists(temp_file)):
+                        os.remove(temp_file)
+                    temp_file = temp_file_name + "_unset.sh"
+                    if (os.path.exists(temp_file)):
+                        os.remove(temp_file)
+
+                os._exit(ret)
                 return
             elif (args['path'] is True):
                 if(args['<value>'] is None):
@@ -3901,168 +4325,6 @@ def main_function():
         else:
             ''
         break
-
-    # custom export function
-    def custom_env_export (file_name = None):
-        plat = getplatform()
-        if (plat == "Windows"):
-            cmd_suffix = ".bat"
-            cmd_codec = "ansi"
-            cmd_return = "\n"
-            cmd_header = "@echo off" + cmd_return
-            env_set = 'set '
-        else:
-            cmd_suffix = ".sh"
-            cmd_codec = "utf8"
-            cmd_return = "\n"
-            cmd_header = "#!/usr/bin/env bash" + cmd_return
-            env_set = 'export '
-
-        # export effect env
-        cmd_effect = 'custom.' + 'env'
-        if (args['<file-name>'] is not None):
-            cmd_effect = 'custom.' + file_name
-        cmd_effect += '_effect' + cmd_suffix
-
-        lines = ""
-        # export path
-        # print(envcustomlistrawpaths)
-        for (key) in envcustomlistrawpaths:
-            if (plat == "Windows"):
-                lines += (env_set + 'PATH=' + key + os.path.pathsep + '%PATH%' + cmd_return)
-            else:
-                lines += (env_set + 'PATH=' + key + os.path.pathsep + '$PATH' + cmd_return)
-
-        # export var
-        for (key, value) in envcustomlistrawvars.items():
-            if (key == 'path+'):
-                continue
-            if (plat == "Windows"):
-                lines += (env_set + key + '=' + value + cmd_return)
-            else:
-                lines += (env_set + key + '=\"' + value + '\"' + cmd_return)
-
-        # print("------------------")
-        # print(lines)
-        with open(cmd_effect, 'w') as f:
-            f.write(cmd_header)
-            f.write(lines)
-
-        # export unset env
-        cmd_unset = 'custom.' + 'env'
-        if (args['<file-name>'] is not None):
-            cmd_unset = 'custom.' + file_name
-        cmd_unset += '_unset' + cmd_suffix
-
-        # export unset path
-        lines = ""
-        for (key) in envcustomlistrawpaths:
-            if (plat == "Windows"):
-                lines += (env_set + 'PATH=%PATH:' + key + ';=%' + cmd_return)
-            else:
-                lines += (env_set + 'PATH=$(' + 'echo ${PATH//' + key.replace('/', '\/') + ':/})' + cmd_return)
-
-        # export unset var
-        for (key, value) in envcustomlistrawvars.items():
-            if (key == 'path+'):
-                continue
-            if (plat == "Windows"):
-                lines += ('set ' + key + '=' + cmd_return)
-            else:
-                lines += ('unset ' + key + cmd_return)
-
-        # print("------------------")
-        # print(lines)
-        with open(cmd_unset, 'w') as f:
-            f.write(cmd_header)
-            f.write(lines)
-
-        #return file name
-        return cmd_effect, cmd_unset
-
-    # system export function
-    def system_env_export (file_name = None):
-        plat = getplatform()
-        if (plat == "Windows"):
-            cmd_suffix = ".bat"
-            cmd_codec = "ansi"
-            cmd_return = "\n"
-            cmd_header = "@echo off" + cmd_return
-            env_set = 'set '
-        else:
-            cmd_suffix = ".sh"
-            cmd_codec = "utf8"
-            cmd_return = "\n"
-            cmd_header = "#!/usr/bin/env bash" + cmd_return
-            env_set = 'export '
-
-        #env = os.environ
-
-        # export effect env
-        cmd_effect = 'system.' + 'env'
-        if (args['<file-name>'] is not None):
-            cmd_effect = 'system.' + file_name
-        cmd_effect += '_effect' + cmd_suffix
-
-        lines = ""
-        # export path
-        # print(envcustomlistrawpaths)
-        for (key) in pymakesystemenviron['PATH'].split(';'):
-            if (plat == "Windows"):
-                lines += (env_set + 'PATH=' + key + os.path.pathsep + '%PATH%' + cmd_return)
-            else:
-                lines += (env_set + 'PATH=' + key + os.path.pathsep + '$PATH' + cmd_return)
-
-        # export var
-        for (key, value) in pymakesystemenviron.items():
-            if (key == 'path+'):
-                continue
-            if (str(key).lower() == "path"):
-                continue
-            if (plat == "Windows"):
-                lines += (env_set + key + '=' + value + cmd_return)
-            else:
-                lines += (env_set + key + '=\"' + value + '\"' + cmd_return)
-
-        # print("------------------")
-        # print(lines)
-        with open(cmd_effect, 'w') as f:
-            f.write(cmd_header)
-            f.write(lines)
-
-        # export unset env
-        cmd_unset = 'system.' + 'env'
-        if (args['<file-name>'] is not None):
-            cmd_unset = 'system.' + file_name
-        cmd_unset += '_unset' + cmd_suffix
-
-        # export unset path
-        lines = ""
-        for (key) in pymakesystemenviron['PATH'].split(';'):
-            if (plat == "Windows"):
-                lines += (env_set + 'PATH=%PATH:' + key + ';=%' + cmd_return)
-            else:
-                lines += (env_set + 'PATH=$(' + 'echo ${PATH//' + key.replace('/', '\/') + ':/})' + cmd_return)
-
-        # export unset var
-        for (key, value) in pymakesystemenviron.items():
-            if (key == 'path+'):
-                continue
-            if (str(key).lower() == "path"):
-                continue
-            if (plat == "Windows"):
-                lines += ('set ' + key + '=' + cmd_return)
-            else:
-                lines += ('unset ' + key + cmd_return)
-
-        # print("------------------")
-        # print(lines)
-        with open(cmd_unset, 'w') as f:
-            f.write(cmd_header)
-            f.write(lines)
-
-        #return file name
-        return cmd_effect, cmd_unset
 
     #system command
     while (True):

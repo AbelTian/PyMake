@@ -785,6 +785,11 @@ User support shell module, user can install them to share their functions.
 
 [Detailed information](./SHELL.md)  
 
+
+# Command  
+[PyMake Command](./COMMAND.md)  
+
+
 # Language       
 [PyMake Language](./LANGUAGE.md)  
 [PyMake Language Example](./example/pymake7-win-msvc3.json)    
