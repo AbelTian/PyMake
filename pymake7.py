@@ -5491,10 +5491,16 @@ def main_function():
                 #cmd_list.append(pythonexecfile + ' ' + params_string)
 
         #print(3, pythonexecfile)
-        if(plat == "Windows"):
-            cmd_list.append("call py \"%s\" %s" % (pythonexecfile, '%*'))
+        if(os.path.isfile(pythonexecfile)):
+            if(plat == "Windows"):
+                cmd_list.append("call py \"%s\" %s" % (pythonexecfile, '%*'))
+            else:
+                cmd_list.append("python3 \"%s\" %s" % (pythonexecfile, '$*'))
         else:
-            cmd_list.append("python3 \"%s\" %s" % (pythonexecfile, '$*'))
+            if(plat == "Windows"):
+                cmd_list.append("call py -c \"%s\" %s" % (pythonexecfile, '%*'))
+            else:
+                cmd_list.append("python3 -c \"%s\" %s" % (pythonexecfile, '$*'))
 
         # append exit 0
         cmd_list.append(cmd_exit)
