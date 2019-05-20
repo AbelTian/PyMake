@@ -123,9 +123,13 @@ Usage:
   pymake7.py  hh execvp [ <command-name> ] [ <command-params> ... ]
   pymake7.py  hh use <env-name> execvp [ <command-name> ] [ <command-params> ... ]
   pymake7.py  -------------------------------------------------------------
-  pymake7.py  import cmd [ hh | here ] [ <script-file> ] [ -a | --all ] [ -f | --force ] [ --recursive ] [ --encoding=<encoding-name> ] [ --filter=<name-filter> ... ]
-  pymake7.py  here import cmd [ <script-file> ] [ -a | --all ] [ -f | --force ] [ --recursive ] [ --encoding=<encoding-name> ] [ --filter=<name-filter> ... ]
-  pymake7.py  hh import cmd [ <script-file> ] [ -a | --all ] [ -f | --force ] [ --recursive ] [ --encoding=<encoding-name> ] [ --filter=<name-filter> ... ]
+  pymake7.py  import cmd [ hh | here ] [ <script-file> ] [ to <command-name> ] [ -a | --all ] [ -f | --force ] [ --recursive ] [ --encoding=<encoding-name> ] [ --filter=<name-filter> ... ]
+  pymake7.py  here import cmd [ <script-file> ] [ to <command-name> ] [ -a | --all ] [ -f | --force ] [ --recursive ] [ --encoding=<encoding-name> ] [ --filter=<name-filter> ... ]
+  pymake7.py  hh import cmd [ <script-file> ] [ to <command-name> ] [ -a | --all ] [ -f | --force ] [ --recursive ] [ --encoding=<encoding-name> ] [ --filter=<name-filter> ... ]
+  pymake7.py  -------------------------------------------------------------
+  pymake7.py  outport cmd [ hh | here ] [ <command-name> ] [ to <script-file> ] [ -a | --all ] [ -f | --force ] [ --encoding=<encoding-name> ]
+  pymake7.py  here outport cmd [ <command-name> ] [ to <script-file> ] [ -a | --all ] [ -f | --force ] [ --encoding=<encoding-name> ]
+  pymake7.py  hh outport cmd [ <command-name> ] [ to <script-file> ] [ -a | --all ] [ -f | --force ] [ --encoding=<encoding-name> ]
   pymake7.py  -------------------------------------------------------------
   pymake7.py  backup [ here | hh ] [ <zip-file-name> ]
   pymake7.py  here backup [ <zip-file-name> ]
@@ -205,11 +209,12 @@ Command:
   exec-with-params  exec a command with params, it is also execvp and ccvp.
   backup            backup all env .json to a zip file.
   recovery          recovery all env .json from a zip file.
-  import            import user path or env or cmd to env .json file. example, import cmd [ <script-file>: x.bat x.cmd x.sh x.ps1 ... ]
+  import            import user path or env or cmd to env .json file. example, import cmd [ <script-file>: x.bat x.cmd x.sh x.ps1 x.py... ]
   custom            custom environment is helpping for calling large dimentions of scripts in computer, manually in console. defined in sourceroot. [ default: close ]
   export2           output private environ and custom environ to a bat file or sh file, a powerfull function from export, support powershell also. [default:current, env]
   powershell        environ for powershell, and to execute in powershell. [cross]
   python            list python information, and execute python script.
+  outport           outport user path or env or cmd to script file. example, outport cmd [ <command-name> ] [ to <script-file>: ... ]
 
 Options:
   -h --help     Show this screen.
@@ -2107,6 +2112,10 @@ def main_function():
                         return
 
                     command_name = os.path.splitext(os.path.basename(local_path))[0]
+
+                    print(args['<command-name>'])
+                    if (args['<command-name>'] is not None):
+                        command_name = args['<command-name>']
 
                     #print(args)
                     if(config['command'].__contains__(command_name) is True):
