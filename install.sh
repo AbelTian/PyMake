@@ -8,7 +8,7 @@ filepath=$(cd `dirname $0`; pwd)
 chmod +x ${filepath}/*.sh
 
 install () {
-    ln -sf ${filepath}/${sourcefile} ${mmpath}/${mmfile}
+    sudo ln -sf ${filepath}/${sourcefile} ${mmpath}/${mmfile}
     echo install ${mmfile}
 }
 
