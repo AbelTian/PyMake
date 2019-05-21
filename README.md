@@ -794,6 +794,11 @@ User support shell module, user can install them to share their functions.
 [PyMake Language](./LANGUAGE.md)  
 [PyMake Language Example](./example/pymake7-win-msvc3.json)    
 
+
+# Encoding  
+[PyMake Profile Encoding](./ENCODING.md)   
+
+
 # Dependencies  
 
 *This program edited by python, support python 2.7 -> 3.6 (tested).You need install python, only python in path, configured.*    
