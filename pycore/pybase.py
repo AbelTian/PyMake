@@ -99,8 +99,7 @@ def getuserroot():
     root = ""
     sysstr = platform.system()
     if(sysstr =="Windows"):
-        #root = os.environ["HOMEDRIVE"] + os.environ["HOMEPATH"]
-        root = os.environ["USERPROFILE"]
+        root = os.environ["HOMEDRIVE"] + os.environ["HOMEPATH"]
     else:
         root = os.environ["HOME"]
     return root
