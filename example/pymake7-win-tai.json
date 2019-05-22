@@ -10,20 +10,17 @@
         "root.build": "${root2}/c0-buildstation",
         "root.test": "${root}/e3-test",
         "root.webrc": "${root}/e2-webrc",
-        "cc": "${root.tool}/a0-compiler",
-        "pymake": "${cc}/PyMake",
+        "cc": "${root.tool}/a0-Compiler",
+        "wincc": "${root.tool}/winCompilers",
+        "python-install":"C:/Users/Administrator/AppData/Local/Programs/Python",
+        "py27":"${python-install}/Python27",
+        "py36":"${python-install}/Python36",
+        "py37":"${python-install}/Python37",
+        "py":"${py37}",
+        "py.bin":"${py};${py}/Scripts",
+        "pymake": "${root.tool}/a0-compiler/PyMake",
         "pymake.env": "${pymake}/UserSource",
         "pymake.shell": "${pymake.env}/UserShell",
-        "wincc": "${root.tool}/winCompilers",
-        "xmake": "${wincc}/xmake",
-        "watcom": "${wincc}/watcom1.9",
-        "watcom.bin": "${watcom}/binw;${watcom}/binnt",
-        "watcom.include": "${watcom}/h;${watcom}/h/nt;${watcom}/h/nt/directx;${watcom}/h/nt/ddk",
-        "watcom.edpath": "${watcom}/eddat",
-        "watcom.help": "${watcom}/binnt/help",
-        "watcom.wipfc": "${watcom}/wipfc",
-        "perl": "${wincc}/perl_5.26.0.1_64",
-        "perl.bin": "${perl}/perl/bin",
         "cmake": "${wincc}/cmake3.9.1_64",
         "cmake.bin": "${cmake}/bin",
         "msys.bin": "${root.tool}/winCompilers/mSys/bin",
@@ -33,6 +30,8 @@
         "FFmpeg.inc": "${FFmpeg}/include/FFmpeg3",
         "doxygen.bin": "${root.tools}/doxygen/bin",
         "graphviz.bin": "${root.tools}/doxygen/graphviz-2.38/bin",
+        "LLVM": "${wincc}/LLVM",
+        "LLVM.bin": "${LLVM}/bin;${LLVM}/libexec",
         "qt": "${root.tool}/winLibraries/Qt",
         "qt5.12.version": "5.12.2",
         "qt5.9.version": "5.9.2",
@@ -101,7 +100,17 @@
         "ndk.x86_64": "${android.ndk}/toolchains/x86_64-4.9/prebuilt/windows-x86_64",
         "ndk.arm.bin": "${ndk.arm}/bin",
         "ndk.x86.bin": "${ndk.x86}/bin",
-        "ndk.x86_64.bin": "${ndk.x86_64}/bin"
+        "ndk.x86_64.bin": "${ndk.x86_64}/bin",
+        "watcom": "${wincc}/watcom1.9",
+        "watcom.bin": "${watcom}/binw;${watcom}/binnt",
+        "watcom.include": "${watcom}/h;${watcom}/h/nt;${watcom}/h/nt/directx;${watcom}/h/nt/ddk",
+        "watcom.edpath": "${watcom}/eddat",
+        "watcom.help": "${watcom}/binnt/help",
+        "watcom.wipfc": "${watcom}/wipfc",
+        "perl": "${wincc}/perl_5.26.0.1_64",
+        "perl.bin": "${perl}/perl/bin",
+        "xmake": "${wincc}/xmake",
+        "ninja": "${wincc}/ninja"
     },
     "environ": {
         "android.mobile": {
@@ -117,6 +126,7 @@
                 "${ant.bin}",
                 "${ndk.arm.bin}"
             ],
+            "make0": "mingw32-make",
             "ANDROID_API_VERSION": "android-23",
             "ANDROID_SDK_ROOT": "${android.sdk}",
             "ANDROID_NDK_ROOT": "${android.ndk}",
@@ -150,6 +160,7 @@
                 "${ant.bin}",
                 "${ndk.x86.bin}"
             ],
+            "make0": "mingw32-make",
             "CLICOLOR": "1",
             "ANDROID_API_VERSION": "android-23",
             "ANDROID_SDK_ROOT": "${android.sdk}",
@@ -171,18 +182,39 @@
             "QKIT": "ANDROIDX86",
             "QSYS": "AndroidX86"
         },
-        "armhf32": {
+        "qt.android": {
             "path+": [
                 "${cmake.bin}",
-                "${qt5.armhf32.bin}",
-                "${armhf32.bin}"
+                "${qt5.8.mingw32.bin}",
+                "${mingw32.bin}",
+                "${java1.8.bin}",
+                "${android.sdk}",
+                "${sdk.plat.tool}",
+                "${sdk.build.tool}",
+                "${sdk.tool}",
+                "${ant.bin}",
+                "${ndk.x86.bin}"
             ],
-            "QTVERSION": "${qt5.version}",
-            "QTDIR": "${qt5.armhf32}",
-            "QTSPEC": "-spec linux-arm-gnueabihf-g++",
-            "QTCONFIG": "",
-            "QKIT": "Armhf32",
-            "QSYS": "Armhf32"
+            "make0": "mingw32-make",
+            "CLICOLOR": "1",
+            "ANDROID_API_VERSION": "android-23",
+            "ANDROID_SDK_ROOT": "${android.sdk}",
+            "ANDROID_NDK_ROOT": "${android.ndk}",
+            "ANDROID_NDK_HOST": "windows-x86_64",
+            "ANDROID_NDK_TOOLCHAIN_PREFIX": "x86",
+            "ANDROID_NDK_TOOLCHAIN_VERSION": "4.9",
+            "ANDROID_NDK_PLATFORM": "android-23",
+            "NDK_TOOLCHAIN_PATH": "${ndk.x86.bin}",
+            "NDK_TOOLS_PREFIX": "i686-linux-android",
+            "QTDIR": "${qt5.8.mingw32}",
+            "QTSPEC": "win32-g++",
+            "QTCONFIG": "x86_64",
+            "JAVA_HOME": "${java1.8.home}",
+            "CLASSPATH": ".:${JAVA_HOME}/lib/dt/jar:${JAVA_HOME}/lib/tools.jar",
+            "PYCMD_MYNAME": "T.D.R",
+            "a_special_var_const": "hello world",
+            "QKIT": "WIN",
+            "QSYS": "Windows"
         },
         "qt4": {
             "path+": [
@@ -190,6 +222,7 @@
                 "${mingw32.bin}",
                 "${qt4.8.mingw32.bin}"
             ],
+            "make0": "mingw32-make",
             "QTVERSION": "${qt4.version}",
             "QTDIR": "${qt4.8.mingw32}",
             "QTSPEC": "-spec win32-g++",
@@ -203,6 +236,8 @@
                 "${mingw32.bin}",
                 "${qt5.9.mingw32.bin}"
             ],
+            "CMAKEGENERATOR": "MinGW Makefiles",
+            "make0": "mingw32-make",
             "QTVERSION": "${qt5.9.version}",
             "QTDIR": "${qt5.9.mingw32}",
             "QTSPEC": "-spec win32-g++",
@@ -216,12 +251,28 @@
                 "${mingw64.bin}",
                 "${qt5.12.mingw64.bin}"
             ],
+            "make0": "mingw32-make",
             "QTVERSION": "${qt5.12.version}",
             "QTDIR": "${qt5.12.mingw64}",
             "QTSPEC": "-spec win32-g++",
             "QTCONFIG": "",
             "QKIT": "WIN64",
             "QSYS": "Win64"
+        },
+        "armhf32": {
+            "path+": [
+                "${cmake.bin}",
+                "${armhf32.bin}",
+                "${qt5.armhf32.bin}",
+                "${mingw32.bin}"
+            ],
+            "make0": "make",
+            "QTVERSION": "${qt5.version}",
+            "QTDIR": "${qt5.armhf32}",
+            "QTSPEC": "-spec linux-arm-gnueabihf-g++",
+            "QTCONFIG": "",
+            "QKIT": "Armhf32",
+            "QSYS": "Armhf32"
         },
         "msys": {
             "path+": [
@@ -249,11 +300,37 @@
         "TIPS": "If you lost variable content or command content, please record to there, I wont delete them."
     },
     "command-assemblage": {
-        "hello.work": "hello world."
+        "hello.work": "hello world.",
+        "build.qmake": "也叫做build.pro，在Qt Source路径编译源代码",
+        "cmake": "在source路径打开cmake-gui。这个cmake到底怎么从命令行配置？再等等谁出一个cmake命令行的丰富用法。",
+        "build.cmake": "开启cmake的make编译。",
+        "open.run": "编译完，运行一下。"
     },
     "command": {
+        "cc0": [],
+        "cc1": [
+            "@echo off",
+            "echo hello."
+        ],
         "ccc": [
             "echo %QTDIR%"
+        ],
+        "test": [
+            "echo %cd%"
+        ],
+        "test.2": [
+            "echo %*",
+            "set param=%*",
+            "echo %param%",
+            "ping 127.0.0.1 %param%",
+            "rem exit /b 0"
+        ],
+        "test.3": [
+            "rem echo %*",
+            "ping %*"
+        ],
+        "test.4": [
+            "exit /b 0"
         ],
         "configure.qt.armhf32": [
             "set src_path=${root.webrc}/qt-everywhere-opensource-src-5.9.2",
@@ -288,9 +365,9 @@
             "qmake %src% ${QTSPEC} CONFIG+=debug CONFIG+=qml_debug ${QTCONFIG} && mingw32-make qmake_all",
             "mingw32-make -j10"
         ],
-        "qt-creator": [
+        "qt.creator": [
             "cd ${root.build}",
-            "\"R:/Develop/b0-toolkits/winLibraries/Qt/Tools/QtCreator/bin/qtcreator.exe\""
+            "start \"${qt}/Tools/QtCreator/bin/qtcreator.exe\""
         ],
         "qt5.android.build": [
             "mkdir -p ${qt5.build.path}",
@@ -300,139 +377,157 @@
         "adb.d": [
             "adb devices"
         ],
-        "cmake": [
-            "if not exist \"CMakeLists.txt\" ( echo has any CMakeLists.txt? please add here command to restrict. & exit /b 0 )",
-            "set src_path=%CD%",
-            "set profilename=%1",
-            "if \"\"%profilename%\"\" == \"\"\"\" ( echo please input a project name. & exit /b 0 )",
-            "::set src=%src_path%/%profilename%.pro",
-            "set build=${root.build}/%profilename%/${QSYS}/${QTVERSION}/Debug",
-            "md %build:/=\\%",
-            "cd /d %build%",
-            "echo src path: %src_path:\\=/%",
-            "echo build at: %build:\\=/%",
-            "start ${cmake.bin}/cmake-gui.exe",
-            "cd /d %src_path%"
-        ],
         "libtool": [
             "cd /d ${root.prod}/AddLibraryTool/Windows",
             "start ${root.prod}/AddLibraryTool/Windows/AddLibraryTool.exe"
+        ],
+        "libtool2": [
+            "cd /d ${root.prod}/AddLibraryTool-Multiple/Windows",
+            "start ${root.prod}/AddLibraryTool-Multiple/Windows/AddLibraryTool-Multiple.exe"
         ],
         "apptool": [
             "cd /d ${root.prod}/ProductExecTool/Windows",
             "start ${root.prod}/ProductExecTool/Windows/ProductExecTool.exe"
         ],
-        "build-opencv": [
-            "cd /d R:/Develop/c0-buildstation/opencv2.3.1",
-            "mingw32-make -j 10",
-            "mingw32-make install"
+        "open.prod": [
+            "set prod=%1",
+            "cd /d ${root.prod}/%prod%/Windows",
+            "start ${root.prod}/%prod%/Windows/%prod%.exe"
         ],
-        "build-opencv-release": [
-            "cd /d R:/Develop/c0-buildstation/opencv2.3.1-release",
-            "mingw32-make -j 10",
-            "mingw32-make install"
+        "open.prodd": [
+            "set prod=%1",
+            "cd /d ${root.prod}/%prod%/Windows",
+            "start ${root.prod}/%prod%/Windows/%prod%d.exe"
         ],
-        "build-openscenegraph": [
-            "cd /d R:/Develop/c0-buildstation/OpenSceneGraph",
-            "mingw32-make -j 10",
-            "mingw32-make install"
+        "open.src": [
+            "set src=%1",
+            "start ${root.src}/%src%"
         ],
-        "test": [
-            "echo %cd%"
+        "open.sdk": [
+            "set sdk=%1",
+            "start ${root.sdk}/%sdk%"
         ],
-        "test.2": [
-            "echo %*",
-            "set param=%*",
-            "echo %param%",
-            "ping 127.0.0.1 %param%",
-            "rem exit /b 0"
+        "open.build": [
+            "rem if not exist \"*.pro\" ( echo has any .pro? please add here command to restrict. & exit /b 0 )",
+            "set src_path=%CD%",
+            "set profilename=%1",
+            "set prod=${root.prod}/%profilename%/${QSYS}",
+            "set sdk=${root.sdk}/%profilename%/${QSYS}",
+            "set src=%src_path%/%profilename%.pro",
+            "set build=${root.build}/%profilename%/${QSYS}/${QTVERSION}/Debug",
+            "rem md %build:/=\\%",
+            "cd /d %build%",
+            "rem del /f /q demo examples src test",
+            "echo src file: %src:\\=/%",
+            "echo build at: %build:\\=/%",
+            "echo sdk at  : %sdk:\\=/%",
+            "echo prod at : %prod:\\=/%",
+            "echo ${QTSPEC} ${QTCONFIG}",
+            "start %build%",
+            "echo build inf ${QTSPEC} ${QTCONFIG}",
+            "echo src file: %src:\\=/%",
+            "echo build at: %build:\\=/%",
+            "echo sdk at  : %sdk:\\=/%",
+            "echo prod at : %prod:\\=/%",
+            "cd /d %src_path%"
         ],
-        "test.3": [
-            "rem echo %*",
-            "ping %*"
+        "add.sdk": [
+            "if not exist \"*.pro\" ( echo has any .pro? please add here command to restrict. & exit /b 0 )",
+            "set src_path=%CD%",
+            "set profilename=%1",
+            "set prod=${root.prod}/%profilename%/${QSYS}",
+            "set sdk=${root.sdk}/%profilename%/${QSYS}",
+            "set src=%src_path%/%profilename%.pro",
+            "if not exist \"%src%\" ( echo %profilename%.pro is not exist. & exit /b 0)",
+            "set sdktoolroot=${root.prod}/AddLibraryTool/Windows",
+            "set sdktool=%sdktoolroot%/AddLibraryToold.exe",
+            "if not exist \"%sdktool%\" ( echo %sdktool% is not exist. please build it in debug mode. & exit /b 0)",
+            "cd /d %sdktoolroot%",
+            "start %sdktool% output %src_path% "
+        ],
+        "add.sdk.2": [
+            "if not exist \"*.pro\" ( echo has any .pro? please add here command to restrict. & exit /b 0 )",
+            "set src_path=%CD%",
+            "set profilename=%1",
+            "set prod=${root.prod}/%profilename%/${QSYS}",
+            "set sdk=${root.sdk}/%profilename%/${QSYS}",
+            "set src=%src_path%/%profilename%.pro",
+            "if not exist \"%src%\" ( echo %profilename%.pro is not exist. & exit /b 0)",
+            "set sdktoolroot=${root.prod}/AddLibraryTool-Multiple/Windows",
+            "set sdktool=%sdktoolroot%/AddLibraryTool-Multipled.exe",
+            "if not exist \"%sdktool%\" ( echo %sdktool% is not exist. please build it in debug mode. & exit /b 0)",
+            "cd /d %sdktoolroot%",
+            "start %sdktool% output %src_path% "
         ],
         "build.qmake": [
             "if not exist \"*.pro\" ( echo has any .pro? please add here command to restrict. & exit /b 0 )",
             "set src_path=%CD%",
             "set profilename=%1",
+            "set prod=${root.prod}/%profilename%/${QSYS}",
+            "set sdk=${root.sdk}/%profilename%/${QSYS}",
             "set src=%src_path%/%profilename%.pro",
+            "if not exist \"%src%\" ( echo %profilename%.pro is not exist. & exit /b 0)",
             "set build=${root.build}/%profilename%/${QSYS}/${QTVERSION}/Debug",
             "md %build:/=\\%",
             "cd /d %build%",
             "rem del /f /q demo examples src test",
             "echo src file: %src:\\=/%",
             "echo build at: %build:\\=/%",
+            "echo sdk at  : %sdk:\\=/%",
+            "echo prod at : %prod:\\=/%",
             "echo ${QTSPEC} ${QTCONFIG}",
             "qmake %src% ${QTSPEC} CONFIG+=debug CONFIG+=qml_debug ${QTCONFIG} && mingw32-make qmake_all",
             "mingw32-make -j10",
             "echo build inf ${QTSPEC} ${QTCONFIG}",
             "echo src file: %src:\\=/%",
             "echo build at: %build:\\=/%",
+            "echo sdk at  : %sdk:\\=/%",
+            "echo prod at : %prod:\\=/%",
             "cd /d %src_path%"
         ],
-        "open-dir": [
-            "if not exist \"%1\" ( echo has no this dir. & exit /b 0)",
-            "start %1"
-        ],
-        "build-osg-release": [
-            "cd /d R:/Develop/c0-buildstation/OpenSceneGraph_Release",
-            "mingw32-make -j 10",
-            "mingw32-make install"
-        ],
-        "install-qwt": [
-            "cd /d R:/Develop/c0-buildstation/qwt/5.9.2/Windows/Debug",
-            "mingw32-make install"
-        ],
-        "make0": [
-            "mingw32-make"
-        ],
-        "deployqt": [
-            "echo need %1."
-        ],
-        "android.sdk": [
-            "${android.sdk}/\"SDK Manager.exe\""
-        ],
-        "libtool2": [
-            "cd /d ${root.prod}/AddLibraryTool-Multiple/Windows",
-            "start ${root.prod}/AddLibraryTool-Multiple/Windows/AddLibraryTool-Multiple.exe"
-        ],
-        "test.4": [
-            "exit /b 0"
-        ],
-        "open-prod": [
-            "set prod=%1",
-            "cd /d ${root.prod}/%prod%/Windows",
-            "start ${root.prod}/%prod%/Windows/%prod%.exe"
-        ],
-        "open-prodd": [
-            "set prod=%1",
-            "cd /d ${root.prod}/%prod%/Windows",
-            "start ${root.prod}/%prod%/Windows/%prod%d.exe"
-        ],
-        "open-sdk": [
-            "set sdk=%1",
-            "start ${root.sdk}/%sdk%"
-        ],
-        "open-build": [
-            "set build=%1",
-            "start ${root.build}/%build%"
-        ],
-        "run": [
-            "if not exist \"*.pro\" ( echo has any .pro? please add here command to restrict. & exit /b 0 )",
+        "open.run": [
+            "rem if not exist \"*.pro\" ( echo has any .pro? please add here command to restrict. & exit /b 0 )",
             "set src_path=%CD%",
             "set profilename=%1",
+            "set prod=${root.prod}/%profilename%/${QSYS}",
+            "set sdk=${root.sdk}/%profilename%/${QSYS}",
             "set src=%src_path%/%profilename%.pro",
             "set build=${root.build}/%profilename%/${QSYS}/${QTVERSION}/Debug",
-            "md %build:/=\\%",
+            "rem md %build:/=\\%",
             "cd /d %build%",
             "rem del /f /q demo examples src test",
             "echo src file: %src:\\=/%",
             "echo build at: %build:\\=/%",
+            "echo sdk at  : %sdk:\\=/%",
+            "echo prod at : %prod:\\=/%",
             "echo ${QTSPEC} ${QTCONFIG}",
-            "start %build%\\debug\\%profilename%.exe",
+            "set exe=%build%\\debug\\%profilename%.exe",
+            "echo %exe%",
+            "if not exist \"%exe%\" ( echo %profilename%.exe is not exist. & exit /b 0)",
+            "start %exe%",
             "echo build inf ${QTSPEC} ${QTCONFIG}",
             "echo src file: %src:\\=/%",
             "echo build at: %build:\\=/%",
+            "echo sdk at  : %sdk:\\=/%",
+            "echo prod at : %prod:\\=/%",
+            "cd /d %src_path%"
+        ],
+        "cmake": [
+            "if not exist \"CMakeLists.txt\" ( echo has any CMakeLists.txt? please add here command to restrict. & exit /b 0 )",
+            "set src_path=%CD%",
+            "set profilename=%1",
+            "if \"\"%profilename%\"\" == \"\"\"\" ( echo please input a project name. & exit /b 0 )",
+            "::set src=%src_path%/%profilename%.pro",
+            "set prod=${root.prod}/%profilename%/${QSYS}",
+            "set sdk=${root.sdk}/%profilename%/${QSYS}",
+            "set build=${root.build}/%profilename%/${QSYS}/${QTVERSION}/Debug",
+            "md %build:/=\\%",
+            "cd /d %build%",
+            "echo src path: %src_path:\\=/%",
+            "echo build at: %build:\\=/%",
+            "echo sdk at  : %sdk:\\=/%",
+            "echo prod at : %prod:\\=/%",
+            "start ${cmake.bin}/cmake-gui.exe",
             "cd /d %src_path%"
         ],
         "build.cmake": [
@@ -441,6 +536,8 @@
             "set profilename=%1",
             "if \"\"%profilename%\"\" == \"\"\"\" ( echo please input a project name. & exit /b 0 )",
             "set src=%src_path%/CMakeLists.txt",
+            "set prod=${root.prod}/%profilename%/${QSYS}",
+            "set sdk=${root.sdk}/%profilename%/${QSYS}",
             "set build=${root.build}/%profilename%/${QSYS}/${QTVERSION}/Debug",
             "md %build:/=\\%",
             "cd /d %build%",
@@ -448,18 +545,61 @@
             "echo Qt spec: ${QTSPEC} ${QTCONFIG}",
             "echo src file: %src:\\=/%",
             "echo build at: %build%",
-            "mingw32-make -j10",
+            "echo sdk at  : %sdk:\\=/%",
+            "echo prod at : %prod:\\=/%",
+            "call ${make0}",
             "echo Qt inf  : ${QTSPEC} ${QTCONFIG}",
             "echo src file: %src:\\=/%",
             "echo build at: %build:\\=/%",
+            "echo sdk at  : %sdk:\\=/%",
+            "echo prod at : %prod:\\=/%",
             "cd /d %src_path%"
         ],
-        "open-tool": [
+        "build.cmake.1": [
+            "if not exist \"CMakeLists.txt\" ( echo has any CMakeLists.txt? please add here command to restrict. & exit /b 0 )",
+            "set src_path=%CD%",
+            "set profilename=%1",
+            "if \"\"%profilename%\"\" == \"\"\"\" ( echo please input a project name. & exit /b 0 )",
+            "set src=%src_path%/CMakeLists.txt",
+            "set prod=${root.prod}/%profilename%/${QSYS}",
+            "set sdk=${root.sdk}/%profilename%/${QSYS}",
+            "set build=${root.build}/%profilename%/${QSYS}/${QTVERSION}/Debug",
+            "md %build:/=\\%",
+            "cd /d %build%",
+            "rem del /f /q demo examples src test",
+            "echo Qt spec: ${QTSPEC} ${QTCONFIG}",
+            "echo src file: %src:\\=/%",
+            "echo build at: %build%",
+            "echo sdk at  : %sdk:\\=/%",
+            "echo prod at : %prod:\\=/%",
+            "set cmake-command=cmake %src_path% -G\"${CMAKEGENERATOR}\" -DCMAKE_INSTALL_PREFIX=${root.sdk}/%profilename%/${QSYS} -DCMAKE_BUILD_TYPE=Debug",
+            "echo %cmake-command%",
+            "call %cmake-command%",
+            "if not %ERRORLEVEL% == 0 ( echo cmake exit code: %ERRORLEVEL% & exit /b %ERRORLEVEL% )",
+            "call ${make0}",
+            "rem call ${make0} install",
+            "rem cmake --build .",
+            "echo %cmake-command%",
+            "echo Qt inf  : ${QTSPEC} ${QTCONFIG}",
+            "echo src file: %src:\\=/%",
+            "echo build at: %build:\\=/%",
+            "echo sdk at  : %sdk:\\=/%",
+            "echo prod at : %prod:\\=/%",
+            "cd /d %src_path%"
+        ],
+        "open.dir": [
+            "if not exist \"%1\" ( echo has no this dir. & exit /b 0)",
+            "start %1"
+        ],
+        "open.tool": [
             "start ${root.tools}/%1.exe.lnk"
         ],
         "qqtsh": [
             "cd ${root.src}",
             "call %1"
+        ],
+        "android.sdk": [
+            "${android.sdk}/\"SDK Manager.exe\""
         ]
     }
 }
