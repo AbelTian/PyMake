@@ -2486,7 +2486,7 @@ def main_function():
         localenv['PYMAKESOURCEFILE'] = sourceconfigfile
         localenv['PYMAKESOURCEROOT'] = sourceroot
         localenv['PYMAKESOURCECONFIG'] = sourcefile
-        localenv['PYMAKESOURCEWORKROOT'] = shellroot
+        localenv['PYMAKEDEFAULTWORKROOT'] = shellroot
         if(args['here'] or args['hh'] is True):
             localenv['PYMAKEWORKROOT'] = pymakeworkpath
         else:
@@ -2507,7 +2507,7 @@ def main_function():
 
         localenv['path+'].append(localenv['PYMAKEPROGRAMROOT'])
         localenv['path+'].append(localenv['PYMAKESOURCEROOT'])
-        localenv['path+'].append(localenv['PYMAKESOURCEWORKROOT'])
+        localenv['path+'].append(localenv['PYMAKEDEFAULTWORKROOT'])
         localenv['path+'].append(localenv['PYMAKEWORKROOT'])
 
         #store to file
