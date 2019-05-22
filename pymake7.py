@@ -2487,7 +2487,7 @@ def main_function():
         localenv['PYMAKESOURCEROOT'] = sourceroot
         localenv['PYMAKESOURCECONFIG'] = sourcefile
         localenv['PYMAKESOURCEWORKROOT'] = shellroot
-        if(args['here'] is True):
+        if(args['here'] or args['hh'] is True):
             localenv['PYMAKEWORKROOT'] = pymakeworkpath
         else:
             localenv['PYMAKEWORKROOT'] = shellroot
@@ -6164,6 +6164,8 @@ def main_function():
                 print("please appoint your command")
                 return
 
+            #print(args['here'])
+            #print(args['hh'])
             if (args['here'] or args['hh'] is True):
                 os.chdir(pymakeworkpath)
 
