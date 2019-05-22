@@ -2446,6 +2446,91 @@ def main_function():
                         break
             step += 1
 
+    # pymake local const variable.
+    localini = sourceroot + os.path.sep + "local.ini"
+    localconf = MyConfigParser()
+    localconf.read(localini)
+    if (not localconf.has_section('local')):
+        localconf.add_section('local')
+        localconf.write(open(localini, 'w'))
+    if (not localconf.has_section('path+')):
+        localconf.add_section('path+')
+        localconf.write(open(localini, 'w'))
+    if (not localconf.has_section('variable')):
+        localconf.add_section('variable')
+        localconf.write(open(localini, 'w'))
+
+    if( not localconf.has_option('local', 'switch') ):
+        localconf.set('local', 'switch', '1')
+        localconf.write(open(localini, 'w'))
+
+    localswitch = localconf['local']['switch']
+    if(localswitch != '0' and localswitch != '1'):
+        localswitch = '1'
+        localconf.set('local', 'switch', localswitch)
+        localconf.write(open(localini, 'w'))
+
+    # set into env
+    while (True):
+        if(int(localswitch) == 0):
+            break
+
+        env = os.environ
+
+        localenv = {}
+        localenv['path+'] = []
+
+        localenv['PYMAKEDEFAULTSOURCEROOT'] = pymakesourceroot
+        localenv['PYMAKEDEFAULTSOURCECONFIG'] = pymakedefaultsourcefile
+
+        localenv['PYMAKESOURCEFILE'] = sourceconfigfile
+        localenv['PYMAKESOURCEROOT'] = sourceroot
+        localenv['PYMAKESOURCECONFIG'] = sourcefile
+        localenv['PYMAKESOURCEWORKROOT'] = shellroot
+        if(args['here'] is True):
+            localenv['PYMAKEWORKROOT'] = pymakeworkpath
+        else:
+            localenv['PYMAKEWORKROOT'] = shellroot
+
+        localenv['PYMAKEPROGRAM'] = os.path.realpath(__file__)
+        localenv['PYMAKEPROGRAMROOT'] = os.path.split(os.path.realpath(__file__))[0]
+        localenv['PYMAKEPROGRAMFILE'] = os.path.split(os.path.realpath(__file__))[1]
+
+        localenv['PYMAKEPROGRAMCONFIGURE'] = os.path.realpath(pymakeini)
+        localenv['PYMAKEPROGRAMCONFIGUREROOT'] = os.path.split(os.path.realpath(pymakeini))[0]
+        localenv['PYMAKEPROGRAMCONFIGUREFILE'] = os.path.split(os.path.realpath(pymakeini))[1]
+
+        if(getplatform() == 'Windows'):
+            localenv['PYMAKEINSTALLROOT'] = env['windir']
+        else:
+            localenv['PYMAKEINSTALLROOT'] = '/usr/local/bin'
+
+        localenv['path+'].append(localenv['PYMAKEPROGRAMROOT'])
+        localenv['path+'].append(localenv['PYMAKESOURCEROOT'])
+        localenv['path+'].append(localenv['PYMAKESOURCEWORKROOT'])
+        localenv['path+'].append(localenv['PYMAKEWORKROOT'])
+
+        #store to file
+        for (key, value) in enumerate(localenv["path+"]):
+            localconf.set('path+', str(key), value)
+
+        for (key, value) in localenv.items():
+            if (key == 'path+'):
+                continue
+            localconf.set('variable', key, value)
+
+        localconf.write(open(localini, 'w'))
+
+        #set into env
+        for (key) in localenv["path+"]:
+            env["PATH"] = key + os.path.pathsep + env["PATH"]
+
+        for (key, value) in localenv.items():
+            if (key == 'path+'):
+                continue
+            env[key] = value
+        break
+
     # raw path function, parse custom path tuple
     def raw_path(pathgroup0):
         pathgroup = copy.deepcopy(pathgroup0)
@@ -2876,7 +2961,7 @@ def main_function():
     plat = getplatform()
     cmd_codec = "utf8"
     cmd_return = "\n"
-    if(plat == "Windows"):
+    if (plat == "Windows"):
         cmd_codec = "ansi"
         # but windows, it is \r\n, python helpping me?
         cmd_return = "\n"
@@ -3060,19 +3145,6 @@ def main_function():
             value = '='.join(str(l).split('=')[1:])
             envcustomlistrawvars[key] = value
 
-        break
-
-    # set into env [False]
-    while (False):
-        env = os.environ
-        current_var = rawconfig['environ']['current']
-        dict0 = copy.deepcopy(rawconfig['environ'][current_var])
-        for (key) in dict0["path+"]:
-            env["PATH"] = key + os.path.pathsep + env["PATH"]
-        for (key, value) in dict0.items():
-            if (key == 'path+'):
-                continue
-            env[key] = value
         break
 
     #export2 command
