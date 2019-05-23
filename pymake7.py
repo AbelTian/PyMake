@@ -4713,12 +4713,12 @@ def main_function():
             if(plat == "Windows"):
                 cmd_list.append("call %s \"%s\" %s" % (languageexecfile, languageparams, '%*'))
             else:
-                cmd_list.append("%s \"%s\" %s" % (languageexecfile, languageparams, '$*'))
+                cmd_list.append("%s \"%s\" %s" % (languageexecfile, languageparams, '"$@"'))
         else:
             if(plat == "Windows"):
                 cmd_list.append("call %s \"%s\" %s" % (languageexecfile, languageparams, '%*'))
             else:
-                cmd_list.append("%s \"%s\" %s" % (languageexecfile, languageparams, '$*'))
+                cmd_list.append("%s \"%s\" %s" % (languageexecfile, languageparams, '"$@"'))
 
         # append exit 0
         cmd_list.append(cmd_exit)
@@ -4728,9 +4728,10 @@ def main_function():
             for line in cmd_list:
                 f.write(line + cmd_return)
 
-        #print("IN: execute file: %s" % cmd_execute)
-        #for cmd in cmd_list:
-        #    print(cmd)
+        print("IN: execute file: %s" % cmd_execute)
+        for cmd in cmd_list:
+            print(cmd)
+        print("---------------------------")
 
         if (plat == "Windows"):
             ""
@@ -4749,9 +4750,10 @@ def main_function():
 
         cmd_list.append(cmd_exit)
 
-        #print("CMD: call %s" % cmd_execute)
-        #for cmd in cmd_list:
-        #    print( cmd )
+        print("CMD: call %s" % cmd_execute)
+        for cmd in cmd_list:
+            print( cmd )
+        print("---------------------------")
 
         return cmd_list, name, cmd_suffix_language
 
@@ -5998,12 +6000,12 @@ def main_function():
             if(plat == "Windows"):
                 cmd_list.append("call py \"%s\" %s" % (pythonexecfile, '%*'))
             else:
-                cmd_list.append("python3 \"%s\" %s" % (pythonexecfile, '$*'))
+                cmd_list.append("python3 \"%s\" %s" % (pythonexecfile, '"$@"'))
         else:
             if(plat == "Windows"):
                 cmd_list.append("call py -c \"%s\" %s" % (pythonexecfile, '%*'))
             else:
-                cmd_list.append("python3 -c \"%s\" %s" % (pythonexecfile, '$*'))
+                cmd_list.append("python3 -c \"%s\" %s" % (pythonexecfile, '"$@"'))
 
         # append exit 0
         cmd_list.append(cmd_exit)
