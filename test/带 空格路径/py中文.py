@@ -51,14 +51,14 @@ import copy
 import types
 
 
-try:
-    import chardet
-except ModuleNotFoundError as e:
-    print("要先安装包!!! 请进入python安装目录，执行一下代码。")
-    print("pip install chardet")
-    #os._exit(1)
-finally:
-    ''
+#try:
+#    import chardet
+#except ModuleNotFoundError as e:
+#    print("要先安装包!!! 请进入python安装目录，执行一下代码。")
+#    print("pip install chardet")
+#    os._exit(1)
+#finally:
+#    ''
     
 def main_function():
     print("BBB")
