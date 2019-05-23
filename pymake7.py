@@ -2700,7 +2700,7 @@ def main_function():
 
         params_string = ""
         for param in params0:
-            params_string += param + " "
+            params_string += " \"" + param + "\" "
         #print(params_string)
 
         if ( local is True):
@@ -3589,7 +3589,7 @@ def main_function():
 
         params_string = ""
         for param in params0:
-            params_string += param + " "
+            params_string += " \"" + param + "\" "
         # print(params_string)
 
         if (local is True):
@@ -3653,6 +3653,10 @@ def main_function():
                 f.write(line + cmd_return)
         # print(cmd_execute)
 
+        #print("IN: execute file: %s" % cmd_execute)
+        #for cmd in cmd_list:
+        #    print(cmd)
+
         # if (plat == "Windows"):
         #    ""
         # else:
@@ -3663,6 +3667,10 @@ def main_function():
         cmd_list.append(cmd_exit)
 
         # print (cmd_list)
+        #print("CMD: call %s" % cmd_execute)
+        #for cmd in cmd_list:
+        #    print( cmd )
+
         return cmd_list, name
 
     #print(args)
@@ -4628,7 +4636,7 @@ def main_function():
 
         params_string = ""
         for param in params0:
-            params_string += param + " "
+            params_string += " \"" + param + "\" "
         #print(params_string)
 
         languageparams = ''
@@ -4820,8 +4828,8 @@ def main_function():
                     local = False
 
                 params0 = []
-                # print(args['--params'])
-                # print(args['<command-params>'])
+                #print(args['--params'])
+                #print(args['<command-params>'])
                 for current_var in args['--params']:
                     params0.append(current_var)
                 for current_var in args['<command-params>']:
@@ -5924,7 +5932,7 @@ def main_function():
 
         params_string = ""
         for param in params0:
-            params_string += param + " "
+            params_string += " \"" + param + "\" "
         #print(params_string)
 
         pythonexecfile = ''
@@ -6434,7 +6442,7 @@ def main_function():
 
         params_string = ""
         for param in params0:
-            params_string += param + " "
+            params_string += " \"" + param + "\" "
         #print(params_string)
 
         if ( local is True):
