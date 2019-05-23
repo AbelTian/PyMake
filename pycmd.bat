@@ -1,9 +1,6 @@
 @echo off
 
-:: pycmd.bat 在当前环境执行pymake保存的命令，自带一个环境。
-:: pycmd.bat 使用pymake的默认环境导出命令，如果用户输入环境，那么使用用户输入的环境。
-:: pycmd.bat 会导出环境进行使用。
-:: pycmd.bat 用户应当留意，导出的是否是目标环境的命令。
+:: pycmd.bat 使用某个环境，在当前目录，执行命令。
 
 if "%1" == "" (
     echo usage:
@@ -22,13 +19,13 @@ set PYPROGRAMNAME=pymake.bat
 set PYPROGRAMPATHNAME=%PYPROGRAMPATH%%PYPROGRAMNAME%
 
 
-echo starting cmd ...
-for /F %%i in ('echo %random%') do ( set "PYEXECINDEX=%%i" )
-echo cmd index: [%PYEXECINDEX%]
-for /F %%i in ('"%PYPROGRAMPATHNAME%" source root') do ( set "PYMMSOURCEROOT=%%i" )
-echo location : [%PYMMSOURCEROOT%]
-for /F %%i in ('"%PYPROGRAMPATHNAME%" source config') do ( set "PYMMSOURCECONFIG=%%i" )
-echo configure: [%PYMMSOURCECONFIG%] [1]
+rem echo starting cmd ...
+rem for /F %%i in ('echo %random%') do ( set "PYEXECINDEX=%%i" )
+rem echo cmd index: [%PYEXECINDEX%]
+rem for /F %%i in ('"%PYPROGRAMPATHNAME%" source root') do ( set "PYMMSOURCEROOT=%%i" )
+rem echo location : [%PYMMSOURCEROOT%]
+rem for /F %%i in ('"%PYPROGRAMPATHNAME%" source config') do ( set "PYMMSOURCECONFIG=%%i" )
+rem echo configure: [%PYMMSOURCECONFIG%] [1]
 
 
 for /F %%i in ('"%PYPROGRAMPATHNAME%" get current env') do ( set "PYMMDEFAULTENVNAME=%%i" )
@@ -45,15 +42,15 @@ if "%PYEXECFLAG%" == "False" (
 )
 echo environme: [%PYENVNAME%] [%PYEXECFLAG%] [USED]
 
-for /F %%i in ('"%PYPROGRAMPATHNAME%" have cmd %PYEXECNAME%') do ( set "PYEXECFLAG=%%i" )
-if "%PYEXECFLAG%" == "False" (
-    echo command  : [%PYEXECNAME%] is system wild command.
-) else (
-    echo command  : [%PYEXECNAME%] [%PYEXECFLAG%] [EXISTED]
-)
+rem for /F %%i in ('"%PYPROGRAMPATHNAME%" have cmd %PYEXECNAME%') do ( set "PYEXECFLAG=%%i" )
+rem if "%PYEXECFLAG%" == "False" (
+rem     echo command  : [%PYEXECNAME%] is system wild command.
+rem ) else (
+rem     echo command  : [%PYEXECNAME%] [%PYEXECFLAG%] [EXISTED]
+rem )
 
-for /F %%i in ('"%PYPROGRAMPATHNAME%" get default exec root') do ( set "PYMMSHELLROOT=%%i" )
-echo exec root: [%PYMMSHELLROOT%] [default]
-echo exec root: [%CD%] [here]
+rem for /F %%i in ('"%PYPROGRAMPATHNAME%" get default exec root') do ( set "PYMMSHELLROOT=%%i" )
+rem echo exec root: [%PYMMSHELLROOT%] [default]
+rem echo exec root: [%CD%] [here]
 
 call "%PYPROGRAMPATHNAME%" use %PYENVNAME% exec here %PYEXECNAME%
