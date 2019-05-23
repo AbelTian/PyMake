@@ -61,9 +61,11 @@ finally:
     ''
     
 def main_function():
-    print(BBB)
+    print("BBB")
     print(__file__)
     print(os.getcwd())
+    print(len(sys.argv))
+    print(sys.argv)
     return
 
 if __name__ == '__main__':

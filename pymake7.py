@@ -3577,6 +3577,7 @@ def main_function():
         cmd_status = "echo pymake-command-status:$LASTEXITCODE"
         cmd_sep = ';'
         cmd_suffix = ".ps1"
+        cmd_suffix_powershell = cmd_suffix
         cmd_exit = 'exit 0'
         cmd_codec = 'ansi'
         # but windows, it is \r\n, python helpping me?
@@ -3598,22 +3599,24 @@ def main_function():
             #actually now has only one command.
             for cmd in list0:
                 # warning: now pymake is in user setted workroot.
+                if(str(cmd).endswith(cmd_suffix_powershell)):
+                    cmd_suffix_powershell = ''
 
                 powershellexecfile = ""
                 while(True):
                     # find in current path [+workroot]
-                    powershellexecfile = pymakeworkpath + os.path.sep + cmd + cmd_suffix
+                    powershellexecfile = pymakeworkpath + os.path.sep + cmd + cmd_suffix_powershell
                     if(os.path.exists(powershellexecfile)):
                         break
 
-                    powershellexecfile = os.getcwd() + os.path.sep + cmd + cmd_suffix
+                    powershellexecfile = os.getcwd() + os.path.sep + cmd + cmd_suffix_powershell
                     if(os.path.exists(powershellexecfile)):
                         break
 
                     # find in .json environ
                     find_flag = 0
                     for path0 in rawconfig['environ'][env_name]['path+']:
-                        powershellexecfile = path0 + os.path.sep + cmd + cmd_suffix
+                        powershellexecfile = path0 + os.path.sep + cmd + cmd_suffix_powershell
                         if (os.path.exists(powershellexecfile)):
                             find_flag = 1
                             break
@@ -3624,7 +3627,7 @@ def main_function():
                     env = os.environ
                     find_flag = 0
                     for path0 in env["PATH"].split(os.path.pathsep):
-                        powershellexecfile = path0 + os.path.sep + cmd + cmd_suffix
+                        powershellexecfile = path0 + os.path.sep + cmd + cmd_suffix_powershell
                         if (os.path.exists(powershellexecfile)):
                             find_flag = 1
                             break
@@ -4696,8 +4699,8 @@ def main_function():
             for cmd in list0:
                 languageexecfile = cmd
 
-        print(3, languageexecfile)
-        print(3, languageparams)
+        #print(3, languageexecfile)
+        #print(3, languageparams)
         if(os.path.isfile(languageparams)):
             if(plat == "Windows"):
                 cmd_list.append("call %s \"%s\" %s" % (languageexecfile, languageparams, '%*'))
@@ -4717,9 +4720,9 @@ def main_function():
             for line in cmd_list:
                 f.write(line + cmd_return)
 
-        print("IN: execute file: %s" % cmd_execute)
-        for cmd in cmd_list:
-            print(cmd)
+        #print("IN: execute file: %s" % cmd_execute)
+        #for cmd in cmd_list:
+        #    print(cmd)
 
         if (plat == "Windows"):
             ""
@@ -4738,9 +4741,9 @@ def main_function():
 
         cmd_list.append(cmd_exit)
 
-        print("CMD: call %s" % cmd_execute)
-        for cmd in cmd_list:
-            print( cmd )
+        #print("CMD: call %s" % cmd_execute)
+        #for cmd in cmd_list:
+        #    print( cmd )
 
         return cmd_list, name, cmd_suffix_language
 
@@ -4822,8 +4825,8 @@ def main_function():
                 current_var = args['<command-param>']
                 list1.append(current_var)
 
-                print(list0)
-                print(list1)
+                #print(list0)
+                #print(list1)
 
                 params0 = []
                 # print(args['--params'])
@@ -5932,6 +5935,8 @@ def main_function():
             #actually now has only one command.
             for cmd in list0:
                 # warning: now pymake is in user setted workroot.
+                if(str(cmd).endswith(cmd_suffix_python)):
+                    cmd_suffix_python = ''
 
                 pythonexecfile = ""
                 while(True):
