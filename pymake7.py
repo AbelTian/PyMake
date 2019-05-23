@@ -197,6 +197,7 @@ Usage:
   pymake7.py  language
   pymake7.py  language [ info | information ]
   pymake7.py  language [ stat | status ]
+  pymake7.py  language clean [ here | hh ] [ --suffix=<.suffix-name> ]
   pymake7.py  language type [ here | hh ] [ <cmd-name> ] [ to <file-name> ] [ --suffix=<.suffix-name> ] [ --encoding=<encoding-name> ]
   pymake7.py  language use <env-name> type [ here | hh ] [ <cmd-name> ]  [ to <file-name> ] [ --suffix=<.suffix-name> ] [ --encoding=<encoding-name> ]
   pymake7.py  language exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ] [ --suffix=<.suffix-name> ] [ --encoding=<encoding-name> ]
@@ -4728,10 +4729,10 @@ def main_function():
             for line in cmd_list:
                 f.write(line + cmd_return)
 
-        print("IN: execute file: %s" % cmd_execute)
-        for cmd in cmd_list:
-            print(cmd)
-        print("---------------------------")
+        #print("IN: execute file: %s" % cmd_execute)
+        #for cmd in cmd_list:
+        #    print(cmd)
+        #print("---------------------------")
 
         if (plat == "Windows"):
             ""
@@ -4750,10 +4751,10 @@ def main_function():
 
         cmd_list.append(cmd_exit)
 
-        print("CMD: call %s" % cmd_execute)
-        for cmd in cmd_list:
-            print( cmd )
-        print("---------------------------")
+        #print("CMD: call %s" % cmd_execute)
+        #for cmd in cmd_list:
+        #    print( cmd )
+        #print("---------------------------")
 
         return cmd_list, name, cmd_suffix_language
 
