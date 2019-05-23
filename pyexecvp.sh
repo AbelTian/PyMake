@@ -14,9 +14,6 @@ if [ "$1" = "" ]; then
 fi
 export PYEXECNAME=$1
 
-if [ "$3" != "" ]; then
-    export PYENVNAME=$3
-fi
 export PYEXECNAME=$1
 export PYEXECPARAM=$2
 export PYENVNAME=$3
@@ -68,18 +65,18 @@ export PYPROGRAMPATHNAME=$PYPROGRAMPATH/$PYPROGRAMNAME
 #echo $(filename "$0")
 #echo $0 | awk -F'\' '{print $NF}'
 
-echo starting cmd ...
-export PYEXECINDEX=$(echo $RANDOM)
-echo env index: \[$PYEXECINDEX\]
+#echo starting cmd ...
+#export PYEXECINDEX=$(echo $RANDOM)
+#echo env index: \[$PYEXECINDEX\]
 
-export PYMMSOURCEROOT=$("${PYPROGRAMPATHNAME}" source root)
-echo location : \[$PYMMSOURCEROOT\]
+#export PYMMSOURCEROOT=$("${PYPROGRAMPATHNAME}" source root)
+#echo location : \[$PYMMSOURCEROOT\]
 
-export PYMMSOURCECONFIG=$("$PYPROGRAMPATHNAME" source config)
-echo configure: \[$PYMMSOURCECONFIG\] \[1\]
+#export PYMMSOURCECONFIG=$("$PYPROGRAMPATHNAME" source config)
+#echo configure: \[$PYMMSOURCECONFIG\] \[1\]
 
 export PYMMDEFAULTENVNAME=$("$PYPROGRAMPATHNAME" get current env)
-echo environme: \[$PYMMDEFAULTENVNAME\] \[default\]
+#echo environme: \[$PYMMDEFAULTENVNAME\] \[default\]
 #echo $1 $2 $3
 if [ "$3" != "" ]; then
     export PYENVNAME=$3
@@ -92,21 +89,27 @@ if [ "$PYEXECFLAG" = "False" ]; then
     echo environme: \[$PYENVNAME\] is not existed.
     break
 fi
-echo environme: \[$PYENVNAME\] \[$PYEXECFLAG\] \[USED\]
+#echo environme: \[$PYENVNAME\] \[$PYEXECFLAG\] \[USED\]
 
-export PYEXECFLAG=$("$PYPROGRAMPATHNAME" have cmd $PYEXECNAME)
-if [ "$PYEXECFLAG" = "False" ]; then
-    echo command\ \ : \[$PYEXECNAME\] is system wild command.
-else
-    echo command\ \ : \[$PYEXECNAME\] \[$PYEXECFLAG\] \[EXISTED\]
-fi
+#export PYEXECFLAG=$("$PYPROGRAMPATHNAME" have cmd $PYEXECNAME)
+#if [ "$PYEXECFLAG" = "False" ]; then
+#    echo command\ \ : \[$PYEXECNAME\] is system wild command.
+#else
+#    echo command\ \ : \[$PYEXECNAME\] \[$PYEXECFLAG\] \[EXISTED\]
+#fi
 
-export PYMMSHELLROOT=$("$PYPROGRAMPATHNAME" get default exec root)
-echo exec root: \[$PYMMSHELLROOT\] \[default\]
-echo exec root: \[$(pwd)\] \[here\]
+#export PYMMSHELLROOT=$("$PYPROGRAMPATHNAME" get default exec root)
+#echo exec root: \[$PYMMSHELLROOT\] \[default\]
+#echo exec root: \[$(pwd)\] \[here\]
 
+#echo $PYEXECPARAM
 #echo "$PYPROGRAMPATHNAME" use $PYENVNAME exec-with-params here $PYEXECNAME --params "$PYEXECPARAM"
-"$PYPROGRAMPATHNAME" use $PYENVNAME exec-with-params here $PYEXECNAME --params "$PYEXECPARAM"
+if [ "$PYEXECPARAM" != "" ]; then
+    #echo .....
+    "$PYPROGRAMPATHNAME" use $PYENVNAME exec-with-params here $PYEXECNAME --params "$PYEXECPARAM"
+else
+    "$PYPROGRAMPATHNAME" use $PYENVNAME exec-with-params here $PYEXECNAME
+fi
 
 break
 done
