@@ -199,12 +199,12 @@ Usage:
   pymake7.py  language [ stat | status ]
   pymake7.py  language type [ here | hh ] [ <cmd-name> ] [ to <file-name> ] [ --suffix=<.suffix-name> ] [ --encoding=<encoding-name> ]
   pymake7.py  language use <env-name> type [ here | hh ] [ <cmd-name> ]  [ to <file-name> ] [ --suffix=<.suffix-name> ] [ --encoding=<encoding-name> ]
-  pymake7.py  language exec-with-params [ here | hh ] [ <command-name> ] [ <command-param> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ] [ --suffix=<.suffix-name> ] [ --encoding=<encoding-name> ]
-  pymake7.py  language use <env-name> exec-with-params [ here | hh ] [ <command-name> ] [ <command-param> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ] [ --suffix=<.suffix-name> ] [ --encoding=<encoding-name> ]
-  pymake7.py  language execvp [ here | hh ] [ <command-name> ] [ <command-param> ] [ <command-params> ... ]
-  pymake7.py  language use <env-name> execvp [ here | hh ] [ <command-name> ] [ <command-param> ] [ <command-params> ... ]
-  pymake7.py  language ccvp [ here | hh ] [ <command-name> ] [ <command-param> ] [ <command-params> ... ]
-  pymake7.py  language use <env-name> ccvp [ here | hh ] [ <command-name> ] [ <command-param> ] [ <command-params> ... ]
+  pymake7.py  language exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ] [ --suffix=<.suffix-name> ] [ --encoding=<encoding-name> ]
+  pymake7.py  language use <env-name> exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ] [ --suffix=<.suffix-name> ] [ --encoding=<encoding-name> ]
+  pymake7.py  language execvp [ here | hh ] [ <command-name> ] [ <command-params> ... ]
+  pymake7.py  language use <env-name> execvp [ here | hh ] [ <command-name> ] [ <command-params> ... ]
+  pymake7.py  language ccvp [ here | hh ] [ <command-name> ] [ <command-params> ... ]
+  pymake7.py  language use <env-name> ccvp [ here | hh ] [ <command-name> ] [ <command-params> ... ]
   pymake7.py  -------------------------------------------------------------
   pymake7.py  (-h | --help)
   pymake7.py  --version
@@ -4819,15 +4819,6 @@ def main_function():
                     list0.append(current_var)
                     local = False
 
-                list1 = []
-                #for current_var in str(args['<command-param>']).split():
-                #    list1.append(current_var)
-                current_var = args['<command-param>']
-                list1.append(current_var)
-
-                #print(list0)
-                #print(list1)
-
                 params0 = []
                 # print(args['--params'])
                 # print(args['<command-params>'])
@@ -4836,9 +4827,22 @@ def main_function():
                 for current_var in args['<command-params>']:
                     params0.append(current_var)
 
+                list1 = []
+                #for current_var in str(args['<command-param>']).split():
+                #    list1.append(current_var)
+                if (params0.__len__() > 0):
+                    current_var = params0[0]
+                    list1.append(current_var)
+                    params0.pop(0)
+
                 suffix = args['--suffix']
                 encoding = args['--encoding']
-                #print(suffix, encoding)
+
+                #print(list0)
+                #print(list1)
+                #print(params0)
+                #print(suffix)
+                #print(encoding)
 
                 cmd_list = []
                 temp_file_name = ""
