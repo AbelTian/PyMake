@@ -5,7 +5,7 @@
 
 if ""%1"" == """" (
     echo usage:
-    echo "  pyexecvp <cmd-name> [ <cmd-params> ... ]"
+    echo "  pylanguage <cmd-name> [ <cmd-params> ... ]"
     echo -----
     echo please appoint a cmd name. & exit /b 0
 )
