@@ -39,6 +39,10 @@ set sourcefile=pypowershell.bat
 set mmfile=pypowershell.bat
 call :uninstall
 
+set sourcefile=pylanguage.bat
+set mmfile=pylanguage.bat
+call :uninstall
+
 set sourcefile=pyinfo.bat
 set mmfile=pyinfo.bat
 call :uninstall

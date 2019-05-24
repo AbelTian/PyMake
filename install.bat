@@ -48,6 +48,11 @@ set filepath=%~dp0
 set sourcefile=pypowershell.bat
 call :install %*
 
+set mmfile=pylanguage.bat
+set filepath=%~dp0
+set sourcefile=pylanguage.bat
+call :install %*
+
 set mmfile=pyinfo.bat
 set filepath=%~dp0
 set sourcefile=pyinfo.bat
