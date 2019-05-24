@@ -37,14 +37,22 @@ set WORKROOT=%WORKROOT%\MyShell
 set WORKROOT=%WORKROOT:/=\\%
 md %WORKROOT%
 
-set command=pymake language exec-with-params python --params py中文.py --workroot %WORKROOT%
+set command=pymake language exec-with-params py --params py中文.py --workroot %WORKROOT%
 echo %command%
 call %command%
+echo --------------------------------------------
 
-set command=pymake language exec-with-params python --params py中文.py --params "你好 中国" --params "你好 美国" --params "Hello Japanese" --params %WORKROOT%
+set command=pymake language exec-with-params py --params py中文.py --params "你好 中国" --params "你好 美国" --params "Hello Japanese" --params %WORKROOT%
 echo %command%
 call %command%
+echo --------------------------------------------
 
-set command=pymake language exec-with-params here python --params py中文.py
+set command=pymake language exec-with-params here py --params py中文.py
 echo %command%
 call %command%
+echo --------------------------------------------
+
+set command=pylanguage py py中文.py "你好 中国" "你好 美国" "你好 俄罗斯"
+echo %command%
+call %command%
+echo --------------------------------------------
