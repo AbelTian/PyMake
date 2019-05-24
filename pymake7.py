@@ -6129,14 +6129,16 @@ def main_function():
 
         # append exit 0
         cmd_list.append(cmd_exit)
-        #for cmd in cmd_list:
-        #    print( cmd )
 
         cmd_execute = name + "_exec" + cmd_suffix
         with open(cmd_execute, "w", encoding=cmd_codec) as f:
             for line in cmd_list:
                 f.write(line + cmd_return)
         #print(cmd_execute)
+        #print("IN execute: %s" % cmd_execute)
+        #for cmd in cmd_list:
+        #    print( cmd )
+        #print("---------------------------")
 
         if (plat == "Windows"):
             ""
@@ -6154,8 +6156,11 @@ def main_function():
             cmd_list.append("./" + cmd_execute + ' ' + params_string + cmd_sep + ' ' + cmd_status)
 
         cmd_list.append(cmd_exit)
+
+        #print("CMD execute: %s" % cmd_execute)
         #for cmd in cmd_list:
         #    print( cmd )
+        #print("---------------------------")
 
         return cmd_list, name
 

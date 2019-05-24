@@ -22,6 +22,7 @@ export PYEXECPARAM7=$7
 export PYEXECPARAM8=$8
 export PYEXECPARAM9=$9
 
+
 #if has source[.] call , failed. source default work path is user home.
 #这些都只是获取到了工作路径
 #used for a link to sh
@@ -108,26 +109,36 @@ export PYENVNAME=current
 #echo exec root: \[$(pwd)\] \[here\]
 
 #echo $PYEXECPARAM
-#echo "$PYPROGRAMPATHNAME" use $PYENVNAME exec-with-params here $PYEXECNAME --params "$PYEXECPARAM"
+#echo $PYEXECPARAM2
+#echo $PYEXECPARAM3
+#echo $PYEXECPARAM4
+#echo $PYEXECPARAM5
+#echo $PYEXECPARAM6
+#echo $PYEXECPARAM7
+#echo $PYEXECPARAM8
+#echo $PYEXECPARAM9
+#echo "$PYPROGRAMPATHNAME" use $PYENVNAME exec-with-params here "$PYEXECNAME" --params "$PYEXECPARAM2" --params "$PYEXECPARAM3" --params "$PYEXECPARAM4" --params "$PYEXECPARAM5" --params "$PYEXECPARAM6" --params "$PYEXECPARAM7" --params "$PYEXECPARAM8" --params "$PYEXECPARAM9"
+
+
 if [ "$PYEXECPARAM9" != "" ]; then
-    "$PYPROGRAMPATHNAME" use $PYENVNAME exec-with-params here $PYEXECNAME --params "$PYEXECPARAM2" --params "$PYEXECPARAM3" --params "$PYEXECPARAM4" --params "$PYEXECPARAM5" --params "$PYEXECPARAM6" --params "$PYEXECPARAM7" --params "$PYEXECPARAM8" --params "$PYEXECPARAM9"
+    "$PYPROGRAMPATHNAME" language use $PYENVNAME exec-with-params here "$PYEXECNAME" --params "$PYEXECPARAM2" --params "$PYEXECPARAM3" --params "$PYEXECPARAM4" --params "$PYEXECPARAM5" --params "$PYEXECPARAM6" --params "$PYEXECPARAM7" --params "$PYEXECPARAM8" --params "$PYEXECPARAM9"
 elif [ "$PYEXECPARAM8" != "" ]; then
-    "$PYPROGRAMPATHNAME" use $PYENVNAME exec-with-params here $PYEXECNAME --params "$PYEXECPARAM2" --params "$PYEXECPARAM3" --params "$PYEXECPARAM4" --params "$PYEXECPARAM5" --params "$PYEXECPARAM6" --params "$PYEXECPARAM7" --params "$PYEXECPARAM8"
+    "$PYPROGRAMPATHNAME" language use $PYENVNAME exec-with-params here "$PYEXECNAME" --params "$PYEXECPARAM2" --params "$PYEXECPARAM3" --params "$PYEXECPARAM4" --params "$PYEXECPARAM5" --params "$PYEXECPARAM6" --params "$PYEXECPARAM7" --params "$PYEXECPARAM8"
 elif [ "$PYEXECPARAM7" != "" ]; then
-    "$PYPROGRAMPATHNAME" use $PYENVNAME exec-with-params here $PYEXECNAME --params "$PYEXECPARAM2" --params "$PYEXECPARAM3" --params "$PYEXECPARAM4" --params "$PYEXECPARAM5" --params "$PYEXECPARAM6" --params "$PYEXECPARAM7"
+    "$PYPROGRAMPATHNAME" language use $PYENVNAME exec-with-params here "$PYEXECNAME" --params "$PYEXECPARAM2" --params "$PYEXECPARAM3" --params "$PYEXECPARAM4" --params "$PYEXECPARAM5" --params "$PYEXECPARAM6" --params "$PYEXECPARAM7"
 elif [ "$PYEXECPARAM6" != "" ]; then
-    "$PYPROGRAMPATHNAME" use $PYENVNAME exec-with-params here $PYEXECNAME --params "$PYEXECPARAM2" --params "$PYEXECPARAM3" --params "$PYEXECPARAM4" --params "$PYEXECPARAM5" --params "$PYEXECPARAM6"
+    "$PYPROGRAMPATHNAME" language use $PYENVNAME exec-with-params here "$PYEXECNAME" --params "$PYEXECPARAM2" --params "$PYEXECPARAM3" --params "$PYEXECPARAM4" --params "$PYEXECPARAM5" --params "$PYEXECPARAM6"
 elif [ "$PYEXECPARAM5" != "" ]; then
-    "$PYPROGRAMPATHNAME" use $PYENVNAME exec-with-params here $PYEXECNAME --params "$PYEXECPARAM2" --params "$PYEXECPARAM3" --params "$PYEXECPARAM4" --params "$PYEXECPARAM5"
+    "$PYPROGRAMPATHNAME" language use $PYENVNAME exec-with-params here "$PYEXECNAME" --params "$PYEXECPARAM2" --params "$PYEXECPARAM3" --params "$PYEXECPARAM4" --params "$PYEXECPARAM5"
 elif [ "$PYEXECPARAM4" != "" ]; then
-    "$PYPROGRAMPATHNAME" use $PYENVNAME exec-with-params here $PYEXECNAME --params "$PYEXECPARAM2" --params "$PYEXECPARAM3" --params "$PYEXECPARAM4"
+    "$PYPROGRAMPATHNAME" language use $PYENVNAME exec-with-params here "$PYEXECNAME" --params "$PYEXECPARAM2" --params "$PYEXECPARAM3" --params "$PYEXECPARAM4"
 elif [ "$PYEXECPARAM3" != "" ]; then
-    "$PYPROGRAMPATHNAME" use $PYENVNAME exec-with-params here $PYEXECNAME --params "$PYEXECPARAM2" --params "$PYEXECPARAM3"
+    "$PYPROGRAMPATHNAME" language use $PYENVNAME exec-with-params here "$PYEXECNAME" --params "$PYEXECPARAM2" --params "$PYEXECPARAM3"
 elif [ "$PYEXECPARAM2" != "" ]; then
     #echo .....
-    "$PYPROGRAMPATHNAME" use $PYENVNAME exec-with-params here $PYEXECNAME --params "$PYEXECPARAM2"
+    "$PYPROGRAMPATHNAME" language use $PYENVNAME exec-with-params here "$PYEXECNAME" --params "$PYEXECPARAM2"
 else
-    "$PYPROGRAMPATHNAME" use $PYENVNAME exec-with-params here $PYEXECNAME
+    "$PYPROGRAMPATHNAME" language use $PYENVNAME exec-with-params here "$PYEXECNAME"
 fi
 
 break
