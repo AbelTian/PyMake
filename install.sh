@@ -41,6 +41,10 @@ sourcefile=pyccvp.sh
 mmfile=pyccvp
 install
 
+sourcefile=pylanguage.sh
+mmfile=pylanguage
+install
+
 sourcefile=pyinfo.sh
 mmfile=pyinfo
 install

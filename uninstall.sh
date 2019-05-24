@@ -30,6 +30,9 @@ uninstall
 mmfile=pyccvp
 uninstall
 
+mmfile=pylanguage
+uninstall
+
 mmfile=pyinfo
 uninstall
 
