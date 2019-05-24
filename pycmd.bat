@@ -29,7 +29,7 @@ rem echo configure: [%PYMMSOURCECONFIG%] [1]
 
 
 for /F %%i in ('"%PYPROGRAMPATHNAME%" get current env') do ( set "PYMMDEFAULTENVNAME=%%i" )
-echo environme: [%PYMMDEFAULTENVNAME%] [default]
+rem echo environme: [%PYMMDEFAULTENVNAME%] [default]
 if not "%2" == "" (
     set PYENVNAME=%2
 ) else (
@@ -40,7 +40,7 @@ if "%PYEXECFLAG%" == "False" (
     echo environme: [%PYENVNAME%] is not existed.
     exit /b 0
 )
-echo environme: [%PYENVNAME%] [%PYEXECFLAG%] [USED]
+rem echo environme: [%PYENVNAME%] [%PYEXECFLAG%] [USED]
 
 rem for /F %%i in ('"%PYPROGRAMPATHNAME%" have cmd %PYEXECNAME%') do ( set "PYEXECFLAG=%%i" )
 rem if "%PYEXECFLAG%" == "False" (
