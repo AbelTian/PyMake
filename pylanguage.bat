@@ -44,6 +44,7 @@ rem echo configure: [%PYMMSOURCECONFIG%] [1]
 rem for /F %%i in ('"%PYPROGRAMPATHNAME%" get current env') do ( set "PYMMDEFAULTENVNAME=%%i" )
 rem echo environme: [%PYMMDEFAULTENVNAME%] [default]
 rem set PYENVNAME=%PYMMDEFAULTENVNAME%
+set PYENVNAME=current
 
 rem for /F %%i in ('"%PYPROGRAMPATHNAME%" have env %PYENVNAME%') do ( set "PYEXECFLAG=%%i" )
 rem if "%PYEXECFLAG%" == "False" (
