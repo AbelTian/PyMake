@@ -6589,6 +6589,11 @@ def main_function():
                 f.write(line + cmd_return)
         #print(cmd_execute)
 
+        #print("IN: execute %s" % cmd_execute)
+        #for cmd in cmd_list:
+        #    print(cmd)
+        #print("----------------------------------------------")
+
         if (plat == "Windows"):
             ""
         else:
@@ -6607,6 +6612,11 @@ def main_function():
         cmd_list.append(cmd_exit)
 
         # print (cmd_list)
+        #print("CMD: execute %s" % cmd_execute)
+        #for cmd in cmd_list:
+        #    print(cmd)
+        #print("----------------------------------------------")
+
         return cmd_list, name
 
     # use env exec-with-params/execvp/ccvp command

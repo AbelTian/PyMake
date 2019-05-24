@@ -12,12 +12,12 @@
         "root.webrc": "${root}/e2-webrc",
         "cc": "${root.tool}/a0-Compiler",
         "wincc": "${root.tool}/winCompilers",
-        "python-install":"C:/Users/Administrator/AppData/Local/Programs/Python",
-        "py27":"${python-install}/Python27",
-        "py36":"${python-install}/Python36",
-        "py37":"${python-install}/Python37",
-        "py":"${py37}",
-        "py.bin":"${py};${py}/Scripts",
+        "python-install": "C:/Users/Administrator/AppData/Local/Programs/Python",
+        "py27": "${python-install}/Python27",
+        "py36": "${python-install}/Python36",
+        "py37": "${python-install}/Python37",
+        "py": "${py37}",
+        "py.bin": "${py};${py}/Scripts",
         "pymake": "${root.tool}/a0-compiler/PyMake",
         "pymake.env": "${pymake}/UserSource",
         "pymake.shell": "${pymake.env}/UserShell",
@@ -110,7 +110,11 @@
         "perl": "${wincc}/perl_5.26.0.1_64",
         "perl.bin": "${perl}/perl/bin",
         "xmake": "${wincc}/xmake",
-        "ninja": "${wincc}/ninja"
+        "ninja": "${wincc}/ninja",
+        "lua": "${wincc}/lua53",
+        "php64": "${wincc}/php-7.3.5-Win32-VC15-x64",
+        "php": "${php64}",
+        "go.bin": "${wincc}/go1.12.5.windows-amd64/go/bin"
     },
     "environ": {
         "android.mobile": {
@@ -293,6 +297,32 @@
             "WIPFC": "${watcom.wipfc}",
             "INCLUDE": "${watcom.include}"
         },
+        "other2": {
+            "path+": [
+                "${doxygen.bin}",
+                "${graphviz.bin}",
+                "${perl.bin}",
+                "${xmake}",
+                "${watcom.bin}",
+                "${ninja}",
+                "${java1.8.bin}",
+                "${py.bin}",
+                "${lua}",
+                "${php}",
+                "${go.bin}",
+                "${cmake.bin}",
+                "${mingw32.bin}",
+                "${qt5.9.mingw32.bin}"
+            ],
+            "CMAKEGENERATOR": "MinGW Makefiles",
+            "make0": "mingw32-make",
+            "QTVERSION": "${qt5.9.version}",
+            "QTDIR": "${qt5.9.mingw32}",
+            "QTSPEC": "-spec win32-g++",
+            "QTCONFIG": "",
+            "QKIT": "WIN32",
+            "QSYS": "Windows"
+        },
         "current": "qt5"
     },
     "variable-assemblage": {
@@ -396,6 +426,8 @@
         ],
         "open.prodd": [
             "set prod=%1",
+            "echo %prod%",
+            "echo ${root.prod}/%prod%/Windows/%prod%d.exe",
             "cd /d ${root.prod}/%prod%/Windows",
             "start ${root.prod}/%prod%/Windows/%prod%d.exe"
         ],
@@ -441,10 +473,11 @@
             "cd /d %projectroot%",
             "set apptoolroot=${root.prod}/QQtApplicationCreator/Windows",
             "set apptool=%apptoolroot%/QQtApplicationCreatord.exe",
+            "set projectroot=%projectroot:\\=/%",
             "echo %projectroot%",
             "echo %apptool%",
             "call %apptool% clean ",
-            "start %apptool% output %projectroot% "
+            "start %apptool% output \"%projectroot%\" "
         ],
         "add.project.2": [
             "set src_path=%CD%",
@@ -456,10 +489,11 @@
             "cd /d %projectroot%",
             "set apptoolroot=${root.prod}/QQtApplicationCreator-Multipel/Windows",
             "set apptool=%apptoolroot%/QQtApplicationCreator-Multipeld.exe",
+            "set projectroot=%projectroot:\\=/%",
             "echo %projectroot%",
             "echo %apptool%",
             "call %apptool% clean ",
-            "start %apptool% output %projectroot% "
+            "start %apptool% output \"%projectroot%\" "
         ],
         "add.project.lib": [
             "set src_path=%CD%",
@@ -471,10 +505,11 @@
             "cd /d %projectroot%",
             "set apptoolroot=${root.prod}/QQtLibraryCreator/Windows",
             "set apptool=%apptoolroot%/QQtLibraryCreatord.exe",
+            "set projectroot=%projectroot:\\=/%",
             "echo %projectroot%",
             "echo %apptool%",
             "call %apptool% clean ",
-            "start %apptool% output %projectroot% "
+            "start %apptool% output \"%projectroot%\" "
         ],
         "add.project.lib.2": [
             "set src_path=%CD%",
@@ -486,10 +521,11 @@
             "cd /d %projectroot%",
             "set apptoolroot=${root.prod}/QQtLibraryCreator-Multipel/Windows",
             "set apptool=%apptoolroot%/QQtLibraryCreator-Multipeld.exe",
+            "set projectroot=%projectroot:\\=/%",
             "echo %projectroot%",
             "echo %apptool%",
             "call %apptool% clean ",
-            "start %apptool% output %projectroot% "
+            "start %apptool% output \"%projectroot%\" "
         ],
         "add.sdk": [
             "if not exist \"*.pro\" ( echo has any .pro? please add here command to restrict. & exit /b 0 )",
@@ -503,7 +539,8 @@
             "set sdktool=%sdktoolroot%/AddLibraryToold.exe",
             "if not exist \"%sdktool%\" ( echo %sdktool% is not exist. please build it in debug mode. & exit /b 0)",
             "cd /d %sdktoolroot%",
-            "start %sdktool% output %src_path% "
+            "set projectroot=%src_path:\\=/%",
+            "start %sdktool% output \"%projectroot%\" "
         ],
         "add.sdk.2": [
             "if not exist \"*.pro\" ( echo has any .pro? please add here command to restrict. & exit /b 0 )",
@@ -517,7 +554,8 @@
             "set sdktool=%sdktoolroot%/AddLibraryTool-Multipled.exe",
             "if not exist \"%sdktool%\" ( echo %sdktool% is not exist. please build it in debug mode. & exit /b 0)",
             "cd /d %sdktoolroot%",
-            "start %sdktool% output %src_path% "
+            "set projectroot=%src_path:\\=/%",
+            "start %sdktool% output \"%projectroot%\" "
         ],
         "build.qmake": [
             "if not exist \"*.pro\" ( echo has any .pro? please add here command to restrict. & exit /b 0 )",
@@ -560,10 +598,18 @@
             "echo build at: %build:\\=/%",
             "echo sdk at  : %sdk:\\=/%",
             "echo prod at : %prod:\\=/%",
+            "echo profilename=%profilename%",
             "echo ${QTSPEC} ${QTCONFIG}",
-            "set exe=%build%\\debug\\%profilename%.exe",
+            "set exeroot=%build%\\debug",
+            "set exeroot=%exeroot:\\=/%",
+            "set relativepath=%2",
+            "rem if not \"\"%relativepath%\"\" == \"\"\"\" ( set relativepath=%relativepath:\\=/% )",
+            "rem echo [%relativepath%]",
+            "set exe=%build%\\debug\\%relativepath%\\%profilename%d.exe",
+            "set exe=%exe:\\=/%",
             "echo %exe%",
-            "if not exist \"%exe%\" ( echo %profilename%.exe is not exist. & exit /b 0)",
+            "if not exist \"%exe%\" ( echo %profilename%d.exe is not exist. & exit /b 0)",
+            "cd /d %exeroot:/=\\%",
             "start %exe%",
             "echo build inf ${QTSPEC} ${QTCONFIG}",
             "echo src file: %src:\\=/%",
@@ -660,6 +706,38 @@
         ],
         "android.sdk": [
             "${android.sdk}/\"SDK Manager.exe\""
+        ],
+        "build.cmake.2": [
+            "if not exist \"CMakeLists.txt\" ( echo has any CMakeLists.txt? please add here command to restrict. & exit /b 0 )",
+            "set src_path=%CD%",
+            "set profilename=%1",
+            "if \"\"%profilename%\"\" == \"\"\"\" ( echo please input a project name. & exit /b 0 )",
+            "set src=%src_path%/CMakeLists.txt",
+            "set prod=${root.prod}/%profilename%/${QSYS}",
+            "set sdk=${root.sdk}/%profilename%/${QSYS}",
+            "set build=${root.build}/%profilename%/${QSYS}/${QTVERSION}/Debug",
+            "md %build:/=\\%",
+            "cd /d %build%",
+            "rem del /f /q demo examples src test",
+            "echo Qt spec: ${QTSPEC} ${QTCONFIG}",
+            "echo src file: %src:\\=/%",
+            "echo build at: %build%",
+            "echo sdk at  : %sdk:\\=/%",
+            "echo prod at : %prod:\\=/%",
+            "set cmake-command=cmake %src_path% -G\"${CMAKEGENERATOR}\" -DCMAKE_INSTALL_PREFIX=${root.prod}/%profilename%/${QSYS} -DCMAKE_BUILD_TYPE=Debug",
+            "echo %cmake-command%",
+            "call %cmake-command%",
+            "if not %ERRORLEVEL% == 0 ( echo cmake exit code: %ERRORLEVEL% & exit /b %ERRORLEVEL% )",
+            "call ${make0}",
+            "rem call ${make0} install",
+            "rem cmake --build .",
+            "echo %cmake-command%",
+            "echo Qt inf  : ${QTSPEC} ${QTCONFIG}",
+            "echo src file: %src:\\=/%",
+            "echo build at: %build:\\=/%",
+            "echo sdk at  : %sdk:\\=/%",
+            "echo prod at : %prod:\\=/%",
+            "cd /d %src_path%"
         ]
     }
 }
