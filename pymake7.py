@@ -4775,7 +4775,126 @@ def main_function():
                 else:
                     print("Normal")
                 return
+            elif(args['clean'] is True):
+                if (args['here'] or args['hh'] is True):
+                    os.chdir(pymakeworkpath)
+
+                #print(args['--suffix'])
+                suffix = args['--suffix']
+                if(suffix is None):
+                    suffix  = ''
+                filename = str("*_exec%s" % suffix)
+
+                plat = getplatform()
+                if (plat == "Windows"):
+                    os.system(str("@del /f /q %s *_effect.bat *_unset.bat *_exec.bat" % filename))
+                else:
+                    os.system(str("rm -f %s *_effect.sh *_unset.sh *_exec.sh" % filename))
+
+                return
             elif (args['type'] is True):
+                current_env = ""
+
+                if (args['use'] is True):
+                    if (args['<env-name>'] is None):
+                        print("please appoint a environ")
+                        return
+
+                    if (rawconfig['environ'].__contains__(args['<env-name>']) is False):
+                        print("please ensure the environ is right")
+                        return
+
+                    current_env = args['<env-name>']
+                    if (args['<env-name>'] == "current"):
+                        current_env = rawconfig['environ']['current']
+
+                    if (rawconfig['environ'].__contains__(current_env) is False):
+                        print(".json file is broken, environ section current env config is lost, please use set command fix it.")
+                        return
+                else:
+                    current_env = rawconfig['environ']['current']
+
+                if (args['here'] or args['hh'] is True):
+                    os.chdir(pymakeworkpath)
+
+                if (args['<cmd-name>'] is None):
+                    for (key, value) in rawconfig['command'].items():
+                        print(Fore.CYAN + "%s" % key)
+                    return
+
+                if (rawconfig['command'].__contains__(args['<cmd-name>']) is False):
+                    print("please check your command name")
+                    return
+
+                if (args['<file-name>'] is None):
+                    if (current_env == rawconfig['environ']['current']):
+                        list0 = copy.deepcopy(rawconfig['command'][args['<cmd-name>']])
+                    else:
+                        list0 = copy.deepcopy(raw_command(current_env)[args['<cmd-name>']])
+
+                    for cmd in list0:
+                        print(Fore.RED + "%s" % (cmd))
+                    return
+
+                cmd_exec = ""
+                # cmd_exec = cmd_type(args['<cmd-name>'], args['<file-name>'], current_env)
+                cmd_name = args['<cmd-name>']
+                file_name = args['<file-name>']
+                env_name = current_env
+
+                if (cmd_name is None):
+                    for (key, value) in rawconfig['command'].items():
+                        print(Fore.CYAN + "%s" % key)
+                    return
+
+                if (rawconfig['command'].__contains__(cmd_name) is False):
+                    print("please check your command name")
+                    return
+
+                if (env_name is None or env_name == rawconfig['environ']['current']):
+                    list0 = copy.deepcopy(rawconfig['command'][cmd_name])
+                else:
+                    list0 = copy.deepcopy(raw_command(env_name)[cmd_name])
+
+                # for cmd in list0:
+                #    print(Fore.RED + "%s" % (cmd))
+
+                temp_file_name = ""
+                if (file_name is None):
+                    temp_file_name = "cmd"
+                else:
+                    temp_file_name = "" + file_name
+
+                cmd_header = ""
+                cmd_codec = "utf8"
+                # but windows, it is \r\n, python helpping me?
+                cmd_return = "\n"
+                cmd_suffix = "_exec"
+
+                suffix = args['--suffix']
+                if(suffix is not None):
+                    cmd_suffix = str("_exec%s" % suffix)
+
+                encoding = args['--encoding']
+                if(encoding is not None):
+                    cmd_codec = encoding
+
+                cmd_exec = temp_file_name + cmd_suffix
+                with open(cmd_exec, 'w', encoding=cmd_codec) as f:
+                    # f.write(cmd_header + cmd_return)
+                    for cmd in list0:
+                        f.write(cmd + cmd_return)
+
+                # if (plat == "Windows"):
+                #    ""
+                # else:
+                #    os.system("chmod +x " + cmd_exec)
+
+                #print(cmd_codec)
+                #print(cmd_suffix)
+                #print(cmd_exec)
+
+                print("successed: use %s type %s to %s" % (current_env, args['<cmd-name>'], cmd_exec))
                 return
             elif (args['ccvp'] or args['execvp'] or args['exec-with-params'] is True):
                 current_env = ""
@@ -4901,7 +5020,7 @@ def main_function():
                 os._exit(ret)
                 return
             else:
-                print("experimental.")
+                print("Normal.")
                 return
         else:
             ''
