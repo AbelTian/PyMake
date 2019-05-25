@@ -397,7 +397,7 @@
         ],
         "qt.creator": [
             "cd ${root.build}",
-            "start \"${qt}/Tools/QtCreator/bin/qtcreator.exe\""
+            "start ${qt}/Tools/QtCreator/bin/qtcreator.exe"
         ],
         "qt5.android.build": [
             "mkdir -p ${qt5.build.path}",
