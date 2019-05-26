@@ -45,11 +45,11 @@ def read_thread_function(p):
         p.stdout.readline()
         p.stdout.readline()
 
-    code = (codecs.lookup(locale.getpreferredencoding()).name)
+    cmd_codec = (codecs.lookup(locale.getpreferredencoding()).name)
     global cmd_event
     global cmd_exit_flag
     while (True):
-        l = p.stdout.readline().rstrip().decode(code)
+        l = p.stdout.readline().rstrip().decode(cmd_codec)
         #print(l)
 
         if (l is None):
@@ -73,7 +73,7 @@ def read_thread_function(p):
             if( ret != 0 ):
                 # cmd running fail, child process exit
                 cmd_exit_flag = 1
-                p.stdin.write(("exit %d\n".encode(code) % (ret)))
+                p.stdin.write(("exit %d\n".encode(cmd_codec) % (ret)))
                 p.stdin.flush()
                 print ("exit %d" % (ret))
                 #print ("read thread exit fail %d, i go" % (ret))
@@ -91,11 +91,11 @@ def read_thread_function(p):
 # read stderr pipe
 def read_stderr_thread_function(p):
     ''
-    code = (codecs.lookup(locale.getpreferredencoding()).name)
+    cmd_codec = (codecs.lookup(locale.getpreferredencoding()).name)
     global cmd_event
     global cmd_exit_flag
     while (True):
-        l = p.stderr.readline().rstrip().decode(code)
+        l = p.stderr.readline().rstrip().decode(cmd_codec)
 
         if (l is None):
             #print ('ddd')
@@ -120,7 +120,7 @@ def read_stderr_thread_function(p):
 # auto command execute
 def write_command_thread_function(p, cmd_list):
     ''
-    code = (codecs.lookup(locale.getpreferredencoding()).name)
+    cmd_codec = (codecs.lookup(locale.getpreferredencoding()).name)
     global cmd_event
     global cmd_exit_flag
     while (True):
@@ -133,7 +133,7 @@ def write_command_thread_function(p, cmd_list):
         #if(cmd.lstrip().startswith("exit")):
             cmd_exit_flag = 1
 
-        p.stdin.write(cmd.encode(code))
+        p.stdin.write(cmd.encode(cmd_codec))
         p.stdin.flush()
 
         if ( cmd_exit_flag == 1 ):
@@ -149,7 +149,7 @@ def write_command_thread_function(p, cmd_list):
 # user input
 def write_thread_function(p):
     ''
-    code = (codecs.lookup(locale.getpreferredencoding()).name)
+    cmd_codec = (codecs.lookup(locale.getpreferredencoding()).name)
     while (True):
         line = sys.stdin.readline()
         if (line is None):
@@ -159,7 +159,7 @@ def write_thread_function(p):
         if (p.poll() is not None):
             #print ("write thread: i go, p is done")
             break
-        p.stdin.write(line.encode(code))
+        p.stdin.write(line.encode(cmd_codec))
         p.stdin.flush()
     return
 
