@@ -80,6 +80,7 @@ Usage:
   pymake7.py  get all ( info | information )
   pymake7.py  get all ( stat | status )
   pymake7.py  get all settings [ path | env | cmd ] [<name>] [-r | --raw] [-a | --all]
+  pymake7.py  get all settings [ -l | --local ] [ -c | --custom ] [ -s | --system ]
   pymake7.py  get default exec root
   pymake7.py  get exec root [ default | here ]
   pymake7.py  initialize
@@ -2894,15 +2895,15 @@ def main_function():
         localconf.set('local', 'switch', localswitch)
         localconf.write(open(localini, 'w'))
 
+    localenv = {}
+    localenv['path+'] = []
+
     # set into env [no effect to system environ]
     while (True):
         if(int(localswitch) == 0):
             break
 
         env = os.environ
-
-        localenv = {}
-        localenv['path+'] = []
 
         localenv['PYMAKEDEFAULTSOURCEROOT'] = pymakesourceroot
         localenv['PYMAKEDEFAULTSOURCECONFIG'] = pymakedefaultsourcefile
@@ -5308,9 +5309,67 @@ def main_function():
                     print("PORT INI CONF : %s" % os.path.split(os.path.realpath(portinifile))[1])
                     return
                 elif (args['settings'] is True):
+                    #print(args['-l'], args['--local'])
+                    #print(args['-c'], args['--custom'])
+                    #print(args['-s'], args['--system'])
+                    #return
+
+                    if (args['-s'] or args['--system'] is True):
+                        dict0 = copy.deepcopy(pymakesystemenviron)
+                        print(Fore.CYAN + "system env")
+                        print(Fore.MAGENTA + "path+:")
+                        for (key) in dict0["PATH"].split(os.path.pathsep):
+                            print(Fore.BLUE + "  %s" % key)
+                        print(Fore.MAGENTA + "variable:")
+                        for (key, value) in dict0.items():
+                            if (key == 'path+'):
+                                continue
+                            if (str(key).lower() == 'path'):
+                                continue
+
+                            print(Fore.GREEN + "  %-30s %s" % (key, value))
+                        return
+
+                    elif (args['-l'] or args['--local'] is True):
+                        if (int(localswitch) == 0):
+                            print("local env is closed manually.")
+                            return
+
+                        dict0 = copy.deepcopy(localenv)
+                        print(Fore.CYAN + "local env")
+                        print(Fore.MAGENTA + "path+:")
+                        for (key) in dict0["path+"]:
+                            print(Fore.BLUE + "  %s" % key)
+                        print(Fore.MAGENTA + "variable:")
+                        for (key, value) in dict0.items():
+                            if (key == 'path+'):
+                                continue
+                            print(Fore.GREEN + "  %-30s %s" % (key, value))
+                        return
+
+                    elif (args['-c'] or args['--custom'] is True):
+                        if (int(switch0) == 0):
+                            print("custom env is closed.")
+                            return
+
+                        print(Fore.CYAN + "custom env")
+                        print(Fore.MAGENTA + "path+:")
+                        for (key) in envcustomlistrawpaths:
+                            print(Fore.BLUE + "  %s" % key)
+                        print(Fore.MAGENTA + "variable:")
+                        for (key, value) in envcustomlistrawvars.items():
+                            if (key == 'path+'):
+                                continue
+                            print(Fore.GREEN + "  %-30s %s" % (key, value))
+                        return
+
+                    else:
+                        ''
+
                     #print('break to display backward.')
                     #important break [ + get all settings ]
                     break
+
                 else:
                     if(config.__contains__("environ") is True):
                         if (config['environ'].__contains__("current") is True):
@@ -5957,6 +6016,7 @@ def main_function():
                                 for cmd in value:
                                     print(Fore.RED + "%-3s %s" % (step, cmd))
                                     step += 1
+
                     else:
                         print(Fore.BLACK + "path-assemblage:")
                         for (k, v) in list_config['path-assemblage'].items():
