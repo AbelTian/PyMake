@@ -3472,6 +3472,24 @@ def main_function():
         if (sourceroot != pymakesourceroot and storecustompaths.__contains__(sourceroot) is False):
             storecustompaths.append(sourceroot)
 
+        #clean repeat path [for store]
+        clean_list = []
+        temp_list = []
+        for l in storecustompaths:
+            if (l == ''):
+                continue
+            if (os.path.isabs(l) is False):
+                continue
+            if (temp_list.__contains__(str(l).replace('\\', '/').lower())):
+                clean_list.append(l)
+                continue
+            else:
+                temp_list.append(str(l).replace('\\', '/').lower())
+        #print(clean_list)
+        for l in clean_list:
+            if (storecustompaths.__contains__(l) is True):
+                storecustompaths.remove(l)
+
         if (custompaths != storecustompaths):
             with open(custompathfile, 'w', encoding=cmd_codec) as f:
                 for l in storecustompaths:
@@ -3490,6 +3508,7 @@ def main_function():
                 continue
             envcustomlistpaths.append(key)
 
+        # clean illgal path
         clean_list = []
         for l in envcustomrawpaths:
             if (l == ''):
@@ -3498,7 +3517,7 @@ def main_function():
             if (os.path.isabs(l) is False):
                 clean_list.append(l)
                 continue
-        # print(clean_list)
+        #print(clean_list)
 
         for l in clean_list:
             if (envcustomrawpaths.__contains__(l) is True):
@@ -3543,6 +3562,25 @@ def main_function():
         avarkeyvalue = "PYMAKEAUTHOR=T.D.R."
         if (storecustomvars.__contains__(avarkeyvalue) is False):
             storecustomvars.append(avarkeyvalue)
+
+        #clean repeat var [for store]
+        clean_list = []
+        temp_list = []
+        for l in storecustomvars:
+            if (l == ''):
+                continue
+            if (str(l).__contains__('=') is False):
+                continue
+            if (temp_list.__contains__(str(l).split('=')[0].strip().lower())):
+                clean_list.append(l)
+                continue
+            else:
+                temp_list.append(str(l).split('=')[0].strip().lower())
+        #print(clean_list)
+        for l in clean_list:
+            if (storecustomvars.__contains__(l) is True):
+                storecustomvars.remove(l)
+
         if (storecustomvars != customenvs):
             with open(customenvfile, 'w', encoding=cmd_codec) as f:
                 for l in storecustomvars:
@@ -3559,9 +3597,10 @@ def main_function():
             if (str(l).__contains__('=') is False):
                 continue
             key = str(key0).split('=')[0].strip()
-            value = '='.join(str(key0).split('=')[1:])
+            value = '='.join(str(key0).split('=')[1:]).strip()
             envcustomlistvars[key] = value
 
+        # clean illgal var
         clean_list = []
         for l in envcustomrawvars:
             if (l == ''):
@@ -3579,12 +3618,12 @@ def main_function():
         env = os.environ
         for l in envcustomrawvars:
             key = str(l).split('=')[0].strip()
-            value = '='.join(str(l).split('=')[1:])
+            value = '='.join(str(l).split('=')[1:]).strip()
             env[key] = value
 
         for l in envcustomrawvars:
             key = str(l).split('=')[0].strip()
-            value = '='.join(str(l).split('=')[1:])
+            value = '='.join(str(l).split('=')[1:]).strip()
             envcustomlistrawvars[key] = value
 
         break
