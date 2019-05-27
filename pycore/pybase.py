@@ -95,6 +95,14 @@ def getplatform( ):
     #    print ("Other System tasks")
     return sysstr
 
+def getplatform_release():
+    sysstr = platform.release()
+    #7
+    #XP
+    #17.4.0
+    #3.10.84-14528008
+    return sysstr
+
 def getuserroot():
     root = ""
     sysstr = platform.system()

@@ -1910,6 +1910,8 @@ def main_function():
                 if(plat == "Windows"):
                     cmd_header = "@echo off"
                     cmd_codec = "ansi"
+                    if(getplatform_release() == "XP"):
+                        cmd_codec = None
                     # but windows, it is \r\n, python helpping me?
                     cmd_return = "\n"
                     cmd_suffix = ".bat"
@@ -2622,6 +2624,8 @@ def main_function():
             cmd_status = "echo pymake-command-status:%ERRORLEVEL%"
             cmd_sep = '&'
             cmd_codec = "ansi"
+            if (getplatform_release() == "XP"):
+                cmd_codec = None
             # but windows, it is \r\n, python helpping me?
             cmd_return = "\n"
             cmd_exit = 'exit /b 0'
@@ -2703,6 +2707,8 @@ def main_function():
         if (plat == "Windows"):
             cmd_suffix = ".bat"
             cmd_codec = "ansi"
+            if (getplatform_release() == "XP"):
+                cmd_codec = None
             cmd_return = "\n"
             cmd_header = "@echo off" + cmd_return
             env_set = 'set '
@@ -2936,6 +2942,8 @@ def main_function():
                     if(plat == "Windows"):
                         cmd_header = "@echo off"
                         cmd_codec = "ansi"
+                        if (getplatform_release() == "XP"):
+                            cmd_codec = None
                         # but windows, it is \r\n, python helpping me?
                         cmd_return = "\n"
                         cmd_suffix = ".bat"
@@ -3185,6 +3193,8 @@ def main_function():
                     if(plat == "Windows"):
                         cmd_header = "@echo off"
                         cmd_codec = "ansi"
+                        if (getplatform_release() == "XP"):
+                            cmd_codec = None
                         # but windows, it is \r\n, python helpping me?
                         cmd_return = "\n"
                         cmd_suffix = ".bat"
@@ -3393,6 +3403,8 @@ def main_function():
     cmd_return = "\n"
     if (plat == "Windows"):
         cmd_codec = "ansi"
+        if (getplatform_release() == "XP"):
+            cmd_codec = None
         # but windows, it is \r\n, python helpping me?
         cmd_return = "\n"
     else:
@@ -3622,6 +3634,8 @@ def main_function():
             if(args['powershell'] is True):
                 cmd_suffix = ".ps1"
                 cmd_codec = 'ansi'
+                if (getplatform_release() == "XP"):
+                    cmd_codec = None
                 # but windows, it is \r\n, python helpping me?
                 cmd_return = "\n"
                 cmd_header = "#!/usr/bin/env bash" + cmd_return
@@ -3750,6 +3764,8 @@ def main_function():
             if (plat == "Windows"):
                 cmd_suffix = ".bat"
                 cmd_codec = "ansi"
+                if (getplatform_release() == "XP"):
+                    cmd_codec = None
                 cmd_return = "\n"
                 cmd_header = "@echo off" + cmd_return
                 env_set = 'set '
@@ -3927,6 +3943,8 @@ def main_function():
 
         cmd_suffix = ".ps1"
         cmd_codec = 'ansi'
+        if (getplatform_release() == "XP"):
+            cmd_codec = None
         # but windows, it is \r\n, python helpping me?
         cmd_return = "\n"
         cmd_header = "#!/usr/bin/env bash" + cmd_return
@@ -3997,6 +4015,8 @@ def main_function():
         cmd_suffix_powershell = cmd_suffix
         cmd_exit = 'exit 0'
         cmd_codec = 'ansi'
+        if (getplatform_release() == "XP"):
+            cmd_codec = None
         # but windows, it is \r\n, python helpping me?
         cmd_return = "\n"
         cmd_header = "#!/usr/bin/env bash"
@@ -4205,6 +4225,8 @@ def main_function():
 
                 cmd_header = "#!/usr/bin/env bash"
                 cmd_codec = "ansi"
+                if (getplatform_release() == "XP"):
+                    cmd_codec = None
                 # but windows, it is \r\n, python helpping me?
                 cmd_return = "\n"
                 cmd_suffix = "_exec.ps1"
@@ -4535,6 +4557,8 @@ def main_function():
                 if (plat == "Windows"):
                     cmd_suffix = ".bat"
                     cmd_codec = "ansi"
+                    if (getplatform_release() == "XP"):
+                        cmd_codec = None
                     cmd_return = "\n"
                     cmd_header = "@echo off" + cmd_return
                     env_set = 'set '
@@ -4936,6 +4960,8 @@ def main_function():
         if (plat == "Windows"):
             cmd_suffix = ".bat"
             cmd_codec = "ansi"
+            if (getplatform_release() == "XP"):
+                cmd_codec = None
             cmd_return = "\n"
             cmd_header = "@echo off" + cmd_return
             env_set = 'set '
@@ -5015,6 +5041,8 @@ def main_function():
             cmd_status = "echo pymake-command-status:%ERRORLEVEL%"
             cmd_sep = '&'
             cmd_codec = "ansi"
+            if (getplatform_release() == "XP"):
+                cmd_codec = None
             # but windows, it is \r\n, python helpping me?
             cmd_return = "\n"
             cmd_exit = 'exit /b 0'
@@ -6221,6 +6249,8 @@ def main_function():
         if (plat == "Windows"):
             cmd_suffix = ".bat"
             cmd_codec = "ansi"
+            if (getplatform_release() == "XP"):
+                cmd_codec = None
             cmd_return = "\n"
             cmd_header = "@echo off" + cmd_return
             env_set = 'set '
@@ -6501,6 +6531,8 @@ def main_function():
             cmd_status = "echo pymake-command-status:%ERRORLEVEL%"
             cmd_sep = '&'
             cmd_codec = "ansi"
+            if (getplatform_release() == "XP"):
+                cmd_codec = None
             # but windows, it is \r\n, python helpping me?
             cmd_return = "\n"
             cmd_exit = 'exit /b 0'
@@ -6777,6 +6809,8 @@ def main_function():
             cmd_status = "echo pymake-command-status:%ERRORLEVEL%"
             cmd_sep = '&'
             cmd_codec = "ansi"
+            if (getplatform_release() == "XP"):
+                cmd_codec = None
             # but windows, it is \r\n, python helpping me?
             cmd_return = "\n"
             cmd_exit = 'exit /b 0'
@@ -7020,6 +7054,8 @@ def main_function():
             cmd_status = "echo pymake-command-status:%ERRORLEVEL%"
             cmd_sep = '&'
             cmd_codec = "ansi"
+            if (getplatform_release() == "XP"):
+                cmd_codec = None
             # but windows, it is \r\n, python helpping me?
             cmd_return = "\n"
             cmd_exit = 'exit /b 0'
