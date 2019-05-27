@@ -80,7 +80,7 @@ Usage:
   pymake7.py  get all ( info | information )
   pymake7.py  get all ( stat | status )
   pymake7.py  get all settings [ path | env | cmd ] [<name>] [-r | --raw] [-a | --all]
-  pymake7.py  get all settings [ -l | --local ] [ -c | --custom ] [ -s | --system ]
+  pymake7.py  get all settings [ -l | --local ] [ -c | --custom ] [ -s | --system ] [ --current ] [ --envname=<env-name> ]
   pymake7.py  get default exec root
   pymake7.py  get exec root [ default | here ]
   pymake7.py  initialize
@@ -5828,6 +5828,44 @@ def main_function():
                             print(Fore.BLUE + "  %s" % key)
                         print(Fore.MAGENTA + "variable:")
                         for (key, value) in envcustomlistrawvars.items():
+                            if (key == 'path+'):
+                                continue
+                            print(Fore.GREEN + "  %-30s %s" % (key, value))
+                        return
+
+                    elif (args['--current'] is True):
+                        current_env = rawconfig['environ']['current']
+                        if (rawconfig['environ'].__contains__(current_env) is False):
+                            print("please ensure the environ is right")
+                            return
+
+                        dict0 = copy.deepcopy(rawconfig['environ'][current_env])
+                        print(Fore.CYAN + "env %s" % current_env)
+                        print(Fore.LIGHTGREEN_EX + "path+:")
+                        for (key) in dict0["path+"]:
+                            print(Fore.LIGHTMAGENTA_EX + "  %s" % key)
+                        print(Fore.LIGHTGREEN_EX + "variable:")
+                        for (key, value) in dict0.items():
+                            if (key == 'path+'):
+                                continue
+                            print(Fore.GREEN + "  %-30s %s" % (key, value))
+                        return
+
+                    elif (args['--envname'] is not None):
+                        current_var = args['--envname']
+                        if (current_var == "current"):
+                            current_var = rawconfig['environ']['current']
+                        if (rawconfig['environ'].__contains__(current_var) is False):
+                            print("please ensure the environ is right")
+                            return
+
+                        dict0 = copy.deepcopy(rawconfig['environ'][current_var])
+                        print(Fore.CYAN + "env %s" % current_var)
+                        print(Fore.LIGHTGREEN_EX + "path+:")
+                        for (key) in dict0["path+"]:
+                            print(Fore.LIGHTMAGENTA_EX + "  %s" % key)
+                        print(Fore.LIGHTGREEN_EX + "variable:")
+                        for (key, value) in dict0.items():
                             if (key == 'path+'):
                                 continue
                             print(Fore.GREEN + "  %-30s %s" % (key, value))
