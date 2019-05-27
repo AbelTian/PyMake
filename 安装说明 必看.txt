@@ -3,10 +3,9 @@
 程序是兼容2.7和3.6的，但是请查看pymake.bat pymake.sh两个运行文件，里边的调用者py被限定了使用python3，so please install python 3 or mod 这两个运行文件.
 
 2019年5月20日
-现在，PyMake v7 新代码使用了file encoding，所以仅仅支持python3，
+现在，PyMake v7 新代码使用了file encoding，所以仅支持python3，
 Windows， 
 建议，安装python3 [64位] 3.7，建议默认安装py launcher。
-注意，本程序依赖py命令，不依赖python3的环境路径，python3不加入环境路径没关系。
 *Unix，
 Unix下，本程序使用python3命令启动。
 
