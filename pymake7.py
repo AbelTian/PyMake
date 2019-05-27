@@ -128,9 +128,12 @@ Usage:
   pymake7.py  here import cmd [ <script-file> ] [ to <command-name> ] [ -a | --all ] [ -f | --force ] [ --recursive ] [ --encoding=<encoding-name> ] [ --filter=<name-filter> ... ]
   pymake7.py  hh import cmd [ <script-file> ] [ to <command-name> ] [ -a | --all ] [ -f | --force ] [ --recursive ] [ --encoding=<encoding-name> ] [ --filter=<name-filter> ... ]
   pymake7.py  -------------------------------------------------------------
-  pymake7.py  outport cmd [ hh | here ] [ <command-name> ] [ to <script-file> ] [ -a | --all ] [ -f | --force ] [ --encoding=<encoding-name> ]
-  pymake7.py  here outport cmd [ <command-name> ] [ to <script-file> ] [ -a | --all ] [ -f | --force ] [ --encoding=<encoding-name> ]
-  pymake7.py  hh outport cmd [ <command-name> ] [ to <script-file> ] [ -a | --all ] [ -f | --force ] [ --encoding=<encoding-name> ]
+  pymake7.py  outport cmd [ hh | here ] [ <command-name> ] [ to <script-file> ] [ -a | --all ] [ -f | --force ] [ --recursive ] [ --encoding=<encoding-name> ] [ --suffix=<.suffix-name> ]
+  pymake7.py  here outport cmd [ <command-name> ] [ to <script-file> ] [ -a | --all ] [ -f | --force ] [ --recursive ] [ --encoding=<encoding-name> ] [ --suffix=<.suffix-name> ]
+  pymake7.py  hh outport cmd [ <command-name> ] [ to <script-file> ] [ -a | --all ] [ -f | --force ] [ --recursive ] [ --encoding=<encoding-name> ] [ --suffix=<.suffix-name> ]
+  pymake7.py  use <env-name> outport cmd [ hh | here ] [ <command-name> ] [ to <script-file> ] [ -a | --all ] [ -f | --force ] [ --recursive ] [ --encoding=<encoding-name> ] [ --suffix=<.suffix-name> ]
+  pymake7.py  here use <env-name> outport cmd [ <command-name> ] [ to <script-file> ] [ -a | --all ] [ -f | --force ] [ --recursive ] [ --encoding=<encoding-name> ] [ --suffix=<.suffix-name> ]
+  pymake7.py  hh use <env-name> outport cmd [ <command-name> ] [ to <script-file> ] [ -a | --all ] [ -f | --force ] [ --recursive ] [ --encoding=<encoding-name> ] [ --suffix=<.suffix-name> ]
   pymake7.py  -------------------------------------------------------------
   pymake7.py  backup [ here | hh ] [ <zip-file-name> ]
   pymake7.py  here backup [ <zip-file-name> ]
@@ -1903,6 +1906,19 @@ def main_function():
                 if (args['here'] or args['hh'] is True):
                     os.chdir(pymakeworkpath)
 
+                plat = getplatform()
+                if(plat == "Windows"):
+                    cmd_header = "@echo off"
+                    cmd_codec = "ansi"
+                    # but windows, it is \r\n, python helpping me?
+                    cmd_return = "\n"
+                    cmd_suffix = ".bat"
+                else:
+                    cmd_header = "#!/usr/bin/env bash"
+                    cmd_codec = "utf8"
+                    cmd_return = "\n"
+                    cmd_suffix = ".sh"
+
                 if( args['-a'] or args['--all'] is True):
                     #print('-a')
                     #print("%-30s %-5s %-5s" % (args['<script-file>'], os.path.isdir(args['<script-file>']), os.path.islink(args['<script-file>'])))
@@ -1963,7 +1979,7 @@ def main_function():
                     #    print (file)
                     #return
 
-                    useencoding = 'utf8'
+                    useencoding = cmd_codec
                     if(args['--encoding'] is not None):
                         useencoding = args['--encoding']
 
@@ -2131,7 +2147,7 @@ def main_function():
                         print("please input a legal script file.")
                         return
 
-                    useencoding = 'utf8'
+                    useencoding = cmd_codec
                     if(args['--encoding'] is not None):
                         useencoding = args['--encoding']
 
@@ -2864,6 +2880,373 @@ def main_function():
                         os.remove(temp_file)
 
                 os._exit(ret)
+                return
+            else:
+                ''
+        else:
+            ''
+        break
+
+    # outport command
+    while (True):
+        if (args['outport'] is True):
+            if (args['cmd'] is True):
+                print("source file   is %s" % sourceconfigfile)
+                print("source root   is %s" % sourceroot)
+                print("source config is %s" % sourcefile)
+                print("---------------------------------------------------------------------")
+                current_env = ""
+
+                if (args['use'] is True):
+                    if (args['<env-name>'] is None):
+                        print("please appoint a environ")
+                        return
+
+                    if (rawconfig['environ'].__contains__(args['<env-name>']) is False):
+                        print("please ensure the environ is right")
+                        return
+
+                    current_env = args['<env-name>']
+                    if (args['<env-name>'] == "current"):
+                        current_env = rawconfig['environ']['current']
+
+                    if (rawconfig['environ'].__contains__(current_env) is False):
+                        print(".json file is broken, environ section current env config is lost, please use set command fix it.")
+                        return
+                else:
+                    current_env = rawconfig['environ']['current']
+
+                dict0 = {}
+                if (current_env == rawconfig['environ']['current']):
+                    dict0 = copy.deepcopy(rawconfig['command'])
+                else:
+                    dict0 = copy.deepcopy(raw_command(current_env))
+
+                import itertools
+
+                os.chdir(sourceroot)
+                if (args['here'] or args['hh'] is True):
+                    os.chdir(pymakeworkpath)
+
+                if (args['-a'] or args['--all'] is True):
+                    # print('-a')
+                    # print("%-30s %-5s %-5s" % (args['<script-file>'], os.path.isdir(args['<script-file>']), os.path.islink(args['<script-file>'])))
+
+                    plat = getplatform()
+                    if(plat == "Windows"):
+                        cmd_header = "@echo off"
+                        cmd_codec = "ansi"
+                        # but windows, it is \r\n, python helpping me?
+                        cmd_return = "\n"
+                        cmd_suffix = ".bat"
+                    else:
+                        cmd_header = "#!/usr/bin/env bash"
+                        cmd_codec = "utf8"
+                        cmd_return = "\n"
+                        cmd_suffix = ".sh"
+
+                    cmd_suffix_custom = cmd_suffix
+                    suffix = args['--suffix']
+                    if (suffix is not None):
+                        cmd_suffix_custom = str("%s" % suffix)
+
+                    root_path = ""
+                    if (args['<script-file>'] is not None):
+                        root_path = args['<script-file>']
+                    else:
+                        root_path = os.getcwd()
+
+                    if(os.path.exists(root_path) is False):
+                        os.mkdir(root_path)
+
+                    print(Fore.CYAN + "%-30s%-30s%s" % ("[command] ", "[status] ", "[file] "))
+
+                    useencoding = cmd_codec
+                    if (args['--encoding'] is not None):
+                        useencoding = args['--encoding']
+
+                    for (key1) in dict0:
+                        local_path = os.path.relpath(os.path.join(root_path, key1+cmd_suffix_custom), os.getcwd())
+                        command_name = key1
+                        #print(command_name, local_path)
+
+                        # fixer
+                        # ext = os.path.splitext(os.path.basename(key1))[1]
+                        # if (ext == '.bat'):
+                        #    useencoding = 'gbk'
+                        cmd_header_custom = ''
+                        # add shebang line
+                        if (list(dict0[command_name]).__len__() > 0):
+                            cmd_header_custom = dict0[command_name][0]
+                        # print(".....")
+                        if (plat == "Windows"):
+                            if (cmd_header_custom.startswith('@echo') is False):
+                                cmd_header_custom = cmd_header
+                        else:
+                            if (cmd_header_custom.startswith('#!') is False):
+                                cmd_header_custom = cmd_header
+
+                        if(cmd_suffix_custom != cmd_suffix):
+                            cmd_header_custom = ''
+
+                        if (os.path.exists(local_path) is False):
+                            with open(local_path, 'w', encoding=useencoding) as f:
+                                if(cmd_header_custom != ''):
+                                    f.write(cmd_header_custom + cmd_return)
+                                for l in dict0[command_name]:
+                                    f.write(l + cmd_return)
+                            print("%-30s%-30s%s" % (command_name, "[SUCCESS][       ][     ]", local_path))
+                        else:
+                            if (args['-f'] or args['--force'] is True):
+                                with open(local_path, 'w', encoding=useencoding) as f:
+                                    if (cmd_header_custom != ''):
+                                        f.write(cmd_header_custom + cmd_return)
+                                    for l in dict0[command_name]:
+                                        f.write(l + cmd_return)
+                                print("%-30s%-30s%s" % (command_name, "[SUCCESS][EXISTED][FORCE]", key1))
+                            else:
+                                print("%-30s%-30s%s" % (command_name, "[CANCEL ][EXISTED][     ]", key1))
+                    return
+
+                if (args['<command-name>'] is None):
+                    print(Fore.CYAN + "%-30s%-30s" % ("[command] ", "[file] "))
+                    keylist1 = []
+                    keylist2 = []
+
+                    #print(args['<command-name>'])
+                    #print(args['<script-file>'])
+
+                    root_path = ""
+                    if (args['<script-file>'] is not None):
+                        root_path = args['<script-file>']
+                    else:
+                        root_path = os.getcwd()
+
+                    #print(args)
+                    #print(args['-r'], args['--recursive'])
+                    if(args['--recursive'] is True):
+                        for ( dirpath, dirnames, filenames ) in os.walk(root_path):
+                            for name in filenames:
+                                #print(os.path.relpath(os.path.join(dirpath, name), os.getcwd()))
+                                keylist1.append(os.path.relpath(os.path.join(dirpath, name), os.getcwd()))
+                    else:
+                        for key in os.listdir(root_path):
+                            keylist1.append(os.path.relpath(os.path.join(root_path, key), os.getcwd()))
+
+                    #for key in os.listdir(os.getcwd()):
+                    #    keylist1.append(key)
+
+                    for key in config['command'].keys():
+                        keylist2.append(key)
+
+                    dirlist = []
+                    for (key) in keylist1:
+                        # print("%-30s %-5s %-5s" % (key, os.path.isdir(key), os.path.islink(key)))
+                        if (os.path.isdir(key)
+                            # or os.path.islink(key)
+                            ):
+                            dirlist.append(key)
+                    # print(dirlist)
+                    for key in dirlist:
+                        keylist1.remove(key)
+
+                    tarkeylist = []
+                    # print(args['--suffix'])
+                    if (args['--suffix'] is None or args['--suffix'] == [] or args['--suffix'] == [''] or args['--suffix'] == ['*']):
+                        tarkeylist = keylist1
+                    else:
+                        filterString = args['--suffix']
+                        if(filterString == None):
+                            filterString = ''
+                        filterList = filterString.split('|')
+                        if (filterList.__contains__('')):
+                            filterList.remove('')
+                        # print(filterString)
+                        # print(filterList)
+                        for fil in filterList:
+                            fil = fil.strip()
+                            for key in keylist1:
+                                if (os.path.splitext(key)[1] == fil):
+                                    tarkeylist.append(key)
+                                    # print(fil, key)
+                    # print(tarkeylist)
+                    # for file in tarkeylist:
+                    #    print (file)
+                    # return
+
+                    # print(keylist1)
+                    # print(keylist2)
+                    count2 = 1
+                    for (key1, key2) in itertools.zip_longest(tarkeylist, keylist2, fillvalue=""):
+                        if (key1 is not ""):
+                            key1 = str("%s" % (key1))
+                        if (key2 is not ""):
+                            key2 = str("%-4s%s" % (count2, key2))
+                            count2 += 1
+                        print("%-30s%-30s" % (key2, key1))
+
+                    # print("Those are the files under %s" % os.getcwd())
+                    return
+
+                if (args['<command-name>'] is not None):
+                    # print("%-30s %-5s %-5s" % (args['<script-file>'], os.path.isdir(args['<script-file>']), os.path.islink(args['<script-file>'])))
+                    if(args['<script-file>'] is not None):
+                        if (os.path.isdir(args['<script-file>'])):
+                            print(Fore.CYAN + "%-30s%-30s" % ("[command] ", "[file] "))
+                            keylist1 = []
+                            keylist2 = []
+
+                            # print(args['<command-name>'])
+                            # print(args['<script-file>'])
+
+                            root_path = ""
+                            if (args['<script-file>'] is not None):
+                                root_path = args['<script-file>']
+                            else:
+                                root_path = os.getcwd()
+
+                            # print(args)
+                            # print(args['-r'], args['--recursive'])
+                            if (args['--recursive'] is True):
+                                for (dirpath, dirnames, filenames) in os.walk(root_path):
+                                    for name in filenames:
+                                        # print(os.path.relpath(os.path.join(dirpath, name), os.getcwd()))
+                                        keylist1.append(os.path.relpath(os.path.join(dirpath, name), os.getcwd()))
+                            else:
+                                for key in os.listdir(root_path):
+                                    keylist1.append(os.path.relpath(os.path.join(root_path, key), os.getcwd()))
+
+                            # for key in os.listdir(os.getcwd()):
+                            #    keylist1.append(key)
+
+                            for key in config['command'].keys():
+                                keylist2.append(key)
+
+                            dirlist = []
+                            for (key) in keylist1:
+                                # print("%-30s %-5s %-5s" % (key, os.path.isdir(key), os.path.islink(key)))
+                                if (os.path.isdir(key)
+                                    # or os.path.islink(key)
+                                    ):
+                                    dirlist.append(key)
+                            # print(dirlist)
+                            for key in dirlist:
+                                keylist1.remove(key)
+
+                            tarkeylist = []
+                            # print(args['--suffix'])
+                            if (args['--suffix'] is None or args['--suffix'] == [] or args['--suffix'] == [''] or args['--suffix'] == ['*']):
+                                tarkeylist = keylist1
+                            else:
+                                filterString = args['--suffix']
+                                if (filterString == None):
+                                    filterString = ''
+                                filterList = filterString.split('|')
+                                if (filterList.__contains__('')):
+                                    filterList.remove('')
+                                # print(filterString)
+                                # print(filterList)
+                                for fil in filterList:
+                                    fil = fil.strip()
+                                    for key in keylist1:
+                                        if (os.path.splitext(key)[1] == fil):
+                                            tarkeylist.append(key)
+                                            # print(fil, key)
+                            # print(tarkeylist)
+                            # for file in tarkeylist:
+                            #    print (file)
+                            # return
+
+                            # print(keylist1)
+                            # print(keylist2)
+                            count2 = 1
+                            for (key1, key2) in itertools.zip_longest(tarkeylist, keylist2, fillvalue=""):
+                                if (key1 is not ""):
+                                    key1 = str("%s" % (key1))
+                                if (key2 is not ""):
+                                    key2 = str("%-4s%s" % (count2, key2))
+                                    count2 += 1
+                                print("%-30s%-30s" % (key2, key1))
+
+                            # print("Those are the files under %s" % os.path.realpath(args['<script-file>']))
+                            return
+
+                    plat = getplatform()
+                    if(plat == "Windows"):
+                        cmd_header = "@echo off"
+                        cmd_codec = "ansi"
+                        # but windows, it is \r\n, python helpping me?
+                        cmd_return = "\n"
+                        cmd_suffix = ".bat"
+                    else:
+                        cmd_header = "#!/usr/bin/env bash"
+                        cmd_codec = "utf8"
+                        cmd_return = "\n"
+                        cmd_suffix = ".sh"
+
+                    cmd_suffix_custom = cmd_suffix
+                    suffix = args['--suffix']
+                    if (suffix is not None):
+                        cmd_suffix_custom = str("%s" % suffix)
+
+                    useencoding = cmd_codec
+                    if (args['--encoding'] is not None):
+                        useencoding = args['--encoding']
+
+                    # args['<script-file>'] is a file.
+                    root_path = ""
+                    if (args['<script-file>'] is not None):
+                        root_path = args['<script-file>'] + cmd_suffix_custom
+                    else:
+                        root_path = args['<command-name>'] + cmd_suffix_custom
+
+                    command_name = args['<command-name>']
+                    local_path = os.path.relpath(root_path, os.getcwd())
+
+                    #print(args['<command-name>'], command_name)
+                    #print(args['<script-file>'], local_path)
+                    if(config['command'].__contains__(command_name) is False):
+                        print ('please ensure your command name is existed.')
+                        return
+
+                    cmd_header_custom = ''
+                    # add shebang line
+                    if (list(dict0[command_name]).__len__() > 0):
+                        cmd_header_custom = dict0[command_name][0]
+                    # print(".....")
+                    if (plat == "Windows"):
+                        if (cmd_header_custom.startswith('@echo') is False):
+                            cmd_header_custom = cmd_header
+                    else:
+                        if (cmd_header_custom.startswith('#!') is False):
+                            cmd_header_custom = cmd_header
+
+                    if (cmd_suffix_custom != cmd_suffix):
+                        cmd_header_custom = ''
+
+                    # print(args)
+                    if (os.path.exists(local_path) is True):
+                        if (args['-f'] or args['--force'] is True):
+                            # print('-f')
+                            # set in force
+                            with open(local_path, 'w', encoding=useencoding) as f:
+                                if(cmd_header_custom != ''):
+                                    f.write(cmd_header_custom + cmd_return)
+                                for l in dict0[command_name]:
+                                    f.write(l + cmd_return)
+                            print('successed: outport %s to %s' % (command_name, local_path))
+                            return
+                        print("failed: script file %s is existed." % local_path)
+                        return
+
+                    # set in
+                    with open(local_path, 'w', encoding=useencoding) as f:
+                        if (cmd_header_custom != ''):
+                            f.write(cmd_header_custom + cmd_return)
+                        for l in dict0[command_name]:
+                            f.write(l + cmd_return)
+                    print('successed: outport %s to %s' % (command_name, local_path))
+                    return
                 return
             else:
                 ''
