@@ -3486,9 +3486,11 @@ def main_function():
             else:
                 temp_list.append(str(l).replace('\\', '/').lower())
         #print(clean_list)
+        storecustompaths.reverse()
         for l in clean_list:
             if (storecustompaths.__contains__(l) is True):
                 storecustompaths.remove(l)
+        storecustompaths.reverse()
 
         if (custompaths != storecustompaths):
             with open(custompathfile, 'w', encoding=cmd_codec) as f:
@@ -3577,9 +3579,11 @@ def main_function():
             else:
                 temp_list.append(str(l).split('=')[0].strip().lower())
         #print(clean_list)
+        storecustomvars.reverse()
         for l in clean_list:
             if (storecustomvars.__contains__(l) is True):
                 storecustomvars.remove(l)
+        storecustomvars.reverse()
 
         if (storecustomvars != customenvs):
             with open(customenvfile, 'w', encoding=cmd_codec) as f:
