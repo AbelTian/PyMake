@@ -80,7 +80,7 @@ Usage:
   pymake7.py  get all ( info | information )
   pymake7.py  get all ( stat | status )
   pymake7.py  get all settings [ path | env | cmd ] [<name>] [-r | --raw] [-a | --all]
-  pymake7.py  get all settings [ -l | --local ] [ -c | --custom ] [ -s | --system ] [ --current ] [ --envname=<env-name> ]
+  pymake7.py  get all settings [ -l | --local ] [ -c | --custom ] [ -s | --system ] [ --current ] [ --envname <env-name> ]
   pymake7.py  get default exec root
   pymake7.py  get exec root [ default | here ]
   pymake7.py  initialize
@@ -5856,8 +5856,19 @@ def main_function():
                         return
 
                     elif (args['--envname'] is not None):
-                        current_var = args['--envname']
-                        if (current_var == "current"):
+                        current_var = args['<env-name>']
+                        if(current_var is None):
+                            current_var = rawconfig['environ']['current']
+                            for key in rawconfig['environ'].keys():
+                                if (key == 'current'):
+                                    continue
+                                if (key == current_var):
+                                    print(Fore.CYAN + "%s" % current_var)
+                                    continue
+                                print("%s" % key)
+                            return
+
+                        if (current_var == "current" or current_var == "cur"):
                             current_var = rawconfig['environ']['current']
                         if (rawconfig['environ'].__contains__(current_var) is False):
                             print("please ensure the environ is right")
