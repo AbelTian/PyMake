@@ -2995,6 +2995,11 @@ def main_function():
                                     f.write(cmd_header_custom + cmd_return)
                                 for l in dict0[command_name]:
                                     f.write(l + cmd_return)
+                            if (plat == "Windows"):
+                                ""
+                            else:
+                                if(cmd_suffix_custom == cmd_suffix):
+                                    os.system("chmod +x " + local_path)
                             print("%-30s%-30s%s" % (command_name, "[SUCCESS][       ][     ]", local_path))
                         else:
                             if (args['-f'] or args['--force'] is True):
@@ -3003,6 +3008,11 @@ def main_function():
                                         f.write(cmd_header_custom + cmd_return)
                                     for l in dict0[command_name]:
                                         f.write(l + cmd_return)
+                                if (plat == "Windows"):
+                                    ""
+                                else:
+                                    if (cmd_suffix_custom == cmd_suffix):
+                                        os.system("chmod +x " + local_path)
                                 print("%-30s%-30s%s" % (command_name, "[SUCCESS][EXISTED][FORCE]", key1))
                             else:
                                 print("%-30s%-30s%s" % (command_name, "[CANCEL ][EXISTED][     ]", key1))
@@ -3234,6 +3244,11 @@ def main_function():
                                     f.write(cmd_header_custom + cmd_return)
                                 for l in dict0[command_name]:
                                     f.write(l + cmd_return)
+                            if (plat == "Windows"):
+                                ""
+                            else:
+                                if(cmd_suffix_custom == cmd_suffix):
+                                    os.system("chmod +x " + local_path)
                             print('successed: outport %s to %s' % (command_name, local_path))
                             return
                         print("failed: script file %s is existed." % local_path)
@@ -3245,6 +3260,11 @@ def main_function():
                             f.write(cmd_header_custom + cmd_return)
                         for l in dict0[command_name]:
                             f.write(l + cmd_return)
+                    if (plat == "Windows"):
+                        ""
+                    else:
+                        if (cmd_suffix_custom == cmd_suffix):
+                            os.system("chmod +x " + local_path)
                     print('successed: outport %s to %s' % (command_name, local_path))
                     return
                 return
