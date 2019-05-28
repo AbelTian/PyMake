@@ -2747,7 +2747,7 @@ def main_function():
             if (plat == "Windows"):
                 lines += (env_set + 'PATH=' + key + os.path.pathsep + '%PATH%' + cmd_return)
             else:
-                lines += (env_set + 'PATH=' + key + os.path.pathsep + '$PATH' + cmd_return)
+                lines += (env_set + 'PATH="' + key + '"' + os.path.pathsep + '$PATH' + cmd_return)
 
         #export var
         for (key, value) in dict0.items():
@@ -2787,6 +2787,12 @@ def main_function():
         with open(cmd_unset, 'w', encoding=cmd_codec) as f:
             f.write(cmd_header)
             f.write(lines)
+
+        if (plat == "Windows"):
+            ""
+        else:
+            os.system("chmod +x " + cmd_effect)
+            os.system("chmod +x " + cmd_unset)
 
         #return file name
         return current_var, cmd_effect, cmd_unset
@@ -3432,7 +3438,7 @@ def main_function():
                     if (plat == "Windows"):
                         lines += (env_set + 'PATH=' + key + os.path.pathsep + '%PATH%' + cmd_return)
                     else:
-                        lines += (env_set + 'PATH=' + key + os.path.pathsep + '$PATH' + cmd_return)
+                        lines += (env_set + 'PATH="' + key + '"' + os.path.pathsep + '$PATH' + cmd_return)
 
                 # export var
                 for (key, value) in localenv.items():
@@ -3477,6 +3483,12 @@ def main_function():
                 with open(cmd_unset, 'w') as f:
                     f.write(cmd_header)
                     f.write(lines)
+
+                if (plat == "Windows"):
+                    ""
+                else:
+                    os.system("chmod +x " + cmd_effect)
+                    os.system("chmod +x " + cmd_unset)
 
                 print("successed: export local env to %s %s" % (cmd_effect, cmd_unset))
                 return
@@ -4157,7 +4169,7 @@ def main_function():
                     if (plat == "Windows"):
                         lines += (env_set + 'PATH=' + key + os.path.pathsep + '%PATH%' + cmd_return)
                     else:
-                        lines += (env_set + 'PATH=' + key + os.path.pathsep + '$PATH' + cmd_return)
+                        lines += (env_set + 'PATH="' + key + '"' + os.path.pathsep + '$PATH' + cmd_return)
 
                 # export var
                 for (key, value) in pymakesystemenviron.items():
@@ -4179,7 +4191,7 @@ def main_function():
                     if (plat == "Windows"):
                         lines += (env_set + 'PATH=' + key + os.path.pathsep + '%PATH%' + cmd_return)
                     else:
-                        lines += (env_set + 'PATH=' + key + os.path.pathsep + '$PATH' + cmd_return)
+                        lines += (env_set + 'PATH="' + key + '"' + os.path.pathsep + '$PATH' + cmd_return)
 
                 # export var
                 for (key, value) in localenv.items():
@@ -4200,7 +4212,7 @@ def main_function():
                     if (plat == "Windows"):
                         lines += (env_set + 'PATH=' + key + os.path.pathsep + '%PATH%' + cmd_return)
                     else:
-                        lines += (env_set + 'PATH=' + key + os.path.pathsep + '$PATH' + cmd_return)
+                        lines += (env_set + 'PATH="' + key + '"' + os.path.pathsep + '$PATH' + cmd_return)
 
                 # export var
                 for (key, value) in envcustomlistrawvars.items():
@@ -4218,7 +4230,7 @@ def main_function():
                 if (plat == "Windows"):
                     lines += (env_set + 'PATH=' + key + os.path.pathsep + '%PATH%' + cmd_return)
                 else:
-                    lines += (env_set + 'PATH=' + key + os.path.pathsep + '$PATH' + cmd_return)
+                    lines += (env_set + 'PATH="' + key + '"' + os.path.pathsep + '$PATH' + cmd_return)
 
             # export var
             for (key, value) in dict0.items():
@@ -4322,6 +4334,12 @@ def main_function():
             with open(cmd_unset, 'w', encoding=cmd_codec) as f:
                 f.write(cmd_header)
                 f.write(lines)
+
+            if (plat == "Windows"):
+                ""
+            else:
+                os.system("chmod +x " + cmd_effect)
+                os.system("chmod +x " + cmd_unset)
 
             # +system
             if(args['-s'] or args['--system'] is True):
@@ -4994,7 +5012,7 @@ def main_function():
                     if (plat == "Windows"):
                         lines += (env_set + 'PATH=' + key + os.path.pathsep + '%PATH%' + cmd_return)
                     else:
-                        lines += (env_set + 'PATH=' + key + os.path.pathsep + '$PATH' + cmd_return)
+                        lines += (env_set + 'PATH="' + key + '"' + os.path.pathsep + '$PATH' + cmd_return)
 
                 # export var
                 for (key, value) in envcustomlistrawvars.items():
@@ -5039,6 +5057,12 @@ def main_function():
                 with open(cmd_unset, 'w') as f:
                     f.write(cmd_header)
                     f.write(lines)
+
+                if (plat == "Windows"):
+                    ""
+                else:
+                    os.system("chmod +x " + cmd_effect)
+                    os.system("chmod +x " + cmd_unset)
 
                 print("successed: export custom env to %s %s" % (cmd_effect, cmd_unset))
                 return
@@ -5396,7 +5420,7 @@ def main_function():
             if (plat == "Windows"):
                 lines += (env_set + 'PATH=' + key + os.path.pathsep + '%PATH%' + cmd_return)
             else:
-                lines += (env_set + 'PATH=' + key + os.path.pathsep + '$PATH' + cmd_return)
+                lines += (env_set + 'PATH="' + key + '"' + os.path.pathsep + '$PATH' + cmd_return)
 
         #export var
         for (key, value) in dict0.items():
@@ -5436,6 +5460,12 @@ def main_function():
         with open(cmd_unset, 'w', encoding=cmd_codec) as f:
             f.write(cmd_header)
             f.write(lines)
+
+        if (plat == "Windows"):
+            ""
+        else:
+            os.system("chmod +x " + cmd_effect)
+            os.system("chmod +x " + cmd_unset)
 
         #return file name
         return current_var, cmd_effect, cmd_unset
@@ -6734,7 +6764,7 @@ def main_function():
             if (plat == "Windows"):
                 lines += (env_set + 'PATH=' + key + os.path.pathsep + '%PATH%' + cmd_return)
             else:
-                lines += (env_set + 'PATH=' + key + os.path.pathsep + '$PATH' + cmd_return)
+                lines += (env_set + 'PATH="' + key + '"' + os.path.pathsep + '$PATH' + cmd_return)
 
         #export var
         for (key, value) in dict0.items():
@@ -6774,6 +6804,12 @@ def main_function():
         with open(cmd_unset, 'w', encoding=cmd_codec) as f:
             f.write(cmd_header)
             f.write(lines)
+
+        if (plat == "Windows"):
+            ""
+        else:
+            os.system("chmod +x " + cmd_effect)
+            os.system("chmod +x " + cmd_unset)
 
         #return file name
         return current_var, cmd_effect, cmd_unset
