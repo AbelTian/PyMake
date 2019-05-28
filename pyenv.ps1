@@ -91,7 +91,7 @@ Write-Output "environme: [$PYENVNAME] [$PYENVEXISTEDFLAG] [USED]"
 Write-Output "exec root: [$PYMMSHELLROOT] [default]"
 Write-Output "exec root: [$PWD] [here]"
 
-& "$PYPROGRAMPATHNAME" export2 powershell $PYENVNAME to $PYENVINDEX --custom
+& "$PYPROGRAMPATHNAME" export2 powershell $PYENVNAME to $PYENVINDEX --local --custom
 
 if ("$PYENVFLAG" -eq "False") {
     . "$PYMMSHELLROOT/${PYENVINDEX}_unset.ps1"

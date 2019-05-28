@@ -110,7 +110,7 @@ export PYMMSHELLROOT=$("$PYPROGRAMPATHNAME" get default exec root)
 echo exec root: \[$PYMMSHELLROOT\] \[default\]
 echo exec root: \[$(pwd)\] \[here\]
 
-"$PYPROGRAMPATHNAME" export $PYENVNAME $PYENVINDEX
+"$PYPROGRAMPATHNAME" export2 $PYENVNAME to $PYENVINDEX --local --custom
 
 if [ $PYENVFLAG -eq 0 ]; then
     if [ -f "${PYMMSHELLROOT}/${PYENVINDEX}_unset.sh" ]; then
