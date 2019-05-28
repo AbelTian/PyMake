@@ -5855,7 +5855,7 @@ def main_function():
                             print(Fore.GREEN + "  %-30s %s" % (key, value))
                         return
 
-                    elif (args['--envname'] is not None):
+                    elif (args['--envname'] is True):
                         current_var = args['<env-name>']
                         if(current_var is None):
                             current_var = rawconfig['environ']['current']
