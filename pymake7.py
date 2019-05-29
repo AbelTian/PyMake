@@ -4120,20 +4120,20 @@ def main_function():
 
                 # +system
                 if (args['-s'] or args['--system'] is True):
-                    print("successed: export %-10s env to %s %s" % ('system', cmd_effect, cmd_unset))
+                    print("successed: export %s env to %s %s" % ('system', cmd_effect, cmd_unset))
                 else:
                     ''
                 # +local
                 if (args['-l'] or args['--local'] is True):
-                    print("successed: export %-10s env to %s %s" % ('local', cmd_effect, cmd_unset))
+                    print("successed: export %s env to %s %s" % ('local', cmd_effect, cmd_unset))
                 else:
                     ''
                 # +custom
                 if (args['-c'] or args['--custom'] is True):
-                    print("successed: export %-10s env to %s %s" % ('custom', cmd_effect, cmd_unset))
+                    print("successed: export %s env to %s %s" % ('custom', cmd_effect, cmd_unset))
                 else:
                     ''
-                print("successed: export %-10s env to %s %s" % (current_var, cmd_effect, cmd_unset))
+                print("successed: export %s env to %s %s" % (current_var, cmd_effect, cmd_unset))
 
                 return
 
@@ -4343,20 +4343,20 @@ def main_function():
 
             # +system
             if(args['-s'] or args['--system'] is True):
-                print("successed: export %-10s env to %s %s" % ('system', cmd_effect, cmd_unset))
+                print("successed: export %s env to %s %s" % ('system', cmd_effect, cmd_unset))
             else:
                 ''
             # +local
             if(args['-l'] or args['--local'] is True):
-                print("successed: export %-10s env to %s %s" % ('local', cmd_effect, cmd_unset))
+                print("successed: export %s env to %s %s" % ('local', cmd_effect, cmd_unset))
             else:
                 ''
             # +custom
             if(args['-c'] or args['--custom'] is True):
-                print("successed: export %-10s env to %s %s" % ('custom', cmd_effect, cmd_unset))
+                print("successed: export %s env to %s %s" % ('custom', cmd_effect, cmd_unset))
             else:
                 ''
-            print("successed: export %-10s env to %s %s" % (current_var, cmd_effect, cmd_unset))
+            print("successed: export %s env to %s %s" % (current_var, cmd_effect, cmd_unset))
 
             return
         else:

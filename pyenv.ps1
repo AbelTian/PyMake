@@ -105,4 +105,17 @@ else {
 #clean
 Remove-Item -Force "$PYMMSHELLROOT/${PYENVINDEX}_effect.ps1","$PYMMSHELLROOT/${PYENVINDEX}_unset.ps1"
 
+#${env:filepath}=""
+#${env:PYENVEXISTEDFLAG}=""
+#${env:PYENVFLAG}=""
+#${env:PYENVINDEX}=""
+#${env:PYENVNAME}=""
+#${env:PYMMDEFAULTENVNAME}=""
+#${env:PYMMSOURCECONFIG}=""
+#${env:PYMMSOURCEROOT}=""
+#${env:PYPROGRAMNAME}=""
+#${env:PYPROGRAMPATH}=""
+#${env:PYPROGRAMPATHNAME}=""
+#${env:PYMMSHELLROOT}=""
+
 exit 0

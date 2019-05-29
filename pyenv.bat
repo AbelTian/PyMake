@@ -75,4 +75,17 @@ if "%PYENVFLAG%" == "False" (
 ::clean
 del /q /f "%PYMMSHELLROOT%\%PYENVINDEX%_effect.bat" "%PYMMSHELLROOT%\%PYENVINDEX%_unset.bat"
 
+rem set filepath=
+rem set PYENVEXISTEDFLAG=
+rem set PYENVFLAG=
+rem set PYENVINDEX=
+rem set PYENVNAME=
+rem set PYMMDEFAULTENVNAME=
+rem set PYMMSOURCECONFIG=
+rem set PYMMSOURCEROOT=
+rem set PYPROGRAMNAME=
+rem set PYPROGRAMPATH=
+rem set PYPROGRAMPATHNAME=
+rem set PYMMSHELLROOT=
+
 exit /b 0
