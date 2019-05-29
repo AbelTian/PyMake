@@ -3321,15 +3321,15 @@ def main_function():
         localconf.write(open(localini, 'w'))
 
     #status readonly
-    if( not localconf.has_option('local', 'status') ):
-        localconf.set('local', 'status', 'readonly')
-        localconf.write(open(localini, 'w'))
+    #if( not localconf.has_option('local', 'status') ):
+    #    localconf.set('local', 'status', 'readonly')
+    #    localconf.write(open(localini, 'w'))
 
-    localswitch = localconf['local']['status']
-    if(localswitch != 'readonly'):
-        localswitch = 'readonly'
-        localconf.set('local', 'status', localswitch)
-        localconf.write(open(localini, 'w'))
+    #localswitch = localconf['local']['status']
+    #if(localswitch != 'readonly'):
+    #    localswitch = 'readonly'
+    #    localconf.set('local', 'status', localswitch)
+    #    localconf.write(open(localini, 'w'))
 
     #switch [1, default]
     if( not localconf.has_option('local', 'switch') ):
@@ -3658,7 +3658,7 @@ def main_function():
                 status = "closed"
                 if(localswitch == '1'):
                     status = "opened"
-                print("local env: %s. [readonly]" % status)
+                print("local env: %s." % status)
                 return
             else:
                 status = "closed"
