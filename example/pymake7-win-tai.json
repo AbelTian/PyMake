@@ -104,6 +104,11 @@
         "ndk.arm.bin": "${ndk.arm}/bin",
         "ndk.x86.bin": "${ndk.x86}/bin",
         "ndk.x86_64.bin": "${ndk.x86_64}/bin",
+        "android.gradle": "${android}/gradle-all",
+        "gradle4.2": "${android.gradle}/gradle-4.2.1",
+        "gradle2.2": "${android.gradle}/gradle-2.2.1",
+        "gradle": "${gradle4.2}",
+        "gradle.bin": "${gradle}/bin",
         "watcom": "${wincc}/watcom1.9",
         "watcom.bin": "${watcom}/binw;${watcom}/binnt",
         "watcom.include": "${watcom}/h;${watcom}/h/nt;${watcom}/h/nt/directx;${watcom}/h/nt/ddk",
@@ -316,7 +321,8 @@
         "cmake": "在source路径打开cmake-gui。这个cmake到底怎么从命令行配置？再等等谁出一个cmake命令行的丰富用法。",
         "build.cmake": "开启cmake的make编译。",
         "open.run": "编译完，运行一下。",
-        "watcom": "watcom提供CL 13，和MSVC CL 13冲突，也不要给MinGW环境用，冲突。"
+        "watcom": "watcom提供CL 13，和MSVC CL 13冲突，也不要给MinGW环境用，冲突。",
+        "configure.qt5.mingw32.static": "need python2 for webengine."
     },
     "command": {
         "cc0": [],
@@ -410,10 +416,6 @@
             "set sdk=%PYMAKEPROGRAMROOT%",
             "start %sdk%"
         ],
-        "open.env": [
-            "set sdk=%PYMAKESOURCEROOT%",
-            "start %sdk%"
-        ],
         "open.prod": [
             "set prod=%1",
             "cd /d ${root.prod}/%prod%/Windows",
@@ -433,6 +435,10 @@
         "open.sdk": [
             "set sdk=%1",
             "start ${root.sdk}/%sdk%"
+        ],
+        "open.env": [
+            "set env0=%PYMAKESOURCEROOT%",
+            "start %env0%"
         ],
         "open.build": [
             "rem if not exist \"*.pro\" ( echo has any .pro? please add here command to restrict. & exit /b 0 )",
@@ -578,7 +584,7 @@
             "echo prod at : %prod:\\=/%",
             "cd /d %src_path%"
         ],
-        "open.run": [
+        "open.run.d": [
             "rem if not exist \"*.pro\" ( echo has any .pro? please add here command to restrict. & exit /b 0 )",
             "set src_path=%CD%",
             "set profilename=%1",
@@ -604,6 +610,41 @@
             "set exe=%exe:\\=/%",
             "echo %exe%",
             "if not exist \"%exe%\" ( echo %profilename%d.exe is not exist. & exit /b 0)",
+            "cd /d %exeroot:/=\\%",
+            "start %exe%",
+            "echo build inf ${QTSPEC} ${QTCONFIG}",
+            "echo src file: %src:\\=/%",
+            "echo build at: %build:\\=/%",
+            "echo sdk at  : %sdk:\\=/%",
+            "echo prod at : %prod:\\=/%",
+            "cd /d %src_path%"
+        ],
+        "open.run": [
+            "rem if not exist \"*.pro\" ( echo has any .pro? please add here command to restrict. & exit /b 0 )",
+            "set src_path=%CD%",
+            "set profilename=%1",
+            "set prod=${root.prod}/%profilename%/${QSYS}",
+            "set sdk=${root.sdk}/%profilename%/${QSYS}",
+            "set src=%src_path%/%profilename%.pro",
+            "set build=${root.build}/%profilename%/${QSYS}/${QTVERSION}/Debug",
+            "rem md %build:/=\\%",
+            "cd /d %build%",
+            "rem del /f /q demo examples src test",
+            "echo src file: %src:\\=/%",
+            "echo build at: %build:\\=/%",
+            "echo sdk at  : %sdk:\\=/%",
+            "echo prod at : %prod:\\=/%",
+            "echo profilename=%profilename%",
+            "echo ${QTSPEC} ${QTCONFIG}",
+            "set exeroot=%build%\\debug",
+            "set exeroot=%exeroot:\\=/%",
+            "set relativepath=%2",
+            "rem if not \"\"%relativepath%\"\" == \"\"\"\" ( set relativepath=%relativepath:\\=/% )",
+            "rem echo [%relativepath%]",
+            "set exe=%build%\\debug\\%relativepath%\\%profilename%.exe",
+            "set exe=%exe:\\=/%",
+            "echo %exe%",
+            "if not exist \"%exe%\" ( echo %profilename%.exe is not exist. & exit /b 0)",
             "cd /d %exeroot:/=\\%",
             "start %exe%",
             "echo build inf ${QTSPEC} ${QTCONFIG}",
