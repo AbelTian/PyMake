@@ -129,6 +129,8 @@ pymake program
 
 
 ``` shell
+#查看PyMake提供的local环境
+pymake local 
 
 #开启“在sourceroot里定义的”自定义环境
 pymake custom open
@@ -164,13 +166,29 @@ pypowershell
 #查看系统环境 [system]
 pymake system
 
+#查看PyMake提供的环境
+pymake local 
+
 #查看自定义环境 [custom]
 pymake custom
 
 #查看独立环境 [separate]
 pymake env current -r
 
+# 另外一组查看环境的命令
+pymake get all settings --local --custom --system --current --envname <env-name>
+
 ```
+
+```cmd
+# 使用其他语言执行命令
+pymake language exec-with-params php --params xxx.php --params ...
+
+#language命令的快捷方式
+pylanguage php xxx.php ...
+
+```
+
 #### pymake使用截图  
 ![命令行截图](./screenshot/a2.png)  
 
