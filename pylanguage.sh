@@ -5,10 +5,10 @@ while [ 1 ]
 do
 
 
-
 if [ "$1" = "" ]; then
-    echo "pylanguage <cmd-name> [ <cmd-params> ... ]"
-    echo please appoint a cmd name.
+    echo usage:
+    echo "  pylanguage <cmd-name> [ <cmd-params> ... ]"
+    echo -----
     break
 fi
 export PYEXECNAME=$1
@@ -89,6 +89,7 @@ export PYPROGRAMPATHNAME=$PYPROGRAMPATH/$PYPROGRAMNAME
 #    export PYENVNAME=$PYMMDEFAULTENVNAME
 #fi
 export PYENVNAME=current
+
 #echo $PYENVNAME
 #export PYEXECFLAG=$("$PYPROGRAMPATHNAME" have env $PYENVNAME)
 #if [ "$PYEXECFLAG" = "False" ]; then

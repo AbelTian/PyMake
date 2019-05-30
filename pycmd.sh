@@ -5,17 +5,15 @@ while [ 1 ]
 do
 
 
-
 if [ "$1" = "" ]; then
-    echo "pycmd <cmd-name> [ <env-name> ]"
+    echo usage:
+    echo "  pycmd <cmd-name>"
+    echo ------
     echo please appoint a cmd name.
     break
 fi
 export PYEXECNAME=$1
 
-if [ "$2" != "" ]; then
-    export PYENVNAME=$2
-fi
 
 #if has source[.] call , failed. source default work path is user home.
 #这些都只是获取到了工作路径
@@ -64,40 +62,42 @@ export PYPROGRAMPATHNAME=$PYPROGRAMPATH/$PYPROGRAMNAME
 #echo $(filename "$0")
 #echo $0 | awk -F'\' '{print $NF}'
 
-echo starting cmd ...
-export PYEXECINDEX=$(echo $RANDOM)
-echo env index: \[$PYEXECINDEX\]
+#echo starting cmd ...
+#export PYEXECINDEX=$(echo $RANDOM)
+#echo env index: \[$PYEXECINDEX\]
 
-export PYMMSOURCEROOT=$("${PYPROGRAMPATHNAME}" source root)
-echo location : \[$PYMMSOURCEROOT\]
+#export PYMMSOURCEROOT=$("${PYPROGRAMPATHNAME}" source root)
+#echo location : \[$PYMMSOURCEROOT\]
 
-export PYMMSOURCECONFIG=$("$PYPROGRAMPATHNAME" source config)
-echo configure: \[$PYMMSOURCECONFIG\] \[1\]
+#export PYMMSOURCECONFIG=$("$PYPROGRAMPATHNAME" source config)
+#echo configure: \[$PYMMSOURCECONFIG\] \[1\]
 
-export PYMMDEFAULTENVNAME=$("$PYPROGRAMPATHNAME" get current env)
-echo environme: \[$PYMMDEFAULTENVNAME\] \[default\]
-if [ "$2" != "" ]; then
-    export PYENVNAME=$2
-else
-    export PYENVNAME=$PYMMDEFAULTENVNAME
-fi
-export PYEXECFLAG=$("$PYPROGRAMPATHNAME" have env $PYENVNAME)
-if [ "$PYEXECFLAG" = "False" ]; then
-    echo environme: \[$PYENVNAME\] is not existed.
-    break
-fi
-echo environme: \[$PYENVNAME\] \[$PYEXECFLAG\] \[USED\]
+#export PYMMDEFAULTENVNAME=$("$PYPROGRAMPATHNAME" get current env)
+#echo environme: \[$PYMMDEFAULTENVNAME\] \[default\]
+#if [ "$2" != "" ]; then
+#    export PYENVNAME=$2
+#else
+#    export PYENVNAME=$PYMMDEFAULTENVNAME
+#fi
+export PYENVNAME=current
 
-export PYEXECFLAG=$("$PYPROGRAMPATHNAME" have cmd $PYEXECNAME)
-if [ "$PYEXECFLAG" = "False" ]; then
-    echo command\ \ : \[$PYEXECNAME\] is system wild command.
-else
-    echo command\ \ : \[$PYEXECNAME\] \[$PYEXECFLAG\] \[EXISTED\]
-fi
+#export PYEXECFLAG=$("$PYPROGRAMPATHNAME" have env $PYENVNAME)
+#if [ "$PYEXECFLAG" = "False" ]; then
+#    echo environme: \[$PYENVNAME\] is not existed.
+#    break
+#fi
+#echo environme: \[$PYENVNAME\] \[$PYEXECFLAG\] \[USED\]
 
-export PYMMSHELLROOT=$("$PYPROGRAMPATHNAME" get default exec root)
-echo exec root: \[$PYMMSHELLROOT\] \[default\]
-echo exec root: \[$(pwd)\] \[here\]
+#export PYEXECFLAG=$("$PYPROGRAMPATHNAME" have cmd $PYEXECNAME)
+#if [ "$PYEXECFLAG" = "False" ]; then
+#    echo command\ \ : \[$PYEXECNAME\] is system wild command.
+#else
+#    echo command\ \ : \[$PYEXECNAME\] \[$PYEXECFLAG\] \[EXISTED\]
+#fi
+
+#export PYMMSHELLROOT=$("$PYPROGRAMPATHNAME" get default exec root)
+#echo exec root: \[$PYMMSHELLROOT\] \[default\]
+#echo exec root: \[$(pwd)\] \[here\]
 
 "$PYPROGRAMPATHNAME" use $PYENVNAME exec here $PYEXECNAME
 

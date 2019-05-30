@@ -21,6 +21,9 @@ uninstall
 mmfile=pyenv
 uninstall
 
+mmfile=pytype
+uninstall
+
 mmfile=pycmd
 uninstall
 
@@ -31,6 +34,9 @@ mmfile=pyccvp
 uninstall
 
 mmfile=pylanguage
+uninstall
+
+mmfile=pyclean
 uninstall
 
 mmfile=pyinfo

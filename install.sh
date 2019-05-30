@@ -29,6 +29,10 @@ sourcefile=pyenv.sh
 mmfile=pyenv
 install
 
+sourcefile=pytype.sh
+mmfile=pytype
+install
+
 sourcefile=pycmd.sh
 mmfile=pycmd
 install
@@ -43,6 +47,10 @@ install
 
 sourcefile=pylanguage.sh
 mmfile=pylanguage
+install
+
+sourcefile=pyclean.sh
+mmfile=pyclean
 install
 
 sourcefile=pyinfo.sh

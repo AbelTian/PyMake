@@ -7,18 +7,24 @@ do
 export PYENVFLAG=1
 if [ "$1" = "" ]
 then
-    echo "pyenv <env-name>"
-    echo "pyenv open <env-name>"
-    echo "pyenv close <env-name>"
+    echo usage:
+    echo "  pyenv <env-name>"
+    echo "  pyenv open <env-name>"
+    echo "  pyenv close <env-name>"
+    echo "  <env name>: 'current' is suggested."
+    echo ------
     echo please appoint a env name.
     break
 elif [ "$1" = "open" ]
 then
     if [ "$2" = "" ]
     then
-        echo "pyenv <env-name>"
-        echo "pyenv open <env-name>"
-        echo "pyenv close <env-name>"
+        echo usage:
+        echo "  pyenv <env-name>"
+        echo "  pyenv open <env-name>"
+        echo "  pyenv close <env-name>"
+        echo "  <env name>: 'current' is suggested."
+        echo ------
         echo please appoint a env name.
         break
     fi
@@ -27,9 +33,12 @@ elif [ "$1" = "close" ]
 then
     if [ "$2" = "" ]
     then
-        echo "pyenv <env-name>"
-        echo "pyenv open <env-name>"
-        echo "pyenv close <env-name>"
+        echo usage:
+        echo "  pyenv <env-name>"
+        echo "  pyenv open <env-name>"
+        echo "  pyenv close <env-name>"
+        echo "  <env name>: 'current' is suggested."
+        echo ------
         echo please appoint a env name.
         break
     fi
