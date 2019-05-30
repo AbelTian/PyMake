@@ -7594,9 +7594,14 @@ def main_function():
             cmd_list.append(cmd_header)
             cmd_list.append("source %s_effect.sh" % name)
 
+        #print(params0)
         params_string = ""
         for param in params0:
-            params_string += " \"" + param + "\" "
+            #print(param)
+            if(str(param).__contains__(' ')):
+                params_string += "\"" + param + "\"" + ' '
+            else:
+                params_string += param + " "
         #print(params_string)
 
         if ( local is True):
@@ -7604,7 +7609,10 @@ def main_function():
                 cmd_list.append(cmd)
         else:
             for cmd in list0:
-                cmd_list.append(cmd + ' ' + params_string)
+                if(str(cmd).__contains__(' ')):
+                    cmd_list.append('"' + cmd + '"' + ' ' + params_string)
+                else:
+                    cmd_list.append(cmd + ' ' + params_string)
 
         # append exit 0
         cmd_list.append(cmd_exit)
@@ -7616,10 +7624,10 @@ def main_function():
                 f.write(line + cmd_return)
         #print(cmd_execute)
 
-        #print("IN: execute %s" % cmd_execute)
-        #for cmd in cmd_list:
-        #    print(cmd)
-        #print("----------------------------------------------")
+        print("IN: execute %s" % cmd_execute)
+        for cmd in cmd_list:
+            print(cmd)
+        print("----------------------------------------------")
 
         if (plat == "Windows"):
             ""
@@ -7639,10 +7647,10 @@ def main_function():
         cmd_list.append(cmd_exit)
 
         # print (cmd_list)
-        #print("CMD: execute %s" % cmd_execute)
-        #for cmd in cmd_list:
-        #    print(cmd)
-        #print("----------------------------------------------")
+        print("CMD: execute %s" % cmd_execute)
+        for cmd in cmd_list:
+            print(cmd)
+        print("----------------------------------------------")
 
         return cmd_list, name
 

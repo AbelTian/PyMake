@@ -2,7 +2,7 @@
 
 :: pyexecvp.bat 使用某个环境，在当前目录，执行用户输入的命令和参数。
 
-if "%1" == "" (
+if ""%1"" == """" (
     rem echo you can execute command with params in default env.
     echo usage:
     echo "  pyexecvp <cmd-name> [ <cmd-params>... ]"
@@ -67,6 +67,16 @@ rem )
 rem for /F %%i in ('"%PYPROGRAMPATHNAME%" get default exec root') do ( set "PYMMSHELLROOT=%%i" )
 rem echo exec root: [%PYMMSHELLROOT%] [default]
 rem echo exec root: [%CD%] [here]
+
+rem echo %PYEXECNAME%
+rem echo %PYEXECPARAM[2]%
+rem echo %PYEXECPARAM[3]%
+rem echo %PYEXECPARAM[4]%
+rem echo %PYEXECPARAM[5]%
+rem echo %PYEXECPARAM[6]%
+rem echo %PYEXECPARAM[7]%
+rem echo %PYEXECPARAM[8]%
+rem echo %PYEXECPARAM[9]%
 
 if not ""%9"" == """" (
     call "%PYPROGRAMPATHNAME%" use %PYENVNAME% exec-with-params here %PYEXECNAME% --params %PYEXECPARAM[2]% --params %PYEXECPARAM[3]% --params %PYEXECPARAM[4]% --params %PYEXECPARAM[5]% --params %PYEXECPARAM[6]% --params %PYEXECPARAM[7]% --params %PYEXECPARAM[8]% --params %PYEXECPARAM[9]%

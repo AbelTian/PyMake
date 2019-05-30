@@ -103,6 +103,32 @@ def getplatform_release():
     #3.10.84-14528008
     return sysstr
 
+def getcmd_codec():
+    if (sys.version_info[0] == 2):
+        return None
+    else:
+        if(getplatform() == "Windows"):
+            if(getplatform_release() == "XP"):
+                return None
+            else:
+                return "ansi"
+        else:
+            return 'utf8'
+
+    return "utf8"
+
+def myopen(file, mode='r', buffering=None, encoding=None, errors=None, newline=None, closefd=True): # known special case of open
+    if (sys.version_info[0] == 2):
+        return open(file, mode, buffering, errors, newline, closefd)
+    else:
+        if(getplatform() == "Windows"):
+            if(getplatform_release() == "XP"):
+                encoding = None
+        return open(file, mode, buffering, encoding, errors, newline, closefd)
+
+    return open(file, mode, buffering, encoding, errors, newline, closefd)
+
+
 def getuserroot():
     root = ""
     sysstr = platform.system()
