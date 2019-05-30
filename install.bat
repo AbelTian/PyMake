@@ -28,6 +28,11 @@ set filepath=%~dp0
 set sourcefile=pyvc.bat
 call :install %*
 
+set mmfile=pytype.bat
+set filepath=%~dp0
+set sourcefile=pytype.bat
+call :install %*
+
 set mmfile=pycmd.bat
 set filepath=%~dp0
 set sourcefile=pycmd.bat
@@ -51,6 +56,11 @@ call :install %*
 set mmfile=pylanguage.bat
 set filepath=%~dp0
 set sourcefile=pylanguage.bat
+call :install %*
+
+set mmfile=pyclean.bat
+set filepath=%~dp0
+set sourcefile=pyclean.bat
 call :install %*
 
 set mmfile=pyinfo.bat

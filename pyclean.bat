@@ -1,15 +1,6 @@
 @echo off
 
-:: pycmd.bat 使用某个环境，在当前目录，执行命令。
-
-if "%1" == "" (
-    rem echo you can execute command with params in default env.
-    echo usage:
-    echo "  pycmd <cmd-name>"
-    echo ------
-    echo please appoint a cmd name. & exit /b 0
-)
-set PYEXECNAME=%1
+:: pyclean.bat 在当前目录，清理掉所有导出的命令脚本。
 
 set PYPROGRAMPATH=%~dp0
 set PYPROGRAMNAME=pymake.bat
@@ -31,7 +22,6 @@ rem     set PYENVNAME=%2
 rem ) else (
 rem     set PYENVNAME=%PYMMDEFAULTENVNAME%
 rem )
-set PYENVNAME=current
 
 rem for /F %%i in ('"%PYPROGRAMPATHNAME%" have env %PYENVNAME%') do ( set "PYEXECFLAG=%%i" )
 rem if "%PYEXECFLAG%" == "False" (
@@ -51,4 +41,5 @@ rem for /F %%i in ('"%PYPROGRAMPATHNAME%" get default exec root') do ( set "PYMM
 rem echo exec root: [%PYMMSHELLROOT%] [default]
 rem echo exec root: [%CD%] [here]
 
-call "%PYPROGRAMPATHNAME%" use %PYENVNAME% exec here %PYEXECNAME%
+call "%PYPROGRAMPATHNAME%" clean here
+

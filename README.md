@@ -415,7 +415,7 @@ Update the command-line.
 
 ## Command-line  
 
-```commandline
+```shell
 Microsoft Windows [版本 10.0.17134.706]
 (c) 2018 Microsoft Corporation。保留所有权利。
 
@@ -651,7 +651,7 @@ R:\Develop\b0-toolkits\a0-compiler\PyMake>
 
 ## Environment    
 
-```commandline
+```shell
 
 Microsoft Windows [版本 10.0.17134.706]
 (c) 2018 Microsoft Corporation。保留所有权利。
@@ -775,7 +775,11 @@ User support shell module, user can install them to share their functions.
 |----|----|----|  
 | pymake.py | pymake | mm, pymm |
 | pymake.py | pyenv | pyvc |
-| pymake.py | pycmd, pyexecvp | pyccvp |
+| pymake.py | pycmd | |
+| pymake.py | pyexecvp | pyccvp |
+| pymake.py | pytype |  |
+| pymake.py | pyclean |  |
+| pymake.py | pylanguage |  |
 | pymake.py | pypowershell.bat |  |
 | pymake.py | pyenv.ps1 |  |
 | pyinfo.py | pyinfo || 

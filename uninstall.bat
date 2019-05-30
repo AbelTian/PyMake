@@ -23,6 +23,10 @@ set sourcefile=pyvc.bat
 set mmfile=pyvc.bat
 call :uninstall
 
+set sourcefile=pytype.bat
+set mmfile=pytype.bat
+call :uninstall
+
 set sourcefile=pycmd.bat
 set mmfile=pycmd.bat
 call :uninstall
@@ -41,6 +45,10 @@ call :uninstall
 
 set sourcefile=pylanguage.bat
 set mmfile=pylanguage.bat
+call :uninstall
+
+set sourcefile=pyclean.bat
+set mmfile=pyclean.bat
 call :uninstall
 
 set sourcefile=pyinfo.bat

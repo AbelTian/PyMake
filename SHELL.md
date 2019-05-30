@@ -1,6 +1,29 @@
 # User Support  
 User support shell module, user can install them to share their functions.   
 
+# 使用说明  
+|影响当前执行器 [PyMake并行]| 不影响当前执行器 [PyMake串行]| 备注 ||
+|-----|-----|-----|-----|  
+|pyenv qt5| pymake set cur env qt5|||
+|pytype test.3 bbc qt5| pytyle test.2 abc |||
+|bbc_exec.bat| abc_exec.bat|都能执行PyMake保存的命令|||
+|java -v|pypowershell xxx ... ||||
+| |pylanguage xxx ...||
+| |pycmd test.4|||
+| |pyexecvp test.5 ...|||||
+| |pyccvp test.5 ...||||||
+|set | pyccvp set|都能执行系统路径里的命令||||
+|php xxx ... | pyccvp php xxx ... |都能执行自定路径里的命令||||
+|pyenv close qt5| | |
+|pyvc msvc2015| pymake set cur env msvc2015 | 都能开启新环境执行命令|
+|CL.exe ... | pyccvp CL.exe ... | |
+|pyvc close msvc2015| | |
+|pyclean | pyclean| 清理掉从PyMake导出的命令 |
+
+说明：前者，一直影响当前环境，后者，一直没影响当前环境。    
+说明：前者，难度较大，后者，比较容易理解和使用。  
+说明：前者和后者，不要混淆使用。  
+
 # pymake  
 
 ## 遇到的问题  
