@@ -5483,7 +5483,7 @@ def main_function():
         return current_var, cmd_effect, cmd_unset
 
     # language [ .bat .sh ] [windows unix] --suffix --encoding
-    def createCmdList07(suffix = None, encoding = None, env_name = None, local = True, list0 = [], list1 = [], params0 = []):
+    def createCmdList07(suffix = None, encoding = None, env_name = None, local = True, list0 = [], params0 = []):
         cmd_list = []
 
         name = uuid.uuid4().__str__()
@@ -5532,6 +5532,15 @@ def main_function():
             cmd_suffix_language = suffix
         if(encoding is not None):
             cmd_codec_language = encoding
+
+        list1 = []
+        # for current_var in str(args['<command-param>']).split():
+        #    list1.append(current_var)
+        if (params0.__len__() > 0):
+            current_var = params0[0]
+            list1.append(current_var)
+            params0.pop(0)
+        #print(list1)
 
         params_string = ""
         for param in params0:
@@ -5592,6 +5601,11 @@ def main_function():
                     # print(2, languageparams)
                     # cmd_list.append(languageparams + ' ' + params_string)
 
+        #print(3, languageparams)
+        if(list1.__len__() >0 ):
+            params_string = '"' + languageparams + '" ' + params_string
+        #print(params_string)
+
         languageexecfile = ''
         if ( local is True):
             #fixed
@@ -5607,17 +5621,16 @@ def main_function():
                 languageexecfile = cmd
 
         #print(3, languageexecfile)
-        #print(3, languageparams)
         if(os.path.isfile(languageparams)):
             if(plat == "Windows"):
-                cmd_list.append("call %s \"%s\" %s" % (languageexecfile, languageparams, '%*'))
+                cmd_list.append("call %s %s" % (languageexecfile, '%*'))
             else:
-                cmd_list.append("%s \"%s\" %s" % (languageexecfile, languageparams, '"$@"'))
+                cmd_list.append("%s %s" % (languageexecfile, '"$@"'))
         else:
             if(plat == "Windows"):
-                cmd_list.append("call %s \"%s\" %s" % (languageexecfile, languageparams, '%*'))
+                cmd_list.append("call %s %s" % (languageexecfile, '%*'))
             else:
-                cmd_list.append("%s \"%s\" %s" % (languageexecfile, languageparams, '"$@"'))
+                cmd_list.append("%s %s" % (languageexecfile, '"$@"'))
 
         # append exit 0
         cmd_list.append(cmd_exit)
@@ -5855,19 +5868,10 @@ def main_function():
                 for current_var in args['<command-params>']:
                     params0.append(current_var)
 
-                list1 = []
-                #for current_var in str(args['<command-param>']).split():
-                #    list1.append(current_var)
-                if (params0.__len__() > 0):
-                    current_var = params0[0]
-                    list1.append(current_var)
-                    params0.pop(0)
-
                 suffix = args['--suffix']
                 encoding = args['--encoding']
 
                 #print(list0)
-                #print(list1)
                 #print(params0)
                 #print(suffix)
                 #print(encoding)
@@ -5879,7 +5883,7 @@ def main_function():
                 # else:
                 #    cmd_list, temp_file_name = createCmdList01(list0)
                 # good compatibility
-                cmd_list, temp_file_name, cmd_suffix_language = createCmdList07(suffix, encoding, current_env, local, list0, list1, params0)
+                cmd_list, temp_file_name, cmd_suffix_language = createCmdList07(suffix, encoding, current_env, local, list0, params0)
 
                 # export env
                 current_var = current_env
