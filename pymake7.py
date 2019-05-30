@@ -4749,6 +4749,9 @@ def main_function():
                 for current_var in args['<command-params>']:
                     params0.append(current_var)
 
+                #print(list0)
+                #print(params0)
+
                 cmd_list = []
                 temp_file_name = ""
                 # if (getplatform() == "Windows"):
