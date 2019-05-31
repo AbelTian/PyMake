@@ -84,6 +84,8 @@ Usage:
   pymake7.py  get default exec root
   pymake7.py  get exec root [ default | here ]
   pymake7.py  initialize
+  pymake7.py  debug
+  pymake7.py  debug [ open | close ]
   pymake7.py  -------------------------------------------------------------
   pymake7.py  port
   pymake7.py  port root [ <source-config-root> ] [ to <target-config-root> ]
@@ -1904,6 +1906,49 @@ def main_function():
             ''
         break
 
+    # debug.
+    debugini = sourceroot + os.path.sep + "debug.ini"
+    debugconf = MyConfigParser()
+    debugconf.read(debugini)
+    if (not debugconf.has_section('debug')):
+        debugconf.add_section('debug')
+        debugconf.write(open(debugini, 'w'))
+
+    if( not debugconf.has_option('debug', 'switch') ):
+        debugconf.set('debug', 'switch', '0')
+        debugconf.write(open(debugini, 'w'))
+
+    debugswitch = debugconf['debug']['switch']
+    if(debugswitch != '0' and debugswitch != '1'):
+        debugswitch = '0'
+        debugconf.set('debug', 'switch', debugswitch)
+        debugconf.write(open(debugini, 'w'))
+
+    while (True):
+        if(args['debug'] is True):
+            if(args['open'] is True):
+                debugswitch = '1'
+                debugconf.set('debug', 'switch', debugswitch)
+                debugconf.write(open(debugini, 'w'))
+                print('debug: opened.')
+                return
+            elif (args['close'] is True):
+                debugswitch = '0'
+                debugconf.set('debug', 'switch', debugswitch)
+                debugconf.write(open(debugini, 'w'))
+                print('debug: closed.')
+                return
+            else:
+                if(debugswitch == '0'):
+                    print('debug: closed.')
+                else:
+                    print('debug: opened.')
+                return
+            return
+        else:
+            ''
+        break
+
     config = readJsonData(sourceconfigfile)
     #print(config)
 
@@ -2668,7 +2713,10 @@ def main_function():
 
         params_string = ""
         for param in params0:
-            params_string += " \"" + param + "\" "
+            if(str(param).__contains__(' ')):
+                params_string += '"' + param + '"' + ' '
+            else:
+                params_string += param + ' '
         #print(params_string)
 
         if ( local is True):
@@ -2688,6 +2736,12 @@ def main_function():
                 f.write(line + cmd_return)
         #print(cmd_execute)
 
+        if(debugswitch == '1'):
+            print("IN: execute file: %s" % cmd_execute)
+            for cmd in cmd_list:
+                print(cmd)
+            print("---------------------------")
+
         if (plat == "Windows"):
             ""
         else:
@@ -2706,6 +2760,12 @@ def main_function():
         cmd_list.append(cmd_exit)
 
         # print (cmd_list)
+        if(debugswitch == '1'):
+            print("CMD: call execute file: %s" % cmd_execute)
+            for cmd in cmd_list:
+                print(cmd)
+            print("---------------------------")
+
         return cmd_list, name
 
     # system export function
@@ -4468,7 +4528,10 @@ def main_function():
 
         params_string = ""
         for param in params0:
-            params_string += " \"" + param + "\" "
+            if(str(param).__contains__(' ')):
+                params_string += '"' + param + '"' + ' '
+            else:
+                params_string += param + ' '
         # print(params_string)
 
         if (local is True):
@@ -4532,9 +4595,11 @@ def main_function():
                 f.write(line + cmd_return)
         # print(cmd_execute)
 
-        #print("IN: execute file: %s" % cmd_execute)
-        #for cmd in cmd_list:
-        #    print(cmd)
+        if(debugswitch == '1'):
+            print("IN: execute file: %s" % cmd_execute)
+            for cmd in cmd_list:
+                print( cmd )
+            print("---------------------------")
 
         # if (plat == "Windows"):
         #    ""
@@ -4546,9 +4611,11 @@ def main_function():
         cmd_list.append(cmd_exit)
 
         # print (cmd_list)
-        #print("CMD: call %s" % cmd_execute)
-        #for cmd in cmd_list:
-        #    print( cmd )
+        if(debugswitch == '1'):
+            print("CMD: call execute file: %s" % cmd_execute)
+            for cmd in cmd_list:
+                print( cmd )
+            print("---------------------------")
 
         return cmd_list, name
 
@@ -5547,14 +5614,17 @@ def main_function():
 
         params_string = ""
         for param in params0:
-            params_string += " \"" + param + "\" "
+            if(str(param).__contains__(' ')):
+                params_string += '"' + param + '"' + ' '
+            else:
+                params_string += param + ' '
         #print(params_string)
 
         languageparams = ''
         #actually only one param.
         if (local is True):
             for param1 in list1:
-                languageparams += param1 + " "
+                languageparams += param1
         else:
             for param1 in list1:
                 # warning: now pymake is in user setted workroot.
@@ -5606,7 +5676,10 @@ def main_function():
 
         #print(3, languageparams)
         if(list1.__len__() >0 ):
-            params_string = '"' + languageparams + '" ' + params_string
+            if(str(languageparams).__contains__(' ')):
+                params_string = '"' + languageparams + '"' + ' ' + params_string
+            else:
+                params_string = languageparams + ' ' + params_string
         #print(params_string)
 
         languageexecfile = ''
@@ -5643,10 +5716,11 @@ def main_function():
             for line in cmd_list:
                 f.write(line + cmd_return)
 
-        #print("IN: execute file: %s" % cmd_execute)
-        #for cmd in cmd_list:
-        #    print(cmd)
-        #print("---------------------------")
+        if(debugswitch == '1'):
+            print("IN: execute file: %s" % cmd_execute)
+            for cmd in cmd_list:
+                print(cmd)
+            print("---------------------------")
 
         if (plat == "Windows"):
             ""
@@ -5665,10 +5739,11 @@ def main_function():
 
         cmd_list.append(cmd_exit)
 
-        #print("CMD: call %s" % cmd_execute)
-        #for cmd in cmd_list:
-        #    print( cmd )
-        #print("---------------------------")
+        if(debugswitch == '1'):
+            print("CMD: call execute file: %s" % cmd_execute)
+            for cmd in cmd_list:
+                print( cmd )
+            print("---------------------------")
 
         return cmd_list, name, cmd_suffix_language
 
@@ -7077,7 +7152,10 @@ def main_function():
 
         params_string = ""
         for param in params0:
-            params_string += " \"" + param + "\" "
+            if(str(param).__contains__(' ')):
+                params_string += '"' + param + '"' + ' '
+            else:
+                params_string += param + ' '
         #print(params_string)
 
         pythonexecfile = ''
@@ -7131,7 +7209,7 @@ def main_function():
                     if (find_flag == 1):
                         break
 
-                    # none? a powershell command, or powershell command-line.
+                    # none? a python command, or python command-line.
                     pythonexecfile = cmd
                     break
 
@@ -7158,10 +7236,12 @@ def main_function():
             for line in cmd_list:
                 f.write(line + cmd_return)
         #print(cmd_execute)
-        #print("IN execute: %s" % cmd_execute)
-        #for cmd in cmd_list:
-        #    print( cmd )
-        #print("---------------------------")
+
+        if(debugswitch == '1'):
+            print("IN: execute file: %s" % cmd_execute)
+            for cmd in cmd_list:
+                print( cmd )
+            print("---------------------------")
 
         if (plat == "Windows"):
             ""
@@ -7180,10 +7260,11 @@ def main_function():
 
         cmd_list.append(cmd_exit)
 
-        #print("CMD execute: %s" % cmd_execute)
-        #for cmd in cmd_list:
-        #    print( cmd )
-        #print("---------------------------")
+        if(debugswitch == '1'):
+            print("CMD: call execute file: %s" % cmd_execute)
+            for cmd in cmd_list:
+                print( cmd )
+            print("---------------------------")
 
         return cmd_list, name
 
@@ -7350,7 +7431,10 @@ def main_function():
         for cmd in list0:
             if (plat == "Windows"):
                 ""  # cmd = cmd.replace('/', '\\')
-            cmd_list.append(cmd)
+            if(str(cmd).__contains__(' ')):
+                cmd_list.append('"' + cmd + '"')
+            else:
+                cmd_list.append(cmd)
 
         # append exit 0
         cmd_list.append(cmd_exit)
@@ -7361,6 +7445,12 @@ def main_function():
             for line in cmd_list:
                 f.write(line + cmd_return)
 
+        if(debugswitch == '1'):
+            print("IN: execute file: %s" % cmd_execute)
+            for cmd in cmd_list:
+                print(cmd)
+            print("---------------------------")
+
         if (plat == "Windows"):
             ""
         else:
@@ -7369,16 +7459,22 @@ def main_function():
         cmd_list.clear()
         if (plat == "Windows"):
             cmd_list.append(cmd_header + ' ' + cmd_sep + ' ' + cmd_status)
-            cmd_list.append("call " + cmd_execute + cmd_sep + ' ' + cmd_status)
+            cmd_list.append("call " + cmd_execute + ' ' + cmd_sep + ' ' + cmd_status)
         else:
             # cmd_list.append(cmd_header + ' ' + cmd_sep + ' ' + cmd_status)
-            cmd_list.append("./" + cmd_execute + cmd_sep + ' ' + cmd_status)
+            cmd_list.append("./" + cmd_execute + ' ' + cmd_sep + ' ' + cmd_status)
         cmd_list.append(cmd_exit)
+
+        if(debugswitch == '1'):
+            print("CMD: call execute file: %s" % cmd_execute)
+            for cmd in cmd_list:
+                print(cmd)
+            print("---------------------------")
 
         # print (cmd_list)
         return cmd_list, name
 
-    #.bat .sh, windows not compatibility, unix only
+    #.bat .sh, windows not compatibility, unix only [ignore]
     def createCmdList01(list0):
 
         cmd_list = []
@@ -7599,9 +7695,9 @@ def main_function():
         for param in params0:
             #print(param)
             if(str(param).__contains__(' ')):
-                params_string += "\"" + param + "\"" + ' '
+                params_string += '"' + param + '"' + ' '
             else:
-                params_string += param + " "
+                params_string += param + ' '
         #print(params_string)
 
         if ( local is True):
@@ -7624,10 +7720,11 @@ def main_function():
                 f.write(line + cmd_return)
         #print(cmd_execute)
 
-        print("IN: execute %s" % cmd_execute)
-        for cmd in cmd_list:
-            print(cmd)
-        print("----------------------------------------------")
+        if(debugswitch == '1'):
+            print("IN: execute file: %s" % cmd_execute)
+            for cmd in cmd_list:
+                print(cmd)
+            print("---------------------------")
 
         if (plat == "Windows"):
             ""
@@ -7647,10 +7744,11 @@ def main_function():
         cmd_list.append(cmd_exit)
 
         # print (cmd_list)
-        print("CMD: execute %s" % cmd_execute)
-        for cmd in cmd_list:
-            print(cmd)
-        print("----------------------------------------------")
+        if(debugswitch == '1'):
+            print("CMD: call execute file: %s" % cmd_execute)
+            for cmd in cmd_list:
+                print(cmd)
+            print("---------------------------")
 
         return cmd_list, name
 

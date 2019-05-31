@@ -48,3 +48,7 @@ call %command%
 set command=pymake python exec-with-params here py中文
 echo %command%
 call %command%
+
+set command=pymake python ccvp py中文 "你好 中国" 你好 中国 \"你好\" \" 你好 美国\" 是吗？ "B -c -y"
+echo %command%
+call %command%

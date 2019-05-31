@@ -5,7 +5,7 @@
 :: pypowershell.bat 会导出环境进行使用。
 :: pypowershell.bat 用户应当留意，导出的是否是目标环境的命令。
 
-if "%1" == "" (
+if ""%1"" == """" (
     echo usage:
     echo "  pypowershell <cmd-name> [ <cmd-params>... ]"
     echo -----
