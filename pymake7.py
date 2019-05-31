@@ -2284,6 +2284,11 @@ def main_function():
                     else:
                         ""
                 elif (args["path"] is True):
+                    if(args['<group>'] is not None):
+                        if(args['<group>'] == 'current'):
+                            args['<group>'] = config['environ']['current']
+                            #print('failed: group name canot be \'current\'.')
+                            #return
                     if (args['--add'] == True):
                         if (args['<group>'] and args['<name>'] is not None):
                             config['environ'][args['<group>']]["path+"].append(args["<name>"])
@@ -2300,15 +2305,25 @@ def main_function():
                             ''
                     elif (args['--mod'] == True):
                         if (args['<group>'] and args['<name>'] and args["<value>"] is not None):
-                            if (config['variable'][args['<group>']]["path+"].__contains__(args['<name>'])):
-                                index = config['variable'][args['<group>']]["path+"].index(args['<name>'])
-                                config['variable'][args['<group>']]["path+"][index] = [args['<value>']]
+                            if (config['environ'][args['<group>']]["path+"].__contains__(args['<name>'])):
+                                index = config['environ'][args['<group>']]["path+"].index(args['<name>'])
+                                config['environ'][args['<group>']]["path+"][index] = [args['<value>']]
                                 print ("successed: %s:%s:%s" % (args['<group>'], args['<name>'], args["<value>"]))
                             else:
                                 print("failed %s:%s" % (args['<group>'], args['<name>']))
                         else:
                             ''
                 else:
+                    if(args['<group>'] is not None):
+                        if(args['<group>'] == 'current'):
+                            args['<group>'] = config['environ']['current']
+                            #print(args['<group>'])
+                            #print('failed: env name canot be \'current\'.')
+                            #return
+                    if (args['<name>'] is not None):
+                        if (args['<name>'] == 'path+'):
+                            print('failed: var name canot be \'path+\'.')
+                            return
                     if (args['--add'] == True):
                         if (args['<group>'] and args['<name>'] and args["<value>"] is not None):
                             config['environ'][args['<group>']][args['<name>']] = args["<value>"]
@@ -2317,8 +2332,8 @@ def main_function():
                             print ("failed %s:%s:%s" % (args['<group>'], args['<name>'], args["<value>"]))
                     elif (args['--del'] == True):
                         if (args['<group>'] and args["<name>"] is not None):
-                            if (config['variable'][args['<group>']].__contains__(args['<name>'])):
-                                config['variable'][args['<group>']].__delitem__(args['<name>'])
+                            if (config['environ'][args['<group>']].__contains__(args['<name>'])):
+                                config['environ'][args['<group>']].__delitem__(args['<name>'])
                                 print ("successed: %s:%s" % (args['<group>'], args['<name>']))
                             else:
                                 print ("failed %s:%s" % (args['<group>'], args['<name>']))
@@ -2326,11 +2341,11 @@ def main_function():
                             ''
                     elif (args['--mod'] == True):
                         if (args['<group>'] and args['<name>'] and args["<value>"] is not None):
-                            if (config['variable'][args['<group>']].__contains__(args['<name>'])):
-                                config['variable'][args['<group>']][args['<name>']] = args["<value>"]
+                            if (config['environ'][args['<group>']].__contains__(args['<name>'])):
+                                config['environ'][args['<group>']][args['<name>']] = args["<value>"]
                                 print ("successed: %s:%s:%s" % (args['<group>'], args['<name>'], args["<value>"]))
                             else:
-                                print ("failed %s:%s:%s" % (args['<group>'], args['<name>'], args["<value>"]))
+                                print ("failed: %s { %s : %s }" % (args['<group>'], args['<name>'], args["<value>"]))
                         else:
                             ''
                     else:
@@ -2339,14 +2354,17 @@ def main_function():
                 if (args['--add'] == True):
                     if (args['<name>'] and args["<values>"] is not None):
                         config["command"][args['<name>']] = args["<values>"]
-                        print("successed: %s:%s" % (args['<name>'], args["<values>"]))
+                        #print("successed: %s:%s" % (args['<name>'], args["<values>"]))
+                        print('successed: %s is added.' % args['<name>'])
+                        for cmd in args['<values>']:
+                            print('  ' + cmd)
                     else:
                         print("failed %s:%s" % (args['<name>'], args["<values>"]))
                 elif (args['--del'] == True):
                     if (args["<name>"] is not None):
                         if (config['command'].__contains__(args['<name>'])):
                             config["command"].__delitem__(args['<name>'])
-                            print("successed: %s" % (args['<name>']))
+                            print("successed: %s is deleted." % (args['<name>']))
                         else:
                             print("failed %s" % (args['<name>']))
                     else:
@@ -2354,7 +2372,10 @@ def main_function():
                 elif (args['--mod'] == True):
                     if (args['<name>'] and args["<values>"] is not None):
                         config["command"][args['<name>']] = args["<values>"]
-                        print("successed: %s:%s" % (args['<name>'], args["<values>"]))
+                        #print("successed: %s:%s" % (args['<name>'], args["<values>"]))
+                        print('successed: %s is modified.' % args['<name>'])
+                        for cmd in args['<values>']:
+                            print('  ' + cmd)
                     else:
                         print("failed %s:%s" % (args['<name>'], args["<values>"]))
                 else:
@@ -2385,7 +2406,8 @@ def main_function():
                     else:
                         ''
                 else:
-                    ''
+                    for (key,path0) in config['path-assemblage'].items():
+                        print("%-30s %s" % (key, path0))
             else:
                 ''
             # print(config)

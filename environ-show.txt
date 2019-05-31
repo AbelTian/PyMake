@@ -1,7 +1,7 @@
-Microsoft Windows [版本 10.0.17134.706]
+Microsoft Windows [版本 10.0.17134.765]
 (c) 2018 Microsoft Corporation。保留所有权利。
 
-R:\Develop\b0-toolkits\a0-compiler\PyMake>pymake system
+R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource\MyShell>pymake system
 system env
 path+:
   C:\WINDOWS\system32
@@ -62,7 +62,30 @@ variable:
   USERPROFILE                    C:\Users\Administrator
   WINDIR                         C:\WINDOWS
 
-R:\Develop\b0-toolkits\a0-compiler\PyMake>pymake custom
+R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource\MyShell>pymake local
+local env: opened.
+path+:
+  R:\Develop\b0-toolkits\a0-compiler\PyMake
+  R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource
+  R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource\UserShell
+  R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource\UserShell
+variable:
+  PYMAKEDEFAULTSOURCEROOT        R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource
+  PYMAKEDEFAULTSOURCECONFIG      pymake.json
+  PYMAKESOURCEFILE               R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource\MyComputer-User.json
+  PYMAKESOURCEROOT               R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource
+  PYMAKESOURCECONFIG             MyComputer-User.json
+  PYMAKEDEFAULTWORKROOT          R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource\UserShell
+  PYMAKEWORKROOT                 R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource\UserShell
+  PYMAKEPROGRAM                  R:\Develop\b0-toolkits\a0-compiler\PyMake\pymake7.py
+  PYMAKEPROGRAMROOT              R:\Develop\b0-toolkits\a0-compiler\PyMake
+  PYMAKEPROGRAMFILE              pymake7.py
+  PYMAKEPROGRAMCONFIGURE         C:\Users\Administrator\.pymake\pymake.ini
+  PYMAKEPROGRAMCONFIGUREROOT     C:\Users\Administrator\.pymake
+  PYMAKEPROGRAMCONFIGUREFILE     pymake.ini
+  PYMAKEINSTALLROOT              C:\WINDOWS
+
+R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource\MyShell>pymake custom
 custom env: opened.
 path+:
   R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource\UserShell
@@ -75,38 +98,78 @@ path+:
   R:/Develop/b0-toolkits/winCompilers/cmake3.9.1_64/bin
   R:/Develop/b0-toolkits/winCompilers/perl_5.26.0.1_64/perl/bin
   R:/Develop/b0-toolkits/winCompilers/xmake
-  R:/Develop/b0-toolkits/winCompilers/watcom1.9/binw;R:/Develop/b0-toolkits/winCompilers/watcom1.9/binnt
+  R:/Develop/b0-toolkits/winCompilers/ninja
+  R:/Develop/b0-toolkits/winAndroidLibraries/Java/jdk1.8.0_131/bin
+  R:/Develop/b0-toolkits/winAndroidLibraries/gradle-all/gradle-4.2.1/bin
+  C:/Users/Administrator/AppData/Local/Programs/Python/Python27;C:/Users/Administrator/AppData/Local/Programs/Python/Python27/Scripts
+  R:/Develop/b0-toolkits/winCompilers/lua53
+  R:/Develop/b0-toolkits/winCompilers/php-7.3.5-Win32-VC15-x64
+  R:/Develop/b0-toolkits/winCompilers/go1.12.5.windows-amd64/go/bin
+  R:/Develop/b0-toolkits/winCompilers/ruby-1.8.4-i386-mingw32/usr/local/bin
   R:/Develop/b0-toolkits/a0-compiler/PyMake
   R:/Develop/b0-toolkits/a0-compiler/PyMake/demo
   R:/Develop/b0-toolkits/a0-compiler/PyMake/test
   R:/Develop/b0-toolkits/a0-compiler/PyMake/test/带 空格路径
-  R:/Develop/b0-toolkits/a0-compiler/PyMake/UserSource/带 空格
+  R:/Develop/b0-toolkits/a0-compiler/PyMake/UserSource/带 空格路径
+  R:/Develop/b0-toolkits/a0-compiler/PyMake/UserSource/UserShell
+  R:/Develop/b0-toolkits/a0-compiler/PyMake/UserSource/MyShell
   R:\一个中文路径
-  R:/Develop/b0-toolkits/winCompilers/ninja
 variable:
   PYMAKEAUTHOR                   T.D.R.
   PYMMXXX                        一个中文变量
-  WATCOM                         R:/Develop/b0-toolkits/winCompilers/watcom1.9
-  EDPATH                         R:/Develop/b0-toolkits/winCompilers/watcom1.9/eddat
-  WHTMLHELP                      R:/Develop/b0-toolkits/winCompilers/watcom1.9/binnt/help
-  WIPFC                          R:/Develop/b0-toolkits/winCompilers/watcom1.9/wipfc
-  INCLUDE                        R:/Develop/b0-toolkits/winCompilers/watcom1.9/h;R:/Develop/b0-toolkits/winCompilers/watcom1.9/h/nt;R:/Develop/b0-toolkits/winCompilers/watcom1.9/h/nt/directx;R:/Develop/b0-toolkits/winCompilers/watcom1.9/h/nt/ddk
+  PYMMXYY                        R:/Develop
 
-R:\Develop\b0-toolkits\a0-compiler\PyMake>pymake env current -r
+R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource\MyShell>pymake env current -r
 env qt5
 path+:
   R:/Develop/b0-toolkits/winCompilers/cmake3.9.1_64/bin
   R:/Develop/b0-toolkits/winLibraries/Qt/Tools/mingw530_32/bin
   R:/Develop/b0-toolkits/winLibraries/Qt/5.9.2/mingw53_32/bin
-  R:/一个中文路径
 variable:
-  make0                          mingw32-make -j10
+  CMAKEGENERATOR                 MinGW Makefiles
+  make0                          mingw32-make
   QTVERSION                      5.9.2
   QTDIR                          R:/Develop/b0-toolkits/winLibraries/Qt/5.9.2/mingw53_32
   QTSPEC                         -spec win32-g++
   QTCONFIG
   QKIT                           WIN32
   QSYS                           Windows
-  QBBE                           一个中文变量
 
-R:\Develop\b0-toolkits\a0-compiler\PyMake>
+R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource\MyShell>pymake env android.mobile -r
+env android.mobile
+path+:
+  R:/Develop/b0-toolkits/winCompilers/cmake3.9.1_64/bin
+  R:/Develop/b0-toolkits/winLibraries/Qt/5.9.2/android_armv7/bin
+  R:/Develop/b0-toolkits/winLibraries/Qt/Tools/mingw530_32/bin
+  R:/Develop/b0-toolkits/winAndroidLibraries/Java/jdk1.8.0_131/bin
+  R:/Develop/b0-toolkits/winAndroidLibraries/android-sdk-windows
+  R:/Develop/b0-toolkits/winAndroidLibraries/android-sdk-windows/platform-tools
+  R:/Develop/b0-toolkits/winAndroidLibraries/android-sdk-windows/build-tools
+  R:/Develop/b0-toolkits/winAndroidLibraries/android-sdk-windows/tools
+  R:/Develop/b0-toolkits/winAndroidLibraries/apache-ant-1.10.3/bin
+  R:/Develop/b0-toolkits/winAndroidLibraries/android-ndk-r13b/toolchains/arm-linux-androideabi-4.9/prebuilt/windows-x86_64/bin
+variable:
+  make0                          mingw32-make
+  ANDROID_API_VERSION            android-23
+  ANDROID_HOME                   R:/Develop/b0-toolkits/winAndroidLibraries/android-sdk-windows
+  ANDROID_SDK_ROOT               R:/Develop/b0-toolkits/winAndroidLibraries/android-sdk-windows
+  ANDROID_NDK_ROOT               R:/Develop/b0-toolkits/winAndroidLibraries/android-ndk-r13b
+  ANDROID_NDK_PLATFORM           android-23
+  ANDROID_NDK_HOST               windows-x86_64
+  ANDROID_NDK_TOOLCHAIN_PREFIX   arm-linux-androideabi
+  ANDROID_NDK_TOOLCHAIN_VERSION  4.9
+  ANDROID_NDK_TOOLS_PREFIX       arm-linux-androideabi
+  NDK_TOOLCHAIN_PATH             R:/Develop/b0-toolkits/winAndroidLibraries/android-ndk-r13b/toolchains/arm-linux-androideabi-4.9/prebuilt/windows-x86_64/bin
+  NDK_TOOLS_PREFIX               arm-linux-androideabi
+  QTDIR                          R:/Develop/b0-toolkits/winLibraries/Qt/5.9.2/android_armv7
+  QTSPEC                         -spec android-g++
+  QTCONFIG
+  JAVA_HOME                      R:/Develop/b0-toolkits/winAndroidLibraries/Java/jdk1.8.0_131
+  CLASSPATH                      .:R:/Develop/b0-toolkits/winAndroidLibraries/Java/jdk1.8.0_131/lib/dt/jar:R:/Develop/b0-toolkits/winAndroidLibraries/Java/jdk1.8.0_131/lib/tools.jar
+  PYMAKE_MYNAME                  T.D.R
+  a_special_var_const            hello world
+  QTVERSION                      5.9.2
+  QKIT                           ANDROID
+  QSYS                           Android
+
+R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource\MyShell>
