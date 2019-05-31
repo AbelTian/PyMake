@@ -268,3 +268,7 @@ call %command%
 set command=pymake exec-with-params here dir
 echo %command%
 call %command%
+
+set command=pymake ccvp "test.8 blank" 你好啊 “中国” "你好 中国"
+echo %command%
+call %command%

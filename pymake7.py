@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #!/usr/bin/env python
-"""PyMake 7.5.5.
+"""PyMake 7.6.
 
 Usage:
   pymake7.py  source
@@ -643,7 +643,7 @@ def main_function():
         conf.set('source', 'config', pymakedefaultsourcefile)
         conf.write(open(pymakeini, 'w'))
 
-    args = docopt(__doc__, version='pymake7.py v7.5.5')
+    args = docopt(__doc__, version='pymake7.py v7.6')
     #print(args)
 
     #initialize
@@ -2746,7 +2746,10 @@ def main_function():
                 cmd_list.append(cmd)
         else:
             for cmd in list0:
-                cmd_list.append(cmd + ' ' + params_string)
+                if (str(cmd).__contains__(' ')):
+                    cmd_list.append('"' + cmd + '"' + ' ' + params_string)
+                else:
+                    cmd_list.append(cmd + ' ' + params_string)
 
         # append exit 0
         cmd_list.append(cmd_exit)

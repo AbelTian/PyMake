@@ -9,12 +9,13 @@
 |pymake| ansi | ansi | windows 7/8/10 | .ini |
 |pymake| ansi | ansi | windows 7/8/10 |.bat .ps1 |
 
-Windows XP: NO
+Windows XP: YES
 1. python 3.4.4
 2. .bat path, no accept blank.
-3. encoding = None, but I use encoding = ansi on windows.
+3. encoding = None.
+4. import and outport command maybe error decoding and encoding.
 
-MSYS: NO
+MSYS: YES
 1. $USERPROFILE != $HOMEDRIVE$HOMEPATH
-2. no sudo ?
-3. access cmd is OK, but default path is wrong.
+2. no sudo ? dont call install.bat and install.sh.
+3. call cmd first is suggessted.
