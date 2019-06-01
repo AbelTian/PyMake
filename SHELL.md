@@ -2,8 +2,8 @@
 User support shell module, user can install them to share their functions.   
 
 # 使用说明  
-|影响当前执行器 [PyMake并行]| 不影响当前执行器 [PyMake串行]| 备注 ||
-|-----|-----|-----|-----|  
+|影响当前执行器 [PyMake并行]| 不影响当前执行器 [PyMake串行]| 备注 |
+|-----|-----|-----|  
 |pyenv qt5| pymake set cur env qt5|||
 |pytype test.3 bbc qt5| pytype test.2 abc |||
 |bbc_exec.bat| abc_exec.bat|都能执行PyMake保存的命令|||

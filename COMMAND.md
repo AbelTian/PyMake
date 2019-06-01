@@ -165,8 +165,11 @@ pylanguage php xxx.php ...
 ```
 
 #### pymake使用截图  
+##### env    
 ![命令行截图](./screenshot/a2.png)  
 
+##### python    
+![命令行截图](./screenshot/b13.png)  
 
 # COMMAND LIST AND GLOZE    
 
