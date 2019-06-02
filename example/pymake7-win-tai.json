@@ -10,13 +10,13 @@
         "root.build": "${root2}/c0-buildstation",
         "root.test": "${root}/e3-test",
         "root.webrc": "${root}/e2-webrc",
-        "cc": "${root.tool}/a0-Compiler",
+        "cc": "${root.tool}/a0-compiler",
         "wincc": "${root.tool}/winCompilers",
         "python-install": "C:/Users/Administrator/AppData/Local/Programs/Python",
         "py27": "${python-install}/Python27",
         "py36": "${python-install}/Python36",
         "py37": "${python-install}/Python37",
-        "py": "${py27}",
+        "py": "${py37}",
         "py.bin": "${py};${py}/Scripts",
         "pymake": "${root.tool}/a0-compiler/PyMake",
         "pymake.env": "${pymake}/UserSource",
@@ -95,7 +95,7 @@
         "java1.7.bin": "${java1.7.home}/bin",
         "java1.8.bin": "${java1.8.home}/bin",
         "java1.9.bin": "${java1.9.home}/bin",
-        "java.home":"${java1.8.home}",
+        "java.home": "${java1.8.home}",
         "java.bin": "${java.home}/bin",
         "ant.bin": "${android.ant}/bin",
         "ndk.arm": "${android.ndk}/toolchains/arm-linux-androideabi-4.9/prebuilt/windows-x86_64",
@@ -353,8 +353,13 @@
         "test.5": [
             "echo 中文。"
         ],
+        "test.6": [
+            "echo %Path%"
+        ],
         "open.dir": [
-            "if not exist \"%1\" ( echo has no this dir. & exit /b 0)",
+            "echo [%1]",
+            "if not exist \"\"%1\"\" ( echo has no this dir. & exit /b 0)",
+            "rem echo [%1]",
             "start %1"
         ],
         "open.tool": [
