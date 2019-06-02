@@ -14,7 +14,9 @@ from .colorama import init, Fore, Back, Style
 init(autoreset=True)
 
 if ( sys.version_info[0] == 2 ):
-    import ConfigParser as PyConfigParser
+    #import ConfigParser as PyConfigParser
+    from .configparser import configparser as PyConfigParser
+    #from .configparser.backports import configparser as PyConfigParser
 else:
     import configparser as PyConfigParser
 
@@ -114,20 +116,17 @@ def getcmd_codec():
                 return "ansi"
         else:
             return 'utf8'
-
-    return "utf8"
+    return 'utf8'
 
 def myopen(file, mode='r', buffering=None, encoding=None, errors=None, newline=None, closefd=True): # known special case of open
     if (sys.version_info[0] == 2):
-        return open(file, mode, buffering, errors, newline, closefd)
+        return open(name=file, mode=mode)
     else:
         if(getplatform() == "Windows"):
             if(getplatform_release() == "XP"):
                 encoding = None
-        return open(file, mode, buffering, encoding, errors, newline, closefd)
-
-    return open(file, mode, buffering, encoding, errors, newline, closefd)
-
+        return open(file=file, mode=mode, encoding=encoding)
+    return open(file=file, mode=mode, encoding=encoding)
 
 def getuserroot():
     root = ""
@@ -151,24 +150,24 @@ def getconfigroot():
 def readJsonData(file):
 
     datas = ""
-    with open(file, 'r', encoding='utf8') as json_file:
+    with myopen(file, 'r', encoding='utf8') as json_file:
         for line in json_file.readlines():
             datas += line
     data = json.loads(datas, encoding='utf-8', object_pairs_hook=OrderedDict);
 
 
-    #with open(file, 'r') as json_file:
+    #with myopen(file, 'r') as json_file:
     #    data = json.load(json_file)
 
     return data
 
 def writeJsonData(file, data):
 
-    with open(file, 'w', encoding='utf8') as json_file:
+    with myopen(file, 'w', encoding='utf8') as json_file:
         json_file.write(json.dumps(data, indent=4, sort_keys=False, ensure_ascii=False))
 
 
-    #with open(file, 'w') as json_file:
+    #with myopen(file, 'w') as json_file:
     #    json.dump(data, json_file, indent=4)
 
 

@@ -632,16 +632,16 @@ def main_function():
     conf.read(pymakeini)
     if( not conf.has_section('pymake') ):
         conf.add_section('pymake')
-        conf.write(open(pymakeini, 'w'))
+        conf.write(myopen(pymakeini, 'w'))
     if( not conf.has_section('source') ):
         conf.add_section('source')
-        conf.write(open(pymakeini, 'w'))
+        conf.write(myopen(pymakeini, 'w'))
     if( not conf.has_option('source', 'root') ):
         conf.set('source', 'root', pymakesourceroot)
-        conf.write(open(pymakeini, 'w'))
+        conf.write(myopen(pymakeini, 'w'))
     if(not conf.has_option('source', 'config')):
         conf.set('source', 'config', pymakedefaultsourcefile)
-        conf.write(open(pymakeini, 'w'))
+        conf.write(myopen(pymakeini, 'w'))
 
     args = docopt(__doc__, version='pymake7.py v7.6')
     #print(args)
@@ -651,7 +651,7 @@ def main_function():
         if(args['initialize'] is True):
             conf.set('source', 'root', pymakesourceroot)
             conf.set('source', 'config', pymakedefaultsourcefile)
-            conf.write(open(pymakeini, 'w'))
+            conf.write(myopen(pymakeini, 'w'))
             r = conf.get('source', 'root')
             f = conf.get('source', 'config')
             print("SOURCE        : %s%s%s" % (r, os.path.sep, f))
@@ -705,7 +705,7 @@ def main_function():
                         print("failed: %s is not a dir." % args['<source-root-path>'])
                         return
                     conf.set('source', 'root', r)
-                    conf.write(open(pymakeini, 'w'))
+                    conf.write(myopen(pymakeini, 'w'))
                     print ("successed: change source root to %s" % r)
                 else:
                     print ("%s" % conf.get('source', 'root'))
@@ -717,7 +717,7 @@ def main_function():
                     elif (args['<config-file-name>'] is not None and args['<config-file-name>'].endswith(pymakesuffix)):
                         os.remove(args['<config-file-name>'])
                         conf.set('source', 'config', 'pymake.json')
-                        conf.write(open(pymakeini, 'w'))
+                        conf.write(myopen(pymakeini, 'w'))
                         print ("successed: %s" % args['<config-file-name>'])
                     else:
                         print ('You can\'t remove pymake.json and un.json\'s file...')
@@ -727,7 +727,7 @@ def main_function():
                         if( f != args['<config-file-name>']):
                             shutil.copyfile(f, args['<config-file-name>'])
                             conf.set('source', 'config', args['<config-file-name>'])
-                            conf.write(open(pymakeini, 'w'))
+                            conf.write(myopen(pymakeini, 'w'))
                             print ("successed: %s" % args['<config-file-name>'])
                         else:
                             print('You can\'t add same named file...')
@@ -739,7 +739,7 @@ def main_function():
                         f = conf.get('source', 'config')
                         if (f == args['<config-file-name>']):
                             conf.set('source', 'config',args['<new-config-file-name>'])
-                            conf.write(open(pymakeini, 'w'))
+                            conf.write(myopen(pymakeini, 'w'))
                         print ("successed: %s" % args['<new-config-file-name>'])
                     else:
                         print ('You can\'t mod pymake.json and un.json\'s file...')
@@ -772,13 +772,13 @@ def main_function():
                     return
                 elif(args['--restore'] is True):
                     conf.set('source', 'config', 'pymake.json')
-                    conf.write(open(pymakeini, 'w'))
+                    conf.write(myopen(pymakeini, 'w'))
                     print ("successed: %s" % 'pymake.json')
                 elif (args['--switch'] is True or ( args['<config-file-name>'] is not None )):
                     if (args['<config-file-name>'] is not None and args['<config-file-name>'].endswith(pymakesuffix) ):
                         if (os.path.exists(args['<config-file-name>'])):
                             conf.set('source', 'config', args['<config-file-name>'])
-                            conf.write(open(pymakeini, 'w'))
+                            conf.write(myopen(pymakeini, 'w'))
                             print("successed: switch to source config %s" % args['<config-file-name>'])
                         else:
                             print("failed: source file %s isn't exists, please --add it" % args['<config-file-name>'])
@@ -825,7 +825,7 @@ def main_function():
                 f = os.path.split(os.path.realpath(args['<source-path-file>']))[1]
                 conf.set('source', 'root', r)
                 conf.set('source', 'config', f)
-                conf.write(open(pymakeini, 'w'))
+                conf.write(myopen(pymakeini, 'w'))
                 print ("change source to %s" % os.path.realpath(args['<source-path-file>']))
                 print ("source root    : %s" % r)
                 print ("source config  : %s" % f)
@@ -986,19 +986,19 @@ def main_function():
         portconf.read(portinifile)
         if (not portconf.has_section('port')):
             portconf.add_section('port')
-            portconf.write(open(portinifile, 'w'))
+            portconf.write(myopen(portinifile, 'w'))
         if (not portconf.has_option('port', 'sourceroot')):
             portconf.set('port', 'sourceroot', sourceroot)
-            portconf.write(open(portinifile, 'w'))
+            portconf.write(myopen(portinifile, 'w'))
         if (not portconf.has_option('port', 'sourceconfig')):
             portconf.set('port', 'sourceconfig', portdefaultsourceconfig)
-            portconf.write(open(portinifile, 'w'))
+            portconf.write(myopen(portinifile, 'w'))
         if (not portconf.has_option('port', 'targetroot')):
             portconf.set('port', 'targetroot', sourceroot)
-            portconf.write(open(portinifile, 'w'))
+            portconf.write(myopen(portinifile, 'w'))
         if (not portconf.has_option('port', 'targetconfig')):
             portconf.set('port', 'targetconfig', portdefaulttargetconfig)
-            portconf.write(open(portinifile, 'w'))
+            portconf.write(myopen(portinifile, 'w'))
         #print (portinifile)
         #print ("sourceroot  :", portconf['port']['sourceroot'])
         #print ("sourceconfig:", portconf['port']['sourceconfig'])
@@ -1110,7 +1110,7 @@ def main_function():
                         print("please input a legal source abspath.")
                         return
                     portconf.set('port', 'sourceroot', args['<config-root>'])
-                    portconf.write(open(portinifile, 'w'))
+                    portconf.write(myopen(portinifile, 'w'))
                     print("port: source root is %s" % portconf['port']['sourceroot'])
                     return
 
@@ -1121,7 +1121,7 @@ def main_function():
                         print("please input a legal target abspath.")
                         return
                     portconf.set('port', 'targetroot', args['<config-root>'])
-                    portconf.write(open(portinifile, 'w'))
+                    portconf.write(myopen(portinifile, 'w'))
                     print("port: target root is %s" % portconf['port']['targetroot'])
                     return
 
@@ -1132,7 +1132,7 @@ def main_function():
                         print("please input a legal source abspath.")
                         return
                     portconf.set('port', 'sourceroot', args['<source-config-root>'])
-                    portconf.write(open(portinifile, 'w'))
+                    portconf.write(myopen(portinifile, 'w'))
                     #print("port: source config root is %s." % portconf['port']['sourceroot'])
 
                 if( args['<target-config-root>'] is not None ):
@@ -1142,7 +1142,7 @@ def main_function():
                         print("please input a legal target abspath.")
                         return
                     portconf.set('port', 'targetroot', args['<target-config-root>'])
-                    portconf.write(open(portinifile, 'w'))
+                    portconf.write(myopen(portinifile, 'w'))
                     #print("port: target config root is %s." % portconf['port']['targetroot'])
 
                 print("port: source root is %s" % portconf['port']['sourceroot'])
@@ -1156,7 +1156,7 @@ def main_function():
                         print("please input a real source .json file.")
                         return
                     portconf.set('port', 'sourceconfig', args['<config-file>'])
-                    portconf.write(open(portinifile, 'w'))
+                    portconf.write(myopen(portinifile, 'w'))
                     print("port: source config is %s" % portconf['port']['sourceconfig'])
                     return
 
@@ -1168,7 +1168,7 @@ def main_function():
                         print("please input a real target .json file.")
                         return
                     portconf.set('port', 'targetconfig', args['<config-file>'])
-                    portconf.write(open(portinifile, 'w'))
+                    portconf.write(myopen(portinifile, 'w'))
                     print("port: target config is %s" % portconf['port']['targetconfig'])
                     return
 
@@ -1180,7 +1180,7 @@ def main_function():
                         print("please input a real source .json file.")
                         return
                     portconf.set('port', 'sourceconfig', args['<source-config-file>'])
-                    portconf.write(open(portinifile, 'w'))
+                    portconf.write(myopen(portinifile, 'w'))
                     #print("port: source config file is %s." % portconf['port']['sourceconfig'])
 
                 if( args['<target-config-file>'] is not None ):
@@ -1191,7 +1191,7 @@ def main_function():
                         print("please input a real target .json file.")
                         return
                     portconf.set('port', 'targetconfig', args['<target-config-file>'])
-                    portconf.write(open(portinifile, 'w'))
+                    portconf.write(myopen(portinifile, 'w'))
                     #print("port: target config file is %s." % portconf['port']['targetconfig'])
 
                 print("port: source config is %s" % portconf['port']['sourceconfig'])
@@ -1208,7 +1208,7 @@ def main_function():
                     f = os.path.split(os.path.realpath(args['<path-file>']))[1]
                     portconf.set('port', 'sourceroot', r)
                     portconf.set('port', 'sourceconfig', f)
-                    portconf.write(open(portinifile, 'w'))
+                    portconf.write(myopen(portinifile, 'w'))
                     print("port: source file   is %s" % os.path.join(portconf['port']['sourceroot'], portconf['port']['sourceconfig']))
                     print("port: source root   is %s" % portconf['port']['sourceroot'])
                     print("port: source config is %s" % portconf['port']['sourceconfig'])
@@ -1225,7 +1225,7 @@ def main_function():
                     f = os.path.split(os.path.realpath(args['<path-file>']))[1]
                     portconf.set('port', 'targetroot', r)
                     portconf.set('port', 'targetconfig', f)
-                    portconf.write(open(portinifile, 'w'))
+                    portconf.write(myopen(portinifile, 'w'))
                     print("port: target file   is %s" % os.path.join(portconf['port']['targetroot'], portconf['port']['targetconfig']))
                     print("port: target root   is %s" % portconf['port']['targetroot'])
                     print("port: target config is %s" % portconf['port']['targetconfig'])
@@ -1242,7 +1242,7 @@ def main_function():
                    f = os.path.split(os.path.realpath(args['<source-path-file>']))[1]
                    portconf.set('port', 'sourceroot', r)
                    portconf.set('port', 'sourceconfig', f)
-                   portconf.write(open(portinifile, 'w'))
+                   portconf.write(myopen(portinifile, 'w'))
 
                 if(args['<target-path-file>'] is not None):
                    if(not args['<target-path-file>'].endswith(pymakesuffix)
@@ -1255,7 +1255,7 @@ def main_function():
                    f = os.path.split(os.path.realpath(args['<target-path-file>']))[1]
                    portconf.set('port', 'targetroot', r)
                    portconf.set('port', 'targetconfig', f)
-                   portconf.write(open(portinifile, 'w'))
+                   portconf.write(myopen(portinifile, 'w'))
 
                 print("port: source file   is %s" % os.path.join(portconf['port']['sourceroot'], portconf['port']['sourceconfig']))
                 print("port: source root   is %s" % portconf['port']['sourceroot'])
@@ -1268,7 +1268,7 @@ def main_function():
                 portconf.set('port', 'sourceconfig', pymakedefaultsourcefile)
                 portconf.set('port', 'targetroot', sourceroot)
                 portconf.set('port', 'targetconfig', portdefaulttargetconfig)
-                portconf.write(open(portinifile, 'w'))
+                portconf.write(myopen(portinifile, 'w'))
                 print("port: source file   is %s" % os.path.join(portconf['port']['sourceroot'], portconf['port']['sourceconfig']))
                 print("port: source root   is %s" % portconf['port']['sourceroot'])
                 print("port: source config is %s" % portconf['port']['sourceconfig'])
@@ -1912,30 +1912,30 @@ def main_function():
     debugconf.read(debugini)
     if (not debugconf.has_section('debug')):
         debugconf.add_section('debug')
-        debugconf.write(open(debugini, 'w'))
+        debugconf.write(myopen(debugini, 'w'))
 
     if( not debugconf.has_option('debug', 'switch') ):
         debugconf.set('debug', 'switch', '0')
-        debugconf.write(open(debugini, 'w'))
+        debugconf.write(myopen(debugini, 'w'))
 
     debugswitch = debugconf['debug']['switch']
     if(debugswitch != '0' and debugswitch != '1'):
         debugswitch = '0'
         debugconf.set('debug', 'switch', debugswitch)
-        debugconf.write(open(debugini, 'w'))
+        debugconf.write(myopen(debugini, 'w'))
 
     while (True):
         if(args['debug'] is True):
             if(args['open'] is True):
                 debugswitch = '1'
                 debugconf.set('debug', 'switch', debugswitch)
-                debugconf.write(open(debugini, 'w'))
+                debugconf.write(myopen(debugini, 'w'))
                 print('debug: opened.')
                 return
             elif (args['close'] is True):
                 debugswitch = '0'
                 debugconf.set('debug', 'switch', debugswitch)
-                debugconf.write(open(debugini, 'w'))
+                debugconf.write(myopen(debugini, 'w'))
                 print('debug: closed.')
                 return
             else:
@@ -2057,7 +2057,7 @@ def main_function():
 
                         if (config['command'].__contains__(command_name) is False):
                             command_content = []
-                            with open(local_path, 'r', encoding=useencoding) as f:
+                            with myopen(local_path, 'r', encoding=useencoding) as f:
                                 for l in f.readlines():
                                     while (l.endswith('\r') or l.endswith('\n') or l.endswith('\r\n')):
                                         l = l.rstrip('\r\n')
@@ -2070,7 +2070,7 @@ def main_function():
                         else:
                             if (args['-f'] or args['--force'] is True):
                                 command_content = []
-                                with open(local_path, 'r', encoding=useencoding) as f:
+                                with myopen(local_path, 'r', encoding=useencoding) as f:
                                     for l in f.readlines():
                                         while (l.endswith('\r') or l.endswith('\n') or l.endswith('\r\n')):
                                             l = l.rstrip('\r\n')
@@ -2235,7 +2235,7 @@ def main_function():
                             #print('-f')
                             #set in force
                             command_content = []
-                            with open(local_path, 'r', encoding=useencoding) as f:
+                            with myopen(local_path, 'r', encoding=useencoding) as f:
                                 for l in f.readlines():
                                     while (l.endswith('\r') or l.endswith('\n') or l.endswith('\r\n')):
                                         l = l.rstrip('\r\n')
@@ -2251,7 +2251,7 @@ def main_function():
 
                     # set in
                     command_content = []
-                    with open(local_path, 'r', encoding=useencoding) as f:
+                    with myopen(local_path, 'r', encoding=useencoding) as f:
                         for l in f.readlines():
                             while (l.endswith('\r') or l.endswith('\n') or l.endswith('\r\n')):
                                 l = l.rstrip('\r\n')
@@ -2756,7 +2756,7 @@ def main_function():
         #print( cmd_list )
 
         cmd_execute = name + "_exec" + cmd_suffix
-        with open(cmd_execute, "w", encoding=cmd_codec) as f:
+        with myopen(cmd_execute, "w", encoding=cmd_codec) as f:
             for line in cmd_list:
                 f.write(line + cmd_return)
         #print(cmd_execute)
@@ -2843,7 +2843,7 @@ def main_function():
             else:
                 lines += (env_set + key + '=\"' + value + '\"' + cmd_return)
 
-        with open(cmd_effect, 'w', encoding=cmd_codec) as f:
+        with myopen(cmd_effect, 'w', encoding=cmd_codec) as f:
             f.write(cmd_header)
             f.write(lines)
 
@@ -2869,7 +2869,7 @@ def main_function():
                 lines += ('set ' + key + '=' + cmd_return)
             else:
                 lines += ('unset ' + key + cmd_return)
-        with open(cmd_unset, 'w', encoding=cmd_codec) as f:
+        with myopen(cmd_unset, 'w', encoding=cmd_codec) as f:
             f.write(cmd_header)
             f.write(lines)
 
@@ -3105,7 +3105,7 @@ def main_function():
                             cmd_header_custom = ''
 
                         if (os.path.exists(local_path) is False):
-                            with open(local_path, 'w', encoding=useencoding) as f:
+                            with myopen(local_path, 'w', encoding=useencoding) as f:
                                 if(cmd_header_custom != ''):
                                     f.write(cmd_header_custom + cmd_return)
                                 for l in dict0[command_name]:
@@ -3118,7 +3118,7 @@ def main_function():
                             print("%-30s%-30s%s" % (command_name, "[SUCCESS][       ][     ]", local_path))
                         else:
                             if (args['-f'] or args['--force'] is True):
-                                with open(local_path, 'w', encoding=useencoding) as f:
+                                with myopen(local_path, 'w', encoding=useencoding) as f:
                                     if (cmd_header_custom != ''):
                                         f.write(cmd_header_custom + cmd_return)
                                     for l in dict0[command_name]:
@@ -3356,7 +3356,7 @@ def main_function():
                         if (args['-f'] or args['--force'] is True):
                             # print('-f')
                             # set in force
-                            with open(local_path, 'w', encoding=useencoding) as f:
+                            with myopen(local_path, 'w', encoding=useencoding) as f:
                                 if(cmd_header_custom != ''):
                                     f.write(cmd_header_custom + cmd_return)
                                 for l in dict0[command_name]:
@@ -3372,7 +3372,7 @@ def main_function():
                         return
 
                     # set in
-                    with open(local_path, 'w', encoding=useencoding) as f:
+                    with myopen(local_path, 'w', encoding=useencoding) as f:
                         if (cmd_header_custom != ''):
                             f.write(cmd_header_custom + cmd_return)
                         for l in dict0[command_name]:
@@ -3397,35 +3397,35 @@ def main_function():
     localconf.read(localini)
     if (not localconf.has_section('local')):
         localconf.add_section('local')
-        localconf.write(open(localini, 'w'))
+        localconf.write(myopen(localini, 'w'))
     if (not localconf.has_section('path+')):
         localconf.add_section('path+')
-        localconf.write(open(localini, 'w'))
+        localconf.write(myopen(localini, 'w'))
     if (not localconf.has_section('variable')):
         localconf.add_section('variable')
-        localconf.write(open(localini, 'w'))
+        localconf.write(myopen(localini, 'w'))
 
     #status readonly
     #if( not localconf.has_option('local', 'status') ):
     #    localconf.set('local', 'status', 'readonly')
-    #    localconf.write(open(localini, 'w'))
+    #    localconf.write(myopen(localini, 'w'))
 
     #localswitch = localconf['local']['status']
     #if(localswitch != 'readonly'):
     #    localswitch = 'readonly'
     #    localconf.set('local', 'status', localswitch)
-    #    localconf.write(open(localini, 'w'))
+    #    localconf.write(myopen(localini, 'w'))
 
     #switch [1, default]
     if( not localconf.has_option('local', 'switch') ):
         localconf.set('local', 'switch', '1')
-        localconf.write(open(localini, 'w'))
+        localconf.write(myopen(localini, 'w'))
 
     localswitch = localconf['local']['switch']
     if(localswitch != '0' and localswitch != '1'):
         localswitch = '1'
         localconf.set('local', 'switch', localswitch)
-        localconf.write(open(localini, 'w'))
+        localconf.write(myopen(localini, 'w'))
 
     localenv = {}
     localenv['path+'] = []
@@ -3476,7 +3476,7 @@ def main_function():
                 continue
             localconf.set('variable', key, value)
 
-        localconf.write(open(localini, 'w'))
+        localconf.write(myopen(localini, 'w'))
 
         #set into env
         for (key) in localenv["path+"]:
@@ -3494,12 +3494,12 @@ def main_function():
             #print('gggg')
             if(args['open'] is True):
                 localconf.set('local', 'switch', '1')
-                localconf.write(open(localini, 'w'))
+                localconf.write(myopen(localini, 'w'))
                 print('success: local environment is opened.')
                 return
             elif (args['close'] is True):
                 localconf.set('local', 'switch', '0')
-                localconf.write(open(localini, 'w'))
+                localconf.write(myopen(localini, 'w'))
                 print('success: local environment is closed.')
                 return
             elif (args['export'] is True):
@@ -3548,7 +3548,7 @@ def main_function():
 
                 #print("------------------")
                 #print(lines)
-                with open(cmd_effect, 'w') as f:
+                with myopen(cmd_effect, 'w') as f:
                     f.write(cmd_header)
                     f.write(lines)
 
@@ -3577,7 +3577,7 @@ def main_function():
 
                 #print("------------------")
                 #print(lines)
-                with open(cmd_unset, 'w') as f:
+                with myopen(cmd_unset, 'w') as f:
                     f.write(cmd_header)
                     f.write(lines)
 
@@ -3770,16 +3770,16 @@ def main_function():
     conf2.read(pymakecustomini)
     if( not conf2.has_section('custom') ):
         conf2.add_section('custom')
-        conf2.write(open(pymakecustomini, 'w'))
+        conf2.write(myopen(pymakecustomini, 'w'))
     if( not conf2.has_option('custom', 'switch') ):
         conf2.set('custom', 'switch', '1')
-        conf2.write(open(pymakecustomini, 'w'))
+        conf2.write(myopen(pymakecustomini, 'w'))
 
     switch0 = conf2['custom']['switch']
     if(switch0 != '0' and switch0 != '1'):
         switch0 = '1'
         conf2.set('custom', 'switch', switch0)
-        conf2.write(open(pymakecustomini, 'w'))
+        conf2.write(myopen(pymakecustomini, 'w'))
 
     custompathfile = sourceroot + os.path.sep + "custom.path+.ini"
     customenvfile = sourceroot + os.path.sep + "custom.var+.ini"
@@ -3822,12 +3822,12 @@ def main_function():
         # init file
         #custompathfile = sourceroot + os.path.sep + "custom.path+.ini"
         if (os.path.exists(custompathfile) is False):
-            with open(custompathfile, 'w', encoding=cmd_codec) as f:
+            with myopen(custompathfile, 'w', encoding=cmd_codec) as f:
                 ''
 
         # read all
         custompaths = []
-        with open(custompathfile, 'r', encoding=cmd_codec) as f:
+        with myopen(custompathfile, 'r', encoding=cmd_codec) as f:
             for l in f.readlines():
                 # important format
                 # l = l.strip()
@@ -3888,7 +3888,7 @@ def main_function():
         storecustompaths.reverse()
 
         if (custompaths != storecustompaths):
-            with open(custompathfile, 'w', encoding=cmd_codec) as f:
+            with myopen(custompathfile, 'w', encoding=cmd_codec) as f:
                 for l in storecustompaths:
                     f.write(l + cmd_return)
 
@@ -3932,12 +3932,12 @@ def main_function():
         # print(customenvfile)
         # init
         if (os.path.exists(customenvfile) is False):
-            with open(customenvfile, 'w', encoding=cmd_codec) as f:
+            with myopen(customenvfile, 'w', encoding=cmd_codec) as f:
                 ''
 
         # read all
         customenvs = []
-        with open(customenvfile, 'r', encoding=cmd_codec) as f:
+        with myopen(customenvfile, 'r', encoding=cmd_codec) as f:
             for l in f.readlines():
                 # important format
                 # l = l.strip()
@@ -3981,7 +3981,7 @@ def main_function():
         storecustomvars.reverse()
 
         if (storecustomvars != customenvs):
-            with open(customenvfile, 'w', encoding=cmd_codec) as f:
+            with myopen(customenvfile, 'w', encoding=cmd_codec) as f:
                 for l in storecustomvars:
                     f.write(l + cmd_return)
 
@@ -4144,7 +4144,7 @@ def main_function():
                     lines += ("${env:" + key + '} = \"' + value + '\"' + cmd_return)
 
                 # print(lines.split('\n'))
-                with open(cmd_effect, 'w', encoding=cmd_codec) as f:
+                with myopen(cmd_effect, 'w', encoding=cmd_codec) as f:
                     # f.write(cmd_header)
                     f.write(lines)
 
@@ -4211,7 +4211,7 @@ def main_function():
                         continue
                     lines += ("${env:%s} = \"\"" % key) + cmd_return
 
-                with open(cmd_unset, 'w', encoding=cmd_codec) as f:
+                with myopen(cmd_unset, 'w', encoding=cmd_codec) as f:
                     # f.write(cmd_header)
                     f.write(lines)
 
@@ -4338,7 +4338,7 @@ def main_function():
                 else:
                     lines += (env_set + key + '=\"' + value + '\"' + cmd_return)
 
-            with open(cmd_effect, 'w', encoding=cmd_codec) as f:
+            with myopen(cmd_effect, 'w', encoding=cmd_codec) as f:
                 f.write(cmd_header)
                 f.write(lines)
 
@@ -4428,7 +4428,7 @@ def main_function():
                 else:
                     lines += ('unset ' + key + cmd_return)
 
-            with open(cmd_unset, 'w', encoding=cmd_codec) as f:
+            with myopen(cmd_unset, 'w', encoding=cmd_codec) as f:
                 f.write(cmd_header)
                 f.write(lines)
 
@@ -4495,7 +4495,7 @@ def main_function():
             lines += ("${env:" + key + '} = \"' + value + '\"' + cmd_return)
 
         # print(lines.split('\n'))
-        with open(cmd_effect, 'w', encoding=cmd_codec) as f:
+        with myopen(cmd_effect, 'w', encoding=cmd_codec) as f:
             # f.write(cmd_header)
             f.write(lines)
 
@@ -4516,7 +4516,7 @@ def main_function():
                 continue
             lines += ("${env:%s} = \"\"" % key) + cmd_return
 
-        with open(cmd_unset, 'w', encoding=cmd_codec) as f:
+        with myopen(cmd_unset, 'w', encoding=cmd_codec) as f:
             # f.write(cmd_header)
             f.write(lines)
 
@@ -4615,7 +4615,7 @@ def main_function():
         # print( cmd_list )
 
         cmd_execute = "" + name + "_exec" + cmd_suffix
-        with open(cmd_execute, "w", encoding=cmd_codec) as f:
+        with myopen(cmd_execute, "w", encoding=cmd_codec) as f:
             for line in cmd_list:
                 f.write(line + cmd_return)
         # print(cmd_execute)
@@ -4766,7 +4766,7 @@ def main_function():
                 cmd_suffix = "_exec.ps1"
 
                 cmd_exec = temp_file_name + cmd_suffix
-                with open(cmd_exec, 'w', encoding=cmd_codec) as f:
+                with myopen(cmd_exec, 'w', encoding=cmd_codec) as f:
                     #f.write(cmd_header + cmd_return)
                     for cmd in list0:
                         f.write(cmd + cmd_return)
@@ -5051,7 +5051,7 @@ def main_function():
                 cmd_suffix = "_exec.py"
 
                 cmd_exec = temp_file_name + cmd_suffix
-                with open(cmd_exec, 'w', encoding=cmd_codec) as f:
+                with myopen(cmd_exec, 'w', encoding=cmd_codec) as f:
                     # f.write(cmd_header + cmd_return)
                     for cmd in list0:
                         f.write(cmd + cmd_return)
@@ -5078,12 +5078,12 @@ def main_function():
             #print('gggg')
             if(args['open'] is True):
                 conf2.set('custom', 'switch', '1')
-                conf2.write(open(pymakecustomini, 'w'))
+                conf2.write(myopen(pymakecustomini, 'w'))
                 print('success: custom environment is opened, you can exec script at any path.')
                 return
             elif (args['close'] is True):
                 conf2.set('custom', 'switch', '0')
-                conf2.write(open(pymakecustomini, 'w'))
+                conf2.write(myopen(pymakecustomini, 'w'))
                 print('success: custom environment is closed, you can use pymake .json environ.')
                 return
             elif (args['export'] is True):
@@ -5132,7 +5132,7 @@ def main_function():
 
                 #print("------------------")
                 #print(lines)
-                with open(cmd_effect, 'w') as f:
+                with myopen(cmd_effect, 'w') as f:
                     f.write(cmd_header)
                     f.write(lines)
 
@@ -5161,7 +5161,7 @@ def main_function():
 
                 #print("------------------")
                 #print(lines)
-                with open(cmd_unset, 'w') as f:
+                with myopen(cmd_unset, 'w') as f:
                     f.write(cmd_header)
                     f.write(lines)
 
@@ -5299,7 +5299,7 @@ def main_function():
                 if(args['--add'] is True):
                     if(not usingcustomenvpaths.__contains__(args['<value>'])):
                         usingcustomenvpaths.append(args['<value>'])
-                        with open(custompathfile, 'w', encoding=cmd_codec) as f:
+                        with myopen(custompathfile, 'w', encoding=cmd_codec) as f:
                             for l in usingcustomenvpaths:
                                 f.write(l + cmd_return)
                         print("successed: %s" % args['<value>'])
@@ -5308,7 +5308,7 @@ def main_function():
                 elif(args['--del'] is True):
                     if(usingcustomenvpaths.__contains__(args['<value>'])):
                         usingcustomenvpaths.remove(args['<value>'])
-                        with open(custompathfile, 'w', encoding=cmd_codec) as f:
+                        with myopen(custompathfile, 'w', encoding=cmd_codec) as f:
                             for l in usingcustomenvpaths:
                                 f.write(l + cmd_return)
                         print("successed: %s" % args['<value>'])
@@ -5344,7 +5344,7 @@ def main_function():
                     varkeyvaluestring = args['<key>'] + '=' + args['<value>']
                     if(not usingcustomenvvars.__contains__(varkeyvaluestring)):
                         usingcustomenvvars.append(varkeyvaluestring)
-                        with open(customenvfile, 'w', encoding=cmd_codec) as f:
+                        with myopen(customenvfile, 'w', encoding=cmd_codec) as f:
                             for l in usingcustomenvvars:
                                 f.write(l + cmd_return)
                         print("successed: %s" % varkeyvaluestring)
@@ -5370,7 +5370,7 @@ def main_function():
                             usingcustomenvvars.remove(l)
 
                     if(usingcustomenvvars != storecustomvars):
-                        with open(customenvfile, 'w', encoding=cmd_codec) as f:
+                        with myopen(customenvfile, 'w', encoding=cmd_codec) as f:
                             for l in usingcustomenvvars:
                                 f.write(l + cmd_return)
                         print("successed: %s" % varkeystring)
@@ -5538,7 +5538,7 @@ def main_function():
             else:
                 lines += (env_set + key + '=\"' + value + '\"' + cmd_return)
 
-        with open(cmd_effect, 'w', encoding=cmd_codec) as f:
+        with myopen(cmd_effect, 'w', encoding=cmd_codec) as f:
             f.write(cmd_header)
             f.write(lines)
 
@@ -5564,7 +5564,7 @@ def main_function():
                 lines += ('set ' + key + '=' + cmd_return)
             else:
                 lines += ('unset ' + key + cmd_return)
-        with open(cmd_unset, 'w', encoding=cmd_codec) as f:
+        with myopen(cmd_unset, 'w', encoding=cmd_codec) as f:
             f.write(cmd_header)
             f.write(lines)
 
@@ -5711,7 +5711,7 @@ def main_function():
         if ( local is True):
             #fixed
             languageexecfile = name + '_exec2' + cmd_suffix_language
-            with open(languageexecfile, 'w', encoding=cmd_codec_language) as f:
+            with myopen(languageexecfile, 'w', encoding=cmd_codec_language) as f:
                 for cmd in list0:
                     f.write(cmd + cmd_return_language)
             #print(1, languageexecfile)
@@ -5737,7 +5737,7 @@ def main_function():
         cmd_list.append(cmd_exit)
 
         cmd_execute = name + "_exec" + cmd_suffix
-        with open(cmd_execute, "w", encoding=cmd_codec) as f:
+        with myopen(cmd_execute, "w", encoding=cmd_codec) as f:
             for line in cmd_list:
                 f.write(line + cmd_return)
 
@@ -5894,7 +5894,7 @@ def main_function():
                     cmd_codec = encoding
 
                 cmd_exec = temp_file_name + cmd_suffix
-                with open(cmd_exec, 'w', encoding=cmd_codec) as f:
+                with myopen(cmd_exec, 'w', encoding=cmd_codec) as f:
                     # f.write(cmd_header + cmd_return)
                     for cmd in list0:
                         f.write(cmd + cmd_return)
@@ -6654,7 +6654,7 @@ def main_function():
             cmd_suffix = "_exec.sh"
 
         cmd_exec = temp_file_name + cmd_suffix
-        with open(cmd_exec, 'w', encoding=cmd_codec) as f:
+        with myopen(cmd_exec, 'w', encoding=cmd_codec) as f:
             cmd = ''
             #add shebang line
             if(list(list0).__len__()>0):
@@ -6894,7 +6894,7 @@ def main_function():
             else:
                 lines += (env_set + key + '=\"' + value + '\"' + cmd_return)
 
-        with open(cmd_effect, 'w', encoding=cmd_codec) as f:
+        with myopen(cmd_effect, 'w', encoding=cmd_codec) as f:
             f.write(cmd_header)
             f.write(lines)
 
@@ -6920,7 +6920,7 @@ def main_function():
                 lines += ('set ' + key + '=' + cmd_return)
             else:
                 lines += ('unset ' + key + cmd_return)
-        with open(cmd_unset, 'w', encoding=cmd_codec) as f:
+        with myopen(cmd_unset, 'w', encoding=cmd_codec) as f:
             f.write(cmd_header)
             f.write(lines)
 
@@ -7187,7 +7187,7 @@ def main_function():
         if ( local is True):
             #fixed
             pythonexecfile = name + '_exec' + cmd_suffix_python
-            with open(pythonexecfile, 'w', encoding=cmd_codec_python) as f:
+            with myopen(pythonexecfile, 'w', encoding=cmd_codec_python) as f:
                 for cmd in list0:
                     f.write(cmd + cmd_return_python)
             #print(1, pythonexecfile)
@@ -7257,7 +7257,7 @@ def main_function():
         cmd_list.append(cmd_exit)
 
         cmd_execute = name + "_exec" + cmd_suffix
-        with open(cmd_execute, "w", encoding=cmd_codec) as f:
+        with myopen(cmd_execute, "w", encoding=cmd_codec) as f:
             for line in cmd_list:
                 f.write(line + cmd_return)
         #print(cmd_execute)
@@ -7466,7 +7466,7 @@ def main_function():
         # print( cmd_list )
 
         cmd_execute = name + "_exec" + cmd_suffix
-        with open(cmd_execute, "w", encoding=cmd_codec) as f:
+        with myopen(cmd_execute, "w", encoding=cmd_codec) as f:
             for line in cmd_list:
                 f.write(line + cmd_return)
 
@@ -7740,7 +7740,7 @@ def main_function():
         #print( cmd_list )
 
         cmd_execute = name + "_exec" + cmd_suffix
-        with open(cmd_execute, "w", encoding=cmd_codec) as f:
+        with myopen(cmd_execute, "w", encoding=cmd_codec) as f:
             for line in cmd_list:
                 f.write(line + cmd_return)
         #print(cmd_execute)

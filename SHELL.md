@@ -103,6 +103,8 @@ pypowershell运行执行powershell脚本和命令，并且是在powershell环境
 这几个命令都允许执行带空格的脚本名。  
 
 #### pyccvp使用截图  
+将所有的、任意的路径下的.bat，在当前路径下执行。不带路径调用。  
+
 ![测试截图](./screenshot/d1.pyccvp.build.pro.png)
 ![测试截图](./screenshot/d2.png)
 
