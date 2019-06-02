@@ -14,9 +14,7 @@ from .colorama import init, Fore, Back, Style
 init(autoreset=True)
 
 if ( sys.version_info[0] == 2 ):
-    #import ConfigParser as PyConfigParser
-    from .configparser import configparser as PyConfigParser
-    #from .configparser.backports import configparser as PyConfigParser
+    import ConfigParser as PyConfigParser
 else:
     import configparser as PyConfigParser
 
@@ -150,24 +148,24 @@ def getconfigroot():
 def readJsonData(file):
 
     datas = ""
-    with myopen(file, 'r', encoding='utf8') as json_file:
+    with open(file, 'r', encoding='utf8') as json_file:
         for line in json_file.readlines():
             datas += line
     data = json.loads(datas, encoding='utf-8', object_pairs_hook=OrderedDict);
 
 
-    #with myopen(file, 'r') as json_file:
+    #with open(file, 'r') as json_file:
     #    data = json.load(json_file)
 
     return data
 
 def writeJsonData(file, data):
 
-    with myopen(file, 'w', encoding='utf8') as json_file:
+    with open(file, 'w', encoding='utf8') as json_file:
         json_file.write(json.dumps(data, indent=4, sort_keys=False, ensure_ascii=False))
 
 
-    #with myopen(file, 'w') as json_file:
+    #with open(file, 'w') as json_file:
     #    json.dump(data, json_file, indent=4)
 
 
