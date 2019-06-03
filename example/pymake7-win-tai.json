@@ -16,7 +16,8 @@
         "py27": "${python-install}/Python27",
         "py36": "${python-install}/Python36",
         "py37": "${python-install}/Python37",
-        "py": "${py37}",
+        "py37venv": "${cc}/Pyvenv/Python37",
+        "py": "${py37venv}",
         "py.bin": "${py};${py}/Scripts",
         "pymake": "${root.tool}/a0-compiler/PyMake",
         "pymake.env": "${pymake}/UserSource",
@@ -124,7 +125,9 @@
         "php64": "${wincc}/php-7.3.5-Win32-VC15-x64",
         "php": "${php64}",
         "go.bin": "${wincc}/go1.12.5.windows-amd64/go/bin",
-        "ruby.bin": "${wincc}/ruby-1.8.4-i386-mingw32/usr/local/bin"
+        "ruby.bin": "${wincc}/ruby-1.8.4-i386-mingw32/usr/local/bin",
+        "R.bin": "${wincc}/R/R-3.6.0/bin",
+        "node.js": "${wincc}/nodejs"
     },
     "environ": {
         "android.mobile": {
@@ -295,6 +298,9 @@
                 "${lua}",
                 "${php}",
                 "${go.bin}",
+                "${ruby.bin}",
+                "${R.bin}",
+                "${gradle.bin}",
                 "${cmake.bin}",
                 "${mingw32.bin}",
                 "${qt5.9.mingw32.bin}"
@@ -310,11 +316,22 @@
         },
         "current": "qt5"
     },
-    "variable-assemblage": {
+    "Path.Tips": {
+        "OLDNAME": "variable-assemblage",
         "MyName": "T.D.R.",
-        "TIPS": "If you lost variable content or command content, please record to there, I wont delete them."
+        "TIPS": "If you lost variable content or command content, please record to there, I wont delete them.",
+        "Start": "路径集是PyMake工具一切的开始。用户只需要把电脑上的路径在路径集里部署一次即可。最好部署全面。使用很方便，可以在environ里使用，可以在command里使用，可以在custom.path+.ini和custom.var+.ini里使用。",
+        "Pyvenv.Tips": "创建Python虚拟环境的时候，不要继承site-packages。",
+        "Python命令": "PyMake提供python命令，内部使用'python'进行调用。python有能力同时具有多个执行环境，为了方便切换，用户不要把python加入系统路径。加到这个文件里最好。"
     },
-    "command-assemblage": {
+    "Environ.Tips": {
+        "Tips.Separate": "上边配置的每个环境都是互相冲突的。",
+        "system": "PyMake给用户提供system命令，查看系统环境，但是，不允许修改。如果用户希望修改，建议使用rapidee修改。",
+        "local": "local环境，是PyMake给用户提供的内部的公共环境，只读。",
+        "custom": "custom环境，是PyMake允许用户设置的公共环境。custom.ini决定自定义环境的开关。custom.path+.ini配置环境路径，custom.var+.ini配置环境变量。"
+    },
+    "Command.Tips": {
+        "OLDNAME": "command-assemblage",
         "hello.work": "hello world.",
         "go.build": "go build -ldflags=\"-H windowsgui\"",
         "build.qmake": "也叫做build.pro，在Qt Source路径编译源代码",

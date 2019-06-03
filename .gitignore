@@ -40,7 +40,4 @@ nosetests.xml
 
 extra
 UserSource
-port.ini
-local.ini
-custom.ini
 venv
