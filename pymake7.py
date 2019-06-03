@@ -7243,54 +7243,67 @@ def main_function():
                 #print(2, pythonexecfile)
                 #cmd_list.append(pythonexecfile + ' ' + params_string)
 
+        #print params.
         #print(3, pythonexecfile)
-        def find_pythoncommand():
-            pycmd = ''
-            plat = getplatform()
-            if(plat == "Windows"):
-                pycmd = 'py'
-            else:
-                pycmd = 'python3'
 
-            # find in custom env[2] and separate env[1]
-            for path0a in envcustomlistrawpaths:
+        #get python command.
+        pycmd = ''
+        if(plat == "Windows"):
+            pycmd = 'py'
+        else:
+            pycmd = 'python3'
+
+        # find in local env
+        for path0a in localenv['path+']:
+            for path0 in path0a.split(os.path.pathsep):
                 #print(path0)
-                for path0 in path0a.split(os.path.pathsep):
-                    path1 = ''
-                    if (plat == "Windows"):
-                        path1 = os.path.join(path0, 'python.exe')
-                    else:
-                        path1 = os.path.join(path0, 'python3')
-                    if(os.path.isfile(path1)):
-                        pycmd = path1
-                        continue
+                path1 = ''
+                if (plat == "Windows"):
+                    path1 = os.path.join(path0, 'python.exe')
+                else:
+                    path1 = os.path.join(path0, 'python3')
+                #print(path1)
+                if(os.path.isfile(path1)):
+                    pycmd = path1
+                    continue
 
-            for path0a in rawconfig['environ'][env_name]['path+']:
-                #print(path0)
-                for path0 in path0a.split(os.path.pathsep):
-                    path1 = ''
-                    if (plat == "Windows"):
-                        path1 = os.path.join(path0, 'python.exe')
-                    else:
-                        path1 = os.path.join(path0, 'python3')
-                    if(os.path.isfile(path1)):
-                        pycmd = path1
-                        continue
+        # find in custom env
+        for path0a in envcustomlistrawpaths:
+            for path0 in path0a.split(os.path.pathsep):
+                # print(path0)
+                path1 = ''
+                if (plat == "Windows"):
+                    path1 = os.path.join(path0, 'python.exe')
+                else:
+                    path1 = os.path.join(path0, 'python3')
+                if(os.path.isfile(path1)):
+                    pycmd = path1
+                    continue
 
-            return pycmd
+        #find in separate env
+        for path0a in rawconfig['environ'][env_name]['path+']:
+            for path0 in path0a.split(os.path.pathsep):
+                # print(path0)
+                path1 = ''
+                if (plat == "Windows"):
+                    path1 = os.path.join(path0, 'python.exe')
+                else:
+                    path1 = os.path.join(path0, 'python3')
+                if(os.path.isfile(path1)):
+                    pycmd = path1
+                    continue
 
-        pycmd = find_pythoncommand()
         #print(pycmd)
         if(os.path.isfile(pythonexecfile)):
             if(plat == "Windows"):
-                cmd_list.append("call %s \"%s\" %s" % (pycmd, pythonexecfile, '%*'))
+                cmd_list.append("call \"%s\" \"%s\" %s" % (pycmd, pythonexecfile, '%*'))
             else:
-                cmd_list.append("%s \"%s\" %s" % (pycmd, pythonexecfile, '"$@"'))
+                cmd_list.append("\"%s\" \"%s\" %s" % (pycmd, pythonexecfile, '"$@"'))
         else:
             if(plat == "Windows"):
-                cmd_list.append("call %s -c \"%s\" %s" % (pycmd, pythonexecfile, '%*'))
+                cmd_list.append("call \"%s\" -c \"%s\" %s" % (pycmd, pythonexecfile, '%*'))
             else:
-                cmd_list.append("%s -c \"%s\" %s" % (pycmd, pythonexecfile, '"$@"'))
+                cmd_list.append("\"%s\" -c \"%s\" %s" % (pycmd, pythonexecfile, '"$@"'))
 
         # append exit 0
         cmd_list.append(cmd_exit)
