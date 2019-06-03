@@ -7294,16 +7294,22 @@ def main_function():
                     continue
 
         #print(pycmd)
+        if(plat == "Windows"):
+            if(pycmd != 'py'):
+                pycmd = 'python'
+        else:
+            pycmd = 'python3'
+
         if(os.path.isfile(pythonexecfile)):
             if(plat == "Windows"):
-                cmd_list.append("call \"%s\" \"%s\" %s" % (pycmd, pythonexecfile, '%*'))
+                cmd_list.append("call %s \"%s\" %s" % (pycmd, pythonexecfile, '%*'))
             else:
-                cmd_list.append("\"%s\" \"%s\" %s" % (pycmd, pythonexecfile, '"$@"'))
+                cmd_list.append("%s \"%s\" %s" % (pycmd, pythonexecfile, '"$@"'))
         else:
             if(plat == "Windows"):
-                cmd_list.append("call \"%s\" -c \"%s\" %s" % (pycmd, pythonexecfile, '%*'))
+                cmd_list.append("call %s -c \"%s\" %s" % (pycmd, pythonexecfile, '%*'))
             else:
-                cmd_list.append("\"%s\" -c \"%s\" %s" % (pycmd, pythonexecfile, '"$@"'))
+                cmd_list.append("%s -c \"%s\" %s" % (pycmd, pythonexecfile, '"$@"'))
 
         # append exit 0
         cmd_list.append(cmd_exit)
