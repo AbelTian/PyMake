@@ -59,6 +59,7 @@ try:
 except ModuleNotFoundError as e:
     print("要先安装包!!! 请进入python安装目录，执行一下代码。")
     print("pip install chardet")
+    sys.stdout.flush()
     os._exit(1)
 finally:
     ''
@@ -94,6 +95,9 @@ def utf(path, recursive=False):
         with open(path, 'rb') as f:
             content = f.read()
         encodeName = chardet.detect(content)["encoding"]
+        if(encodeName is None):
+            print(path, encodeName, "ignored")
+            return
 
         content = ""
         content = ReadFile(path, encodeName)
@@ -103,36 +107,37 @@ def utf(path, recursive=False):
         newEncodeName = "utf-8"
         WriteFile(path, newContent, newEncodeName)
 
-        print(path, encodeName, newEncodeName)
+        #print(path, encodeName, newEncodeName)
+        print("%-12s %-12s %s" % (encodeName, newEncodeName, path))
 
     else:
         for i in os.listdir(path):
             now_path = os.path.join(path, i)
             #print(path, now_path, os.path.splitext(i)[1], os.path.isdir(now_path) )
-            if os.path.isdir(now_path) and recursive is True:
+            if (os.path.isdir(now_path) and recursive is True):
                 utf(now_path, recursive)
-            elif os.path.splitext(i)[1] == ".cpp" \
-                    or os.path.splitext(i)[1] == ".bat"\
-                    or os.path.splitext(i)[1] == ".sh"\
-                    or os.path.splitext(i)[1] == ".cc"\
-                    or os.path.splitext(i)[1] == ".hh"\
-                    or os.path.splitext(i)[1] == ".sh"\
-                    or os.path.splitext(i)[1] == ".c"\
-                    or os.path.splitext(i)[1] == ".ui"\
-                    or os.path.splitext(i)[1] == ".qrc"\
-                    or os.path.splitext(i)[1] == ".rc"\
-                    or os.path.splitext(i)[1] == ".in"\
-                    or os.path.splitext(i)[1] == ".h"\
-                    or os.path.splitext(i)[1] == ".pro"\
-                    or os.path.splitext(i)[1] == ".pri"\
-                    or os.path.splitext(i)[1] == ".c"\
-                    or os.path.splitext(i)[1] == ".ui":
+            elif ( os.path.splitext(i)[1] == ".cpp"
+                    #or os.path.splitext(i)[1] == ".bat"
+                    or os.path.splitext(i)[1] == ".sh"
+                    or os.path.splitext(i)[1] == ".cc"
+                    or os.path.splitext(i)[1] == ".hh"
+                    or os.path.splitext(i)[1] == ".sh"
+                    or os.path.splitext(i)[1] == ".c"
+                    or os.path.splitext(i)[1] == ".ui"
+                    or os.path.splitext(i)[1] == ".qrc"
+                    #or os.path.splitext(i)[1] == ".rc"
+                    or os.path.splitext(i)[1] == ".in"
+                    or os.path.splitext(i)[1] == ".h"
+                    or os.path.splitext(i)[1] == ".pro"
+                    or os.path.splitext(i)[1] == ".pri"
+                    or os.path.splitext(i)[1] == ".c"
+                    or os.path.splitext(i)[1] == ".ui"):
                 #print ("inside", now_path)
                 utf(now_path)
             else:
-                continue;
+                continue
                 #print ("excide", now_path)
-
+    return
 
 
 def main_function():

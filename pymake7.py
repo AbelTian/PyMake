@@ -7244,12 +7244,12 @@ def main_function():
         #print(3, pythonexecfile)
         if(os.path.isfile(pythonexecfile)):
             if(plat == "Windows"):
-                cmd_list.append("call py \"%s\" %s" % (pythonexecfile, '%*'))
+                cmd_list.append("call python \"%s\" %s" % (pythonexecfile, '%*'))
             else:
                 cmd_list.append("python3 \"%s\" %s" % (pythonexecfile, '"$@"'))
         else:
             if(plat == "Windows"):
-                cmd_list.append("call py -c \"%s\" %s" % (pythonexecfile, '%*'))
+                cmd_list.append("call python -c \"%s\" %s" % (pythonexecfile, '%*'))
             else:
                 cmd_list.append("python3 -c \"%s\" %s" % (pythonexecfile, '"$@"'))
 
