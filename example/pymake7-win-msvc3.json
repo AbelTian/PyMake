@@ -191,13 +191,13 @@
         "qt5.vc6": {
             "path+": [
                 "${cmake.bin}",
-                "VC6.BIN",
-                "${qt5.5.vc6.bin}"
+                "${VC6.BIN}",
+                "${qt5.9.vc6.bin}"
             ],
-            "INCLUDE": "VC6.INCLUDE",
-            "LIB": "VC6.LIB",
-            "QTVERSION": "${qt5.5.version}",
-            "QTDIR": "${qt5.5.vc6}",
+            "INCLUDE": "${VC6.INCLUDE}",
+            "LIB": "${VC6.LIB}",
+            "QTVERSION": "${qt5.9.version}",
+            "QTDIR": "${qt5.9.vc6}",
             "QTSPEC": "-spec win32-msvc",
             "QTCONFIG": "",
             "QKIT": "WIN32",
