@@ -26,12 +26,6 @@
         "cmake.bin": "${cmake}/bin",
         "msys.bin": "${root.tool}/winCompilers/mSys/bin",
         "msys2.bin": "${root.tool}/winCompilers/mSys2/bin",
-        "FFmpeg": "${root.sdk}/FFmpeg3/Windows",
-        "FFmpeg.bin": "${FFmpeg}/bin",
-        "FFmpeg.lib": "${FFmpeg}/lib",
-        "FFmpeg.inc": "${FFmpeg}/include/FFmpeg3",
-        "doxygen.bin": "${root.tools}/doxygen/bin",
-        "graphviz.bin": "${root.tools}/doxygen/graphviz-2.38/bin",
         "LLVM": "${wincc}/LLVM",
         "LLVM.bin": "${LLVM}/bin;${LLVM}/libexec",
         "qt": "${root.tool}/winLibraries/Qt",
@@ -117,6 +111,19 @@
         "watcom.help": "${watcom}/binnt/help",
         "watcom.wipfc": "${watcom}/wipfc",
         "test.P0": "R:/一个中文路径",
+        "FFmpeg": "${root.sdk}/FFmpeg3/Windows",
+        "FFmpeg.bin": "${FFmpeg}/bin",
+        "FFmpeg.lib": "${FFmpeg}/lib",
+        "FFmpeg.inc": "${FFmpeg}/include/FFmpeg3",
+        "doxygen.bin": "${root.tools}/doxygen/bin",
+        "graphviz.bin": "${root.tools}/doxygen/graphviz-2.38/bin",
+        "astyle.bin": "${root.tools}/AStyle_3.1_windows/AStyle/bin",
+        "bcompare": "${root.tools}/beyond compare_xpgod/Beyond Compare",
+        "rapidee": "${root.tools}/RapidEEx64",
+        "jcpicker": "${root.tools}/jcpicker",
+        "7z": "C:\\Program Files\\7-Zip",
+        "pycharm": "C:\\Program Files\\JetBrains\\PyCharm Community Edition 2019.1.3\\bin",
+        "test.P1": "R:/一个中文路径",
         "perl": "${wincc}/perl_5.26.0.1_64",
         "perl.bin": "${perl}/perl/bin",
         "xmake": "${wincc}/xmake",
@@ -127,7 +134,33 @@
         "go.bin": "${wincc}/go1.12.5.windows-amd64/go/bin",
         "ruby.bin": "${wincc}/ruby-1.8.4-i386-mingw32/usr/local/bin",
         "R.bin": "${wincc}/R/R-3.6.0/bin",
-        "node.js": "${wincc}/nodejs"
+        "node.js": "${wincc}/nodejs",
+        "rexx32": "${wincc}/REXX/Regina391w32",
+        "rexx64": "${wincc}/REXX/Regina391w64",
+        "rexx": "${rexx64}",
+        "nasm32": "${wincc}/nasm/nasm-2.14.02-win32/nasm-2.14.02",
+        "nasm64": "${wincc}/nasm/nasm-2.14.02",
+        "nasm": "${nasm64}",
+        "nasm.bin": "${nasm};${nasm}/rdoff",
+        "erlang10": "${wincc}/erl10.0.1",
+        "erlang10.bin": "${erlang10}/bin;${erlang10}/erts-10.0.1/bin",
+        "erlang.bin": "${erlang10.bin}",
+        "dlang": "${wincc}/D",
+        "dlang.bin": "${dlang}/dmd2/windows/bin;${dlang}/dmd2/windows/bin64",
+        "groovy": "${wincc}/groovy-2.5.7",
+        "groovy.bin": "${groovy}/bin",
+        "racket": "${wincc}/Racket",
+        "haskell": "${wincc}/Haskell/8.6.5",
+        "haskell.bin": "${haskell}/bin;${haskell}/winghci",
+        "haskell.perl": "${haskell}/perl",
+        "haskell.mingw": "${haskell}/mingw",
+        "haskell.mingw.bin": "${haskell.mingw}/bin",
+        "haskell.mingw.lib": "${haskell.mingw}/lib",
+        "haskell.mingw.include": "${haskell.mingw}/include",
+        "haskell.msys": "${haskell}/msys",
+        "haskell.msys.bin": "${haskell}/msys/usr/bin",
+        "haskell.stack": "${haskell}/../Stack",
+        "haskell.stack.bin": "${haskell.stack}/usr/local/bin"
     },
     "environ": {
         "android.mobile": {
@@ -286,6 +319,17 @@
             "WIPFC": "${watcom.wipfc}",
             "INCLUDE": "${watcom.include}"
         },
+        "haskell": {
+            "path+": [
+                "${haskell.bin}",
+                "${haskell.mingw.bin}",
+                "${haskell.msys}",
+                "${haskell.msys.bin}",
+                "${haskell.perl}",
+                "${haskell.stack.bin}"
+            ],
+            "STACK_ROOT": "${haskell}/Stack"
+        },
         "other2": {
             "path+": [
                 "${doxygen.bin}",
@@ -414,6 +458,9 @@
             "rem del /f /q /s demo examples src test",
             "qmake %src% ${QTSPEC} CONFIG+=debug CONFIG+=qml_debug ${QTCONFIG} && mingw32-make qmake_all",
             "mingw32-make -j10"
+        ],
+        "color.picker": [
+            "start ${jcpicker}\\jcpicker.exe"
         ],
         "qt.creator": [
             "cd ${root.build}",
