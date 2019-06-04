@@ -66,6 +66,8 @@ def read_thread_function(p):
             break
 
         if ("pymake-command-status:" in l):
+            #you must input legal format params
+            #print (l)
             ret = int(l.split(':')[-1].strip())
             # java windows return 0 or 1
             #print (l)

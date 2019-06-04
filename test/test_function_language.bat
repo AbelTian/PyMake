@@ -56,3 +56,25 @@ set command=pylanguage py py中文.py "你好 中国" "你好 美国" "你好 俄罗斯"
 echo %command%
 call %command%
 echo --------------------------------------------
+
+set command=pymake language ccvp "powershell -File" p中文.ps1 "你好 中国" "你好  美国"
+echo %command%
+call %command%
+echo --------------------------------------------
+
+set command=pymake language ccvp python py中文.py "你好 中国" "你好 美国" \" 你好 美国\" 是吗？ "B -c -y"
+echo %command%
+call %command%
+echo --------------------------------------------
+
+rem legal
+set command=pymake language ccvp python py中文.py "你好 中国" "你好 美国"\" 你好 美国\" 是吗？ "B -c -y"
+echo %command%
+call %command%
+echo --------------------------------------------
+
+rem illegal
+set command=pymake language ccvp python py中文.py "你好 中国""你好 美国" \" 你好 美国\" 是吗？ "B -c -y"
+echo %command%
+call %command%
+echo --------------------------------------------

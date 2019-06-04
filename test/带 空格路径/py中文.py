@@ -66,6 +66,8 @@ def main_function():
     print(os.getcwd())
     print(len(sys.argv))
     print(sys.argv)
+    for path0 in sys.argv:
+        print ("PARAMS:", path0)
     return
 
 if __name__ == '__main__':

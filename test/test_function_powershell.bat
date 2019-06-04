@@ -61,6 +61,10 @@ set command=pypowershell p中文 "你好，再一次，中国。"
 echo %command%
 call %command%
 
+set command=pymake powershell ccvp p中文 "你好 中国" "你好 美国" 你好 \"你好 中国\" "“是吗”" B C "B -c -h"
+echo %command%
+call %command%
+
 set command=pymake powershell ccvp pscript "你好 中国" 你好 "你好 美国" \"你好 中国\" "“是吗”" B C "B -c -h"
 echo %command%
 call %command%
