@@ -3846,6 +3846,8 @@ def main_function():
         #    print("AAAA:" + l)
 
         # write back
+
+        #strip
         storecustompaths = copy.deepcopy(custompaths)
         for (i, l) in enumerate(storecustompaths):
             # import format
@@ -3893,6 +3895,8 @@ def main_function():
                     f.write(l + cmd_return)
 
         # set into env
+
+        #raw
         envcustompaths = copy.deepcopy(storecustompaths)
         envcustomrawpaths = raw_path(envcustompaths)
         #print(envcustompaths)
@@ -3952,6 +3956,8 @@ def main_function():
                 customenvs.append(l)
 
         # write back
+
+        #strip
         storecustomvars = copy.deepcopy(customenvs)
         for (i, l) in enumerate(storecustomvars):
             # important format
@@ -3988,6 +3994,8 @@ def main_function():
                     f.write(l + cmd_return)
 
         # set into env
+
+        #raw
         envcustomvars = copy.deepcopy(storecustomvars)
         envcustomrawvars = raw_path(envcustomvars)
         #print(envcustomvars)
@@ -4093,7 +4101,7 @@ def main_function():
                 if (args['-s'] or args['--system'] is True):
                     # export path
                     # print(envcustomlistrawpaths)
-                    for (key) in pymakesystemenviron['PATH'].split(';'):
+                    for (key) in pymakesystemenviron['PATH'].split(os.path.pathsep):
                         lines += ("if ( !$env:Path.Contains(\"%s;\" ) ) { $env:Path = $env:Path.Insert(0, \"%s;\") }" % (key, key)) + cmd_return
 
                     # export var
@@ -4161,7 +4169,7 @@ def main_function():
                 # +system
                 if (args['-s'] or args['--system'] is True):
                     # export unset path
-                    for (key) in pymakesystemenviron['PATH'].split(';'):
+                    for (key) in pymakesystemenviron['PATH'].split(os.path.pathsep):
                         lines += ("if ( $env:Path.Contains(\"%s;\" ) ) { $env:Path = $env:Path.Replace(\"%s;\", \"\") }" % (key, key)) + cmd_return
 
                     # export unset var
@@ -4264,7 +4272,7 @@ def main_function():
             if(args['-s'] or args['--system'] is True):
                 # export path
                 # print(envcustomlistrawpaths)
-                for (key) in pymakesystemenviron['PATH'].split(';'):
+                for (key) in pymakesystemenviron['PATH'].split(os.path.pathsep):
                     if (plat == "Windows"):
                         lines += (env_set + 'PATH=' + key + os.path.pathsep + '%PATH%' + cmd_return)
                     else:
@@ -4355,7 +4363,7 @@ def main_function():
             # +system
             if(args['-s'] or args['--system'] is True):
                 # export unset path
-                for (key) in pymakesystemenviron['PATH'].split(';'):
+                for (key) in pymakesystemenviron['PATH'].split(os.path.pathsep):
                     if (plat == "Windows"):
                         lines += (env_set + 'PATH=%PATH:' + key + ';=%' + cmd_return)
                     else:
@@ -4461,6 +4469,99 @@ def main_function():
         else:
             ''
         break
+
+    # which command [internal]
+    def which_command(env_name = None, name = '', postfix = []):
+        if(env_name is None):
+            env_name = rawconfig['environ']['current']
+
+        if(rawconfig['environ'].__contains__(env_name) is False):
+            print("Fault Error! .json file is broken, env %s is losing!" % env_name)
+            return None
+
+        if(name is None or name == ''):
+            return None
+
+        #get python command.
+        pycmd = name
+
+        #get path ext
+        pathext = []
+        pathext.append('')
+        pathext.extend(postfix)
+        plat = getplatform()
+        if(plat == "Windows"):
+            pathext.extend(os.environ['PATHEXT'])
+        else:
+            pathext.extend(['.sh','.out','.cmd'])
+
+        #find in separate env
+        list0 = copy.deepcopy(rawconfig['environ'][env_name]['path+'])
+        list0.reverse()
+        for path0a in list0:
+            for path0 in path0a.split(os.path.pathsep):
+                path0 = path0.strip()
+                # print(path0)
+                path1 = ''
+                for pext0 in pathext:
+                    if(pext0 == ''):
+                        path1 = path0 + os.path.sep + pycmd
+                    else:
+                        path1 = path0 + os.path.sep + pycmd + os.path.sep + pext0
+                    if(os.path.isfile(path1)):
+                        return path1
+
+        # find in custom env
+        list0 = copy.deepcopy(envcustomlistrawpaths)
+        list0.reverse()
+        for path0a in list0:
+            for path0 in path0a.split(os.path.pathsep):
+                path0 = path0.strip()
+                # print(path0)
+                path1 = ''
+                for pext0 in pathext:
+                    if(pext0 == ''):
+                        path1 = path0 + os.path.sep + pycmd
+                    else:
+                        path1 = path0 + os.path.sep + pycmd + os.path.sep + pext0
+                    if(os.path.isfile(path1)):
+                        return path1
+
+        # find in local env
+        list0 = copy.deepcopy(localenv['path+'])
+        list0.reverse()
+        for path0a in list0:
+            for path0 in path0a.split(os.path.pathsep):
+                path0 = path0.strip()
+                #print(path0)
+                path1 = ''
+                for pext0 in pathext:
+                    if(pext0 == ''):
+                        path1 = path0 + os.path.sep + pycmd
+                    else:
+                        path1 = path0 + os.path.sep + pycmd + os.path.sep + pext0
+                    #print(path1)
+                    if(os.path.isfile(path1)):
+                        return path1
+
+        # find in system env
+        list0 = copy.deepcopy(pymakesystemenviron['PATH'].split(os.path.pathsep))
+        list0.reverse()
+        for path0a in list0:
+            for path0 in path0a.split(os.path.pathsep):
+                path0 = path0.strip()
+                #print(path0)
+                path1 = ''
+                for pext0 in pathext:
+                    if(pext0 == ''):
+                        path1 = path0 + os.path.sep + pycmd
+                    else:
+                        path1 = path0 + os.path.sep + pycmd + os.path.sep + pext0
+                    #print(path1)
+                    if(os.path.isfile(path1)):
+                        return path1
+
+        return None
 
     #powershell export env function
     def powershell_environ_export(env_name = None, file_name = None):
@@ -7249,49 +7350,11 @@ def main_function():
         #get python command.
         pycmd = ''
         if(plat == "Windows"):
-            pycmd = 'py'
+            pycmd = 'python.exe'
         else:
             pycmd = 'python3'
 
-        # find in local env
-        for path0a in localenv['path+']:
-            for path0 in path0a.split(os.path.pathsep):
-                #print(path0)
-                path1 = ''
-                if (plat == "Windows"):
-                    path1 = os.path.join(path0, 'python.exe')
-                else:
-                    path1 = os.path.join(path0, 'python3')
-                #print(path1)
-                if(os.path.isfile(path1)):
-                    pycmd = path1
-                    continue
-
-        # find in custom env
-        for path0a in envcustomlistrawpaths:
-            for path0 in path0a.split(os.path.pathsep):
-                # print(path0)
-                path1 = ''
-                if (plat == "Windows"):
-                    path1 = os.path.join(path0, 'python.exe')
-                else:
-                    path1 = os.path.join(path0, 'python3')
-                if(os.path.isfile(path1)):
-                    pycmd = path1
-                    continue
-
-        #find in separate env
-        for path0a in rawconfig['environ'][env_name]['path+']:
-            for path0 in path0a.split(os.path.pathsep):
-                # print(path0)
-                path1 = ''
-                if (plat == "Windows"):
-                    path1 = os.path.join(path0, 'python.exe')
-                else:
-                    path1 = os.path.join(path0, 'python3')
-                if(os.path.isfile(path1)):
-                    pycmd = path1
-                    continue
+        pycmd = which_command(env_name, pycmd)
 
         #print(pycmd)
         if(plat == "Windows"):
