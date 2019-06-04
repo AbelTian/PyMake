@@ -4546,7 +4546,7 @@ def main_function():
 
         # find in system env
         list0 = copy.deepcopy(pymakesystemenviron['PATH'].split(os.path.pathsep))
-        list0.reverse()
+        #list0.reverse()
         for path0a in list0:
             for path0 in path0a.split(os.path.pathsep):
                 path0 = path0.strip()
@@ -7358,7 +7358,9 @@ def main_function():
 
         #print(pycmd)
         if(plat == "Windows"):
-            if(pycmd != 'py'):
+            if(pycmd is None):
+                pycmd = 'py'
+            elif(pycmd != 'py'):
                 pycmd = 'python'
         else:
             pycmd = 'python3'
