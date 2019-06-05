@@ -7723,12 +7723,7 @@ def main_function():
             cmd_list.append("source %s_effect.sh" % name)
 
         for cmd in list0:
-            if (plat == "Windows"):
-                ""  # cmd = cmd.replace('/', '\\')
-            if(str(cmd).__contains__(' ')):
-                cmd_list.append('"' + cmd + '"')
-            else:
-                cmd_list.append(cmd)
+            cmd_list.append(cmd)
 
         # append exit 0
         cmd_list.append(cmd_exit)
@@ -7838,7 +7833,11 @@ def main_function():
                     if (current_var in dict0):
                         list0.extend(dict0[current_var])
                     else:
-                        list0.append(current_var)
+                        cmd = current_var
+                        if (str(cmd).__contains__(' ')):
+                            list0.append('"' + cmd + '"')
+                        else:
+                            list0.append(cmd)
 
                 cmd_list = []
                 temp_file_name = ""
@@ -7902,7 +7901,11 @@ def main_function():
                 if (current_var in dict0):
                     list0.extend(dict0[current_var])
                 else:
-                    list0.append(current_var)
+                    cmd = current_var
+                    if (str(cmd).__contains__(' ')):
+                        list0.append('"' + cmd + '"')
+                    else:
+                        list0.append(cmd)
 
             cmd_list = []
             temp_file_name = ""
