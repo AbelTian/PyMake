@@ -6777,6 +6777,30 @@ def main_function():
                                         continue
                                     print(Fore.GREEN + "  %-30s %s" % (key, value))
                         return
+                    elif (args['cmd'] == True):
+                        dict0 = copy.deepcopy(list_config['command'])
+                        if (args['<name>'] is not None):
+                            # print(Fore.CYAN + "group: %s" % args['<name>'])
+                            if (dict0.__contains__(args['<name>']) is False):
+                                print("there is no this cmd in command group.")
+                                return
+                            value = dict0[args['<name>']]
+                            step = 1
+                            for cmd in value:
+                                print(Fore.RED + "%-3s %s" % (step, cmd))
+                                step += 1
+                            return
+                        else:
+                            for (key, value) in dict0.items():
+                                if (args['-a'] is not True and args['--all'] is not True):
+                                    print(Fore.CYAN + "%s" % key)
+                                    continue
+                                print(Fore.CYAN + "group: %s" % key)
+                                step = 1
+                                for cmd in value:
+                                    print(Fore.RED + "%-3s %s" % (step, cmd))
+                                    step += 1
+                            return
                     else:
                         ''
                 else:
@@ -7286,29 +7310,6 @@ def main_function():
                                     if (key == 'PATH'):
                                         continue
                                     print(Fore.GREEN + "  %-30s %s" % (key, value))
-
-                    elif (args['cmd'] == True):
-                        dict0 = copy.deepcopy(list_config['command'])
-                        if (args['<name>'] is not None):
-                            # print(Fore.CYAN + "group: %s" % args['<name>'])
-                            if (dict0.__contains__(args['<name>']) is False):
-                                print("there is no this cmd in command group.")
-                                return
-                            value = dict0[args['<name>']]
-                            step = 1
-                            for cmd in value:
-                                print(Fore.RED + "%-3s %s" % (step, cmd))
-                                step += 1
-                        else:
-                            for (key, value) in dict0.items():
-                                if (args['-a'] is not True and args['--all'] is not True):
-                                    print(Fore.CYAN + "%s" % key)
-                                    continue
-                                print(Fore.CYAN + "group: %s" % key)
-                                step = 1
-                                for cmd in value:
-                                    print(Fore.RED + "%-3s %s" % (step, cmd))
-                                    step += 1
 
                     else:
                         print(Fore.BLACK + "path-assemblage:")
