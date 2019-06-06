@@ -4531,41 +4531,11 @@ def main_function():
                     if(os.path.isfile(path1)):
                         return path1
 
-        # find in custom env
-        list0 = copy.deepcopy(envcustomlistrawpaths)
-        list0.reverse()
-        for path0a in list0:
-            for path0 in path0a.split(os.path.pathsep):
-                path0 = path0.strip()
-                # print(path0)
-                path1 = ''
-                for pext0 in pathext:
-                    if(pext0 == ''):
-                        path1 = path0 + os.path.sep + pycmd
-                    else:
-                        path1 = path0 + os.path.sep + pycmd + os.path.sep + pext0
-                    if(os.path.isfile(path1)):
-                        return path1
-
-        # find in local env
-        list0 = copy.deepcopy(localenv['path+'])
-        list0.reverse()
-        for path0a in list0:
-            for path0 in path0a.split(os.path.pathsep):
-                path0 = path0.strip()
-                #print(path0)
-                path1 = ''
-                for pext0 in pathext:
-                    if(pext0 == ''):
-                        path1 = path0 + os.path.sep + pycmd
-                    else:
-                        path1 = path0 + os.path.sep + pycmd + os.path.sep + pext0
-                    #print(path1)
-                    if(os.path.isfile(path1)):
-                        return path1
-
-        # find in system env
-        list0 = copy.deepcopy(pymakesystemenviron['PATH'].split(os.path.pathsep))
+        # find in env. [custom+, local+, system]
+        env = os.environ
+        #for pathA in env['PATH'].split(os.path.pathsep):
+        #    print(pathA)
+        list0 = copy.deepcopy(env['PATH'].split(os.path.pathsep))
         #list0.reverse()
         for path0a in list0:
             for path0 in path0a.split(os.path.pathsep):
@@ -4580,6 +4550,56 @@ def main_function():
                     #print(path1)
                     if(os.path.isfile(path1)):
                         return path1
+
+        # find in custom env
+        #list0 = copy.deepcopy(envcustomlistrawpaths)
+        #list0.reverse()
+        #for path0a in list0:
+        #    for path0 in path0a.split(os.path.pathsep):
+        #        path0 = path0.strip()
+        #        # print(path0)
+        #        path1 = ''
+        #        for pext0 in pathext:
+        #            if(pext0 == ''):
+        #                path1 = path0 + os.path.sep + pycmd
+        #            else:
+        #                path1 = path0 + os.path.sep + pycmd + os.path.sep + pext0
+        #            if(os.path.isfile(path1)):
+        #                return path1
+        #
+        ## find in local env
+        #list0 = copy.deepcopy(localenv['path+'])
+        #list0.reverse()
+        #for path0a in list0:
+        #    for path0 in path0a.split(os.path.pathsep):
+        #        path0 = path0.strip()
+        #        #print(path0)
+        #        path1 = ''
+        #        for pext0 in pathext:
+        #            if(pext0 == ''):
+        #                path1 = path0 + os.path.sep + pycmd
+        #            else:
+        #                path1 = path0 + os.path.sep + pycmd + os.path.sep + pext0
+        #            #print(path1)
+        #            if(os.path.isfile(path1)):
+        #                return path1
+        #
+        ## find in system env
+        #list0 = copy.deepcopy(pymakesystemenviron['PATH'].split(os.path.pathsep))
+        ##list0.reverse()
+        #for path0a in list0:
+        #    for path0 in path0a.split(os.path.pathsep):
+        #        path0 = path0.strip()
+        #        #print(path0)
+        #        path1 = ''
+        #        for pext0 in pathext:
+        #            if(pext0 == ''):
+        #                path1 = path0 + os.path.sep + pycmd
+        #            else:
+        #                path1 = path0 + os.path.sep + pycmd + os.path.sep + pext0
+        #            #print(path1)
+        #            if(os.path.isfile(path1)):
+        #                return path1
 
         return None
 
@@ -4644,41 +4664,9 @@ def main_function():
                     if(os.path.isfile(path1)):
                         return path1
 
-        # find in custom env
-        list0 = copy.deepcopy(envcustomlistrawpaths)
-        list0.reverse()
-        for path0a in list0:
-            for path0 in path0a.split(os.path.pathsep):
-                path0 = path0.strip()
-                # print(path0)
-                path1 = ''
-                for pext0 in pathext:
-                    if(pext0 == ''):
-                        path1 = path0 + os.path.sep + pycmd
-                    else:
-                        path1 = path0 + os.path.sep + pycmd + os.path.sep + pext0
-                    if(os.path.isfile(path1)):
-                        return path1
-
-        # find in local env
-        list0 = copy.deepcopy(localenv['path+'])
-        list0.reverse()
-        for path0a in list0:
-            for path0 in path0a.split(os.path.pathsep):
-                path0 = path0.strip()
-                #print(path0)
-                path1 = ''
-                for pext0 in pathext:
-                    if(pext0 == ''):
-                        path1 = path0 + os.path.sep + pycmd
-                    else:
-                        path1 = path0 + os.path.sep + pycmd + os.path.sep + pext0
-                    #print(path1)
-                    if(os.path.isfile(path1)):
-                        return path1
-
-        # find in system env
-        list0 = copy.deepcopy(pymakesystemenviron['PATH'].split(os.path.pathsep))
+        # find in env. [custom+, local+, system]
+        env = os.environ
+        list0 = copy.deepcopy(env['PATH'].split(os.path.pathsep))
         #list0.reverse()
         for path0a in list0:
             for path0 in path0a.split(os.path.pathsep):
@@ -4693,6 +4681,56 @@ def main_function():
                     #print(path1)
                     if(os.path.isfile(path1)):
                         return path1
+
+        # find in custom env
+        #list0 = copy.deepcopy(envcustomlistrawpaths)
+        #list0.reverse()
+        #for path0a in list0:
+        #    for path0 in path0a.split(os.path.pathsep):
+        #        path0 = path0.strip()
+        #        # print(path0)
+        #        path1 = ''
+        #        for pext0 in pathext:
+        #            if(pext0 == ''):
+        #                path1 = path0 + os.path.sep + pycmd
+        #            else:
+        #                path1 = path0 + os.path.sep + pycmd + os.path.sep + pext0
+        #            if(os.path.isfile(path1)):
+        #                return path1
+        #
+        ## find in local env
+        #list0 = copy.deepcopy(localenv['path+'])
+        #list0.reverse()
+        #for path0a in list0:
+        #    for path0 in path0a.split(os.path.pathsep):
+        #        path0 = path0.strip()
+        #        #print(path0)
+        #        path1 = ''
+        #        for pext0 in pathext:
+        #            if(pext0 == ''):
+        #                path1 = path0 + os.path.sep + pycmd
+        #            else:
+        #                path1 = path0 + os.path.sep + pycmd + os.path.sep + pext0
+        #            #print(path1)
+        #            if(os.path.isfile(path1)):
+        #                return path1
+        #
+        ## find in system env
+        #list0 = copy.deepcopy(pymakesystemenviron['PATH'].split(os.path.pathsep))
+        ##list0.reverse()
+        #for path0a in list0:
+        #    for path0 in path0a.split(os.path.pathsep):
+        #        path0 = path0.strip()
+        #        #print(path0)
+        #        path1 = ''
+        #        for pext0 in pathext:
+        #            if(pext0 == ''):
+        #                path1 = path0 + os.path.sep + pycmd
+        #            else:
+        #                path1 = path0 + os.path.sep + pycmd + os.path.sep + pext0
+        #            #print(path1)
+        #            if(os.path.isfile(path1)):
+        #                return path1
 
         return None
 
