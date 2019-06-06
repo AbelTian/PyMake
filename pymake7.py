@@ -2873,7 +2873,7 @@ def main_function():
                 cmd_codec = None
             # but windows, it is \r\n, python helpping me?
             cmd_return = "\n"
-            cmd_exit = 'exit /b 0'
+            cmd_exit = 'exit /b %ERRORLEVEL%'
             cmd_suffix = ".bat"
             cmd_header = "@echo off"
             cmd_call = "call "
@@ -4717,7 +4717,7 @@ def main_function():
         cmd_sep = ';'
         cmd_suffix = ".ps1"
         cmd_suffix_powershell = cmd_suffix
-        cmd_exit = 'exit 0'
+        cmd_exit = 'exit $LASTEXITCODE'
         cmd_codec = 'ansi'
         if (getplatform_release() == "XP"):
             cmd_codec = None
@@ -5775,7 +5775,7 @@ def main_function():
                 cmd_codec = None
             # but windows, it is \r\n, python helpping me?
             cmd_return = "\n"
-            cmd_exit = 'exit /b 0'
+            cmd_exit = 'exit /b %ERRORLEVEL%'
             cmd_suffix = ".bat"
             cmd_header = "@echo off"
             cmd_call = "call "
@@ -7393,7 +7393,7 @@ def main_function():
                 cmd_codec = None
             # but windows, it is \r\n, python helpping me?
             cmd_return = "\n"
-            cmd_exit = 'exit /b 0'
+            cmd_exit = 'exit /b %ERRORLEVEL%'
             cmd_suffix = ".bat"
             cmd_header = "@echo off"
             cmd_call = "call "
@@ -7701,7 +7701,7 @@ def main_function():
                 cmd_codec = None
             # but windows, it is \r\n, python helpping me?
             cmd_return = "\n"
-            cmd_exit = 'exit /b 0'
+            cmd_exit = 'exit /b %ERRORLEVEL%'
             cmd_suffix = ".bat"
             cmd_header = "@echo off"
             # window close echo, close promot
@@ -7773,7 +7773,7 @@ def main_function():
             cmd_status = "echo pymake-command-status:%errorlevel%"
             cmd_sep = '&'
             cmd_header = "@echo off"
-            cmd_exit = 'exit /b 0'
+            cmd_exit = 'exit /b %ERRORLEVEL%'
             # window close echo, close promot
             cmd_list.append(cmd_header + ' ' + cmd_sep + ' ' + cmd_status)
             cmd_list.append("call %s_effect.bat" % name + ' ' + cmd_sep + ' ' + cmd_status)
@@ -7986,7 +7986,7 @@ def main_function():
                 cmd_codec = None
             # but windows, it is \r\n, python helpping me?
             cmd_return = "\n"
-            cmd_exit = 'exit /b 0'
+            cmd_exit = 'exit /b %ERRORLEVEL%'
             cmd_suffix = ".bat"
             cmd_header = "@echo off"
             cmd_call = "call "
