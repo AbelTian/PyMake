@@ -1,4 +1,4 @@
-echo 你知道中文吗，Windows？
+echo HEIHEI 2，你知道中文吗，Windows？
 echo %*
 echo %1
 echo %2

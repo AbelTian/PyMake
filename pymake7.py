@@ -2656,6 +2656,168 @@ def main_function():
                 step += 1
         return command_dict
 
+    # which command [internal]
+    def which_command(env_name = None, name = '', postfix = []):
+        if(name is None or name == ''):
+            return None
+
+        #get python command.
+        pycmd = name
+
+        #get path ext
+        pathext = []
+        pathext.append('')
+        pathext.extend(postfix)
+        plat = getplatform()
+        if(plat == "Windows"):
+            pathext.extend(os.environ['PATHEXT'].split(os.path.pathsep))
+        else:
+            pathext.extend(['.sh','.out','.cmd'])
+
+        #find in current path
+        specialpath = [
+            pymakeworkpath,
+            os.getcwd()
+        ]
+        list0 = copy.deepcopy(specialpath)
+        list0.reverse()
+        for path0a in list0:
+            for path0 in path0a.split(os.path.pathsep):
+                path0 = path0.strip()
+                # print(path0)
+                path1 = ''
+                for pext0 in pathext:
+                    path1 = path0 + os.path.sep + pycmd + pext0
+                    if(os.path.isfile(path1)):
+                        if (plat == "Windows"):
+                            return path1.replace('/', '\\')
+                        else:
+                            return path1.replace('\\', '/')
+
+        if(env_name is not None):
+            if(rawconfig['environ'].__contains__(env_name) is False):
+                print("Fault Error! .json file is broken, env %s is losing!" % env_name)
+                return None
+
+            #find in separate env
+            list0 = copy.deepcopy(rawconfig['environ'][env_name]['path+'])
+            list0.reverse()
+            for path0a in list0:
+                for path0 in path0a.split(os.path.pathsep):
+                    path0 = path0.strip()
+                    # print(path0)
+                    path1 = ''
+                    for pext0 in pathext:
+                        path1 = path0 + os.path.sep + pycmd + pext0
+                        if(os.path.isfile(path1)):
+                            if (plat == "Windows"):
+                                return path1.replace('/', '\\')
+                            else:
+                                return path1.replace('\\', '/')
+
+        # find in env. [custom+, local+, system]
+        env = os.environ
+        #for pathA in env['PATH'].split(os.path.pathsep):
+        #    print(pathA)
+        list0 = copy.deepcopy(env['PATH'].split(os.path.pathsep))
+        #list0.reverse()
+        for path0a in list0:
+            for path0 in path0a.split(os.path.pathsep):
+                path0 = path0.strip()
+                #print(path0)
+                path1 = ''
+                for pext0 in pathext:
+                    path1 = path0 + os.path.sep + pycmd + pext0
+                    #print("[%s]" % path1)
+                    if(os.path.isfile(path1)):
+                        if (plat == "Windows"):
+                            return path1.replace('/', '\\')
+                        else:
+                            return path1.replace('\\', '/')
+
+        return None
+
+    # which file [internal]
+    def which_file(env_name = None, name = '', postfix = []):
+        if(name is None or name == ''):
+            return None
+
+        #get python command.
+        pycmd = name
+
+        #get path ext
+        pathext = []
+        pathext.append('')
+        pathext.extend(postfix)
+        plat = getplatform()
+        if(plat == "Windows"):
+            pathext.extend([])
+        else:
+            pathext.extend([])
+
+        #find in current path
+        specialpath = [
+            pymakeworkpath,
+            os.getcwd()
+        ]
+        list0 = copy.deepcopy(specialpath)
+        list0.reverse()
+        for path0a in list0:
+            for path0 in path0a.split(os.path.pathsep):
+                path0 = path0.strip()
+                # print(path0)
+                path1 = ''
+                for pext0 in pathext:
+                    path1 = path0 + os.path.sep + pycmd + pext0
+                    if(os.path.isfile(path1)):
+                        if (plat == "Windows"):
+                            return path1.replace('/', '\\')
+                        else:
+                            return path1.replace('\\', '/')
+
+        if(env_name is not None):
+            if(rawconfig['environ'].__contains__(env_name) is False):
+                print("Fault Error! .json file is broken, env %s is losing!" % env_name)
+                return None
+
+            #find in separate env
+            list0 = copy.deepcopy(rawconfig['environ'][env_name]['path+'])
+            list0.reverse()
+            for path0a in list0:
+                for path0 in path0a.split(os.path.pathsep):
+                    path0 = path0.strip()
+                    # print(path0)
+                    path1 = ''
+                    for pext0 in pathext:
+                        path1 = path0 + os.path.sep + pycmd + pext0
+                        if(os.path.isfile(path1)):
+                            if (plat == "Windows"):
+                                return path1.replace('/', '\\')
+                            else:
+                                return path1.replace('\\', '/')
+
+        # find in env. [custom+, local+, system]
+        env = os.environ
+        #for pathA in env['PATH'].split(os.path.pathsep):
+        #    print(pathA)
+        list0 = copy.deepcopy(env['PATH'].split(os.path.pathsep))
+        #list0.reverse()
+        for path0a in list0:
+            for path0 in path0a.split(os.path.pathsep):
+                path0 = path0.strip()
+                #print(path0)
+                path1 = ''
+                for pext0 in pathext:
+                    path1 = path0 + os.path.sep + pycmd + pext0
+                    #print("[%s]" % path1)
+                    if(os.path.isfile(path1)):
+                        if (plat == "Windows"):
+                            return path1.replace('/', '\\')
+                        else:
+                            return path1.replace('\\', '/')
+
+        return None
+
     # system command function
     # system command stream from rawconfig path-assemblage
     def raw_command_system():
@@ -2747,7 +2909,12 @@ def main_function():
         else:
             for cmd in list0:
                 if (str(cmd).__contains__(' ')):
-                    cmd_list.append('"' + cmd + '"' + ' ' + params_string)
+                    pycmd = which_command(env_name, str(cmd))
+                    #print(pycmd)
+                    if(pycmd is not None and os.path.isfile(pycmd)):
+                        cmd_list.append('"' + cmd + '"' + ' ' + params_string)
+                    else:
+                        cmd_list.append(cmd + ' ' + params_string)
                 else:
                     cmd_list.append(cmd + ' ' + params_string)
 
@@ -4470,270 +4637,6 @@ def main_function():
             ''
         break
 
-    # which command [internal]
-    def which_command(env_name = None, name = '', postfix = []):
-        if(env_name is None):
-            env_name = rawconfig['environ']['current']
-
-        if(rawconfig['environ'].__contains__(env_name) is False):
-            print("Fault Error! .json file is broken, env %s is losing!" % env_name)
-            return None
-
-        if(name is None or name == ''):
-            return None
-
-        #get python command.
-        pycmd = name
-
-        #get path ext
-        pathext = []
-        pathext.append('')
-        pathext.extend(postfix)
-        plat = getplatform()
-        if(plat == "Windows"):
-            pathext.extend(os.environ['PATHEXT'])
-        else:
-            pathext.extend(['.sh','.out','.cmd'])
-
-        #find in current path
-        specialpath = [
-            pymakeworkpath,
-            os.getcwd()
-        ]
-        list0 = copy.deepcopy(specialpath)
-        list0.reverse()
-        for path0a in list0:
-            for path0 in path0a.split(os.path.pathsep):
-                path0 = path0.strip()
-                # print(path0)
-                path1 = ''
-                for pext0 in pathext:
-                    if(pext0 == ''):
-                        path1 = path0 + os.path.sep + pycmd
-                    else:
-                        path1 = path0 + os.path.sep + pycmd + os.path.sep + pext0
-                    if(os.path.isfile(path1)):
-                        return path1
-
-        #find in separate env
-        list0 = copy.deepcopy(rawconfig['environ'][env_name]['path+'])
-        list0.reverse()
-        for path0a in list0:
-            for path0 in path0a.split(os.path.pathsep):
-                path0 = path0.strip()
-                # print(path0)
-                path1 = ''
-                for pext0 in pathext:
-                    if(pext0 == ''):
-                        path1 = path0 + os.path.sep + pycmd
-                    else:
-                        path1 = path0 + os.path.sep + pycmd + os.path.sep + pext0
-                    if(os.path.isfile(path1)):
-                        return path1
-
-        # find in env. [custom+, local+, system]
-        env = os.environ
-        #for pathA in env['PATH'].split(os.path.pathsep):
-        #    print(pathA)
-        list0 = copy.deepcopy(env['PATH'].split(os.path.pathsep))
-        #list0.reverse()
-        for path0a in list0:
-            for path0 in path0a.split(os.path.pathsep):
-                path0 = path0.strip()
-                #print(path0)
-                path1 = ''
-                for pext0 in pathext:
-                    if(pext0 == ''):
-                        path1 = path0 + os.path.sep + pycmd
-                    else:
-                        path1 = path0 + os.path.sep + pycmd + os.path.sep + pext0
-                    #print(path1)
-                    if(os.path.isfile(path1)):
-                        return path1
-
-        # find in custom env
-        #list0 = copy.deepcopy(envcustomlistrawpaths)
-        #list0.reverse()
-        #for path0a in list0:
-        #    for path0 in path0a.split(os.path.pathsep):
-        #        path0 = path0.strip()
-        #        # print(path0)
-        #        path1 = ''
-        #        for pext0 in pathext:
-        #            if(pext0 == ''):
-        #                path1 = path0 + os.path.sep + pycmd
-        #            else:
-        #                path1 = path0 + os.path.sep + pycmd + os.path.sep + pext0
-        #            if(os.path.isfile(path1)):
-        #                return path1
-        #
-        ## find in local env
-        #list0 = copy.deepcopy(localenv['path+'])
-        #list0.reverse()
-        #for path0a in list0:
-        #    for path0 in path0a.split(os.path.pathsep):
-        #        path0 = path0.strip()
-        #        #print(path0)
-        #        path1 = ''
-        #        for pext0 in pathext:
-        #            if(pext0 == ''):
-        #                path1 = path0 + os.path.sep + pycmd
-        #            else:
-        #                path1 = path0 + os.path.sep + pycmd + os.path.sep + pext0
-        #            #print(path1)
-        #            if(os.path.isfile(path1)):
-        #                return path1
-        #
-        ## find in system env
-        #list0 = copy.deepcopy(pymakesystemenviron['PATH'].split(os.path.pathsep))
-        ##list0.reverse()
-        #for path0a in list0:
-        #    for path0 in path0a.split(os.path.pathsep):
-        #        path0 = path0.strip()
-        #        #print(path0)
-        #        path1 = ''
-        #        for pext0 in pathext:
-        #            if(pext0 == ''):
-        #                path1 = path0 + os.path.sep + pycmd
-        #            else:
-        #                path1 = path0 + os.path.sep + pycmd + os.path.sep + pext0
-        #            #print(path1)
-        #            if(os.path.isfile(path1)):
-        #                return path1
-
-        return None
-
-    # which file [internal]
-    def which_file(env_name = None, name = '', postfix = []):
-        if(env_name is None):
-            env_name = rawconfig['environ']['current']
-
-        if(rawconfig['environ'].__contains__(env_name) is False):
-            print("Fault Error! .json file is broken, env %s is losing!" % env_name)
-            return None
-
-        if(name is None or name == ''):
-            return None
-
-        #get python command.
-        pycmd = name
-
-        #get path ext
-        pathext = []
-        pathext.append('')
-        pathext.extend(postfix)
-        plat = getplatform()
-        if(plat == "Windows"):
-            pathext.extend([])
-        else:
-            pathext.extend([])
-
-        #find in current path
-        specialpath = [
-            pymakeworkpath,
-            os.getcwd()
-        ]
-        list0 = copy.deepcopy(specialpath)
-        list0.reverse()
-        for path0a in list0:
-            for path0 in path0a.split(os.path.pathsep):
-                path0 = path0.strip()
-                # print(path0)
-                path1 = ''
-                for pext0 in pathext:
-                    if(pext0 == ''):
-                        path1 = path0 + os.path.sep + pycmd
-                    else:
-                        path1 = path0 + os.path.sep + pycmd + os.path.sep + pext0
-                    if(os.path.isfile(path1)):
-                        return path1
-
-        #find in separate env
-        list0 = copy.deepcopy(rawconfig['environ'][env_name]['path+'])
-        list0.reverse()
-        for path0a in list0:
-            for path0 in path0a.split(os.path.pathsep):
-                path0 = path0.strip()
-                # print(path0)
-                path1 = ''
-                for pext0 in pathext:
-                    if(pext0 == ''):
-                        path1 = path0 + os.path.sep + pycmd
-                    else:
-                        path1 = path0 + os.path.sep + pycmd + os.path.sep + pext0
-                    if(os.path.isfile(path1)):
-                        return path1
-
-        # find in env. [custom+, local+, system]
-        env = os.environ
-        list0 = copy.deepcopy(env['PATH'].split(os.path.pathsep))
-        #list0.reverse()
-        for path0a in list0:
-            for path0 in path0a.split(os.path.pathsep):
-                path0 = path0.strip()
-                #print(path0)
-                path1 = ''
-                for pext0 in pathext:
-                    if(pext0 == ''):
-                        path1 = path0 + os.path.sep + pycmd
-                    else:
-                        path1 = path0 + os.path.sep + pycmd + os.path.sep + pext0
-                    #print(path1)
-                    if(os.path.isfile(path1)):
-                        return path1
-
-        # find in custom env
-        #list0 = copy.deepcopy(envcustomlistrawpaths)
-        #list0.reverse()
-        #for path0a in list0:
-        #    for path0 in path0a.split(os.path.pathsep):
-        #        path0 = path0.strip()
-        #        # print(path0)
-        #        path1 = ''
-        #        for pext0 in pathext:
-        #            if(pext0 == ''):
-        #                path1 = path0 + os.path.sep + pycmd
-        #            else:
-        #                path1 = path0 + os.path.sep + pycmd + os.path.sep + pext0
-        #            if(os.path.isfile(path1)):
-        #                return path1
-        #
-        ## find in local env
-        #list0 = copy.deepcopy(localenv['path+'])
-        #list0.reverse()
-        #for path0a in list0:
-        #    for path0 in path0a.split(os.path.pathsep):
-        #        path0 = path0.strip()
-        #        #print(path0)
-        #        path1 = ''
-        #        for pext0 in pathext:
-        #            if(pext0 == ''):
-        #                path1 = path0 + os.path.sep + pycmd
-        #            else:
-        #                path1 = path0 + os.path.sep + pycmd + os.path.sep + pext0
-        #            #print(path1)
-        #            if(os.path.isfile(path1)):
-        #                return path1
-        #
-        ## find in system env
-        #list0 = copy.deepcopy(pymakesystemenviron['PATH'].split(os.path.pathsep))
-        ##list0.reverse()
-        #for path0a in list0:
-        #    for path0 in path0a.split(os.path.pathsep):
-        #        path0 = path0.strip()
-        #        #print(path0)
-        #        path1 = ''
-        #        for pext0 in pathext:
-        #            if(pext0 == ''):
-        #                path1 = path0 + os.path.sep + pycmd
-        #            else:
-        #                path1 = path0 + os.path.sep + pycmd + os.path.sep + pext0
-        #            #print(path1)
-        #            if(os.path.isfile(path1)):
-        #                return path1
-
-        return None
-
     #powershell export env function
     def powershell_environ_export(env_name = None, file_name = None):
         # select env
@@ -6001,7 +5904,17 @@ def main_function():
             languageexecfile = ''
             #actually now has only one command.
             for cmd in list0:
-                languageexecfile = cmd
+                #actually this is a command.
+                if (str(cmd).__contains__(' ')):
+                    pycmd = which_command(env_name, str(cmd))
+                    #print(cmd)
+                    #print(pycmd)
+                    if(pycmd is not None and os.path.isfile(pycmd)):
+                        languageexecfile = '"' + cmd + '"'
+                    else:
+                        languageexecfile = cmd
+                else:
+                    languageexecfile = cmd
 
         #print(3, languageexecfile)
         if(os.path.isfile(languageparams)):
@@ -7872,8 +7785,14 @@ def main_function():
                         list0.extend(dict0[current_var])
                     else:
                         cmd = current_var
+                        env_name = current_env
                         if (str(cmd).__contains__(' ')):
-                            list0.append('"' + cmd + '"')
+                            pycmd = which_command(env_name, str(cmd))
+                            # print(pycmd)
+                            if (pycmd is not None and os.path.isfile(pycmd)):
+                                list0.append('"' + cmd + '"')
+                            else:
+                                list0.append(cmd)
                         else:
                             list0.append(cmd)
 
@@ -7928,6 +7847,12 @@ def main_function():
                 print("please appoint your commands")
                 return
 
+            current_env = rawconfig['environ']['current']
+            if (current_env == 'current'
+                or rawconfig['environ'].__contains__(current_env) is False):
+                print(".json file is broken, environ section current env config is lost, please use set command fix it.")
+                return
+
             if (args['here'] or args['hh'] is True):
                 os.chdir(pymakeworkpath)
 
@@ -7940,8 +7865,14 @@ def main_function():
                     list0.extend(dict0[current_var])
                 else:
                     cmd = current_var
+                    env_name = current_env
                     if (str(cmd).__contains__(' ')):
-                        list0.append('"' + cmd + '"')
+                        pycmd = which_command(env_name, str(cmd))
+                        # print(pycmd)
+                        if (pycmd is not None and os.path.isfile(pycmd)):
+                            list0.append('"' + cmd + '"')
+                        else:
+                            list0.append(cmd)
                     else:
                         list0.append(cmd)
 
@@ -7988,9 +7919,13 @@ def main_function():
         break
 
     #.bat .sh, windows, unix
-    def createCmdList02(local = True, list0 = [], params0 = []):
+    def createCmdList02(env_name = None, local = True, list0 = [], params0 = []):
 
         cmd_list = []
+
+        if(env_name is None):
+            env_name = rawconfig['environ']['current']
+        #print(env_name)
 
         name = uuid.uuid4().__str__()
         name = name.split('-')[0]
@@ -8041,7 +7976,13 @@ def main_function():
         else:
             for cmd in list0:
                 if(str(cmd).__contains__(' ')):
-                    cmd_list.append('"' + cmd + '"' + ' ' + params_string)
+                    pycmd = which_command(env_name, str(cmd))
+                    #print(str(cmd))
+                    #print(Fore.RED + "which command:", pycmd)
+                    if(pycmd is not None and os.path.isfile(pycmd)):
+                        cmd_list.append('"' + cmd + '"' + ' ' + params_string)
+                    else:
+                        cmd_list.append(cmd + ' ' + params_string)
                 else:
                     cmd_list.append(cmd + ' ' + params_string)
 
@@ -8155,7 +8096,7 @@ def main_function():
                 # else:
                 #    cmd_list, temp_file_name = createCmdList01(list0)
                 # good compatibility
-                cmd_list, temp_file_name = createCmdList02(local, list0, params0)
+                cmd_list, temp_file_name = createCmdList02(current_env, local, list0, params0)
 
                 # export env
                 current_var = current_env
@@ -8198,6 +8139,12 @@ def main_function():
             #print(args)
             if (args['<command-name>'] is None):
                 print("please appoint your command")
+                return
+
+            current_env = rawconfig['environ']['current']
+            if (current_env == 'current'
+                or rawconfig['environ'].__contains__(current_env) is False):
+                print(".json file is broken, environ section current env config is lost, please use set command fix it.")
                 return
 
             #print(args['here'])
@@ -8243,7 +8190,7 @@ def main_function():
             # else:
             #    cmd_list, temp_file_name = createCmdList01(list0)
             # good compatibility
-            cmd_list, temp_file_name = createCmdList02(local, list0, params0)
+            cmd_list, temp_file_name = createCmdList02(current_env, local, list0, params0)
 
             current_var = rawconfig['environ']['current']
             env_export(current_var, temp_file_name)
