@@ -2886,7 +2886,7 @@ def main_function():
             cmd_status = "echo pymake-command-status:$?"
             cmd_sep = ';'
             cmd_suffix = ".sh"
-            cmd_exit = 'exit 0'
+            cmd_exit = 'exit $?'
             cmd_codec = "utf8"
             cmd_return = "\n"
             cmd_header = "#!/usr/bin/env bash"
@@ -5787,7 +5787,7 @@ def main_function():
             cmd_status = "echo pymake-command-status:$?"
             cmd_sep = ';'
             cmd_suffix = ".sh"
-            cmd_exit = 'exit 0'
+            cmd_exit = 'exit $?'
             cmd_codec = "utf8"
             cmd_return = "\n"
             cmd_header = "#!/usr/bin/env bash"
@@ -7405,7 +7405,7 @@ def main_function():
             cmd_status = "echo pymake-command-status:$?"
             cmd_sep = ';'
             cmd_suffix = ".sh"
-            cmd_exit = 'exit 0'
+            cmd_exit = 'exit $?'
             cmd_codec = "utf8"
             cmd_return = "\n"
             cmd_header = "#!/usr/bin/env bash"
@@ -7712,7 +7712,7 @@ def main_function():
             cmd_status = "echo pymake-command-status:$?"
             cmd_sep = ';'
             cmd_suffix = ".sh"
-            cmd_exit = 'exit 0'
+            cmd_exit = 'exit $?'
             cmd_codec = "utf8"
             cmd_return = "\n"
             cmd_header = "#!/usr/bin/env bash"
@@ -7780,7 +7780,7 @@ def main_function():
         else:
             cmd_status = "echo pymake-command-status:$?"
             cmd_sep = ';'
-            cmd_exit = 'exit 0'
+            cmd_exit = 'exit $?'
             cmd_header = "#!/usr/bin/env bash"
             cmd_list.append("source %s_effect.sh" % name + ' ' + cmd_sep + ' ' + cmd_status)
 
@@ -7998,7 +7998,7 @@ def main_function():
             cmd_status = "echo pymake-command-status:$?"
             cmd_sep = ';'
             cmd_suffix = ".sh"
-            cmd_exit = 'exit 0'
+            cmd_exit = 'exit $?'
             cmd_codec = "utf8"
             cmd_return = "\n"
             cmd_header = "#!/usr/bin/env bash"

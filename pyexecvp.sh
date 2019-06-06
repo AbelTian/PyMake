@@ -129,6 +129,7 @@ elif [ "$PYEXECPARAM2" != "" ]; then
 else
     "$PYPROGRAMPATHNAME" use $PYENVNAME exec-with-params here "$PYEXECNAME"
 fi
+exit $?
 
 break
 done

@@ -77,7 +77,7 @@ def read_thread_function(p):
                 cmd_exit_flag = 1
                 p.stdin.write(("exit %d\n".encode(cmd_codec) % (ret)))
                 p.stdin.flush()
-                print ("exit %d" % (ret))
+                #print ("exit %d" % (ret))
                 #print ("read thread exit fail %d, i go" % (ret))
                 break
             cmd_event.set()
@@ -225,4 +225,5 @@ def communicateWithCommandLine(list0):
         stopThread(write_thread)
 
     # time.sleep(1)
+    #print(p.returncode)
     return p.returncode

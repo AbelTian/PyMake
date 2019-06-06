@@ -100,7 +100,7 @@ export PYENVNAME=current
 #echo exec root: \[$(pwd)\] \[here\]
 
 "$PYPROGRAMPATHNAME" use $PYENVNAME exec here $PYEXECNAME
-
+exit $?
 
 break
 done
