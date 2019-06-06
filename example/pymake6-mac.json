@@ -10,6 +10,7 @@
         "root.webrc": "${root}/e0-webrc",
         "cc": "${root.tool}/a0-compiler",
         "cmake.bin": "${cc}/CMake.app/Contents/bin",
+        "pymake": "${cc}/PyMake",
         "qt": "${root.tool}/macLibraries/Qt",
         "qt5.9.version": "5.9.2",
         "qt5.9.ios": "${qt}/${qt5.9.version}/ios",
@@ -226,6 +227,110 @@
         "${qt5.path.source}/configure -prefix ${qt5.path.install} -hostprefix ${qt5.path.install} -xplatform android-g++ -release -nomake tests -nomake examples -android-ndk $ANDROID_NDK_ROOT -android-sdk $ANDROID_SDK_ROOT -android-ndk-host $ANDROID_NDK_HOST -android-toolchain-version $ANDROID_NDK_TOOLCHAIN_VERSION -skip qtwebkit-examples -no-warnings-are-errors"
     ],
     "command": {
+        "test": [
+            "echo $(pwd)"
+        ],
+        "test.6": [
+            "echo 中文"
+        ],
+        "test.7": [
+            "echo $PATH"
+        ],
+        "qqt.build": [
+            "src_path=${root.src}/LibQQt",
+            "src=${root.src}/LibQQt/QQt.pro",
+            "build=${root.build}/QQt/${QSYS}/${QTVERSION}/Debug",
+            "mkdir -p $build",
+            "cd $build",
+            "echo build $(pwd)",
+            "qmake ${src} ${QTSPEC} CONFIG+=debug CONFIG+=qml_debug ${QTCONFIG} && make qmake_all",
+            "make -j4"
+        ],
+        "qqt.clean": [
+            "src=${root.src}/LibQQt/QQt.pro",
+            "build=${root.build}/QQt/${QSYS}/${QTVERSION}/Debug",
+            "cd $build",
+            "make clean"
+        ],
+        "qt": [
+            "open \"/Applications/Qt Creator.app\""
+        ],
+        "cmake": [
+            "open /Users/abel/Develop/b0-toolskits/macCompilers/CMake.app"
+        ],
+        "prod": [
+            "open /Users/abel/Develop/d0-product/ProductExecTool/macOS/ProductExecTool_debug.app"
+        ],
+        "libtool": [
+            "open /Users/abel/Develop/d0-product/AddLibraryTool/macOS/AddLibraryTool_debug.app"
+        ],
+        "qt.check": [
+            "src=${root.tool}/z0-Source/qt-everywhere-opensource-src-4.8.7",
+            "build=${root.build}/qt4.8.7",
+            "install=${root.tool}/macLibraries/Qt/4.8.7/gcc_64",
+            "mkdir -p $build",
+            "cd $build",
+            "echo build $(pwd)",
+            "${src}/configure --help"
+        ],
+        "qt4.build": [
+            "src=${root.tool}/z0-Source/qt",
+            "build=${root.build}/qt",
+            "install=${root.tool}/macLibraries/Qt/4.8/gcc_64",
+            "mkdir -p $build",
+            "cd $build",
+            "echo build $(pwd)",
+            "CXXFLAGS=-stdlib=libc++",
+            "${src}/configure -prefix ${install}",
+            "make -j4",
+            "make install"
+        ],
+        "qt4.8.7.build": [
+            "src=${root.tool}/z0-Source/qt-everywhere-opensource-src-4.8.7",
+            "build=${root.build}/qt4.8.7",
+            "install=${root.tool}/macLibraries/Qt/4.8.7/gcc_64",
+            "mkdir -p $build",
+            "cd $build",
+            "echo build $(pwd)",
+            "${src}/configure -prefix ${install}",
+            "make -j4",
+            "make install"
+        ],
+        "qtsoap.build": [
+            "src=/Users/abel/Develop/c1-webrc/qt-solutions/qtsoap",
+            "build=${root.build}/qtsoap",
+            "install=/Users/abel/Develop/d1-product/QtSoap",
+            "cd $build",
+            "${src}/configure -library"
+        ],
+        "qqt.push": [
+            "src=${root.src}/LibQQt",
+            "cd $src",
+            "git push",
+            "git push --tag"
+        ],
+        "qqt.pull": [
+            "src=${root.src}/LibQQt",
+            "cd $src",
+            "git pull"
+        ],
+        "qqt.cloc": [
+            "src=${root.src}/LibQQt",
+            "cd $src",
+            "perl ${pymake}/demo/cloc-1.74.pl  .",
+            "date"
+        ],
+        "android.sdk": [
+            "/Users/abel/Develop/b0-toolskits/macAndroidLibraries/android-sdk-macosx/tools/android"
+        ],
+        "test.2": [
+            "#echo $*",
+            "param=$*",
+            "ping 127.0.0.1 $param"
+        ],
+        "open-dir": [
+            "open $1"
+        ],
         "daily.qqt": [
             "src_path=/Users/abel/Develop/a0-develop/LibQQt",
             "src=$src_path/QQt.pro",
@@ -276,18 +381,6 @@
             "build=/Users/abel/Develop/c0-buildstation/QQt/${QSYS}/${QTVERSION}/Release",
             "cd $build",
             "make clean"
-        ],
-        "qt": [
-            "open \"/Applications/Qt Creator.app\""
-        ],
-        "cmake": [
-            "open /Users/abel/Develop/b0-toolskits/macCompilers/CMake.app"
-        ],
-        "prod": [
-            "open /Users/abel/Develop/d0-product/ProductExecTool/macOS/ProductExecTool_debug.app"
-        ],
-        "libtool": [
-            "open /Users/abel/Develop/d0-product/AddLibraryTool/macOS/AddLibraryTool_debug.app"
         ],
         "check.qt": [
             "src=/Users/abel/Develop/b0-toolskits/z0-Source/qt-everywhere-opensource-src-4.8.7",
@@ -342,7 +435,7 @@
         "cloc.qqt": [
             "src=/Users/abel/Develop/a0-develop/LibQQt",
             "cd $src",
-            "perl /Users/abel/Develop/b1-buildshell/cloc-1.74.pl  .",
+            "perl ${pymake}/demo/cloc-1.74.pl  .",
             "date"
         ],
         "cloc.light": [
@@ -353,14 +446,6 @@
         ],
         "qtdir": [
             "echo $QTDIR"
-        ],
-        "test": [
-            "echo $(pwd)"
-        ],
-        "test.2": [
-            "#echo $*",
-            "param=$*",
-            "ping 127.0.0.1 $param"
         ],
         "test.3": [
             "#echo $*",
@@ -397,12 +482,6 @@
             "echo build at: $build",
             "break",
             "done"
-        ],
-        "open-dir": [
-            "open $1"
-        ],
-        "android.sdk": [
-            "/Users/abel/Develop/b0-toolskits/macAndroidLibraries/android-sdk-macosx/tools/android"
         ],
         "test.5": [
             "exit 0"

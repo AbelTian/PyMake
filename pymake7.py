@@ -5800,9 +5800,9 @@ def main_function():
         if(env_name == "current"):
             env_name = rawconfig['environ']['current']
 
-        cmd_suffix_language = ''
-        cmd_codec_language = 'utf8'
-        cmd_return_language = '\n'
+        cmd_suffix_language = cmd_suffix
+        cmd_codec_language = cmd_codec
+        cmd_return_language = cmd_return
 
         if(suffix is not None):
             cmd_suffix_language = suffix
@@ -5826,9 +5826,17 @@ def main_function():
                 params_string += param + ' '
         #print(params_string)
 
+        local2 = True
+        if (list1.__len__() > 0):
+            current_var = list1[0]
+            if (current_var in rawconfig['command']):
+                local2 = True
+            else:
+                local2 = False
+
         languageparams = ''
         #actually only one param.
-        if (local is True):
+        if (local2 is True):
             for param1 in list1:
                 languageparams += param1
         else:
@@ -5884,21 +5892,51 @@ def main_function():
                     # print(2, languageparams)
                     # cmd_list.append(languageparams + ' ' + params_string)
 
+        if(list1.__len__() >0):
+            ''
+            if(local2 is True):
+                ''
+                current_var = env_name
+                local_command = raw_command(current_var)
+                dict0 = copy.deepcopy(local_command)
+
+                inside_name = name + '_2'
+                languageparams = inside_name + '_exec' + cmd_suffix_language
+
+                with open(languageparams, 'w', encoding=cmd_codec_language) as f:
+                    for cmd1 in list1:
+                        for cmd in dict0[cmd1]:
+                            f.write(cmd + cmd_return_language)
+
+                #print(1, cmd_suffix_language)
+                #print(1, cmd_return_language)
+                #print(1, cmd_codec_language)
+                #print(1, languageparams)
+            else:
+                ''
+
         #print(3, languageparams)
         if(list1.__len__() >0 ):
-            if(str(languageparams).__contains__(' ')):
-                params_string = '"' + languageparams + '"' + ' ' + params_string
-            else:
+            if(local2 is True):
                 params_string = languageparams + ' ' + params_string
+            else:
+                if(str(languageparams).__contains__(' ')):
+                    params_string = '"' + languageparams + '"' + ' ' + params_string
+                else:
+                    params_string = languageparams + ' ' + params_string
         #print(params_string)
 
         languageexecfile = ''
         if ( local is True):
             #fixed
-            languageexecfile = name + '_exec2' + cmd_suffix_language
-            with open(languageexecfile, 'w', encoding=cmd_codec_language) as f:
+            #inside_name = name
+            #inside_name = hex( int( inside_name, 16 ) + 1).split('x')[1]
+            inside_name = name + '_1'
+            #print(inside_name)
+            languageexecfile = inside_name + '_exec' + cmd_suffix
+            with open(languageexecfile, 'w', encoding=cmd_codec) as f:
                 for cmd in list0:
-                    f.write(cmd + cmd_return_language)
+                    f.write(cmd + cmd_return)
             #print(1, languageexecfile)
         else:
             languageexecfile = ''
@@ -5917,14 +5955,11 @@ def main_function():
                     languageexecfile = cmd
 
         #print(3, languageexecfile)
-        if(os.path.isfile(languageparams)):
-            if(plat == "Windows"):
-                cmd_list.append("call %s %s" % (languageexecfile, '%*'))
-            else:
-                cmd_list.append("%s %s" % (languageexecfile, '"$@"'))
+        if(plat == "Windows"):
+            cmd_list.append("call %s %s" % (languageexecfile, '%*'))
         else:
-            if(plat == "Windows"):
-                cmd_list.append("call %s %s" % (languageexecfile, '%*'))
+            if(languageexecfile.endswith('.sh')):
+                cmd_list.append("sh %s %s" % (languageexecfile, '"$@"'))
             else:
                 cmd_list.append("%s %s" % (languageexecfile, '"$@"'))
 
@@ -5965,7 +6000,7 @@ def main_function():
                 print( cmd )
             print("---------------------------")
 
-        return cmd_list, name, cmd_suffix_language
+        return cmd_list, name, cmd_suffix, cmd_suffix_language
 
     #language command
     while (True):
@@ -6079,6 +6114,14 @@ def main_function():
                 # but windows, it is \r\n, python helpping me?
                 cmd_return = "\n"
                 cmd_suffix = "_exec"
+                if(getplatform() == "Windows"):
+                    cmd_codec = "ansi"
+                    if (getplatform_release() == "XP"):
+                        cmd_codec = None
+                    cmd_suffix = "_exec.bat"
+                else:
+                    cmd_codec = 'utf8'
+                    cmd_suffix = "_exec.sh"
 
                 suffix = args['--suffix']
                 if(suffix is not None):
@@ -6181,7 +6224,7 @@ def main_function():
                 # else:
                 #    cmd_list, temp_file_name = createCmdList01(list0)
                 # good compatibility
-                cmd_list, temp_file_name, cmd_suffix_language = createCmdList07(suffix, encoding, current_env, local, list0, params0)
+                cmd_list, temp_file_name, cmd_suffix, cmd_suffix_language = createCmdList07(suffix, encoding, current_env, local, list0, params0)
 
                 # export env
                 current_var = current_env
@@ -6192,7 +6235,10 @@ def main_function():
 
                 # delete env file and cmd file
                 cmd_prefix = ''
-                temp_file = cmd_prefix + temp_file_name + "_exec2" + cmd_suffix_language
+                temp_file = cmd_prefix + temp_file_name + "_1_exec" + cmd_suffix
+                if (os.path.exists(temp_file)):
+                    os.remove(temp_file)
+                temp_file = cmd_prefix + temp_file_name + "_2_exec" + cmd_suffix_language
                 if (os.path.exists(temp_file)):
                     os.remove(temp_file)
 
