@@ -187,6 +187,8 @@ Usage:
   pymake7.py  custom ccvp [ here | hh ] [ <command-name> ] [ <command-params> ... ]
   pymake7.py  custom use <env-name> ccvp [ here | hh ] [ <command-name> ] [ <command-params> ... ]
   pymake7.py  export2 [ powershell ] [ here | hh ] [ <env-name> ] [ to <file-name> ] [ -c | --custom ] [ -l | --local ] [ -s | --system ]
+  pymake7.py  type2 [ here | hh ] [ <cmd-name> ] [ to <file-name> ] [ --suffix=<.suffix-name> ] [ --encoding=<encoding-name> ] [ --samename ]
+  pymake7.py  use <env-name> type2 [ here | hh ] [ <cmd-name> ] [ to <file-name> ] [ --suffix=<.suffix-name> ] [ --encoding=<encoding-name> ] [ --samename ]
   pymake7.py  -------------------------------------------------------------
   pymake7.py  powershell
   pymake7.py  powershell [ info | information ]
@@ -238,8 +240,8 @@ Command:
   set path          path assemblage
   set env           set env variable
   set cmd           set cmd stream
-  export            output private env variable and paths to a bat file or sh file [default:current, env]
-  type              output command to a bat file or sh file [default:cmd]
+  export            output private env variable and paths to a bat file or sh file
+  type              output command to a bat file or sh file
   see               check command stream
   ss                check command stream
   cmd               check command stream
@@ -269,6 +271,7 @@ Command:
   outport           outport user path or env or cmd to script file. example, outport cmd [ <command-name> ] [ to <script-file>: ... ]
   language          find script file automatically and execute it. example, language ccvp java xxx.java ...
   local             using pymake local expanding environ, read only.
+  type2             output command to a bat file or sh file, user can appoint file suffix and encoding.
 
 Options:
   -h --help     Show this screen.
@@ -915,7 +918,7 @@ def main_function():
 
             ziphandle = zipfile.ZipFile(file, 'w')
             for f in files:
-                if (f.endswith('.json')):
+                if (f.endswith('.json') or f.endswith('.ini')):
                     print(f)
                     ziphandle.write(f, compress_type=zipfile.ZIP_DEFLATED)
             ziphandle.close()
@@ -7078,6 +7081,127 @@ def main_function():
                 return
             else:
                 ""
+        else:
+            ""
+        break
+
+    # type2 command
+    while (True):
+        if (args['type2'] == True):
+            current_env = ""
+
+            if (args['use'] is True):
+                if (args['<env-name>'] is None):
+                    print("please appoint a environ")
+                    return
+
+                if (rawconfig['environ'].__contains__(args['<env-name>']) is False):
+                    print("please ensure the environ is right")
+                    return
+
+                current_env = args['<env-name>']
+                if (args['<env-name>'] == "current"):
+                    current_env = rawconfig['environ']['current']
+
+                if (rawconfig['environ'].__contains__(current_env) is False):
+                    print(".json file is broken, environ section current env config is lost, please use set command fix it.")
+                    return
+            else:
+                current_env = rawconfig['environ']['current']
+
+            if (args['here'] or args['hh'] is True):
+                os.chdir(pymakeworkpath)
+
+            if (args['<cmd-name>'] is None):
+                for (key, value) in rawconfig['command'].items():
+                    print(Fore.CYAN + "%s" % key)
+                return
+
+            if (rawconfig['command'].__contains__(args['<cmd-name>']) is False):
+                print("please check your command name")
+                return
+
+            if(args['--samename'] is True):
+                args['<file-name>'] = args['<cmd-name>']
+
+            if (args['<file-name>'] is None):
+                if (current_env == rawconfig['environ']['current']):
+                    list0 = copy.deepcopy(rawconfig['command'][args['<cmd-name>']])
+                else:
+                    list0 = copy.deepcopy(raw_command(current_env)[args['<cmd-name>']])
+
+                for cmd in list0:
+                    print(Fore.RED + "%s" % (cmd))
+                return
+
+            cmd_exec = ""
+            # cmd_exec = cmd_type(args['<cmd-name>'], args['<file-name>'], current_env)
+            cmd_name = args['<cmd-name>']
+            file_name = args['<file-name>']
+            env_name = current_env
+
+            if (cmd_name is None):
+                for (key, value) in rawconfig['command'].items():
+                    print(Fore.CYAN + "%s" % key)
+                return
+
+            if (rawconfig['command'].__contains__(cmd_name) is False):
+                print("please check your command name")
+                return
+
+            if (env_name is None or env_name == rawconfig['environ']['current']):
+                list0 = copy.deepcopy(rawconfig['command'][cmd_name])
+            else:
+                list0 = copy.deepcopy(raw_command(env_name)[cmd_name])
+
+            # for cmd in list0:
+            #    print(Fore.RED + "%s" % (cmd))
+
+            temp_file_name = ""
+            if (file_name is None):
+                temp_file_name = "cmd"
+            else:
+                temp_file_name = "" + file_name
+
+            cmd_header = ""
+            cmd_codec = "utf8"
+            # but windows, it is \r\n, python helpping me?
+            cmd_return = "\n"
+            cmd_suffix = ""
+            if (getplatform() == "Windows"):
+                cmd_codec = "ansi"
+                if (getplatform_release() == "XP"):
+                    cmd_codec = None
+                cmd_suffix = ".bat"
+            else:
+                cmd_codec = 'utf8'
+                cmd_suffix = ".sh"
+
+            suffix = args['--suffix']
+            if (suffix is not None):
+                cmd_suffix = str("%s" % suffix)
+
+            encoding = args['--encoding']
+            if (encoding is not None):
+                cmd_codec = encoding
+
+            cmd_exec = temp_file_name + cmd_suffix
+            with open(cmd_exec, 'w', encoding=cmd_codec) as f:
+                # f.write(cmd_header + cmd_return)
+                for cmd in list0:
+                    f.write(cmd + cmd_return)
+
+            # if (plat == "Windows"):
+            #    ""
+            # else:
+            #    os.system("chmod +x " + cmd_exec)
+
+            # print(cmd_codec)
+            # print(cmd_suffix)
+            # print(cmd_exec)
+
+            print("successed: use %s type %s to %s" % (current_env, cmd_name, cmd_exec))
+            return
         else:
             ""
         break
