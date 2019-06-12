@@ -226,4 +226,9 @@ def communicateWithCommandLine(list0):
 
     # time.sleep(1)
     #print(p.returncode)
+    if(p.returncode > 2147483647):
+        p.returncode = 2147483647
+    elif (p.returncode < -2147483647 ):
+        p.returncode = -2147483647
+
     return p.returncode

@@ -186,9 +186,6 @@ Usage:
   pymake7.py  custom use <env-name> execvp [ here | hh ] [ <command-name> ] [ <command-params> ... ]
   pymake7.py  custom ccvp [ here | hh ] [ <command-name> ] [ <command-params> ... ]
   pymake7.py  custom use <env-name> ccvp [ here | hh ] [ <command-name> ] [ <command-params> ... ]
-  pymake7.py  export2 [ powershell ] [ here | hh ] [ <env-name> ] [ to <file-name> ] [ -c | --custom ] [ -l | --local ] [ -s | --system ]
-  pymake7.py  type2 [ here | hh ] [ <cmd-name> ] [ to <file-name> ] [ --suffix=<.suffix-name> ] [ --encoding=<encoding-name> ] [ --samename ]
-  pymake7.py  use <env-name> type2 [ here | hh ] [ <cmd-name> ] [ to <file-name> ] [ --suffix=<.suffix-name> ] [ --encoding=<encoding-name> ] [ --samename ]
   pymake7.py  -------------------------------------------------------------
   pymake7.py  powershell
   pymake7.py  powershell [ info | information ]
@@ -230,6 +227,12 @@ Usage:
   pymake7.py  language ccvp [ here | hh ] [ <command-name> ] [ <command-params> ... ]
   pymake7.py  language use <env-name> ccvp [ here | hh ] [ <command-name> ] [ <command-params> ... ]
   pymake7.py  -------------------------------------------------------------
+  pymake7.py  export2 [ powershell ] [ here | hh ] [ <env-name> ] [ to <file-name> ] [ -c | --custom ] [ -l | --local ] [ -s | --system ]
+  pymake7.py  type2 [ here | hh ] [ <cmd-name> ] [ to <file-name> ] [ --suffix=<.suffix-name> ] [ --encoding=<encoding-name> ] [ --samename ]
+  pymake7.py  use <env-name> type2 [ here | hh ] [ <cmd-name> ] [ to <file-name> ] [ --suffix=<.suffix-name> ] [ --encoding=<encoding-name> ] [ --samename ]
+  pymake7.py  open
+  pymake7.py  open <path-name> [ -c | --custom ] [ --current ] [ --envname <env-name> ]
+  pymake7.py  -------------------------------------------------------------
   pymake7.py  (-h | --help)
   pymake7.py  --version
 
@@ -265,13 +268,14 @@ Command:
   recovery          recovery all env .json from a zip file.
   import            import user path or env or cmd to env .json file. example, import cmd [ <script-file>: x.bat x.cmd x.sh x.ps1 x.py x.java... ]
   custom            custom environment is helpping for calling large dimentions of scripts in computer, manually in console. defined in sourceroot. [ default: close ]
-  export2           output private environ and custom environ to a bat file or sh file, a powerfull function from export, support powershell also. [default:current, env]
   powershell        environ for powershell, and to execute in powershell. [cross]
   python            list python information, and execute python script.
   outport           outport user path or env or cmd to script file. example, outport cmd [ <command-name> ] [ to <script-file>: ... ]
   language          find script file automatically and execute it. example, language ccvp java xxx.java ...
   local             using pymake local expanding environ, read only.
+  export2           output private environ and custom environ to a bat file or sh file, a powerfull function from export, support powershell also. [default:current, env]
   type2             output command to a bat file or sh file, user can appoint file suffix and encoding.
+  open              open path by stored name in path-assemblage. support .../${path-name}/...., support search in env and appoint env.
 
 Options:
   -h --help     Show this screen.
@@ -3561,6 +3565,144 @@ def main_function():
             ''
         break
 
+    # raw path2 function, ignore case. parse dict path
+    def raw_path2(dictfrom0, pathgroup0):
+        dict0 = {k.lower(): v for k, v in dictfrom0.items()}
+        pathgroup = {k.lower(): v for k, v in pathgroup0.items()}
+
+        # replace path
+        for (key, value) in pathgroup.items():
+            #print (key, value) #...
+
+            startpos = 0
+            while (True):
+                # print (startpos)
+
+                index = value.find('${', startpos)
+                if (index == -1):
+                    break
+
+                index2 = value.find('}', index)
+                startpos = index2
+
+                key_replace = value[index:index2 + 1]
+                # print ( key0 ) #${...}
+                key_from = key_replace.split('{')[1].split('}')[0].strip().lower()
+                # print ( key1 ) #...
+
+                for (find_key, find_value) in dict0.items():
+                    #print("%-30s, %-30s" % (find_key, key_from))
+                    if (key == find_key):
+                        break
+                    #if (find_key == 'path+'):
+                    #    continue
+                    #if (find_key == "path"):
+                    #    continue
+                    if (find_key == key_from):
+                        pathgroup[key] = pathgroup[key].replace(key_replace, dict0[key_from])
+                        # print("xxx %s" % pathgroup[key])
+                        break
+        return pathgroup
+
+    # raw path2 function, open command
+    def raw_path2_open(pathname = None, envname = None ):
+        if(pathname is None):
+            return None
+
+        path0 = pathname
+        while (True):
+            dict0 = {k.lower(): v for k, v in rawconfig['path-assemblage'].items()}
+            #for (key, value) in dict0.items():
+            #    print("%-30s %s" % (key, value))
+            #for (key, value) in rawconfig['path-assemblage'].items():
+            #    print("%-30s %s" % (key, value))
+
+            # in rawconfig path-assemblage, ignore case.
+            if (dict0.__contains__(pathname.lower()) is True):
+                path0 = dict0[pathname.lower()]
+                break
+
+            pathlist0 = {
+                "P0": path0
+            }
+            dict0 = copy.deepcopy(raw_path2(rawconfig['path-assemblage'], pathlist0))
+
+            # raw path
+            #for (key, value) in dict0.items():
+            #    print("%-30s %s" % (key, value))
+            #temppath = dict0['p0']
+            #print(temppath)
+            path0 = dict0['p0']
+            #print(path0)
+
+            # system [ignore case]
+            env = os.environ
+            pathlist0 = {
+                "P0": path0
+            }
+            dict0 = copy.deepcopy(raw_path2(env, pathlist0))
+            path0 = dict0['p0']
+            #print(path0)
+
+            if(envname is not None):
+                # separete env [ignore case]
+                pathlist0 = {
+                    "P0": path0
+                }
+                env_name = envname
+                dict0 = copy.deepcopy(raw_path2(rawconfig['environ'][env_name], pathlist0))
+                #for (key, value) in dict0.items():
+                #    print("%-30s %s" % (key, value))
+                path0 = dict0['p0']
+                #print(path0)
+
+            break
+
+        return path0
+
+    # open command
+    while (True):
+        if(args['open'] is True):
+            ''
+            if(args['<path-name>'] is None):
+                ''
+                dict0 = copy.deepcopy(rawconfig['path-assemblage'])
+                pos0 = 0
+                for (key, value) in dict0.items():
+                    pos0 = pos0 + 1
+                    if(pos0 % 3 == 0):
+                        print("%-30s" % key)
+                        continue
+                    print("%-30s" % key, end=' ')
+
+                return
+
+            if(args['-c'] or args['--custom'] is True):
+                break
+            if(args['--current'] is True):
+                break
+            if(args['--envname'] is True or args['<env-name>'] is not None):
+                break
+
+            path0 = ''
+            pathname = args['<path-name>']
+            path0 = raw_path2_open(pathname=pathname, envname=None)
+
+            plat = getplatform()
+            cmd0 = ''
+            if (plat == "Windows"):
+                cmd0 = "start " + path0
+            elif (plat == "Darwin"):
+                cmd0 = "open " + path0
+            else:
+                cmd0 = "xdg-open " + path0
+            os.system(cmd0)
+            print('successed: %s' % path0)
+            return
+        else:
+            ''
+        break
+
     # pymake local const variable.
     localini = sourceroot + os.path.sep + "local.ini"
     localconf = MyConfigParser()
@@ -4635,6 +4777,69 @@ def main_function():
                 ''
             print("successed: export %s env to %s %s" % (current_var, cmd_effect, cmd_unset))
 
+            return
+        else:
+            ''
+        break
+
+    # open command
+    while (True):
+        if (args['open'] is True):
+            ''
+            if (args['<path-name>'] is None):
+                ''
+                dict0 = copy.deepcopy(rawconfig['path-assemblage'])
+                pos0 = 0
+                for (key, value) in dict0.items():
+                    pos0 = pos0 + 1
+                    if (pos0 % 3 == 0):
+                        print("%-30s" % key)
+                        continue
+                    print("%-30s" % key, end=' ')
+                return
+
+            if (args['-c'] or args['--custom'] is True):
+                ''
+
+            current_env = None
+            if (args['--current'] is True):
+                current_env = rawconfig['environ']['current']
+
+            if (args['--envname'] is True or args['<env-name>'] is not None):
+                current_var = args['<env-name>']
+                if (current_var is None):
+                    current_var = rawconfig['environ']['current']
+                elif (current_var == "current" or current_var == "cur"):
+                    current_var = rawconfig['environ']['current']
+                current_env = current_var
+
+            if(current_env is not None):
+                if (rawconfig['environ'].__contains__(current_env) is False):
+                    print("please ensure the environ is right")
+                    return
+
+                env = os.environ
+                for l in rawconfig['environ'][current_env]['path+']:
+                    env["PATH"] = l + os.path.pathsep + env["PATH"]
+                for (key, value) in rawconfig['environ'][current_env].items():
+                    if (key == 'path+'):
+                        continue
+                    env[key] = value
+
+            path0 = ''
+            pathname = args['<path-name>']
+            path0 = raw_path2_open(pathname=pathname, envname=current_env)
+
+            plat = getplatform()
+            cmd0 = ''
+            if (plat == "Windows"):
+                cmd0 = "start " + path0
+            elif (plat == "Darwin"):
+                cmd0 = "open " + path0
+            else:
+                cmd0 = "xdg-open " + path0
+            os.system(cmd0)
+            print('successed: %s' % path0)
             return
         else:
             ''
