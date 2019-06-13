@@ -275,7 +275,7 @@ Command:
   local             using pymake local expanding environ, read only.
   export2           output private environ and custom environ to a bat file or sh file, a powerfull function from export, support powershell also. [default:current, env]
   type2             output command to a bat file or sh file, user can appoint file suffix and encoding.
-  open              open path by stored name in path-assemblage. support .../${path-name}/...., support search in env and appoint env.
+  open              open path by stored name in path-assemblage. support .../${path-name}/...., support search in env. ignore case.
 
 Options:
   -h --help     Show this screen.
