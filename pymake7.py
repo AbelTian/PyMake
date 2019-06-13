@@ -3604,10 +3604,12 @@ def main_function():
                         break
         return pathgroup
 
-    # raw path2 function, open command
+    # raw path2 function, open command, [ignore case]
     def raw_path2_open(pathname = None, envname = None ):
         if(pathname is None):
             return None
+
+        env = os.environ
 
         path0 = pathname
         while (True):
@@ -3620,6 +3622,13 @@ def main_function():
             # in rawconfig path-assemblage, ignore case.
             if (dict0.__contains__(pathname.lower()) is True):
                 path0 = dict0[pathname.lower()]
+                break
+
+            #in env [system] [optional: custom, separate]
+            dict0 = {k.lower(): v for k, v in env.items()}
+            if (dict0.__contains__(pathname.lower()) is True):
+                path0 = dict0[pathname.lower()]
+                #print("......")
                 break
 
             pathlist0 = {
@@ -3635,8 +3644,7 @@ def main_function():
             path0 = dict0['p0']
             #print(path0)
 
-            # system [ignore case]
-            env = os.environ
+            #in env [system] [optional: custom, separate]
             pathlist0 = {
                 "P0": path0
             }
@@ -3644,16 +3652,23 @@ def main_function():
             path0 = dict0['p0']
             #print(path0)
 
+            # separate env [ignore]
             if(envname is not None):
-                # separete env [ignore case]
-                pathlist0 = {
-                    "P0": path0
-                }
                 env_name = envname
-                dict0 = copy.deepcopy(raw_path2(rawconfig['environ'][env_name], pathlist0))
+                #in env [separate]
+                #dict0 = {k.lower(): v for k, v in rawconfig['environ'][env_name].items()}
+                #if (dict0.__contains__(pathname.lower()) is True):
+                #    path0 = dict0[pathname.lower()]
+                #    break
+
+                # separete env [ignore case]
+                #pathlist0 = {
+                #    "P0": path0
+                #}
+                #dict0 = copy.deepcopy(raw_path2(rawconfig['environ'][env_name], pathlist0))
                 #for (key, value) in dict0.items():
                 #    print("%-30s %s" % (key, value))
-                path0 = dict0['p0']
+                #path0 = dict0['p0']
                 #print(path0)
 
             break
