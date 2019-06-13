@@ -52,3 +52,32 @@ call %command%
 set command=mm open ${py} android.mobile
 echo %command%
 call %command%
+
+set command=mm open sdk --custom
+call :execmd
+
+set command=mm open sdk --current
+call :execmd
+
+set command=mm open qtdir --custom
+call :execmd
+
+set command=mm open qtdir --current
+call :execmd
+
+set command=mm open qtdir --envname cur
+call :execmd
+
+set command=mm open qtdir --envname current
+call :execmd
+
+
+exit /b 0
+
+:execmd
+echo -----------------------------------------------------
+echo %command%
+call %command%
+goto :eof
+
+
