@@ -16,7 +16,8 @@ User support shell module, user can install them to share their functions.
 |php xxx ... | pyccvp php xxx ... |都能执行自定路径里的命令||||
 |pyenv close qt5| | |
 |pyvc msvc2015| pymake set cur env msvc2015 | 都能开启新环境执行命令|
-|CL.exe ... | pyccvp CL.exe ... | |
+|MSBuild.exe ... | pymake vc ccvp MSBuild ... | |
+|CL.exe ... | pyvcccvp CL ... | |
 |pyvc close msvc2015| | |
 |pyclean | pyclean| 清理掉从PyMake导出的命令 |
 

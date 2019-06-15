@@ -46,6 +46,61 @@ class MyOrderedDict(OrderedDict):
             if ii >= index and k != key:
                 self.move_to_end(k)
 
+class DiffDict(object):
+    """get diff between two dicts"""
+
+    def __init__(self, current, last):
+        self.current = current
+        self.last = last
+        self.set_current = set(current)
+        self.set_last = set(last)
+        self.intersect_keys = self.set_current & self.set_last
+
+    def get_added(self):
+        """current - mixed = added key"""
+        added_keys = self.set_current - self.intersect_keys
+        return {key : self.current.get(key) for key in added_keys}
+
+    def get_removed(self):
+        """last - mixed = removed key"""
+        removed_keys = self.set_last - self.intersect_keys
+        return {key : self.current.get(key) for key in removed_keys}
+
+    def get_mixed(self):
+        return { key: self.current.get(key) for key in self.intersect_keys }, { key: self.last.get(key) for key in self.intersect_keys }
+
+    def get_changed(self):
+        """not equal keys in mixed"""
+        changed_keys = set(o for o in self.intersect_keys if self.current.get(o) != self.last.get(o))
+        return { key: self.current.get(key) for key in changed_keys }, { key: self.last.get(key) for key in changed_keys }
+
+class DiffList(object):
+    """get diff between two lists"""
+
+    def __init__(self, current, last):
+        self.current = current
+        self.last = last
+        self.set_current = set(current)
+        self.set_last = set(last)
+        self.intersect_keys = self.set_current & self.set_last
+
+    def get_added(self):
+        """current - mixed = added key"""
+        added_keys = self.set_current - self.intersect_keys
+        return [key for key in added_keys]
+
+    def get_removed(self):
+        """last - mixed = removed key"""
+        removed_keys = self.set_last - self.intersect_keys
+        return [key for key in removed_keys]
+
+    def get_mixed(self):
+        return [key for key in self.intersect_keys]
+
+    def get_changed(self):
+        """not equal keys"""
+        return [key for key in self.set_current.difference(self.set_last)], [key for key in self.set_last.difference(self.current)]
+
 def TestPlatform( ):
     print ("----------Operation System--------------------------")
     #  Python Version

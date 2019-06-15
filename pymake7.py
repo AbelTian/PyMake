@@ -233,6 +233,35 @@ Usage:
   pymake7.py  open
   pymake7.py  open <path-name> [ -c | --custom ] [ --current ] [ --envname <env-name> ]
   pymake7.py  -------------------------------------------------------------
+  pymake7.py  vc
+  pymake7.py  vc [ info | information ]
+  pymake7.py  vc [ stat | status ]
+  pymake7.py  vc settings [ <env-name> ]
+  pymake7.py  vc init [ <env-name> ]
+  pymake7.py  vc check [ <env-name> ]
+  pymake7.py  vc clean [ here | hh ]
+  pymake7.py  vc type [ here | hh ] [ <cmd-name> ] [ to <file-name> ]
+  pymake7.py  vc use <env-name> type [ here | hh ] [ <cmd-name> ]  [ to <file-name> ]
+  pymake7.py  vc export [ powershell ] [ here | hh ] [ <env-name> ] [ to <file-name> ]
+  pymake7.py  vc exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  vc use <env-name> exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  vc execvp [ here | hh ] [ <command-name> ] [ <command-params> ... ]
+  pymake7.py  vc use <env-name> execvp [ here | hh ] [ <command-name> ] [ <command-params> ... ]
+  pymake7.py  vc ccvp [ here | hh ] [ <command-name> ] [ <command-params> ... ]
+  pymake7.py  vc use <env-name> ccvp [ here | hh ] [ <command-name> ] [ <command-params> ... ]
+  pymake7.py  vc powershell exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  vc powershell use <env-name> exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  vc powershell execvp [ here | hh ] [ <command-name> ] [ <command-params> ... ]
+  pymake7.py  vc powershell use <env-name> execvp [ here | hh ] [ <command-name> ] [ <command-params> ... ]
+  pymake7.py  vc powershell ccvp [ here | hh ] [ <command-name> ] [ <command-params> ... ]
+  pymake7.py  vc powershell use <env-name> ccvp [ here | hh ] [ <command-name> ] [ <command-params> ... ]
+  pymake7.py  vc python exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  vc python use <env-name> exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  vc python execvp [ here | hh ] [ <command-name> ] [ <command-params> ... ]
+  pymake7.py  vc python use <env-name> execvp [ here | hh ] [ <command-name> ] [ <command-params> ... ]
+  pymake7.py  vc python ccvp [ here | hh ] [ <command-name> ] [ <command-params> ... ]
+  pymake7.py  vc python use <env-name> ccvp [ here | hh ] [ <command-name> ] [ <command-params> ... ]
+  pymake7.py  -------------------------------------------------------------
   pymake7.py  (-h | --help)
   pymake7.py  --version
 
@@ -276,6 +305,7 @@ Command:
   export2           output private environ and custom environ to a bat file or sh file, a powerfull function from export, support powershell also. [default:current, env]
   type2             output command to a bat file or sh file, user can appoint file suffix and encoding.
   open              open path by stored name in path-assemblage. support .../${path-name}/...., support search in env. ignore case.
+  vc                easy start visual studio environment.
 
 Options:
   -h --help     Show this screen.
@@ -4860,6 +4890,510 @@ def main_function():
             ''
         break
 
+    #vc json export function
+    def vc_json_export(dict0 = None, env_name = None, file_name = None):
+        if(dict0 is None):
+            return "", "", ""
+
+        #select env
+        current_var = rawconfig['environ']['current']
+        if( env_name is not None ):
+            current_var = env_name
+
+        cmd_suffix = ".json"
+        cmd_codec = 'utf8'
+        if (getplatform_release() == "XP"):
+            cmd_codec = None
+        # but windows, it is \r\n, python helpping me?
+        cmd_return = "\n"
+        cmd_header = "#!/usr/bin/env bash" + cmd_return
+        env_set = ''
+
+        # export effect env
+        cmd_effect = 'vcenv'
+        if (file_name is not None):
+            cmd_effect = file_name
+        cmd_effect += cmd_suffix
+
+        if(os.path.exists(cmd_effect) is False):
+            tempdict = {
+                'environ': {
+                    
+                }
+            }
+            writeJsonData(cmd_effect, tempdict)
+
+        vcdict = readJsonData(cmd_effect)
+        if(vcdict.__contains__('environ') is False):
+            vcdict['environ'] = {}
+        vcdict['environ'][current_var] = dict0
+        writeJsonData(cmd_effect, vcdict)
+
+        return cmd_effect
+
+    #vc powershell export function
+    def vc_powershell_export(dict0 = None, env_name = None, file_name = None):
+        if(dict0 is None):
+            return "", "", ""
+
+        #select env
+        current_var = rawconfig['environ']['current']
+        if( env_name is not None ):
+            current_var = env_name
+
+        cmd_suffix = ".ps1"
+        cmd_codec = 'ansi'
+        if (getplatform_release() == "XP"):
+            cmd_codec = None
+        # but windows, it is \r\n, python helpping me?
+        cmd_return = "\n"
+        cmd_header = "#!/usr/bin/env bash" + cmd_return
+        env_set = ''
+
+        # export effect env
+        cmd_effect = 'env'
+        if (file_name is not None):
+            cmd_effect = "" + file_name
+        cmd_effect += '_effect' + cmd_suffix
+
+        # export path
+        lines = ""
+        for (key) in dict0["path+"]:
+            lines += ("if ( !$env:Path.Contains(\"%s;\" ) ) { $env:Path = $env:Path.Insert(0, \"%s;\") }" % (key, key)) + cmd_return
+
+        # export var
+        for (key, value) in dict0.items():
+            if (key == 'path+'):
+                continue
+            lines += ("${env:" + key + '} = \"' + value + '\"' + cmd_return)
+
+        # print(lines.split('\n'))
+        with open(cmd_effect, 'w', encoding=cmd_codec) as f:
+            # f.write(cmd_header)
+            f.write(lines)
+
+        # export unset env
+        cmd_unset = 'env'
+        if (file_name is not None):
+            cmd_unset = "" + file_name
+        cmd_unset += '_unset' + cmd_suffix
+
+        # export unset path
+        lines = ""
+        for (key) in dict0["path+"]:
+            # lines += ("$env:Path = $env:Path.Replace(\"%s;\", \"\")" % key) + cmd_return
+            lines += ("if ( $env:Path.Contains(\"%s;\" ) ) { $env:Path = $env:Path.Replace(\"%s;\", \"\") }" % (key, key)) + cmd_return
+        # export unset var
+        for (key, value) in dict0.items():
+            if (key == 'path+'):
+                continue
+            lines += ("${env:%s} = \"\"" % key) + cmd_return
+
+        with open(cmd_unset, 'w', encoding=cmd_codec) as f:
+            # f.write(cmd_header)
+            f.write(lines)
+
+        return cmd_effect, cmd_unset
+
+    # vc export function
+    # dict0: VC effect env
+    # env_name: separate env
+    # file_name: script name
+    def vc_export (dict0 = None, env_name = None, file_name = None):
+        if(dict0 is None):
+            return "", "", ""
+
+        #select env
+        current_var = rawconfig['environ']['current']
+        if( env_name is not None ):
+            current_var = env_name
+
+        plat = getplatform()
+        if (plat == "Windows"):
+            cmd_suffix = ".bat"
+            cmd_codec = "ansi"
+            if (getplatform_release() == "XP"):
+                cmd_codec = None
+            cmd_return = "\n"
+            cmd_header = "@echo off" + cmd_return
+            env_set = 'set '
+        else:
+            cmd_suffix = ".sh"
+            cmd_codec = "utf8"
+            cmd_return = "\n"
+            cmd_header = "#!/usr/bin/env bash" + cmd_return
+            env_set = 'export '
+
+        #export effect env
+        cmd_effect = 'env'
+        if (file_name is not None):
+            cmd_effect = file_name
+        cmd_effect += '_effect' + cmd_suffix
+
+        #export path
+        lines = ""
+        for (key) in dict0["path+"]:
+            if (plat == "Windows"):
+                lines += (env_set + 'PATH=' + key + os.path.pathsep + '%PATH%' + cmd_return)
+            else:
+                lines += (env_set + 'PATH="' + key + '"' + os.path.pathsep + '$PATH' + cmd_return)
+
+        #export var
+        for (key, value) in dict0.items():
+            if (key == 'path+'):
+                continue
+            if (plat == "Windows"):
+                lines += (env_set + key + '=' + value + cmd_return)
+            else:
+                lines += (env_set + key + '=\"' + value + '\"' + cmd_return)
+
+        with open(cmd_effect, 'w', encoding=cmd_codec) as f:
+            f.write(cmd_header)
+            f.write(lines)
+
+        #export unset env
+        cmd_unset = 'env'
+        if (file_name is not None):
+            cmd_unset = file_name
+        cmd_unset += '_unset' + cmd_suffix
+
+        #export unset path
+        lines = ""
+        for (key) in dict0["path+"]:
+            if (plat == "Windows"):
+                lines += (env_set + 'PATH=%PATH:' + key + ';=%' + cmd_return)
+            else:
+                lines += (env_set + 'PATH=$(' + 'echo ${PATH//' + key.replace('/', '\/') + ':/})' + cmd_return)
+
+        #export unset var
+        for (key, value) in dict0.items():
+            if (key == 'path+'):
+                continue
+            if (plat == "Windows"):
+                lines += ('set ' + key + '=' + cmd_return)
+            else:
+                lines += ('unset ' + key + cmd_return)
+
+        with open(cmd_unset, 'w', encoding=cmd_codec) as f:
+            f.write(cmd_header)
+            f.write(lines)
+
+        if (plat == "Windows"):
+            ""
+        else:
+            os.system("chmod +x " + cmd_effect)
+            os.system("chmod +x " + cmd_unset)
+
+        #return file name
+        return cmd_effect, cmd_unset
+
+    # vc settings function
+    def vc_settings(env_name = None):
+        current_env = env_name
+        if(env_name is None):
+            current_env = rawconfig['environ']['current']
+
+        vcvarslist = [
+            'vcvarsall-1998',
+            'vcvarsall-2003',
+            'vcvarsall-2005',
+            'vcvarsall-2008',
+            'vcvarsall-2010',
+            'vcvarsall-2012',
+            'vcvarsall-2013',
+            'vcvarsall-2015',
+            'vcvarsall-2017',
+            'vcvarsall-2019',
+            'vcvarsall-20XX'
+        ]
+        print('path-assemblage:')
+        for key in vcvarslist:
+            if (rawconfig['path-assemblage'].__contains__(key) is False):
+                rawconfig['path-assemblage'][key] = "<CAN SET>"
+            print('  "%s": "%s"' % (key, rawconfig['path-assemblage'][key]))
+
+        current_vcvarsall = 'vcvarsall'
+        print('system env:')
+        if (pymakesystemenviron.__contains__(current_vcvarsall) is False):
+            pymakesystemenviron[current_vcvarsall] = "<CAN SET>"
+        print('  "%s": "%s"' % (current_vcvarsall, pymakesystemenviron[current_vcvarsall]))
+
+        print('custom env:')
+        if (envcustomlistrawvars.__contains__(current_vcvarsall) is False):
+            envcustomlistrawvars[current_vcvarsall] = "<CAN SET>"
+        print('  "%s": "%s"' % (current_vcvarsall, envcustomlistrawvars[current_vcvarsall]))
+
+        print('env %s:' % current_env)
+        if (rawconfig['environ'][current_env].__contains__(current_vcvarsall) is False):
+            rawconfig['environ'][current_env][current_vcvarsall] = "<CAN SET>"
+        print('  "%s": "%s"' % (current_vcvarsall, rawconfig['environ'][current_env][current_vcvarsall]))
+        return
+
+    # vc command
+    while (True):
+        if(args['vc'] is True):
+            ''
+            if(args['init'] is True):
+                current_env = ""
+
+                if (args['<env-name>'] is not None):
+                    if (args['<env-name>'] is None):
+                        print("please appoint a environ")
+                        return
+
+                    if (rawconfig['environ'].__contains__(args['<env-name>']) is False):
+                        print("please ensure the environ is right")
+                        return
+
+                    current_env = args['<env-name>']
+                    if (args['<env-name>'] == "current"):
+                        current_env = rawconfig['environ']['current']
+
+                    if (rawconfig['environ'].__contains__(current_env) is False):
+                        print(".json file is broken, environ section current env config is lost, please use set command fix it.")
+                        return
+                else:
+                    current_env = rawconfig['environ']['current']
+
+                current_vcvarsall = 'vcvarsall'
+                current_vcvarsallparam = 'vcvarsallparam'
+                has_set = '0'
+                native_dict = {}
+                while(True):
+                    if (pymakesystemenviron.__contains__(current_vcvarsall) is True):
+                        native_dict = pymakesystemenviron
+                        has_set = "system env:"
+                    if (envcustomlistrawvars.__contains__(current_vcvarsall) is True):
+                        native_dict = envcustomlistrawvars
+                        has_set = "custom env:"
+                    if (rawconfig['environ'][current_env].__contains__(current_vcvarsall) is True):
+                        native_dict = rawconfig['environ'][current_env]
+                        has_set = str("env %s:" % current_env)
+                    break
+
+                #print(has_set)
+                #if(has_set != '0'):
+                #    print(native_dict[current_vcvarsall])
+
+                if(has_set is '0'):
+                    print("please set env variable: vcvarsall.")
+                    return
+
+                if(native_dict.__contains__(current_vcvarsallparam) is False):
+                    print("please set env variable: vcvarsallparam.")
+                    return
+
+                print("source root:")
+                print("  %s" % sourceroot)
+
+                print(has_set)
+                print('  "vcvarsall": "%s"' % native_dict[current_vcvarsall])
+                print('  "vcvarsallparam": "%s"' % native_dict[current_vcvarsallparam])
+
+                plat = getplatform()
+                if (plat != "Windows"):
+                    print('pymake vc command cant support non-windows system.')
+                    return
+
+                if(os.path.isfile(native_dict[current_vcvarsall]) is False):
+                    print('failed: %s is not existed.' % native_dict[current_vcvarsall])
+                    return
+
+                cmd_list = ['cmd', "/c",
+                            "call %s 1>nul 2>nul" % native_dict[current_vcvarsall],
+                            "& set"
+                            ]
+                result = subprocess.getoutput(cmd_list)
+                list1 = result.split('\n')
+                #print(list1)
+                dict1 = {}
+                for l in list1:
+                    key = str(l).split('=')[0].strip()
+                    value = '='.join(str(l).split('=')[1:]).strip()
+                    dict1[key.upper()]=value
+                #print(dict1)
+                #for (key, value) in dict1.items():
+                #    print("%-30s %s" % (key, value))
+
+                dict2 = {k.upper(): v for k, v in os.environ.items()}
+                #print(dict2)
+                #for (key, value) in dict2.items():
+                #    print("%-30s %s" % (key, value))
+
+                diff0 = DiffDict(dict1, dict2)
+                #print('AAAA', diff0.get_added())
+                #print('BBBB', diff0.get_removed())
+                #print('CCCC', diff0.get_changed())
+
+                dict11, dict21 = diff0.get_changed()
+                #print(dict11)
+                #print(dict21)
+                if(dict11.__contains__('PATH') is False):
+                    print('failed: %s execute failed.' % native_dict[current_vcvarsall])
+                    return
+
+                diff1 = DiffList(dict11['PATH'].split(os.path.pathsep), dict21['PATH'].split(os.path.pathsep))
+                #print(dict11['PATH'])
+                #print(dict21['PATH'])
+                #print('AAAAA', diff1.get_added())
+                #print('BBBBB', diff1.get_removed())
+                #print('CCCCC', diff1.get_changed())
+
+                dict3 = {}
+                pathlist0, pathlist1 = diff1.get_changed()
+                dict3['path+'] = copy.deepcopy(pathlist0)
+                vardict = copy.deepcopy(diff0.get_added())
+                dict3.update(vardict)
+                #print(dict3)
+
+                os.chdir(sourceroot)
+
+                if(dict3.__contains__('VISUALSTUDIOVERSION') is False):
+                    print('failed: env var VISUALSTUDIOVERSION is not defined in %s.' % native_dict[current_vcvarsall])
+
+                #export json
+                jsonfile = 'pymake-vc-command'
+                f0 = vc_json_export(dict3, current_env, jsonfile)
+
+                #export
+                vcname = 'vc' + dict3['VISUALSTUDIOVERSION'] + '_' + native_dict[current_vcvarsallparam]
+                filename = 'pymake_' + vcname
+                f11, f12 = vc_export(dict3, current_env, filename)
+
+                #export powershell
+                f21, f22 = vc_powershell_export(dict3, current_env, filename)
+
+                print("inited:")
+                print('  %s' % f0)
+                print('  %s, %s' % (f11, f22))
+                print('  %s, %s' % (f21, f22))
+                print("successed")
+                return
+            elif (args['check'] is True):
+                ''
+                current_env = ""
+
+                if (args['<env-name>'] is not None):
+                    if (args['<env-name>'] is None):
+                        print("please appoint a environ")
+                        return
+
+                    if (rawconfig['environ'].__contains__(args['<env-name>']) is False):
+                        print("please ensure the environ is right")
+                        return
+
+                    current_env = args['<env-name>']
+                    if (args['<env-name>'] == "current"):
+                        current_env = rawconfig['environ']['current']
+
+                    if (rawconfig['environ'].__contains__(current_env) is False):
+                        print(".json file is broken, environ section current env config is lost, please use set command fix it.")
+                        return
+                else:
+                    current_env = rawconfig['environ']['current']
+
+                current_vcvarsall = 'vcvarsall'
+                current_vcvarsallparam = 'vcvarsallparam'
+                has_set = '0'
+                native_dict = {}
+                while(True):
+                    if (pymakesystemenviron.__contains__(current_vcvarsall) is True):
+                        native_dict = pymakesystemenviron
+                        has_set = "system env:"
+                    if (envcustomlistrawvars.__contains__(current_vcvarsall) is True):
+                        native_dict = envcustomlistrawvars
+                        has_set = "custom env:"
+                    if (rawconfig['environ'][current_env].__contains__(current_vcvarsall) is True):
+                        native_dict = rawconfig['environ'][current_env]
+                        has_set = str("env %s:" % current_env)
+                    break
+
+                #print(has_set)
+                #if(has_set != '0'):
+                #    print(native_dict[current_vcvarsall])
+
+                if(has_set is '0'):
+                    print("please set env variable: vcvarsall.")
+                    return
+
+                if(native_dict.__contains__(current_vcvarsallparam) is False):
+                    print("please set env variable: vcvarsallparam.")
+                    return
+
+                print("source root:")
+                print("  %s" % sourceroot)
+
+                print(has_set)
+                print('  "vcvarsall": "%s"' % native_dict[current_vcvarsall])
+                print('  "vcvarsallparam": "%s"' % native_dict[current_vcvarsallparam])
+
+                os.chdir(sourceroot)
+                jsonfile = 'pymake-vc-command.json'
+                dict0 = readJsonData(jsonfile)
+                if(dict0.__contains__('environ') is False):
+                    print('please init vc.')
+                    return
+                if(dict0['environ'].__contains__(current_env) is False):
+                    print('please init vc for %s env.' % current_env)
+                    return
+
+                print (Fore.CYAN+ "env %s" % current_env)
+                print(Fore.LIGHTGREEN_EX + "path+:")
+                for (key) in dict0['environ'][current_env]["path+"]:
+                    print(Fore.LIGHTMAGENTA_EX + "  %s" % key)
+                print(Fore.LIGHTGREEN_EX + "variable:")
+                for (key, value) in dict0['environ'][current_env].items():
+                    if (key == 'path+'):
+                        continue
+                    print(Fore.GREEN + "  %-30s %s" % (key, value))
+
+                return
+            elif (args['settings'] is True):
+                ''
+                current_env = ""
+
+                if (args['<env-name>'] is not None):
+                    if (args['<env-name>'] is None):
+                        print("please appoint a environ")
+                        return
+
+                    if (rawconfig['environ'].__contains__(args['<env-name>']) is False):
+                        print("please ensure the environ is right")
+                        return
+
+                    current_env = args['<env-name>']
+                    if (args['<env-name>'] == "current"):
+                        current_env = rawconfig['environ']['current']
+
+                    if (rawconfig['environ'].__contains__(current_env) is False):
+                        print(".json file is broken, environ section current env config is lost, please use set command fix it.")
+                        return
+                else:
+                    current_env = rawconfig['environ']['current']
+
+                vc_settings(current_env)
+                return
+            elif(args['clean'] is True):
+                break
+            elif (args['type'] is True):
+                ''
+            elif (args['export'] is True):
+                ''
+            elif (args['type'] is True):
+                ''
+            elif (args['ccvp'] or args['execvp'] or args['exec-with-params'] is True):
+                ''
+            elif (args['powershell'] is True):
+                ''
+            elif (args['python'] is True):
+                ''
+            else:
+                ''
+                vc_settings(None)
+        else:
+            ''
+        break
+
     #powershell export env function
     def powershell_environ_export(env_name = None, file_name = None):
         # select env
@@ -8671,9 +9205,3 @@ def main_function():
 
 if __name__ == '__main__':
     main_function()
-    #ret = main_function()
-    #print(ret)
-    #if(ret is None):
-    #    ret = 0
-    #print(ret)
-    #os._exit(ret)
