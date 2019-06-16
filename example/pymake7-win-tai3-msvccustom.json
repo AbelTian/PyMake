@@ -246,6 +246,7 @@
         "GnuWin32.bin": "${wincc}/GnuWin32/GnuWin32/bin",
         "msys.bin": "${root.tool}/winCompilers/mSys/bin",
         "msys2.bin": "${root.tool}/winCompilers/mSys2/bin",
+        "msys-mod.bin": "${wincc}/GnuWin32/mSys-MOD/bin",
         "watcom": "${wincc}/watcom1.9",
         "watcom.bin": "${watcom}/binw;${watcom}/binnt",
         "watcom.include": "${watcom}/h;${watcom}/h/nt;${watcom}/h/nt/directx;${watcom}/h/nt/ddk",
