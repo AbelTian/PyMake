@@ -10,6 +10,7 @@
 :: 建议增加"RUN-VCVARSALL"="${VCVARSALL} ${VCVARSALLPARAM}"。
 :: 用户自行决定配置"CLS-VCVARSALL"和"CLS-VCVARSALLPARAM"。
 
+set PYENVFLAG=True
 if "%1" == "" (
     echo usage:
     echo "  pyvc <env-name>"
@@ -40,6 +41,7 @@ if "%1" == "" (
         echo please appoint a env name. & exit /b 0
     )
     set PYENVNAME=%2
+    set PYENVFLAG=False
 ) else (
     set PYENVNAME=%1
 )
@@ -48,6 +50,9 @@ set PYPROGRAMPATH=%~dp0
 set PYPROGRAMNAME=pymake.bat
 set PYPROGRAMPATHNAME=%PYPROGRAMPATH%%PYPROGRAMNAME%
 
+echo preparing vc env ...
+for /F %%i in ('echo %random%') do ( set "PYENVINDEX=%%i" )
+rem echo env index: [%PYENVINDEX%]
 for /F %%i in ('"%PYPROGRAMPATHNAME%" get current env') do ( set "PYMMDEFAULTENVNAME=%%i" )
 rem echo environme: [%PYMMDEFAULTENVNAME%] [default]
 for /F %%i in ('"%PYPROGRAMPATHNAME%" have env %PYENVNAME%') do ( set "PYENVEXISTEDFLAG=%%i" )
@@ -55,16 +60,20 @@ if "%PYENVEXISTEDFLAG%" == "False" (
     echo environme: [%PYENVNAME%] is not existed.
     exit /b 0
 )
-rem echo environme: [%PYENVNAME%] [%PYENVEXISTEDFLAG%] [USED]
+echo environme: [%PYENVNAME%] [%PYENVEXISTEDFLAG%] [USED]
+for /F %%i in ('"%PYPROGRAMPATHNAME%" get default exec root') do ( set "PYMMSHELLROOT=%%i" )
+echo exec root: [%PYMMSHELLROOT%] [default]
+rem echo exec root: [%CD%] [here]
 
-call "%PYPROGRAMPATH%\pyenv.bat" %PYENVNAME%
-
+call "%PYPROGRAMPATHNAME%" vc export2 %PYENVNAME% to %PYENVINDEX% --local --custom
+rem echo %ERRORLEVEL%
 if "%PYENVFLAG%" == "False" (
-    echo pyvc env : CLS-VCVARSALL="%CLS-VCVARSALL:/=\%" %CLS-VCVARSALLPARAM%
-    call "%CLS-VCVARSALL:/=\%" %CLS-VCVARSALLPARAM%
-    echo pyvc env : [%PYENVNAME%] closed, but you should use new vcvarsall overlap it.
+    call "%PYMMSHELLROOT%\%PYENVINDEX%_unset.bat"
+    echo vc env   : [%PYENVNAME%] closed
 ) else (
-    echo pyvc env : RUN-VCVARSALL="%VCVARSALL:/=\%" %VCVARSALLPARAM%
-    call "%VCVARSALL:/=\%" %VCVARSALLPARAM%
-    echo pyvc env : [%PYENVNAME%] opened, sure.
+    call "%PYMMSHELLROOT%\%PYENVINDEX%_effect.bat"
+    echo vc env   : [%PYENVNAME%] opened
 )
+
+::clean
+del /q /f "%PYMMSHELLROOT%\%PYENVINDEX%_effect.bat" "%PYMMSHELLROOT%\%PYENVINDEX%_unset.bat"

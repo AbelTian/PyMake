@@ -23,6 +23,10 @@ set sourcefile=pyvc.bat
 set mmfile=pyvc.bat
 call :uninstall
 
+set sourcefile=pyvcccvp.bat
+set mmfile=pyvcccvp.bat
+call :uninstall
+
 set sourcefile=pytype.bat
 set mmfile=pytype.bat
 call :uninstall

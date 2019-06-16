@@ -45,13 +45,13 @@ set PYPROGRAMPATHNAME=%PYPROGRAMPATH%%PYPROGRAMNAME%
 
 echo preparing env ...
 for /F %%i in ('echo %random%') do ( set "PYENVINDEX=%%i" )
-echo env index: [%PYENVINDEX%]
-for /F %%i in ('"%PYPROGRAMPATHNAME%" source root') do ( set "PYMMSOURCEROOT=%%i" )
-echo location : [%PYMMSOURCEROOT%]
-for /F %%i in ('"%PYPROGRAMPATHNAME%" source config') do ( set "PYMMSOURCECONFIG=%%i" )
-echo configure: [%PYMMSOURCECONFIG%] [1]
+rem echo env index: [%PYENVINDEX%]
+rem for /F %%i in ('"%PYPROGRAMPATHNAME%" source root') do ( set "PYMMSOURCEROOT=%%i" )
+rem echo location : [%PYMMSOURCEROOT%]
+rem for /F %%i in ('"%PYPROGRAMPATHNAME%" source config') do ( set "PYMMSOURCECONFIG=%%i" )
+rem echo configure: [%PYMMSOURCECONFIG%] [1]
 for /F %%i in ('"%PYPROGRAMPATHNAME%" get current env') do ( set "PYMMDEFAULTENVNAME=%%i" )
-echo environme: [%PYMMDEFAULTENVNAME%] [default]
+rem echo environme: [%PYMMDEFAULTENVNAME%] [default]
 for /F %%i in ('"%PYPROGRAMPATHNAME%" have env %PYENVNAME%') do ( set "PYENVEXISTEDFLAG=%%i" )
 if "%PYENVEXISTEDFLAG%" == "False" (
     echo environme: [%PYENVNAME%] is not existed.
@@ -60,7 +60,7 @@ if "%PYENVEXISTEDFLAG%" == "False" (
 echo environme: [%PYENVNAME%] [%PYENVEXISTEDFLAG%] [USED]
 for /F %%i in ('"%PYPROGRAMPATHNAME%" get default exec root') do ( set "PYMMSHELLROOT=%%i" )
 echo exec root: [%PYMMSHELLROOT%] [default]
-echo exec root: [%CD%] [here]
+rem echo exec root: [%CD%] [here]
 
 call "%PYPROGRAMPATHNAME%" export2 %PYENVNAME% to %PYENVINDEX% --local --custom
 

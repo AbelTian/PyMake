@@ -28,6 +28,11 @@ set filepath=%~dp0
 set sourcefile=pyvc.bat
 call :install %*
 
+set mmfile=pyvcccvp.bat
+set filepath=%~dp0
+set sourcefile=pyvcccvp.bat
+call :install %*
+
 set mmfile=pytype.bat
 set filepath=%~dp0
 set sourcefile=pytype.bat
