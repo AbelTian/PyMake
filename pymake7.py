@@ -238,8 +238,8 @@ Usage:
   pymake7.py  vc [ stat | status ]
   pymake7.py  vc settings [ <env-name> ]
   pymake7.py  vc init [ <env-name> ]
-  pymake7.py  vc kan [ <env-name> ]
-  pymake7.py  vc check [ <env-name> ]
+  pymake7.py  vc deinit [ <env-name> ]
+  pymake7.py  vc ( kan | check ) [ <env-name> ]
   pymake7.py  vc clean [ here | hh ]
   pymake7.py  vc type [ here | hh ] [ <cmd-name> ] [ to <file-name> ]
   pymake7.py  vc use <env-name> type [ here | hh ] [ <cmd-name> ]  [ to <file-name> ]
@@ -5604,6 +5604,88 @@ def main_function():
                 print('  %s, %s' % (f11, f12))
                 print('  %s, %s' % (f21, f22))
                 print("successed")
+                return
+            elif (args['deinit'] is True):
+                current_env = ""
+
+                if (args['<env-name>'] is not None):
+                    if (args['<env-name>'] is None):
+                        print("please appoint a environ")
+                        return
+
+                    if (rawconfig['environ'].__contains__(args['<env-name>']) is False):
+                        print("please ensure the environ is right")
+                        return
+
+                    current_env = args['<env-name>']
+                    if (args['<env-name>'] == "current"):
+                        current_env = rawconfig['environ']['current']
+
+                    if (rawconfig['environ'].__contains__(current_env) is False):
+                        print(".json file is broken, environ section current env config is lost, please use set command fix it.")
+                        return
+                else:
+                    current_env = rawconfig['environ']['current']
+
+                current_vcvarsall = 'vcvarsall'
+                current_vcvarsallparam = 'vcvarsallparam'
+                has_set = '0'
+                native_dict = {}
+                while(True):
+                    if (pymakesystemenviron.__contains__(current_vcvarsall) is True):
+                        native_dict = pymakesystemenviron
+                        has_set = "system env:"
+                    if (envcustomlistrawvars.__contains__(current_vcvarsall) is True):
+                        native_dict = envcustomlistrawvars
+                        has_set = "custom env:"
+                    if (rawconfig['environ'][current_env].__contains__(current_vcvarsall) is True):
+                        native_dict = rawconfig['environ'][current_env]
+                        has_set = str("env %s:" % current_env)
+                    break
+
+                #print(has_set)
+                #if(has_set != '0'):
+                #    print(native_dict[current_vcvarsall])
+
+                if(has_set is '0'):
+                    print('please set env variable vcvarsall in %s, env %s.' % (sourcefile, current_env))
+                    return
+
+                if(native_dict.__contains__(current_vcvarsallparam) is False):
+                    print('please set env variable vcvarsallparam in %s, env %s.' % (sourcefile, current_env))
+                    return
+
+                print("source file: %s" % sourceconfigfile)
+
+                print(has_set)
+                print('  "vcvarsall": "%s"' % native_dict[current_vcvarsall])
+                print('  "vcvarsallparam": "%s"' % native_dict[current_vcvarsallparam])
+
+                plat = getplatform()
+                if (plat != "Windows"):
+                    print('pymake vc command cant support non-windows system.')
+                    return
+
+                if(os.path.isfile(native_dict[current_vcvarsall]) is False):
+                    print('failed: %s is not existed.' % native_dict[current_vcvarsall])
+                    return
+
+                os.chdir(vcroot)
+                jsonfile = 'pymake-vc-command.json'
+                if(not os.path.exists(jsonfile)):
+                    print('please init vc.')
+                    return
+                dict0 = readJsonData(jsonfile)
+                if(dict0.__contains__('environ') is False):
+                    print('please init vc.')
+                    return
+                if(dict0['environ'].__contains__(current_env) is False):
+                    print('please init vc for %s env.' % current_env)
+                    return
+
+                dict0['environ'].__delitem__(current_env)
+                writeJsonData(jsonfile, dict0)
+                print('successed: vc deinit %s' % current_env)
                 return
             elif (args['kan'] or args['check'] is True):
                 ''

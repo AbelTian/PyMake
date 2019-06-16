@@ -19,3 +19,8 @@ MSYS: YES
 1. $USERPROFILE != $HOMEDRIVE$HOMEPATH
 2. no sudo ? dont call install.bat and install.sh.
 3. call cmd first is suggessted.
+
+MSYS2: YES  
+1. equals to MSYS.
+2. not support chinese.  
+

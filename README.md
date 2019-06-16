@@ -874,14 +874,21 @@ User support shell module, user can install them to share their functions.
 |Program|Shortcut|Shortcut(Level 2)|
 |----|----|----|  
 | pymake.py | pymake | mm, pymm |
-| pymake.py | pyenv | pyvc |
+| pymake.py | pyenv | |
 | pymake.py | pycmd | |
 | pymake.py | pyexecvp | pyccvp |
 | pymake.py | pytype |  |
+| pymake.py | pyexport |  |
 | pymake.py | pyclean |  |
+| pymake.py | pypython |  |
 | pymake.py | pylanguage |  |
 | pymake.py | pypowershell.bat |  |
 | pymake.py | pyenv.ps1 |  |
+| pymake.py | | pyvc.bat |  |
+| pymake.py | | pyvcccvp.bat |  |
+| pymake.py | | pyvcpowershell.bat |  |
+| pymake.py | | pyvcpython.bat |  |
+| pymake.py | | pyvcexport.bat |  |
 | pyinfo.py | pyinfo || 
 | pypaths.py | pypaths || 
 | pycodec.py | | |
