@@ -49,7 +49,7 @@ import datetime
 import json
 import copy
 import types
-
+import platform
 
 #try:
 #    import chardet
@@ -61,6 +61,10 @@ import types
 #    ''
     
 def main_function():
+    for (k ,v) in os.environ.items():
+        print("%-30s %s" % (k,v))
+    print(sys.executable)
+    print(platform.python_version())
     print("BBB")
     print(__file__)
     print(os.getcwd())
