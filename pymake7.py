@@ -802,6 +802,8 @@ def main_function():
                     cmd0 = ''
                     if(plat == "Windows"):
                         cmd0 = "start " + file0
+                        if (file0.__contains__(' ')):
+                            cmd0 = 'start "" ' + '"%s"' % file0
                     elif (plat == "Darwin"):
                         cmd0 = "open " + file0
                     else:
@@ -3739,6 +3741,8 @@ def main_function():
             cmd0 = ''
             if (plat == "Windows"):
                 cmd0 = "start " + path0
+                if(path0.__contains__(' ')):
+                    cmd0 = 'start "" ' + '"%s"' % path0
             elif (plat == "Darwin"):
                 cmd0 = "open " + path0
             else:
@@ -8570,6 +8574,8 @@ def main_function():
             cmd0 = ''
             if (plat == "Windows"):
                 cmd0 = "start " + path0
+                if(path0.__contains__(' ')):
+                    cmd0 = 'start "" ' + '"%s"' % path0
             elif (plat == "Darwin"):
                 cmd0 = "open " + path0
             else:
