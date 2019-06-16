@@ -5516,6 +5516,11 @@ def main_function():
                     print('failed: %s is not existed.' % native_dict[current_vcvarsall])
                     return
 
+                if (debugswitch == '1'):
+                    cmd_string = str('call "%s" %s' % (native_dict[current_vcvarsall], native_dict[current_vcvarsallparam]))
+                    result = subprocess.getoutput(cmd_string)
+                    print(result)
+
                 cmd_string = str('call "%s" %s 1>nul 2>nul & set' % (native_dict[current_vcvarsall], native_dict[current_vcvarsallparam]))
                 result = subprocess.getoutput(cmd_string)
                 #print(result)
