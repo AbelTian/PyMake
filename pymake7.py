@@ -5717,6 +5717,58 @@ def main_function():
 
                 vc_settings(current_env)
                 return
+            elif (args['stat'] or args['status'] is True):
+                ''
+                print("source root: %s" % sourceroot)
+                current_vcvarsall = 'vcvarsall'
+                current_vcvarsallparam = 'vcvarsallparam'
+                has_set = '0'
+                set_content = '<CAN SET>'
+                while(True):
+                    has_set = "system env:"
+                    set_content = '<CAN SET>'
+                    if (pymakesystemenviron.__contains__(current_vcvarsall) is True):
+                        set_content = pymakesystemenviron[current_vcvarsall]
+                    print(has_set)
+                    print('  ', set_content)
+
+                    has_set = "custom env:"
+                    set_content = '<CAN SET>'
+                    if (envcustomlistrawvars.__contains__(current_vcvarsall) is True):
+                        set_content = envcustomlistrawvars[current_vcvarsall]
+                    print(has_set)
+                    print('  ', set_content)
+                    break
+
+                os.chdir(vcroot)
+                jsonfile = 'pymake-vc-command.json'
+                if(not os.path.exists(jsonfile)):
+                    print('please init vc.')
+                    return
+                dict0 = readJsonData(jsonfile)
+                if(dict0.__contains__('environ') is False):
+                    print('please init vc.')
+                    return
+
+                print("source file: %s" % sourceconfigfile)
+                print('%-30s %-30s %-30s %s' % ('env', 'status', 'vcvarsall', 'vcvarsallparam'))
+                set_content = '<CAN INIT>'
+                set_content2 = '<CAN SET>'
+                for (k, v) in rawconfig['environ'].items():
+                    current_env = k
+                    status = set_content
+                    vcvarsall = set_content2
+                    vcvarsallparam = set_content2
+                    if(dict0['environ'].__contains__(current_env) is True):
+                        if(dict0['environ'][current_env].__contains__('VISUALSTUDIOVERSION') is True):
+                            status = 'VC' + dict0['environ'][current_env]['VISUALSTUDIOVERSION']
+                    if (rawconfig['environ'][current_env].__contains__(current_vcvarsall) is True):
+                        vcvarsall = rawconfig['environ'][current_env][current_vcvarsall]
+                    if (rawconfig['environ'][current_env].__contains__(current_vcvarsallparam) is True):
+                        vcvarsallparam = rawconfig['environ'][current_env][current_vcvarsallparam]
+                    print('%-30s %-30s %-30s %s' % (current_env, status, vcvarsall, vcvarsallparam))
+
+                return
             elif(args['clean'] is True):
                 break
             elif (args['type'] is True):
