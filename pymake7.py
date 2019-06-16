@@ -5770,6 +5770,11 @@ def main_function():
                         vcvarsall = rawconfig['environ'][current_env][current_vcvarsall]
                     if (rawconfig['environ'][current_env].__contains__(current_vcvarsallparam) is True):
                         vcvarsallparam = rawconfig['environ'][current_env][current_vcvarsallparam]
+                    if(current_env == 'current'):
+                        continue
+                    if(current_env == rawconfig['environ']['current']):
+                        print(Fore.LIGHTMAGENTA_EX +'%-30s %-30s %-30s %s' % (current_env, status, vcvarsall, vcvarsallparam))
+                        continue
                     print('%-30s %-30s %-30s %s' % (current_env, status, vcvarsall, vcvarsallparam))
 
                 return
