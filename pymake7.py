@@ -5641,11 +5641,10 @@ def main_function():
                     print('failed: %s is not existed.' % native_dict[current_vcvarsall])
                     return
 
-                cmd_list = ['cmd', "/c",
-                            "call %s 1>nul 2>nul" % native_dict[current_vcvarsall],
-                            "& set"
-                            ]
-                result = subprocess.getoutput(cmd_list)
+                cmd_string = str('call "%s" %s 1>nul 2>nul & set' % (native_dict[current_vcvarsall], native_dict[current_vcvarsallparam]))
+                result = subprocess.getoutput(cmd_string)
+                #print(result)
+                #print(cmd_string)
                 list1 = result.split('\n')
                 #print(list1)
                 dict1 = {}
