@@ -66,6 +66,10 @@ echo exec root: [%PYMMSHELLROOT%] [default]
 rem echo exec root: [%CD%] [here]
 
 call "%PYPROGRAMPATHNAME%" vc export2 %PYENVNAME% to %PYENVINDEX% --local --custom
+if not "%ERRORLEVEL%" == "0" (
+    exit /b 0
+)
+
 rem echo %ERRORLEVEL%
 if "%PYENVFLAG%" == "False" (
     call "%PYMMSHELLROOT%\%PYENVINDEX%_unset.bat"

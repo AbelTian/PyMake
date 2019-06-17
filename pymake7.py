@@ -5570,7 +5570,9 @@ def main_function():
     # vc command
     while (True):
         if(args['vc'] is True):
-            ''
+            VC_SUCCESS = 0
+            VC_FAIL = 1
+
             if(args['init'] is True):
                 current_env = ""
 
@@ -6084,14 +6086,14 @@ def main_function():
 
                 if (rawconfig['environ'].__contains__(current_env) is False):
                     print("please ensure the environ is right")
-                    return
+                    return VC_FAIL
 
                 if (args['<env-name>'] == "current"):
                     current_env = rawconfig['environ']['current']
 
                 if (rawconfig['environ'].__contains__(current_env) is False):
                     print(".json file is broken, environ section current env config is lost, please use set command fix it.")
-                    return
+                    return VC_FAIL
 
                 if (args['here'] or args['hh'] is True):
                     os.chdir(pymakeworkpath)
@@ -6119,11 +6121,11 @@ def main_function():
 
                 if(has_set is '0'):
                     print("please set env variable: vcvarsall.")
-                    return
+                    return VC_FAIL
 
                 if(native_dict.__contains__(current_vcvarsallparam) is False):
                     print("please set env variable: vcvarsallparam.")
-                    return
+                    return VC_FAIL
 
                 print("source file: %s" % sourceconfigfile)
 
@@ -6139,14 +6141,14 @@ def main_function():
                 jsonfile = 'pymake-vc-command.json'
                 if(not os.path.exists(jsonfile)):
                     print('please init vc.')
-                    return
+                    return VC_FAIL
                 dict0 = readJsonData(jsonfile)
                 if(dict0.__contains__('environ') is False):
                     print('please init vc.')
-                    return
+                    return VC_FAIL
                 if(dict0['environ'].__contains__(current_env) is False):
                     print('please init vc for %s env.' % current_env)
-                    return
+                    return VC_FAIL
                 for (key) in dict0['environ'][current_env]["path+"]:
                     dict1['path+'].append(key)
                 for (key, value) in dict0['environ'][current_env].items():
@@ -11071,4 +11073,7 @@ def main_function():
     return
 
 if __name__ == '__main__':
-    main_function()
+    ret = main_function()
+    if(ret == None):
+        ret = 0
+    os._exit(ret)

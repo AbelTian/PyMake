@@ -92,6 +92,9 @@ Write-Output "exec root: [$PYMMSHELLROOT] [default]"
 #Write-Output "exec root: [$PWD] [here]"
 
 & "$PYPROGRAMPATHNAME" vc export2 powershell $PYENVNAME to $PYENVINDEX --local --custom
+if ($LASTEXITCODE -ne 0) {
+    exit 0
+}
 
 if ("$PYENVFLAG" -eq "False") {
     . "$PYMMSHELLROOT/${PYENVINDEX}_unset.ps1"
