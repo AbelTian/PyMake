@@ -246,6 +246,7 @@
         "GnuWin32.bin": "${wincc}/GnuWin32/GnuWin32/bin",
         "msys.bin": "${root.tool}/winCompilers/mSys/bin",
         "msys2.bin": "${root.tool}/winCompilers/mSys2/bin",
+        "msys-mod.bin": "${wincc}/GnuWin32/mSys-MOD/bin",
         "watcom": "${wincc}/watcom1.9",
         "watcom.bin": "${watcom}/binw;${watcom}/binnt",
         "watcom.include": "${watcom}/h;${watcom}/h/nt;${watcom}/h/nt/directx;${watcom}/h/nt/ddk",
@@ -331,54 +332,53 @@
             "path+": [
                 "${cmake.bin}",
                 "${mingw32.bin}",
-                "${qt4.8.mingw32.bin}"
+                "${qt4.mingw32.bin}"
             ],
             "make0": "mingw32-make",
-            "QTVERSION": "${qt4.version}",
-            "QTDIR": "${qt4.8.mingw32}",
+            "QTVERSION": "${qt4.mingw32.version}",
+            "QTDIR": "${qt4.mingw32}",
             "QTSPEC": "-spec win32-g++",
             "QTCONFIG": "CONFIG+=x86",
             "QKIT": "WIN32",
             "QSYS": "Windows"
         },
-        "qt5": {
+        "mingw32": {
             "path+": [
                 "${cmake.bin}",
                 "${mingw32.bin}",
-                "${qt5.9.mingw32.bin}"
+                "${qt5.mingw32.bin}"
             ],
             "CMAKEGENERATOR": "MinGW Makefiles",
             "make0": "mingw32-make",
-            "QTVERSION": "${qt5.9.version}",
-            "QTDIR": "${qt5.9.mingw32}",
+            "QTVERSION": "${qt5.mingw32.version}",
+            "QTDIR": "${qt5.mingw32}",
             "QTSPEC": "-spec win32-g++",
             "QTCONFIG": "",
             "QKIT": "WIN32",
             "QSYS": "Windows"
         },
-        "qt5.x64": {
+        "mingw64": {
             "path+": [
                 "${cmake.bin}",
                 "${mingw64.bin}",
-                "${qt5.12.mingw64.bin}"
+                "${qt5.mingw64.bin}"
             ],
             "make0": "mingw32-make",
-            "QTVERSION": "${qt5.12.version}",
-            "QTDIR": "${qt5.12.mingw64}",
+            "QTVERSION": "${qt5.mingw64.version}",
+            "QTDIR": "${qt5.mingw64}",
             "QTSPEC": "-spec win32-g++",
             "QTCONFIG": "",
             "QKIT": "WIN64",
             "QSYS": "Win64"
         },
-        "armhf32": {
+        "mingw32.armhf32": {
             "path+": [
                 "${cmake.bin}",
-                "${armhf32.bin}",
                 "${qt5.armhf32.bin}",
-                "${mingw32.bin}"
+                "${armhf32.bin}"
             ],
             "make0": "make",
-            "QTVERSION": "${qt5.version}",
+            "QTVERSION": "${qt5.armhf32.version}",
             "QTDIR": "${qt5.armhf32}",
             "QTSPEC": "-spec linux-arm-gnueabihf-g++",
             "QTCONFIG": "",
@@ -395,7 +395,7 @@
                 "${msys2.bin}"
             ]
         },
-        "qt5.llvm": {
+        "llvm": {
             "path+": [
                 "${LLVM.bin}"
             ]
@@ -421,6 +421,11 @@
             ],
             "STACK_ROOT": "${haskell}/Stack"
         },
+        "freepascal": {
+            "path+": [
+                "${FreePascal.bin}"
+            ]
+        },
         "other2": {
             "path+": [
                 "${doxygen.bin}",
@@ -438,18 +443,18 @@
                 "${gradle.bin}",
                 "${cmake.bin}",
                 "${mingw32.bin}",
-                "${qt5.9.mingw32.bin}"
+                "${qt5.mingw32.bin}"
             ],
             "CMAKEGENERATOR": "MinGW Makefiles",
             "make0": "mingw32-make",
-            "QTVERSION": "${qt5.9.version}",
-            "QTDIR": "${qt5.9.mingw32}",
+            "QTVERSION": "${qt5.mingw32.version}",
+            "QTDIR": "${qt5.mingw32}",
             "QTSPEC": "-spec win32-g++",
             "QTCONFIG": "",
             "QKIT": "WIN32",
             "QSYS": "Windows"
         },
-        "current": "qt5"
+        "current": "mingw32"
     },
     "Path.Tips": {
         "OLDNAME": "variable-assemblage",
@@ -508,6 +513,9 @@
         "test.6": [
             "echo %Path%"
         ],
+        "test.7": [
+            "type %1"
+        ],
         "open.dir": [
             "echo [%1]",
             "if not exist \"\"%1\"\" ( echo has no this dir. & exit /b 0)",
@@ -517,38 +525,8 @@
         "open.tool": [
             "start ${root.tools}/%1.exe.lnk"
         ],
-        "qqtsh": [
-            "cd ${root.src}",
-            "call %1"
-        ],
         "android.sdk": [
             "${android.sdk}/\"SDK Manager.exe\""
-        ],
-        "daily.qqt": [
-            "set src_path=${root.src}/LibQQt",
-            "set src=%src_path%/QQt.pro",
-            "set build=${root.build}/QQt/${QSYS}/${QTVERSION}/Debug",
-            "md %build:/=\\%",
-            "cd /d %build%",
-            "rem del /f /q /s demo examples src test",
-            "qmake %src% ${QTSPEC} CONFIG+=debug CONFIG+=qml_debug ${QTCONFIG} && mingw32-make qmake_all",
-            "mingw32-make -j10",
-            "set build=${root.build}/QQt/${QSYS}/${QTVERSION}/Release",
-            "md %build:/=\\%",
-            "cd /d %build%",
-            "rem del /f /q /s demo examples src test",
-            "qmake %src% ${QTSPEC} CONFIG+=release CONFIG+=qml_release ${QTCONFIG} && mingw32-make qmake_all",
-            "mingw32-make -j10"
-        ],
-        "qqt.build": [
-            "set src_path=${root.src}/LibQQt",
-            "set src=%src_path%/QQt.pro",
-            "set build=${root.build}/QQt/${QSYS}/${QTVERSION}/Debug",
-            "md %build:/=\\%",
-            "cd /d %build%",
-            "rem del /f /q /s demo examples src test",
-            "qmake %src% ${QTSPEC} CONFIG+=debug CONFIG+=qml_debug ${QTCONFIG} && mingw32-make qmake_all",
-            "mingw32-make -j10"
         ],
         "color.picker": [
             "start ${jcpicker}\\jcpicker.exe"
@@ -587,6 +565,14 @@
             "echo ${root.prod}/%prod%/Windows/%prod%d.exe",
             "cd /d ${root.prod}/%prod%/Windows",
             "start ${root.prod}/%prod%/Windows/%prod%d.exe"
+        ],
+        "open.webrc": [
+            "set src=%1",
+            "set srcdir=${root.webrc}",
+            "if not \"\"%src%\"\" == \"\"\"\" ( set srcdir=%srcdir%/%src% )",
+            "set srcdir=%srcdir:/=\\%",
+            "echo %srcdir%",
+            "start %srcdir%"
         ],
         "open.src": [
             "set src=%1",
@@ -929,25 +915,92 @@
         "configure.qt5.armhf32": [
             "set src_path=${root.webrc}/qt-everywhere-opensource-src-5.9.2",
             "set build=${root.build}/Qt5/${QTVERSION}/${QSYS}/Debug",
+            "set sdk_path=${root.tool}/winLibraries/Qt/${QTVERSION}/armhf32",
             "md %build:/=\\%",
             "cd /d %build%",
-            "%src_path%/configure -opensource -confirm-license -shared --sysroot=${qt5.5.armhf32.sysroot} --prefix=/usr/Qt5.9.2 -xplatform linux-arm-gnueabihf-g++ -nomake tests -nomake examples -no-warnings-are-errors"
+            "%src_path%/configure -opensource -confirm-license -shared --sysroot=${qt5.5.armhf32.sysroot} --prefix=%sdk_path% -xplatform linux-arm-gnueabihf-g++ -nomake tests -nomake examples -no-warnings-are-errors"
         ],
         "configure.qt5.mingw32.static": [
-            "set src_path=${root.webrc}/qt-everywhere-opensource-src-${QTVERSION}",
-            "set build=${root.build}/Qt5Static/${QTVERSION}/${QSYS}/Debug",
+            "set src_path=${root.webrc}/qt-everywhere-opensource-src-5.9.2",
+            "set build=${root.build}/Qt5_static/${QTVERSION}/${QSYS}/Debug",
             "set sdk_path=${root.tool}/winLibraries/Qt/${QTVERSION}/mingw53_32_static",
             "md %build:/=\\%",
             "cd /d %build%",
             "%src_path%/configure -opensource -confirm-license -debug-and-release -static --prefix=%sdk_path% -nomake tests -nomake examples -no-warnings-are-errors -opengl desktop",
-            "${make0} -j10",
+            "echo %src_path%",
+            "echo %build%",
+            "echo %sdk_path%"
+        ],
+        "build.qt5.mingw32.static": [
+            "set src_path=${root.webrc}/qt-everywhere-opensource-src-5.9.2",
+            "set build=${root.build}/Qt5_static/${QTVERSION}/${QSYS}/Debug",
+            "set sdk_path=${root.tool}/winLibraries/Qt/${QTVERSION}/mingw53_32_static",
+            "rem md %build:/=\\%",
+            "cd /d %build%",
+            "${make0}",
             "${make0} install",
             "echo %src_path%",
             "echo %build%",
             "echo %sdk_path%"
         ],
+        "qqt.sh": [
+            "cd ${root.src}",
+            "call %1"
+        ],
+        "qqt.daily": [
+            "set src_path=${root.src}/LibQQt",
+            "set src=%src_path%/QQt.pro",
+            "set build=${root.build}/QQt/${QSYS}/${QTVERSION}/Debug",
+            "md %build:/=\\%",
+            "cd /d %build%",
+            "rem del /f /q /s demo examples src test",
+            "qmake %src% ${QTSPEC} CONFIG+=debug CONFIG+=qml_debug ${QTCONFIG} && mingw32-make qmake_all",
+            "mingw32-make -j10",
+            "set build=${root.build}/QQt/${QSYS}/${QTVERSION}/Release",
+            "md %build:/=\\%",
+            "cd /d %build%",
+            "rem del /f /q /s demo examples src test",
+            "qmake %src% ${QTSPEC} CONFIG+=release CONFIG+=qml_release ${QTCONFIG} && mingw32-make qmake_all",
+            "mingw32-make -j10"
+        ],
+        "qqt.build": [
+            "set src_path=${root.src}/LibQQt",
+            "set src=%src_path%/QQt.pro",
+            "set build=${root.build}/QQt/${QSYS}/${QTVERSION}/Debug",
+            "md %build:/=\\%",
+            "cd /d %build%",
+            "rem del /f /q /s demo examples src test",
+            "qmake %src% ${QTSPEC} CONFIG+=debug CONFIG+=qml_debug ${QTCONFIG} && mingw32-make qmake_all",
+            "mingw32-make -j10"
+        ],
+        "build.go": [
+            "if not exist \"*.go\" ( echo has any .go? please add here command to restrict. & exit /b 0 )",
+            "set src_path=%CD%",
+            "set profilename=%1",
+            "set prod=${root.prod}/%profilename%/${QSYS}",
+            "set sdk=${root.sdk}/%profilename%/${QSYS}",
+            "set src=%src_path%/%profilename%.go",
+            "if not exist \"%src%\" ( echo %profilename%.go is not exist. & exit /b 0)",
+            "set build=${root.build}/%profilename%/${QSYS}/${QTVERSION}/Debug",
+            "md %build:/=\\%",
+            "cd /d %build%",
+            "rem del /f /q demo examples src test",
+            "echo src file: %src:\\=/%",
+            "echo build at: %build:\\=/%",
+            "echo sdk at  : %sdk:\\=/%",
+            "echo prod at : %prod:\\=/%",
+            "echo ${QTSPEC} ${QTCONFIG}",
+            "call go build %src% ",
+            "echo build inf ${QTSPEC} ${QTCONFIG}",
+            "echo src file: %src:\\=/%",
+            "echo build at: %build:\\=/%",
+            "echo sdk at  : %sdk:\\=/%",
+            "echo prod at : %prod:\\=/%",
+            "cd /d %src_path%"
+        ],
         "test.end": [
-            "echo the last %CD%."
+            "echo the env path: %Path%.",
+            "echo the last: %CD%."
         ]
     }
 }

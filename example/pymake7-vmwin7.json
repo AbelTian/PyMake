@@ -177,7 +177,7 @@
             "QKIT": "ANDROIDX86",
             "QSYS": "AndroidX86"
         },
-        "armhf32": {
+        "mingw32.armhf32": {
             "path+": [
                 "${cmake.bin}",
                 "${qt5.armhf32.bin}",
@@ -203,7 +203,7 @@
             "QKIT": "WIN32",
             "QSYS": "Windows"
         },
-        "qt5": {
+        "mingw32": {
             "path+": [
                 "${cmake.bin}",
                 "${mingw32.bin}",
@@ -216,7 +216,7 @@
             "QKIT": "WIN32",
             "QSYS": "Windows"
         },
-        "qt5.x64": {
+        "mingw64": {
             "path+": [
                 "${cmake.bin}",
                 "${mingw64.bin}",
@@ -248,7 +248,7 @@
             "WIPFC": "${watcom.wipfc}",
             "INCLUDE": "${watcom.include}"
         },
-        "current": "qt5"
+        "current": "mingw32"
     },
     "variable-assemblage": {
         "MyName": "T.D.R.",

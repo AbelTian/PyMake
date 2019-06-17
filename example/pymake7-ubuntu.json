@@ -8,7 +8,8 @@
         "root.build": "${root}/c0-buildstation",
         "root.test": "${root}/e3-test",
         "root.webrc": "${root}/e2-webrc",
-        "cc": "${root.tool}/a0-compiler",
+        "cc": "${root.tool}/compiler",
+	    "pymake": "${cc}/PyMake",
         "cmake": "${cc}/CMake.app/Contents",
         "cmake.bin": "${cmake}/MacOS",
         "qt": "${root.tool}/Qt",
@@ -20,7 +21,7 @@
         "qt5.9.gcc_64.bin": "${qt5.9.gcc_64}/bin",
         "qt5.5.armhf32": "${qt}/${qt5.5.version}/arm32/sysroots/cortexa9hf-vfp-neon-poky-linux-gnueabi/usr",
         "qt5.5.armhf32.bin": "${qt5.5.armhf32}/bin",
-        "gcc-armhf4.9": "${qt}/Tools/armhf-4.9/bin",
+        "gcc.armhf4.9": "${qt}/Tools/armhf-4.9/bin",
         "qt5.9.android_arm": "${qt}/5.9.1/android_armv7",
         "qt5.9.android_arm.bin": "${qt}/5.9.1/android_armv7/bin",
         "qt5.9.android_x86": "${qt}/5.9.1/android_x86",
@@ -70,9 +71,6 @@
         "ndk.x86_64.bin": "${ndk.x86_64}/bin"
     },
     "environ": {
-        "default": {
-            "path+": []
-        },
         "android.mobile": {
             "path+": [
                 "${cmake.bin}",
@@ -136,7 +134,7 @@
             "QKIT": "ANDROIDX86",
             "QSYS": "Android_x86"
         },
-        "mips32": {
+        "gcc.mips32": {
             "path+": [
                 "${cmake.bin}",
                 "${qt4.8.mips32.bin}"
@@ -148,10 +146,10 @@
             "QKIT": "MIPS32",
             "QSYS": "Mips32"
         },
-        "armhf32": {
+        "gcc.armhf32": {
             "path+": [
                 "${cmake.bin}",
-                "${gcc-armhf4.9}",
+                "${gcc.armhf4.9}",
                 "${qt5.5.armhf32.bin}"
             ],
             "QTVERSION": "${qt5.5.version}",
@@ -173,7 +171,7 @@
             "QKIT": "LINUX64",
             "QSYS": "Linux64"
         },
-        "qt5": {
+        "gcc": {
             "path+": [
                 "${cmake.bin}",
                 "${qt5.9.gcc_64.bin}"
@@ -185,7 +183,7 @@
             "QKIT": "LINUX64",
             "QSYS": "Linux64"
         },
-        "current": "qt5"
+        "current": "gcc"
     },
     "command": {
         "test": [
@@ -266,7 +264,7 @@
             "echo param3: $3",
             "echo param4: $4"
         ],
-        "build.pro": [
+        "build.qmake": [
             "while [ 1 ]",
             "do",
             "if [ -f \"$1.pro\" ]; then",
@@ -279,6 +277,8 @@
             "profilename=$1",
             "src=$src_path/$profilename.pro",
             "build=${root.build}/$profilename/${QSYS}/${QTVERSION}/Debug",
+            "prod=${root.prod}/$profilename/${QSYS}",
+            "sdk=${root.sdk}/$profilename/${QSYS}",
             "mkdir -p $build",
             "cd $build",
             "echo src file: $src",
@@ -289,6 +289,36 @@
             "echo build inf ${QTSPEC} ${QTCONFIG}",
             "echo src file: $src",
             "echo build at: $build",
+            "echo sdk   at: $sdk",
+            "echo prod  at: $prod",
+            "break",
+            "done"
+        ],
+        "clean.qmake": [
+            "while [ 1 ]",
+            "do",
+            "if [ -f \"$1.pro\" ]; then",
+            "   echo $1.pro existed.",
+            "else",
+            "   echo has $1.pro? please add here command to restrict.",
+            "   break",
+            "fi",
+            "src_path=$(pwd)",
+            "profilename=$1",
+            "src=$src_path/$profilename.pro",
+            "build=${root.build}/$profilename/${QSYS}/${QTVERSION}/Debug",
+            "prod=${root.prod}/$profilename/${QSYS}",
+            "sdk=${root.sdk}/$profilename/${QSYS}",
+            "cd $build",
+            "echo src file: $src",
+            "echo build at: $build",
+            "echo ${QTSPEC} ${QTCONFIG}",
+            "make clean",
+            "echo build inf ${QTSPEC} ${QTCONFIG}",
+            "echo src file: $src",
+            "echo build at: $build",
+            "echo sdk   at: $sdk",
+            "echo prod  at: $prod",
             "break",
             "done"
         ],
@@ -310,17 +340,6 @@
         ],
         "qt": [
             "${root.tool}/Qt/Tools/QtCreator/bin/qtcreator.sh"
-        ],
-        "build.qt5": [
-            "src=${root.tool}/z0-Source/qt",
-            "build=${root.build}/qt",
-            "install=${root.tool}/macLibraries/Qt/5.9.2/android_CUSTOM",
-            "mkdir -p $build",
-            "cd $build",
-            "echo build $(pwd)",
-            "${src}/configure -prefix ${install} -hostprefix ${install} -xplatform android-g++ -release -nomake tests -nomake examples -android-ndk $ANDROID_NDK_ROOT -android-sdk $ANDROID_SDK_ROOT -android-ndk-host $ANDROID_NDK_HOST -android-toolchain-version $ANDROID_NDK_TOOLCHAIN_VERSION -skip qtwebkit-examples -no-warnings-are-errors",
-            "make -j4",
-            "make install"
         ],
         "open-build": [
             "cd ${root.build}",
@@ -349,30 +368,6 @@
             "perl ${pymake}/demo/cloc-1.74.pl .",
             "date"
         ],
-        "clean.pro": [
-            "while [ 1 ]",
-            "do",
-            "if [ -f \"$1.pro\" ]; then",
-            "   echo $1.pro existed.",
-            "else",
-            "   echo has $1.pro? please add here command to restrict.",
-            "   break",
-            "fi",
-            "src_path=$(pwd)",
-            "profilename=$1",
-            "src=$src_path/$profilename.pro",
-            "build=${root.build}/$profilename/${QSYS}/${QTVERSION}/Debug",
-            "cd $build",
-            "echo src file: $src",
-            "echo build at: $build",
-            "echo ${QTSPEC} ${QTCONFIG}",
-            "make clean",
-            "echo build inf ${QTSPEC} ${QTCONFIG}",
-            "echo src file: $src",
-            "echo build at: $build",
-            "break",
-            "done"
-        ],
         "cmake": [
             "open ${root.tool}/macCompilers/CMake.app"
         ],
@@ -394,6 +389,17 @@
             "echo build $(pwd)",
             "CXXFLAGS=-stdlib=libc++",
             "${src}/configure -prefix ${install}",
+            "make -j4",
+            "make install"
+        ],
+        "build.qt5": [
+            "src=${root.tool}/z0-Source/qt",
+            "build=${root.build}/qt",
+            "install=${root.tool}/macLibraries/Qt/5.9.2/android_CUSTOM",
+            "mkdir -p $build",
+            "cd $build",
+            "echo build $(pwd)",
+            "${src}/configure -prefix ${install} -hostprefix ${install} -xplatform android-g++ -release -nomake tests -nomake examples -android-ndk $ANDROID_NDK_ROOT -android-sdk $ANDROID_SDK_ROOT -android-ndk-host $ANDROID_NDK_HOST -android-toolchain-version $ANDROID_NDK_TOOLCHAIN_VERSION -skip qtwebkit-examples -no-warnings-are-errors",
             "make -j4",
             "make install"
         ],

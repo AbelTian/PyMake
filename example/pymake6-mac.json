@@ -122,6 +122,18 @@
             "QKIT": "ANDROIDX86",
             "QSYS": "AndroidX86"
         },
+        "qt4": {
+            "path+": [
+                "${cmake.bin}",
+                "${qt4.8.clang.bin}"
+            ],
+            "QTVERSION": "${qt4.version}",
+            "QTDIR": "${qt4.8.clang}",
+            "QTSPEC": "-spec macx-llvm",
+            "QTCONFIG": "CONFIG+=x86_64",
+            "QKIT": "macOS",
+            "QSYS": "MacOS"
+        },
         "ios": {
             "path+": [
                 "${cmake.bin}",
@@ -146,18 +158,6 @@
             "QKIT": "iOSSimulator",
             "QSYS": "iOSSimulator"
         },
-        "qt4": {
-            "path+": [
-                "${cmake.bin}",
-                "${qt4.8.clang.bin}"
-            ],
-            "QTVERSION": "${qt4.version}",
-            "QTDIR": "${qt4.8.clang}",
-            "QTSPEC": "-spec macx-llvm",
-            "QTCONFIG": "CONFIG+=x86_64",
-            "QKIT": "macOS",
-            "QSYS": "MacOS"
-        },
         "macos": {
             "path+": [
                 "${cmake.bin}",
@@ -172,7 +172,7 @@
         },
         "current": "macos"
     },
-    "variable-assemblage": [
+    "variable.tips": [
         "QQt",
         "LibQQt",
         "${root.build}/${qqt.proj.name}/${qt.sys.mac}/${build.release}",
@@ -203,7 +203,7 @@
         "${prod.name}.framework/Resources",
         "macdeployqt ${}"
     ],
-    "command-assemblage": [
+    "command.tips": [
         "I'm not similar to these command, so list them here, rather than forgotten them",
         "cl-command, sys-command",
         "replace? no, append? easy!",
@@ -414,7 +414,7 @@
             "make -j4",
             "make install"
         ],
-        "build soap": [
+        "build.soap": [
             "src=/Users/abel/Develop/c1-webrc/qt-solutions/qtsoap",
             "build=/Users/abel/Develop/c0-buildstation/qtsoap",
             "install=/Users/abel/Develop/d1-product/QtSoap",
@@ -457,7 +457,7 @@
             "echo param3: $3",
             "echo param4: $4"
         ],
-        "build.pro": [
+        "build.qmake": [
             "while [ 1 ]",
             "do",
             "if [ -f \"$1.pro\" ]; then",
@@ -470,6 +470,8 @@
             "profilename=$1",
             "src=$src_path/$profilename.pro",
             "build=${root.build}/$profilename/${QSYS}/${QTVERSION}/Debug",
+            "prod=${root.prod}/$profilename/${QSYS}",
+            "sdk=${root.sdk}/$profilename/${QSYS}",
             "mkdir -p $build",
             "cd $build",
             "echo src file: $src",
@@ -480,6 +482,10 @@
             "echo build inf ${QTSPEC} ${QTCONFIG}",
             "echo src file: $src",
             "echo build at: $build",
+            "echo sdk   at: $sdk",
+            "echo prod  at: $prod",
+            "echo sdk   at: $sdk",
+            "echo prod  at: $prod",
             "break",
             "done"
         ],
