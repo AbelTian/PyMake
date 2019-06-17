@@ -90,7 +90,6 @@
         "VS120COMNTOOLS": "C:/Program Files (x86)/Microsoft Visual Studio 12.0/Common7/Tools/",
         "VS140COMNTOOLS": "C:/Program Files (x86)/Microsoft Visual Studio 14.0/Common7/Tools/",
         "VSSDK140Install": "C:/Program Files (x86)/Microsoft Visual Studio 14.0/VSSDK/",
-        "MSBuild": "C:\\Program Files (x86)\\MSBuild\\14.0\\Bin\\amd64\\MSBuild.exe",
         "make1": "C:/Users/Administrator/msvc_make.bat",
         "make2": "nmake.exe",
         "cdb": "C:/Program Files (x86)/Windows Kits/10/Debuggers/x86",
@@ -196,7 +195,7 @@
             "QKIT": "WIN32",
             "QSYS": "Windows"
         },
-        "qt5.vc6": {
+        "vc6": {
             "path+": [
                 "${cmake.bin}",
                 "VC6.BIN",
@@ -215,7 +214,7 @@
             "QSYS": "MSVC",
             "MSMAKE": "${make2}"
         },
-        "qt5": {
+        "msvc2015": {
             "path+": [
                 "${cmake.bin}",
                 "${qt5.9.msvc2015.bin}"
@@ -225,6 +224,7 @@
             "BuildType": "Debug",
             "BuildTarget": "Win32",
             "run-vcvarsall": "\"${vcvarsall}\" ${vcvarsallparam}",
+            "MSBuild": "C:\\Program Files (x86)\\MSBuild\\14.0\\Bin\\amd64\\MSBuild.exe",
             "VS110COMNTOOLS": "C:/Program Files (x86)/Microsoft Visual Studio 11.0/Common7/Tools/",
             "VS120COMNTOOLS": "C:/Program Files (x86)/Microsoft Visual Studio 12.0/Common7/Tools/",
             "VS140COMNTOOLS": "C:/Program Files (x86)/Microsoft Visual Studio 14.0/Common7/Tools/",
@@ -238,7 +238,7 @@
             "QSYS": "MSVC",
             "MSMAKE": "${make2}"
         },
-        "qt5.x64": {
+        "msvc2015.x64": {
             "path+": [
                 "${cmake.bin}",
                 "${qt5.12.msvc2015_64.bin}"
@@ -246,6 +246,7 @@
             "vcvarsall": "${vcvarsall-2015}",
             "vcvarsallparam": "x86_amd64",
             "run-vcvarsall": "${vcvarsall} ${vcvarsallparam}",
+            "MSBuild": "C:\\Program Files (x86)\\MSBuild\\14.0\\Bin\\MSBuild.exe",
             "QtMsBuild": "${QtMsBuild}",
             "QTVERSION": "${qt5.12.version}",
             "QTDIR": "${qt5.12.msvc2015_64}",
@@ -255,7 +256,7 @@
             "QSYS": "MSVC64",
             "MSMAKE": "${make2}"
         },
-        "qt5.winrt": {
+        "msvc2015.winrt": {
             "path+": [
                 "${cmake.bin}",
                 "${qt5.12.winrt.arm.bin}"
@@ -263,6 +264,7 @@
             "vcvarsall": "${vcvarsall-2015}",
             "vcvarsallparam": "amd64_arm",
             "run-vcvarsall": "${vcvarsall} ${vcvarsallparam}",
+            "MSBuild": "C:\\Program Files (x86)\\MSBuild\\14.0\\Bin\\amd64\\MSBuild.exe",
             "QtMsBuild": "${QtMsBuild}",
             "QTVERSION": "${qt5.12.version}",
             "QTDIR": "${qt5.12.winrt.arm}",
@@ -272,7 +274,7 @@
             "QSYS": "WinRT",
             "MSMAKE": "${make2}"
         },
-        "qt5.winrt.simulator": {
+        "msvc2015.winrt.simulator": {
             "path+": [
                 "${cmake.bin}",
                 "${qt5.12.winrt.x64.bin}"
@@ -280,6 +282,7 @@
             "vcvarsall": "${vcvarsall-2015}",
             "vcvarsallparam": "x86_amd64",
             "run-vcvarsall": "${vcvarsall} ${vcvarsallparam}",
+            "MSBuild": "C:\\Program Files (x86)\\MSBuild\\14.0\\Bin\\MSBuild.exe",
             "QtMsBuild": "${QtMsBuild}",
             "QTVERSION": "${qt5.12.version}",
             "QTDIR": "${qt5.12.winrt.x64}",
@@ -318,6 +321,7 @@
             "vcvarsall": "${vcvarsall-2013}",
             "vcvarsallparam": "x86",
             "run-vcvarsall": "\"${vcvarsall}\" ${vcvarsallparam}",
+            "MSBuild": "C:\\Program Files (x86)\\MSBuild\\12.0\\Bin\\MSBuild.exe",
             "VS110COMNTOOLS": "C:/Program Files (x86)/Microsoft Visual Studio 11.0/Common7/Tools/",
             "VS120COMNTOOLS": "C:/Program Files (x86)/Microsoft Visual Studio 12.0/Common7/Tools/",
             "VS140COMNTOOLS": "C:/Program Files (x86)/Microsoft Visual Studio 14.0/Common7/Tools/",
@@ -352,7 +356,7 @@
             "QKIT": "WIN32",
             "QSYS": "Windows"
         },
-        "armhf32": {
+        "qt5.armhf32": {
             "path+": [
                 "${cmake.bin}",
                 "${armhf32.bin}",
@@ -366,7 +370,7 @@
             "QKIT": "Armhf32",
             "QSYS": "Armhf32"
         },
-        "current": "qt5"
+        "current": "msvc2015"
     },
     "command-assemblage": [
         "cl.exe /nologo /ML /W3 /GX /O2 /D \"WIN32\" /D \"NDEBUG\" /D \"_CONSOLE\" /D \"_MBCS\" /Fp\"Release/hw.pch\" /Yc\"stdafx.h\" /Fo\"Release/\" /Fd\"Release/\" /FD /c \"./\\StdAfx.cpp\"",
@@ -516,7 +520,10 @@
             "mingw32-make install"
         ],
         "make": [
-            "mingw32-make"
+            "mingw32-make %*"
+        ],
+        "MSBuild": [
+            "\"${MSBuild}\" %*"
         ],
         "android.sdk.manager": [
             "${android.sdk}/\"SDK Manager.exe\""
