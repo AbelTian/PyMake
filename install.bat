@@ -33,9 +33,29 @@ set filepath=%~dp0
 set sourcefile=pyvcccvp.bat
 call :install %*
 
+set mmfile=pyvcexport.bat
+set filepath=%~dp0
+set sourcefile=pyvcexport.bat
+call :install %*
+
+set mmfile=pyvcpython.bat
+set filepath=%~dp0
+set sourcefile=pyvcpython.bat
+call :install %*
+
+set mmfile=pyvcpowershell.bat
+set filepath=%~dp0
+set sourcefile=pyvcpowershell.bat
+call :install %*
+
 set mmfile=pytype.bat
 set filepath=%~dp0
 set sourcefile=pytype.bat
+call :install %*
+
+set mmfile=pyexport.bat
+set filepath=%~dp0
+set sourcefile=pyexport.bat
 call :install %*
 
 set mmfile=pycmd.bat
@@ -51,6 +71,11 @@ call :install %*
 set mmfile=pyccvp.bat
 set filepath=%~dp0
 set sourcefile=pyccvp.bat
+call :install %*
+
+set mmfile=pypython.bat
+set filepath=%~dp0
+set sourcefile=pypython.bat
 call :install %*
 
 set mmfile=pypowershell.bat
@@ -81,6 +106,11 @@ call :install %*
 set mmfile=pyenv.ps1
 set filepath=%~dp0
 set sourcefile=pyenv.ps1
+call :install_powershell %*
+
+set mmfile=pyvc.ps1
+set filepath=%~dp0
+set sourcefile=pyvc.ps1
 call :install_powershell %*
 
 echo 安装成功。

@@ -53,7 +53,7 @@ set PYPROGRAMPATHNAME=%PYPROGRAMPATH%%PYPROGRAMNAME%
 echo preparing vc env ...
 for /F %%i in ('echo %random%') do ( set "PYENVINDEX=%%i" )
 rem echo env index: [%PYENVINDEX%]
-for /F %%i in ('"%PYPROGRAMPATHNAME%" get current env') do ( set "PYMMDEFAULTENVNAME=%%i" )
+rem for /F %%i in ('"%PYPROGRAMPATHNAME%" get current env') do ( set "PYMMDEFAULTENVNAME=%%i" )
 rem echo environme: [%PYMMDEFAULTENVNAME%] [default]
 for /F %%i in ('"%PYPROGRAMPATHNAME%" have env %PYENVNAME%') do ( set "PYENVEXISTEDFLAG=%%i" )
 if "%PYENVEXISTEDFLAG%" == "False" (

@@ -24,6 +24,9 @@ uninstall
 mmfile=pytype
 uninstall
 
+mmfile=pyexport
+uninstall
+
 mmfile=pycmd
 uninstall
 
@@ -31,6 +34,9 @@ mmfile=pyexecvp
 uninstall
 
 mmfile=pyccvp
+uninstall
+
+mmfile=pypython
 uninstall
 
 mmfile=pylanguage

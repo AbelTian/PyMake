@@ -19,11 +19,20 @@ User support shell module, user can install them to share their functions.
 |MSBuild.exe ... | pymake vc ccvp MSBuild ... | |
 |CL.exe ... | pyvcccvp CL ... | |
 |pyvc close msvc2015| | |
+|pyvcexport msvc2003 abc| | |
+|abc_effect.bat| | |
+|CL.exe ... |  | |
+|abc_unset.bat |||
+|pyexport qt5 abc1| | |
+|abc1_effect.bat| | |
+|qmake.exe -v ... |  | |
+|abc1_unset.bat |||
 |pyclean | pyclean| 清理掉从PyMake导出的命令 |
 
 说明：前者，一直影响当前环境，后者，一直没影响当前环境。    
 说明：前者，难度较大，后者，比较容易理解和使用。  
 说明：前者和后者，不要混淆使用。  
+说明：pyvc系列命令，必须先pymake vc init <env-name>，每个VC环境初始化一次，以后就直接使用。用pymake vc stat查看初始化状态。    
 
 
 # pyenv   

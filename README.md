@@ -873,7 +873,7 @@ User support shell module, user can install them to share their functions.
 
 |Program|Shortcut|Shortcut(Level 2)|
 |----|----|----|  
-| pymake.py | pymake | mm, pymm |
+| pymake.py | pymake | pymm, mm |
 | pymake.py | pyenv | |
 | pymake.py | pycmd | |
 | pymake.py | pyexecvp | pyccvp |
@@ -884,6 +884,7 @@ User support shell module, user can install them to share their functions.
 | pymake.py | pylanguage |  |
 | pymake.py | pypowershell.bat |  |
 | pymake.py | pyenv.ps1 |  |
+| pymake.py | | pyvc.ps1 |  |
 | pymake.py | | pyvc.bat |  |
 | pymake.py | | pyvcccvp.bat |  |
 | pymake.py | | pyvcpowershell.bat |  |

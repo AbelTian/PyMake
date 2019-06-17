@@ -5837,7 +5837,7 @@ def main_function():
                     return
 
                 print("source file: %s" % sourceconfigfile)
-                print('%-30s %-30s %-30s %s' % ('env', 'status', 'vcvarsall', 'vcvarsallparam'))
+                print('%-30s %-30s %-30s %s' % ('[env]', '[status]', '[vcvarsall]', '[vcvarsallparam]'))
                 set_content = '<CAN INIT>'
                 set_content2 = '<CAN SET>'
                 for (k, v) in rawconfig['environ'].items():

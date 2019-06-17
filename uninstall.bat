@@ -27,8 +27,24 @@ set sourcefile=pyvcccvp.bat
 set mmfile=pyvcccvp.bat
 call :uninstall
 
+set sourcefile=pyvcexport.bat
+set mmfile=pyvcexport.bat
+call :uninstall
+
+set sourcefile=pyvcpython.bat
+set mmfile=pyvcpython.bat
+call :uninstall
+
+set sourcefile=pyvcpowershell.bat
+set mmfile=pyvcpowershell.bat
+call :uninstall
+
 set sourcefile=pytype.bat
 set mmfile=pytype.bat
+call :uninstall
+
+set sourcefile=pyexport.bat
+set mmfile=pyexport.bat
 call :uninstall
 
 set sourcefile=pycmd.bat
@@ -41,6 +57,10 @@ call :uninstall
 
 set sourcefile=pyccvp.bat
 set mmfile=pyccvp.bat
+call :uninstall
+
+set sourcefile=pypython.bat
+set mmfile=pypython.bat
 call :uninstall
 
 set sourcefile=pypowershell.bat
@@ -65,6 +85,10 @@ call :uninstall
 
 set sourcefile=pyenv.ps1
 set mmfile=pyenv.ps1
+call :uninstall
+
+set sourcefile=pyvc.ps1
+set mmfile=pyvc.ps1
 call :uninstall
 
 echo –∂‘ÿ≥…π¶°£

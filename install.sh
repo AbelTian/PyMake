@@ -33,6 +33,10 @@ sourcefile=pytype.sh
 mmfile=pytype
 install
 
+sourcefile=pyexport.sh
+mmfile=pyexport
+install
+
 sourcefile=pycmd.sh
 mmfile=pycmd
 install
@@ -43,6 +47,10 @@ install
 
 sourcefile=pyccvp.sh
 mmfile=pyccvp
+install
+
+sourcefile=pypython.sh
+mmfile=pypython
 install
 
 sourcefile=pylanguage.sh

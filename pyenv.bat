@@ -50,7 +50,7 @@ rem for /F %%i in ('"%PYPROGRAMPATHNAME%" source root') do ( set "PYMMSOURCEROOT
 rem echo location : [%PYMMSOURCEROOT%]
 rem for /F %%i in ('"%PYPROGRAMPATHNAME%" source config') do ( set "PYMMSOURCECONFIG=%%i" )
 rem echo configure: [%PYMMSOURCECONFIG%] [1]
-for /F %%i in ('"%PYPROGRAMPATHNAME%" get current env') do ( set "PYMMDEFAULTENVNAME=%%i" )
+rem for /F %%i in ('"%PYPROGRAMPATHNAME%" get current env') do ( set "PYMMDEFAULTENVNAME=%%i" )
 rem echo environme: [%PYMMDEFAULTENVNAME%] [default]
 for /F %%i in ('"%PYPROGRAMPATHNAME%" have env %PYENVNAME%') do ( set "PYENVEXISTEDFLAG=%%i" )
 if "%PYENVEXISTEDFLAG%" == "False" (
