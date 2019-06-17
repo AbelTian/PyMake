@@ -101,6 +101,54 @@ class DiffList(object):
         """not equal keys"""
         return [key for key in self.set_current.difference(self.set_last)], [key for key in self.set_last.difference(self.current)]
 
+#include inherret
+def instanceof(variate):
+    type1=""
+    if (isinstance(variate,int)):
+        type1 = "int"
+    elif (isinstance(variate,str)):
+        type1 = "str"
+    elif (isinstance(variate,float)):
+        type1 = "float"
+    elif (isinstance(variate,list)):
+        type1 = "list"
+    elif (isinstance(variate,tuple)):
+        type1 = "tuple"
+    elif (isinstance(variate,dict)):
+        type1 = "dict"
+    elif (isinstance(variate,set)):
+        type1 = "set"
+    else:
+        type1 = "valid"
+    return type1
+
+def typeof(variate):
+    type1 = ""
+    if (type(variate) == type(1)):
+        type1 = "int"
+    elif (type(variate) == type("str")):
+        type1 = "str"
+    elif (type(variate) == type(12.3)):
+        type1 = "float"
+    elif (type(variate) == type([1])):
+        type1 = "list"
+    elif (type(variate) == type(())):
+        type1 = "tuple"
+    elif (type(variate) == type({"key1":"123"})):
+        type1 = "dict"
+    elif (type(variate) == type({"key1"})):
+        type1 = "set"
+    else:
+        type1 = "valid"
+    return type1
+
+#def getType(variate):
+#    arr = {"int":"整数","float":"浮点","str":"字符串","list":"列表","tuple":"元组","dict":"字典","set":"集合","valid":"未知类型"}
+#    vartype = typeof(variate)
+#    if not (vartype in arr):
+#        return "未知类型"
+#    return arr[vartype]
+
 def TestPlatform( ):
     print ("----------Operation System--------------------------")
     #  Python Version

@@ -230,8 +230,8 @@ Usage:
   pymake7.py  export2 [ powershell ] [ here | hh ] [ <env-name> ] [ to <file-name> ] [ -c | --custom ] [ -l | --local ] [ -s | --system ]
   pymake7.py  type2 [ here | hh ] [ <cmd-name> ] [ to <file-name> ] [ --suffix=<.suffix-name> ] [ --encoding=<encoding-name> ] [ --samename ]
   pymake7.py  use <env-name> type2 [ here | hh ] [ <cmd-name> ] [ to <file-name> ] [ --suffix=<.suffix-name> ] [ --encoding=<encoding-name> ] [ --samename ]
-  pymake7.py  open
-  pymake7.py  open <path-name> [ -c | --custom ] [ --current ] [ --envname <env-name> ]
+  pymake7.py  open [ <path-name> ... ] [ -c | --custom ] [ --current ] [ -i | --ignorecase ]
+  pymake7.py  use <env-name> open [ <path-name> ... ] [ -i | --ignorecase ]
   pymake7.py  -------------------------------------------------------------
   pymake7.py  vc
   pymake7.py  vc [ info | information ]
@@ -306,7 +306,7 @@ Command:
   local             using pymake local expanding environ, read only.
   export2           output private environ and custom environ to a bat file or sh file, a powerfull function from export, support powershell also. [default:current, env]
   type2             output command to a bat file or sh file, user can appoint file suffix and encoding.
-  open              open path by stored name in path-assemblage. support .../${path-name}/...., support search in env. ignore case.
+  open              open path by stored name in path-assemblage. support .../${path-name}/..., support search in env, support two or more path.
   vc                start visual studio environment directly, easy to use. [system, local, custom, .json, vc]
 
 Options:
@@ -2495,7 +2495,7 @@ def main_function():
                     #print("xxx %s" % rawconfig["path-assemblage"][key])
                     break
 
-            #ignore [in command, has various interpretations]
+            #NO! ignore [in command, has various interpretations]
             #for (find_key, find_value) in pymakesystemenviron.items():
             #    if (key == find_key):
             #        break
@@ -2697,6 +2697,192 @@ def main_function():
                 step += 1
         return command_dict
 
+    # custom string dict -> raw dict
+    def raw_string(pathgroup0, env_name=None):
+        pathgroup = {k: v for k, v in pathgroup0.items()}
+        #print(pathgroup)
+
+        dict0 = {k: v for k, v in rawconfig['path-assemblage'].items()}
+        dict1 = {}
+        current_env = env_name
+        if(current_env == "current"):
+            current_env = rawconfig['environ']['current']
+        if(env_name is not None):
+            dict1 = {k: v for k, v in rawconfig['environ'][current_env].items()}
+        dict2 = {k: v for k, v in os.environ.items()}
+
+        # replace path
+        for (key, value) in pathgroup.items():
+            #print (key, value) #...
+
+            if(instanceof(value) != 'str'):
+                continue
+
+            if (dict0.__contains__(value) is True):
+                pathgroup[key] = dict0[value]
+                #print(pathgroup[key])
+                continue
+
+            if (dict2.__contains__(value) is True):
+                pathgroup[key] = dict2[value]
+                continue
+
+            if (dict1.__contains__(value) is True):
+                pathgroup[key] = dict1[value]
+                continue
+
+            startpos = 0
+            while (True):
+                # print (startpos)
+
+                index = value.find('${', startpos)
+                if (index == -1):
+                    break
+
+                index2 = value.find('}', index)
+                startpos = index2
+
+                key_replace = value[index:index2 + 1]
+                # print ( key0 ) #${...}
+                key_from = key_replace.split('{')[1].split('}')[0].strip()
+                # print ( key1 ) #...
+
+                for (find_key, find_value) in dict0.items():
+                    #print("%-30s, %-30s, %-30s, path-assemblage" % (key, key_from, find_key))
+                    if (key == find_key):
+                        break
+                    #if (find_key == 'path+'):
+                    #    continue
+                    #if (find_key == "path"):
+                    #    continue
+                    if (find_key == key_from):
+                        pathgroup[key] = pathgroup[key].replace(key_replace, dict0[key_from])
+                        #print("path-assemblage %s" % pathgroup[key])
+                        break
+
+                for (find_key, find_value) in dict2.items():
+                    #print("%-30s, %-30s, %-30s, system env" % (key, key_from, find_key))
+                    if (key == find_key):
+                        break
+                    #if (find_key == 'path+'):
+                    #    continue
+                    if (find_key == "path"):
+                        continue
+                    if (find_key == key_from):
+                        pathgroup[key] = pathgroup[key].replace(key_replace, dict2[key_from])
+                        # print("system env %s" % pathgroup[key])
+                        break
+
+                for (find_key, find_value) in dict1.items():
+                    #print("%-30s, %-30s, %-30s, separate env" % (key, key_from, find_key))
+                    if (key == find_key):
+                        break
+                    if (find_key == 'path+'):
+                        continue
+                    # if (find_key == "path"):
+                    #    continue
+                    if (find_key == key_from):
+                        pathgroup[key] = pathgroup[key].replace(key_replace, dict1[key_from])
+                        # print("separate env %s" % pathgroup[key])
+                        break
+
+        return pathgroup
+
+    # custom string dict -> raw dict [ignore case]
+    def raw_string1(pathgroup0, env_name=None):
+        #pathgroup = {k: v.lower() for k, v in pathgroup0.items()}
+        pathgroup1 = {k: v for k, v in pathgroup0.items()}
+        #print(pathgroup)
+
+        dict0 = {k.lower(): v for k, v in rawconfig['path-assemblage'].items()}
+        dict1 = {}
+        current_env = env_name
+        if(current_env == "current"):
+            current_env = rawconfig['environ']['current']
+        if(env_name is not None):
+            dict1 = {k.lower(): v for k, v in rawconfig['environ'][current_env].items()}
+        dict2 = {k.lower(): v for k, v in os.environ.items()}
+
+        # replace path
+        for (key, value) in pathgroup0.items():
+            #print (key, value) #...
+
+            if(instanceof(value) != 'str'):
+                continue
+
+            if (dict0.__contains__(value.lower()) is True):
+                pathgroup1[key] = dict0[value.lower()]
+                #print(pathgroup1[key])
+                continue
+
+            if (dict2.__contains__(value.lower()) is True):
+                pathgroup1[key] = dict2[value.lower()]
+                continue
+
+            if (dict1.__contains__(value.lower()) is True):
+                pathgroup1[key] = dict1[value.lower()]
+                continue
+
+            startpos = 0
+            while (True):
+                # print (startpos)
+
+                index = value.find('${', startpos)
+                if (index == -1):
+                    break
+
+                index2 = value.find('}', index)
+                startpos = index2
+
+                key_replace = value[index:index2 + 1]
+                # print ( key0 ) #${...}
+                key_from = key_replace.split('{')[1].split('}')[0].strip()
+                # print ( key1 ) #...
+
+                for (find_key, find_value) in dict0.items():
+                    #print("%-30s, %-30s, %-30s, path-assemblage" % (key, key_from, find_key))
+                    if (key.lower() == find_key):
+                        break
+                    #if (find_key == 'path+'):
+                    #    continue
+                    #if (find_key == "path"):
+                    #    continue
+                    if (find_key == key_from.lower()):
+                        pathgroup1[key] = pathgroup1[key].replace(key_replace, key_replace.lower())
+                        pathgroup1[key] = pathgroup1[key].replace(key_replace.lower(), dict0[key_from.lower()])
+                        #print("path-assemblage %s" % pathgroup1[key])
+                        break
+
+                for (find_key, find_value) in dict2.items():
+                    #print("%-30s, %-30s, %-30s, system env" % (key, key_from, find_key))
+                    if (key.lower() == find_key):
+                        break
+                    #if (find_key == 'path+'):
+                    #    continue
+                    if (find_key == "path"):
+                        continue
+                    if (find_key == key_from.lower()):
+                        pathgroup1[key] = pathgroup1[key].replace(key_replace, key_replace.lower())
+                        pathgroup1[key] = pathgroup1[key].replace(key_replace.lower(), dict2[key_from.lower()])
+                        # print("system env %s" % pathgroup1[key])
+                        break
+
+                for (find_key, find_value) in dict1.items():
+                    #print("%-30s, %-30s, %-30s, separate env" % (key, key_from, find_key))
+                    if (key.lower() == find_key):
+                        break
+                    if (find_key == 'path+'):
+                        continue
+                    # if (find_key == "path"):
+                    #    continue
+                    if (find_key == key_from.lower()):
+                        pathgroup1[key] = pathgroup1[key].replace(key_replace, key_replace.lower())
+                        pathgroup1[key] = pathgroup1[key].replace(key_replace.lower(), dict1[key_from.lower()])
+                        #print("separate env %s" % pathgroup1[key])
+                        break
+
+        return pathgroup1
+
     # which command [internal]
     def which_command(env_name = None, name = '', postfix = []):
         if(name is None or name == ''):
@@ -2858,6 +3044,15 @@ def main_function():
                             return path1.replace('\\', '/')
 
         return None
+
+    # pymake expand command-line.
+    #current_var = args['<env-name>']
+    #args = raw_string(args, current_var)
+    #print(args)
+    #for (k, v) in args.items():
+    #    if(isinstance(v, str)):
+    #        print(k, v)
+    #return
 
     # system command function
     # system command stream from rawconfig path-assemblage
@@ -3599,121 +3794,43 @@ def main_function():
             ''
         break
 
-    # raw path2 function, ignore case. parse dict path
-    def raw_path2(dictfrom0, pathgroup0):
-        dict0 = {k.lower(): v for k, v in dictfrom0.items()}
-        pathgroup = {k.lower(): v for k, v in pathgroup0.items()}
+    # get open path's cmd list
+    def open_command (pathlist0, env_name = None):
+        pathgroup0 = {}
+        for (k,v) in enumerate(pathlist0):
+            pathgroup0[str('-pymake-open-p%d'%k)] = str(v)
 
-        # replace path
-        for (key, value) in pathgroup.items():
-            #print (key, value) #...
+        cmd_list = []
+        pathgroup1 = {}
+        #if(args['-i'] or args['--ignorecase'] is True):
+        #    pathgroup1 = raw_string1(pathgroup0, env_name)
+        #else:
+        #    pathgroup1 = raw_string(pathgroup0, env_name)
+        pathgroup1 = raw_string1(pathgroup0, env_name)
 
-            startpos = 0
-            while (True):
-                # print (startpos)
+        plat = getplatform()
+        for (k, v) in pathgroup1.items():
+            path0 = str(v)
+            cmd0 = ''
+            if (plat == "Windows"):
+                if(path0.__contains__(' ')):
+                    cmd0 = 'start "" ' + '"%s"' % path0
+                else:
+                    cmd0 = "start " + path0
+            elif (plat == "Darwin"):
+                cmd0 = "open " + path0
+            else:
+                cmd0 = "xdg-open " + path0
+            cmd_list.append(cmd0)
 
-                index = value.find('${', startpos)
-                if (index == -1):
-                    break
-
-                index2 = value.find('}', index)
-                startpos = index2
-
-                key_replace = value[index:index2 + 1]
-                # print ( key0 ) #${...}
-                key_from = key_replace.split('{')[1].split('}')[0].strip().lower()
-                # print ( key1 ) #...
-
-                for (find_key, find_value) in dict0.items():
-                    #print("%-30s, %-30s" % (find_key, key_from))
-                    if (key == find_key):
-                        break
-                    #if (find_key == 'path+'):
-                    #    continue
-                    #if (find_key == "path"):
-                    #    continue
-                    if (find_key == key_from):
-                        pathgroup[key] = pathgroup[key].replace(key_replace, dict0[key_from])
-                        # print("xxx %s" % pathgroup[key])
-                        break
-        return pathgroup
-
-    # raw path2 function, open command, [ignore case]
-    def raw_path2_open(pathname = None, envname = None ):
-        if(pathname is None):
-            return None
-
-        env = os.environ
-
-        path0 = pathname
-        while (True):
-            dict0 = {k.lower(): v for k, v in rawconfig['path-assemblage'].items()}
-            #for (key, value) in dict0.items():
-            #    print("%-30s %s" % (key, value))
-            #for (key, value) in rawconfig['path-assemblage'].items():
-            #    print("%-30s %s" % (key, value))
-
-            # in rawconfig path-assemblage, ignore case.
-            if (dict0.__contains__(pathname.lower()) is True):
-                path0 = dict0[pathname.lower()]
-                break
-
-            #in env [system] [optional: custom, separate]
-            dict0 = {k.lower(): v for k, v in env.items()}
-            if (dict0.__contains__(pathname.lower()) is True):
-                path0 = dict0[pathname.lower()]
-                #print("......")
-                break
-
-            pathlist0 = {
-                "P0": path0
-            }
-            dict0 = copy.deepcopy(raw_path2(rawconfig['path-assemblage'], pathlist0))
-
-            # raw path
-            #for (key, value) in dict0.items():
-            #    print("%-30s %s" % (key, value))
-            #temppath = dict0['p0']
-            #print(temppath)
-            path0 = dict0['p0']
-            #print(path0)
-
-            #in env [system] [optional: custom, separate]
-            pathlist0 = {
-                "P0": path0
-            }
-            dict0 = copy.deepcopy(raw_path2(env, pathlist0))
-            path0 = dict0['p0']
-            #print(path0)
-
-            # separate env [ignore]
-            if(envname is not None):
-                env_name = envname
-                #in env [separate]
-                #dict0 = {k.lower(): v for k, v in rawconfig['environ'][env_name].items()}
-                #if (dict0.__contains__(pathname.lower()) is True):
-                #    path0 = dict0[pathname.lower()]
-                #    break
-
-                # separete env [ignore case]
-                #pathlist0 = {
-                #    "P0": path0
-                #}
-                #dict0 = copy.deepcopy(raw_path2(rawconfig['environ'][env_name], pathlist0))
-                #for (key, value) in dict0.items():
-                #    print("%-30s %s" % (key, value))
-                #path0 = dict0['p0']
-                #print(path0)
-
-            break
-
-        return path0
+        return cmd_list
 
     # open command
+    #print(args)
     while (True):
         if(args['open'] is True):
             ''
-            if(args['<path-name>'] is None):
+            if(args['<path-name>'] == []):
                 ''
                 dict0 = copy.deepcopy(rawconfig['path-assemblage'])
                 pos0 = 0
@@ -3726,29 +3843,28 @@ def main_function():
 
                 return
 
+            #print("use", args['use'])
+            #print("-c", args['-c'], args['--custom'])
+            #print("-i", args['-i'], args['--ignorecase'])
+            #print("--current", args['--current'])
+            #print("--envname", args['--envname'], args['<env-name>'])
+            #return
+
+            if(args['use'] is True):
+                break
             if(args['-c'] or args['--custom'] is True):
                 break
             if(args['--current'] is True):
                 break
             if(args['--envname'] is True or args['<env-name>'] is not None):
                 break
+            #print('......')
 
-            path0 = ''
             pathname = args['<path-name>']
-            path0 = raw_path2_open(pathname=pathname, envname=None)
-
-            plat = getplatform()
-            cmd0 = ''
-            if (plat == "Windows"):
-                cmd0 = "start " + path0
-                if(path0.__contains__(' ')):
-                    cmd0 = 'start "" ' + '"%s"' % path0
-            elif (plat == "Darwin"):
-                cmd0 = "open " + path0
-            else:
-                cmd0 = "xdg-open " + path0
-            os.system(cmd0)
-            print('successed: %s' % path0)
+            cmd_list = open_command(pathlist0=pathname, env_name=None)
+            for cmd in cmd_list:
+                os.system(cmd)
+                print('successed: %s' % cmd)
             return
         else:
             ''
@@ -8613,7 +8729,7 @@ def main_function():
     while (True):
         if (args['open'] is True):
             ''
-            if (args['<path-name>'] is None):
+            if (args['<path-name>'] == []):
                 ''
                 dict0 = copy.deepcopy(rawconfig['path-assemblage'])
                 pos0 = 0
@@ -8636,7 +8752,7 @@ def main_function():
                 current_var = args['<env-name>']
                 if (current_var is None):
                     current_var = rawconfig['environ']['current']
-                elif (current_var == "current" or current_var == "cur"):
+                elif (current_var == "current"):
                     current_var = rawconfig['environ']['current']
                 current_env = current_var
 
@@ -8644,31 +8760,14 @@ def main_function():
                 if (rawconfig['environ'].__contains__(current_env) is False):
                     print("please ensure the environ is right")
                     return
-
-                env = os.environ
-                for l in rawconfig['environ'][current_env]['path+']:
-                    env["PATH"] = l + os.path.pathsep + env["PATH"]
-                for (key, value) in rawconfig['environ'][current_env].items():
-                    if (key == 'path+'):
-                        continue
-                    env[key] = value
-
-            path0 = ''
+            
             pathname = args['<path-name>']
-            path0 = raw_path2_open(pathname=pathname, envname=current_env)
-
-            plat = getplatform()
-            cmd0 = ''
-            if (plat == "Windows"):
-                cmd0 = "start " + path0
-                if(path0.__contains__(' ')):
-                    cmd0 = 'start "" ' + '"%s"' % path0
-            elif (plat == "Darwin"):
-                cmd0 = "open " + path0
-            else:
-                cmd0 = "xdg-open " + path0
-            os.system(cmd0)
-            print('successed: %s' % path0)
+            #print(pathname)
+            #print(current_env)
+            cmd_list = open_command(pathlist0=pathname, env_name=current_env)
+            for cmd in cmd_list:
+                os.system(cmd)
+                print('successed: %s' % cmd)
             return
         else:
             ''

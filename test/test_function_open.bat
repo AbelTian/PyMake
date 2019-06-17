@@ -65,10 +65,10 @@ call :execmd
 set command=mm open qtdir --current
 call :execmd
 
-set command=mm open qtdir --envname cur
+set command=mm use current open qtdir
 call :execmd
 
-set command=mm open qtdir --envname current
+set command=mm use current open qtdir
 call :execmd
 
 
