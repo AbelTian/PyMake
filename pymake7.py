@@ -5551,20 +5551,30 @@ def main_function():
             print('  "%s": "%s"' % (key, rawconfig['path-assemblage'][key]))
 
         current_vcvarsall = 'vcvarsall'
+        current_vcvarsallparam = 'vcvarsallparam'
         print('system env:')
         if (pymakesystemenviron.__contains__(current_vcvarsall) is False):
             pymakesystemenviron[current_vcvarsall] = "<CAN SET>"
-        print('  "%s": "%s"' % (current_vcvarsall, pymakesystemenviron[current_vcvarsall]))
+        print('  "%s"     : "%s"' % (current_vcvarsall, pymakesystemenviron[current_vcvarsall]))
+        if (pymakesystemenviron.__contains__(current_vcvarsallparam) is False):
+            pymakesystemenviron[current_vcvarsallparam] = "<CAN SET>"
+        print('  "%s": "%s"' % (current_vcvarsallparam, pymakesystemenviron[current_vcvarsallparam]))
 
         print('custom env:')
         if (envcustomlistrawvars.__contains__(current_vcvarsall) is False):
             envcustomlistrawvars[current_vcvarsall] = "<CAN SET>"
-        print('  "%s": "%s"' % (current_vcvarsall, envcustomlistrawvars[current_vcvarsall]))
+        print('  "%s"     : "%s"' % (current_vcvarsall, envcustomlistrawvars[current_vcvarsall]))
+        if (envcustomlistrawvars.__contains__(current_vcvarsallparam) is False):
+            envcustomlistrawvars[current_vcvarsallparam] = "<CAN SET>"
+        print('  "%s": "%s"' % (current_vcvarsallparam, envcustomlistrawvars[current_vcvarsallparam]))
 
         print('env %s:' % current_env)
         if (rawconfig['environ'][current_env].__contains__(current_vcvarsall) is False):
             rawconfig['environ'][current_env][current_vcvarsall] = "<CAN SET>"
-        print('  "%s": "%s"' % (current_vcvarsall, rawconfig['environ'][current_env][current_vcvarsall]))
+        print('  "%s"     : "%s"' % (current_vcvarsall, rawconfig['environ'][current_env][current_vcvarsall]))
+        if (rawconfig['environ'][current_env].__contains__(current_vcvarsallparam) is False):
+            rawconfig['environ'][current_env][current_vcvarsallparam] = "<CAN SET>"
+        print('  "%s": "%s"' % (current_vcvarsallparam, rawconfig['environ'][current_env][current_vcvarsallparam]))
         return
 
     # vc command
@@ -5930,18 +5940,26 @@ def main_function():
                 set_content = '<CAN SET>'
                 while(True):
                     has_set = "system env:"
+                    print(has_set)
                     set_content = '<CAN SET>'
                     if (pymakesystemenviron.__contains__(current_vcvarsall) is True):
                         set_content = pymakesystemenviron[current_vcvarsall]
-                    print(has_set)
-                    print('  ', set_content)
+                    print('  "%s"     : "%s"' % (current_vcvarsall, set_content))
+                    set_content = '<CAN SET>'
+                    if (pymakesystemenviron.__contains__(current_vcvarsallparam) is True):
+                        set_content = pymakesystemenviron[current_vcvarsallparam]
+                    print('  "%s": "%s"' % (current_vcvarsallparam, set_content))
 
                     has_set = "custom env:"
+                    print(has_set)
                     set_content = '<CAN SET>'
                     if (envcustomlistrawvars.__contains__(current_vcvarsall) is True):
                         set_content = envcustomlistrawvars[current_vcvarsall]
-                    print(has_set)
-                    print('  ', set_content)
+                    print('  "%s"     : "%s"' % (current_vcvarsall, set_content))
+                    set_content = '<CAN SET>'
+                    if (envcustomlistrawvars.__contains__(current_vcvarsallparam) is True):
+                        set_content = envcustomlistrawvars[current_vcvarsallparam]
+                    print('  "%s": "%s"' % (current_vcvarsallparam, set_content))
                     break
 
                 os.chdir(vcroot)
