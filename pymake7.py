@@ -5870,7 +5870,7 @@ def main_function():
                 print("source file: %s" % sourceconfigfile)
 
                 print(has_set)
-                print('  "%s"     : "%s"' % (current_vcvarsall, native_dict[current_vcvarsall]))
+                print('  "%s": "%s"' % (current_vcvarsall, native_dict[current_vcvarsall]))
                 print('  "%s": "%s"' % (current_vcvarsallparam, native_dict[current_vcvarsallparam]))
 
                 print (Fore.CYAN+ "env %s" % current_env)
