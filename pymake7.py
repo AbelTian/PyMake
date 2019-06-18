@@ -240,6 +240,7 @@ Usage:
   pymake7.py  vc init [ <env-name> ]
   pymake7.py  vc deinit [ <env-name> ]
   pymake7.py  vc ( kan | check ) [ <env-name> ]
+  pymake7.py  vc detail [ <env-name> ]
   pymake7.py  vc clean [ here | hh ]
   pymake7.py  vc type [ here | hh ] [ <cmd-name> ] [ to <file-name> ]
   pymake7.py  vc use <env-name> type [ here | hh ] [ <cmd-name> ]  [ to <file-name> ]
@@ -5815,7 +5816,7 @@ def main_function():
                 writeJsonData(jsonfile, dict0)
                 print('successed: vc deinit %s' % current_env)
                 return
-            elif (args['kan'] or args['check'] is True):
+            elif (args['detail'] or args['kan'] or args['check'] is True):
                 ''
                 current_env = ""
 
