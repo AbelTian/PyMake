@@ -195,17 +195,34 @@
             "QKIT": "WIN32",
             "QSYS": "Windows"
         },
-        "vc6": {
+        "vc6.0": {
             "path+": [
                 "${cmake.bin}",
-                "VC6.BIN",
+                "${VC6.BIN}",
                 "${qt5.5.vc6.bin}"
             ],
             "vcvarsall": "${vcvarsall-1998}",
             "vcvarsallparam": "x86",
             "run-vcvarsall": "\"${vcvarsall}\" ${vcvarsallparam}",
-            "INCLUDE": "VC6.INCLUDE",
-            "LIB": "VC6.LIB",
+            "VISUALSTUDIOVERSION": "6.0",
+            "INCLUDE": "${VC6.INCLUDE}",
+            "LIB": "${VC6.LIB}",
+            "QTVERSION": "${qt5.5.version}",
+            "QTDIR": "${qt5.5.vc6}",
+            "QTSPEC": "-spec win32-msvc",
+            "QTCONFIG": "",
+            "QKIT": "WIN32",
+            "QSYS": "MSVC",
+            "MSMAKE": "${make2}"
+        },
+        "vc6": {
+            "path+": [
+                "${cmake.bin}",
+                "${qt5.5.vc6.bin}"
+            ],
+            "vcvarsall": "${vcvarsall-1998}",
+            "vcvarsallparam": "x86",
+            "run-vcvarsall": "\"${vcvarsall}\" ${vcvarsallparam}",
             "QTVERSION": "${qt5.5.version}",
             "QTDIR": "${qt5.5.vc6}",
             "QTSPEC": "-spec win32-msvc",
