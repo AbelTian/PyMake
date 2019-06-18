@@ -5532,6 +5532,7 @@ def main_function():
         if(env_name is None):
             current_env = rawconfig['environ']['current']
 
+        print("source file: %s" % sourceconfigfile)
         vcvarslist = [
             'vcvarsall-1998',
             'vcvarsall-2003',
