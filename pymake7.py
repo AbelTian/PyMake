@@ -968,9 +968,9 @@ def main_function():
                             cmd0 = "open " + file0
                     else:
                         if (file0.__contains__(' ')):
-                            cmd0 = 'xdg-open ' + '"%s"' % file0
+                            cmd0 = 'xdg-open ' + '"%s" ' % file0 + ">/dev/null 2>&1"
                         else:
-                            cmd0 = "xdg-open " + file0
+                            cmd0 = "xdg-open " + file0 + ">/dev/null 2>&1"
                     os.system(cmd0)
                     print('successed: %s' % file0)
                     return
@@ -3987,9 +3987,9 @@ def main_function():
                     cmd0 = "open " + path0
             else:
                 if(path0.__contains__(' ')):
-                    cmd0 = 'xdg-open ' + '"%s"' % path0
+                    cmd0 = 'xdg-open ' + '"%s"' % path0 + ">/dev/null 2>&1"
                 else:
-                    cmd0 = "xdg-open " + path0
+                    cmd0 = "xdg-open " + path0 + ">/dev/null 2>&1"
             cmd_list.append(cmd0)
 
         return cmd_list
