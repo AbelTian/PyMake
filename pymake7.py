@@ -228,8 +228,8 @@ Usage:
   pymake7.py  language use <env-name> ccvp [ here | hh ] [ <command-name> ] [ <command-params> ... ]
   pymake7.py  -------------------------------------------------------------
   pymake7.py  export2 [ powershell ] [ here | hh ] [ <env-name> ] [ to <file-name> ] [ -c | --custom ] [ -l | --local ] [ -s | --system ]
-  pymake7.py  type2 [ here | hh ] [ <cmd-name> ] [ to <file-name> ] [ --suffix=<.suffix-name> ] [ --encoding=<encoding-name> ] [ --samename ]
-  pymake7.py  use <env-name> type2 [ here | hh ] [ <cmd-name> ] [ to <file-name> ] [ --suffix=<.suffix-name> ] [ --encoding=<encoding-name> ] [ --samename ]
+  pymake7.py  type2 [ here | hh ] [ <cmd-name> ] [ to <file-name> ] [ --suffix=<.suffix-name> ] [ --encoding=<encoding-name> ] [ --samename ] [ -a | --all ]
+  pymake7.py  use <env-name> type2 [ here | hh ] [ <cmd-name> ] [ to <file-name> ] [ --suffix=<.suffix-name> ] [ --encoding=<encoding-name> ] [ --samename ] [ -a | --all ]
   pymake7.py  open [ <path-name> ... ] [ -c | --custom ] [ --current ] [ -i | --ignorecase ]
   pymake7.py  use <env-name> open [ <path-name> ... ] [ -i | --ignorecase ]
   pymake7.py  -------------------------------------------------------------
@@ -9409,201 +9409,87 @@ def main_function():
             ''
         break
 
-    # cmd_type function
-    def cmd_type (cmd_name = None, file_name = None, env_name = None):
+    # cmd type2 function
+    def cmd_type2 (cmd_name = None, file_name = None, env_name = None):
+
         if (cmd_name is None):
             for (key, value) in rawconfig['command'].items():
                 print(Fore.CYAN + "%s" % key)
-            return ""
+            return
 
         if (rawconfig['command'].__contains__(cmd_name) is False):
             print("please check your command name")
-            return ""
+            return
 
-        if(env_name is None or env_name == rawconfig['environ']['current']):
+        if (env_name is None or env_name == rawconfig['environ']['current']):
             list0 = copy.deepcopy(rawconfig['command'][cmd_name])
         else:
             list0 = copy.deepcopy(raw_command(env_name)[cmd_name])
 
-        #for cmd in list0:
+        # for cmd in list0:
         #    print(Fore.RED + "%s" % (cmd))
 
         temp_file_name = ""
         if (file_name is None):
             temp_file_name = "cmd"
         else:
-            temp_file_name = file_name
+            temp_file_name = "" + file_name
 
+        cmd_header = ""
+        cmd_codec = "utf8"
+        # but windows, it is \r\n, python helpping me?
+        cmd_return = "\n"
+        cmd_suffix = ""
         if (getplatform() == "Windows"):
+            cmd_codec = "ansi"
+            if (getplatform_release() == "XP"):
+                cmd_codec = None
             cmd_header = "@echo off"
-            cmd_suffix = "_exec.bat"
+            cmd_suffix = ".bat"
         else:
+            cmd_codec = 'utf8'
             cmd_header = "#!/usr/bin/env bash"
-            cmd_suffix = "_exec.sh"
+            cmd_suffix = ".sh"
+
+        suffix = args['--suffix']
+        if (suffix is not None):
+            cmd_suffix = str("%s" % suffix)
+
+        encoding = args['--encoding']
+        if (encoding is not None):
+            cmd_codec = encoding
 
         cmd_exec = temp_file_name + cmd_suffix
         with open(cmd_exec, 'w', encoding=cmd_codec) as f:
+            # f.write(cmd_header + cmd_return)
             cmd = ''
             #add shebang line
             if(list(list0).__len__()>0):
                 cmd = list0[0]
             #print(".....")
             if(getplatform() == "Windows"):
-                if (cmd.startswith('@echo') is False):
-                    f.write(cmd_header + cmd_return)
+                if (cmd_suffix == '.bat'):
+                    if (cmd.startswith('@echo') is False):
+                        f.write(cmd_header + cmd_return)
             else:
-                if (cmd.startswith('#!') is False):
-                    f.write(cmd_header + cmd_return)
+                if (cmd_suffix == '.sh'):
+                    if (cmd.startswith('#!') is False):
+                        f.write(cmd_header + cmd_return)
+
             for cmd in list0:
                 f.write(cmd + cmd_return)
 
         if (plat == "Windows"):
             ""
         else:
-            os.system("chmod +x " + cmd_exec)
+            if(cmd_suffix == '.sh'):
+                os.system("chmod +x " + cmd_exec)
+
+        # print(cmd_codec)
+        # print(cmd_suffix)
+        # print(cmd_exec)
 
         return cmd_exec
-
-    # use - see/ss/cmd
-    while (True):
-        if (args['use'] is True):
-            if(args['<env-name>'] is None):
-                print("please appoint a environ")
-                return
-
-            if(rawconfig['environ'].__contains__(args['<env-name>']) is False):
-                print("please ensure the environ is right")
-                return
-
-            current_env = args['<env-name>']
-            if(args['<env-name>'] == "current"):
-                current_env = rawconfig['environ']['current']
-
-            if (rawconfig['environ'].__contains__(current_env) is False):
-                print(".json file is broken, environ section current env config is lost, please use set command fix it.")
-                return
-
-            if (args['ss'] or args['see'] or args['cmd'] is True):
-                local_command = config['command']
-                if ( args['--raw'] is True ):
-                    local_command = raw_command(current_env)
-
-                if (args['<cmd-name>'] is None):
-                    for (key, value) in local_command.items():
-                        if (args['-a'] is not True and args['--all'] is not True):
-                            print(Fore.CYAN + "%s" % key)
-                            continue
-                        print(Fore.CYAN + "group: %s" % key)
-                        step = 1
-                        for cmd in value:
-                            print(Fore.RED + "%-3s %s" % (step, cmd))
-                            step += 1
-                    return
-
-                if (args['<cmd-name>'] is not None):
-                    if (local_command.__contains__(args['<cmd-name>']) is False):
-                        print("please check your command name")
-                        return
-                    value = local_command[args['<cmd-name>']]
-                    step = 1
-                    for cmd in value:
-                        if(args['-l'] or args['--linenumber'] is True):
-                            print(Fore.RED + "%-3s %s" % (step, cmd))
-                        else:
-                            print(Fore.RED + "%s" % (cmd))
-                        step += 1
-                    return
-        else:
-            ""
-        break
-
-    # see ss cmd
-    while (True):
-        if (args['ss'] or args['see'] or args['cmd'] is True):
-            list_config = config
-            if ( args['--raw'] is True ):
-                list_config = rawconfig
-
-            if (args['<cmd-name>'] is None):
-                for (key, value) in list_config['command'].items():
-                    if (args['-a'] is not True and args['--all'] is not True):
-                        print(Fore.CYAN + "%s" % key)
-                        continue
-                    print(Fore.CYAN + "group: %s" % key)
-                    step = 1
-                    for cmd in value:
-                        print(Fore.RED + "%-3s %s" % (step, cmd))
-                        step += 1
-                return
-
-            if (args['<cmd-name>'] is not None):
-                if (list_config['command'].__contains__(args['<cmd-name>']) is False):
-                    print("please check your command name")
-                    return
-                value = list_config['command'][args['<cmd-name>']]
-                step = 1
-                for cmd in value:
-                    if (args['-l'] or args['--linenumber'] is True):
-                        print(Fore.RED + "%-3s %s" % (step, cmd))
-                    else:
-                        print(Fore.RED + "%s" % (cmd))
-                    step += 1
-                return
-        else:
-            ""
-        break
-
-    # use env type command
-    while (True):
-        if (args['use'] is True):
-            if(args['<env-name>'] is None):
-                print("please appoint a environ")
-                return
-
-            if(rawconfig['environ'].__contains__(args['<env-name>']) is False):
-                print("please ensure the environ is right")
-                return
-
-            current_env = args['<env-name>']
-            if(args['<env-name>'] == "current"):
-                current_env = rawconfig['environ']['current']
-
-            if (rawconfig['environ'].__contains__(current_env) is False):
-                print(".json file is broken, environ section current env config is lost, please use set command fix it.")
-                return
-
-            if (args['type'] == True):
-                if (args['here'] or args['hh'] is True):
-                    os.chdir(pymakeworkpath)
-
-                if(args['<cmd-name>'] is None):
-                    for (key, value) in rawconfig['command'].items():
-                        print(Fore.CYAN + "%s" % key)
-                    return
-
-                if (rawconfig['command'].__contains__(args['<cmd-name>']) is False):
-                    print("please check your command name")
-                    return
-
-                if (args['<file-name>'] is None):
-                    if (current_env == rawconfig['environ']['current']):
-                        list0 = copy.deepcopy(rawconfig['command'][args['<cmd-name>']])
-                    else:
-                        list0 = copy.deepcopy(raw_command(current_env)[args['<cmd-name>']])
-
-                    for cmd in list0:
-                       print(Fore.RED + "%s" % (cmd))
-                    return
-
-                cmd_exec = cmd_type(args['<cmd-name>'], args['<file-name>'], current_env )
-
-                print("successed: use %s type %s to %s" % (current_env, args['<cmd-name>'], cmd_exec))
-                return
-            else:
-                ""
-        else:
-            ""
-        break
 
     # type2 command
     while (True):
@@ -9632,6 +9518,16 @@ def main_function():
             if (args['here'] or args['hh'] is True):
                 os.chdir(pymakeworkpath)
 
+            if(args['-a'] or args['--all'] is True):
+                ''
+                keys = config['command']
+                for cmd in keys:
+                    cmd_name = cmd
+                    file_name = cmd
+                    cmd_exec = cmd_type2(cmd_name, file_name, current_env)
+                    print("successed: use %s type %s to %s" % (current_env, file_name, cmd_exec))
+                return
+
             if (args['<cmd-name>'] is None):
                 for (key, value) in rawconfig['command'].items():
                     print(Fore.CYAN + "%s" % key)
@@ -9654,104 +9550,9 @@ def main_function():
                     print(Fore.RED + "%s" % (cmd))
                 return
 
-            cmd_exec = ""
-            # cmd_exec = cmd_type(args['<cmd-name>'], args['<file-name>'], current_env)
-            cmd_name = args['<cmd-name>']
-            file_name = args['<file-name>']
-            env_name = current_env
-
-            if (cmd_name is None):
-                for (key, value) in rawconfig['command'].items():
-                    print(Fore.CYAN + "%s" % key)
-                return
-
-            if (rawconfig['command'].__contains__(cmd_name) is False):
-                print("please check your command name")
-                return
-
-            if (env_name is None or env_name == rawconfig['environ']['current']):
-                list0 = copy.deepcopy(rawconfig['command'][cmd_name])
-            else:
-                list0 = copy.deepcopy(raw_command(env_name)[cmd_name])
-
-            # for cmd in list0:
-            #    print(Fore.RED + "%s" % (cmd))
-
-            temp_file_name = ""
-            if (file_name is None):
-                temp_file_name = "cmd"
-            else:
-                temp_file_name = "" + file_name
-
-            cmd_header = ""
-            cmd_codec = "utf8"
-            # but windows, it is \r\n, python helpping me?
-            cmd_return = "\n"
-            cmd_suffix = ""
-            if (getplatform() == "Windows"):
-                cmd_codec = "ansi"
-                if (getplatform_release() == "XP"):
-                    cmd_codec = None
-                cmd_suffix = ".bat"
-            else:
-                cmd_codec = 'utf8'
-                cmd_suffix = ".sh"
-
-            suffix = args['--suffix']
-            if (suffix is not None):
-                cmd_suffix = str("%s" % suffix)
-
-            encoding = args['--encoding']
-            if (encoding is not None):
-                cmd_codec = encoding
-
-            cmd_exec = temp_file_name + cmd_suffix
-            with open(cmd_exec, 'w', encoding=cmd_codec) as f:
-                # f.write(cmd_header + cmd_return)
-                for cmd in list0:
-                    f.write(cmd + cmd_return)
-
-            # if (plat == "Windows"):
-            #    ""
-            # else:
-            #    os.system("chmod +x " + cmd_exec)
-
-            # print(cmd_codec)
-            # print(cmd_suffix)
-            # print(cmd_exec)
-
-            print("successed: use %s type %s to %s" % (current_env, cmd_name, cmd_exec))
+            cmd_exec = cmd_type2(args['<cmd-name>'], args['<file-name>'], current_env)
+            print("successed: use %s type %s to %s" % (current_env, args['<file-name>'], cmd_exec))
             return
-        else:
-            ""
-        break
-
-    # type
-    while (True):
-        if (args['type'] == True):
-            if (args['here'] or args['hh'] is True):
-                os.chdir(pymakeworkpath)
-
-            if (args['<cmd-name>'] is None):
-                for (key, value) in rawconfig['command'].items():
-                    print(Fore.CYAN + "%s" % key)
-                return
-
-            if (rawconfig['command'].__contains__(args['<cmd-name>']) is False):
-                print("please check your command name")
-                return
-
-            if (args['<file-name>'] is None):
-                list0 = copy.deepcopy(rawconfig['command'][args['<cmd-name>']])
-                for cmd in list0:
-                    print(Fore.RED + "%s" % (cmd))
-                return
-
-            cmd_exec = cmd_type(args['<cmd-name>'], args['<file-name>'] )
-
-            print("successed: type %s to %s" % (args['<cmd-name>'], cmd_exec))
-            return
-
         else:
             ""
         break
@@ -10187,6 +9988,232 @@ def main_function():
             return
         else:
             ''
+        break
+
+    # cmd_type function
+    def cmd_type (cmd_name = None, file_name = None, env_name = None):
+        if (cmd_name is None):
+            for (key, value) in rawconfig['command'].items():
+                print(Fore.CYAN + "%s" % key)
+            return ""
+
+        if (rawconfig['command'].__contains__(cmd_name) is False):
+            print("please check your command name")
+            return ""
+
+        if(env_name is None or env_name == rawconfig['environ']['current']):
+            list0 = copy.deepcopy(rawconfig['command'][cmd_name])
+        else:
+            list0 = copy.deepcopy(raw_command(env_name)[cmd_name])
+
+        #for cmd in list0:
+        #    print(Fore.RED + "%s" % (cmd))
+
+        temp_file_name = ""
+        if (file_name is None):
+            temp_file_name = "cmd"
+        else:
+            temp_file_name = file_name
+
+        if (getplatform() == "Windows"):
+            cmd_header = "@echo off"
+            cmd_suffix = "_exec.bat"
+        else:
+            cmd_header = "#!/usr/bin/env bash"
+            cmd_suffix = "_exec.sh"
+
+        cmd_exec = temp_file_name + cmd_suffix
+        with open(cmd_exec, 'w', encoding=cmd_codec) as f:
+            cmd = ''
+            #add shebang line
+            if(list(list0).__len__()>0):
+                cmd = list0[0]
+            #print(".....")
+            if(getplatform() == "Windows"):
+                if (cmd.startswith('@echo') is False):
+                    f.write(cmd_header + cmd_return)
+            else:
+                if (cmd.startswith('#!') is False):
+                    f.write(cmd_header + cmd_return)
+            for cmd in list0:
+                f.write(cmd + cmd_return)
+
+        if (plat == "Windows"):
+            ""
+        else:
+            os.system("chmod +x " + cmd_exec)
+
+        return cmd_exec
+
+    # use - see/ss/cmd
+    while (True):
+        if (args['use'] is True):
+            if(args['<env-name>'] is None):
+                print("please appoint a environ")
+                return
+
+            if(rawconfig['environ'].__contains__(args['<env-name>']) is False):
+                print("please ensure the environ is right")
+                return
+
+            current_env = args['<env-name>']
+            if(args['<env-name>'] == "current"):
+                current_env = rawconfig['environ']['current']
+
+            if (rawconfig['environ'].__contains__(current_env) is False):
+                print(".json file is broken, environ section current env config is lost, please use set command fix it.")
+                return
+
+            if (args['ss'] or args['see'] or args['cmd'] is True):
+                local_command = config['command']
+                if ( args['--raw'] is True ):
+                    local_command = raw_command(current_env)
+
+                if (args['<cmd-name>'] is None):
+                    for (key, value) in local_command.items():
+                        if (args['-a'] is not True and args['--all'] is not True):
+                            print(Fore.CYAN + "%s" % key)
+                            continue
+                        print(Fore.CYAN + "group: %s" % key)
+                        step = 1
+                        for cmd in value:
+                            print(Fore.RED + "%-3s %s" % (step, cmd))
+                            step += 1
+                    return
+
+                if (args['<cmd-name>'] is not None):
+                    if (local_command.__contains__(args['<cmd-name>']) is False):
+                        print("please check your command name")
+                        return
+                    value = local_command[args['<cmd-name>']]
+                    step = 1
+                    for cmd in value:
+                        if(args['-l'] or args['--linenumber'] is True):
+                            print(Fore.RED + "%-3s %s" % (step, cmd))
+                        else:
+                            print(Fore.RED + "%s" % (cmd))
+                        step += 1
+                    return
+        else:
+            ""
+        break
+
+    # see ss cmd
+    while (True):
+        if (args['ss'] or args['see'] or args['cmd'] is True):
+            list_config = config
+            if ( args['--raw'] is True ):
+                list_config = rawconfig
+
+            if (args['<cmd-name>'] is None):
+                for (key, value) in list_config['command'].items():
+                    if (args['-a'] is not True and args['--all'] is not True):
+                        print(Fore.CYAN + "%s" % key)
+                        continue
+                    print(Fore.CYAN + "group: %s" % key)
+                    step = 1
+                    for cmd in value:
+                        print(Fore.RED + "%-3s %s" % (step, cmd))
+                        step += 1
+                return
+
+            if (args['<cmd-name>'] is not None):
+                if (list_config['command'].__contains__(args['<cmd-name>']) is False):
+                    print("please check your command name")
+                    return
+                value = list_config['command'][args['<cmd-name>']]
+                step = 1
+                for cmd in value:
+                    if (args['-l'] or args['--linenumber'] is True):
+                        print(Fore.RED + "%-3s %s" % (step, cmd))
+                    else:
+                        print(Fore.RED + "%s" % (cmd))
+                    step += 1
+                return
+        else:
+            ""
+        break
+
+    # use env type command
+    while (True):
+        if (args['use'] is True):
+            if(args['<env-name>'] is None):
+                print("please appoint a environ")
+                return
+
+            if(rawconfig['environ'].__contains__(args['<env-name>']) is False):
+                print("please ensure the environ is right")
+                return
+
+            current_env = args['<env-name>']
+            if(args['<env-name>'] == "current"):
+                current_env = rawconfig['environ']['current']
+
+            if (rawconfig['environ'].__contains__(current_env) is False):
+                print(".json file is broken, environ section current env config is lost, please use set command fix it.")
+                return
+
+            if (args['type'] == True):
+                if (args['here'] or args['hh'] is True):
+                    os.chdir(pymakeworkpath)
+
+                if(args['<cmd-name>'] is None):
+                    for (key, value) in rawconfig['command'].items():
+                        print(Fore.CYAN + "%s" % key)
+                    return
+
+                if (rawconfig['command'].__contains__(args['<cmd-name>']) is False):
+                    print("please check your command name")
+                    return
+
+                if (args['<file-name>'] is None):
+                    if (current_env == rawconfig['environ']['current']):
+                        list0 = copy.deepcopy(rawconfig['command'][args['<cmd-name>']])
+                    else:
+                        list0 = copy.deepcopy(raw_command(current_env)[args['<cmd-name>']])
+
+                    for cmd in list0:
+                       print(Fore.RED + "%s" % (cmd))
+                    return
+
+                cmd_exec = cmd_type(args['<cmd-name>'], args['<file-name>'], current_env )
+
+                print("successed: use %s type %s to %s" % (current_env, args['<cmd-name>'], cmd_exec))
+                return
+            else:
+                ""
+        else:
+            ""
+        break
+
+    # type
+    while (True):
+        if (args['type'] == True):
+            if (args['here'] or args['hh'] is True):
+                os.chdir(pymakeworkpath)
+
+            if (args['<cmd-name>'] is None):
+                for (key, value) in rawconfig['command'].items():
+                    print(Fore.CYAN + "%s" % key)
+                return
+
+            if (rawconfig['command'].__contains__(args['<cmd-name>']) is False):
+                print("please check your command name")
+                return
+
+            if (args['<file-name>'] is None):
+                list0 = copy.deepcopy(rawconfig['command'][args['<cmd-name>']])
+                for cmd in list0:
+                    print(Fore.RED + "%s" % (cmd))
+                return
+
+            cmd_exec = cmd_type(args['<cmd-name>'], args['<file-name>'] )
+
+            print("successed: type %s to %s" % (args['<cmd-name>'], cmd_exec))
+            return
+
+        else:
+            ""
         break
 
     # export function
