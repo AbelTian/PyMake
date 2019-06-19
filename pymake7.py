@@ -352,7 +352,7 @@ def main_function():
             "root.webrc": "${root}/e0-webrc",
             "cc": "${root.tool}/a0-compiler",
             "cmake.bin": "${cc}/CMake.app/Contents/bin",
-            "pymake":"${cc}/PyMake",
+            "pymake": "${cc}/PyMake",
             "qt": "${root.tool}/macLibraries/Qt",
             "qt5.9.version": "5.9.2",
             "qt5.9.ios": "${qt}/${qt5.9.version}/ios",
@@ -464,6 +464,18 @@ def main_function():
                 "QKIT": "ANDROIDX86",
                 "QSYS": "AndroidX86"
             },
+            "qt4": {
+                "path+": [
+                    "${cmake.bin}",
+                    "${qt4.8.clang.bin}"
+                ],
+                "QTVERSION": "${qt4.version}",
+                "QTDIR": "${qt4.8.clang}",
+                "QTSPEC": "-spec macx-llvm",
+                "QTCONFIG": "CONFIG+=x86_64",
+                "QKIT": "macOS",
+                "QSYS": "MacOS"
+            },
             "ios": {
                 "path+": [
                     "${cmake.bin}",
@@ -488,19 +500,7 @@ def main_function():
                 "QKIT": "iOSSimulator",
                 "QSYS": "iOSSimulator"
             },
-            "qt4": {
-                "path+": [
-                    "${cmake.bin}",
-                    "${qt4.8.clang.bin}"
-                ],
-                "QTVERSION": "${qt4.version}",
-                "QTDIR": "${qt4.8.clang}",
-                "QTSPEC": "-spec macx-llvm",
-                "QTCONFIG": "CONFIG+=x86_64",
-                "QKIT": "MacOS",
-                "QSYS": "MacOS"
-            },
-            "qt5": {
+            "macos": {
                 "path+": [
                     "${cmake.bin}",
                     "${qt5.9.clang.bin}"
@@ -512,97 +512,59 @@ def main_function():
                 "QKIT": "macOS",
                 "QSYS": "macOS"
             },
-            "current": "qt5"
+            "current": "macos"
         },
         "command": {
-            "current-dir":[
+            "test": [
                 "echo $(pwd)"
             ],
-            "open-dir": [
-                "open $*"
+            "test.6": [
+                "echo 中文"
+            ],
+            "test.7": [
+                "echo $PATH"
+            ],
+            "qqt.build": [
+                "src_path=${root.src}/LibQQt",
+                "src=${root.src}/LibQQt/QQt.pro",
+                "build=${root.build}/QQt/$QSYS/$QTVERSION/Debug",
+                "mkdir -p $build",
+                "cd $build",
+                "echo build $(pwd)",
+                "qmake ${src} $QTSPEC CONFIG+=debug CONFIG+=qml_debug $QTCONFIG && make qmake_all",
+                "make -j4"
+            ],
+            "qqt.clean": [
+                "src=${root.src}/LibQQt/QQt.pro",
+                "build=${root.build}/QQt/$QSYS/$QTVERSION/Debug",
+                "cd $build",
+                "make clean"
             ],
             "qt": [
                 "open \"/Applications/Qt Creator.app\""
             ],
             "cmake": [
-                "open ${root.tool}/macCompilers/CMake.app"
+                "open /Users/abel/Develop/b0-toolskits/macCompilers/CMake.app"
             ],
             "prod": [
-                "open ${root.prod}/ProductExecTool/macOS/ProductExecTool.app"
+                "open /Users/abel/Develop/d0-product/ProductExecTool/macOS/ProductExecTool_debug.app"
             ],
-            "prod-debug": [
-                "open ${root.prod}/ProductExecTool/macOS/ProductExecTool_debug.app"
+            "libtool": [
+                "open /Users/abel/Develop/d0-product/AddLibraryTool/macOS/AddLibraryTool_debug.app"
             ],
-            "addlibrarytool": [
-                "open ${root.prod}/AddLibraryTool/macOS/AddLibraryTool_debug.app"
-            ],
-            "open-prod": [
-                "open ${root.prod}"
-            ],
-            "open-sdk": [
-                "open ${root.sdk}"
-            ],
-            "open-build": [
-                "open ${root.build}"
-            ],
-            "cloc": [
-                "perl ${pymake}/demo/cloc-1.74.pl .",
-                "date"
-            ],
-            "build.pro": [
-                "while [ 1 ]",
-                "do",
-                "if [ -f \"$1.pro\" ]; then",
-                "   echo $1.pro existed.",
-                "else",
-                "   echo has $1.pro? please add here command to restrict.",
-                "   break",
-                "fi",
-                "src_path=$(pwd)",
-                "profilename=$1",
-                "src=$src_path/$profilename.pro",
-                "build=${root.build}/$profilename/${QSYS}/${QTVERSION}/Debug",
+            "qt.check": [
+                "src=${root.tool}/z0-Source/qt-everywhere-opensource-src-4.8.7",
+                "build=${root.build}/qt4.8.7",
+                "install=${root.tool}/macLibraries/Qt/4.8.7/gcc_64",
                 "mkdir -p $build",
                 "cd $build",
-                "echo src file: $src",
-                "echo build at: $build",
-                "echo ${QTSPEC} ${QTCONFIG}",
-                "qmake $src ${QTSPEC} CONFIG+=debug CONFIG+=qml_debug ${QTCONFIG} && make qmake_all",
-                "make -j4",
-                "echo build inf ${QTSPEC} ${QTCONFIG}",
-                "echo src file: $src",
-                "echo build at: $build",
-                "break",
-                "done"
+                "echo build $(pwd)",
+                "${src}/configure --help"
             ],
-            "clean.pro": [
-                "while [ 1 ]",
-                "do",
-                "if [ -f \"$1.pro\" ]; then",
-                "   echo $1.pro existed.",
-                "else",
-                "   echo has $1.pro? please add here command to restrict.",
-                "   break",
-                "fi",
-                "src_path=$(pwd)",
-                "profilename=$1",
-                "src=$src_path/$profilename.pro",
-                "build=${root.build}/$profilename/${QSYS}/${QTVERSION}/Debug",
-                "cd $build",
-                "echo src file: $src",
-                "echo build at: $build",
-                "echo ${QTSPEC} ${QTCONFIG}",
-                "make clean",
-                "echo build inf ${QTSPEC} ${QTCONFIG}",
-                "echo src file: $src",
-                "echo build at: $build",
-                "break",
-                "done"
-            ],
-            "build.qt4": [
+            "qt4.build": [
                 "src=${root.tool}/z0-Source/qt",
                 "build=${root.build}/qt",
-                "install=${root.tool}/macLibraries/Qt/4.8/gcc_64_CUSTOM",
+                "install=${root.tool}/macLibraries/Qt/4.8/gcc_64",
                 "mkdir -p $build",
                 "cd $build",
                 "echo build $(pwd)",
@@ -611,19 +573,212 @@ def main_function():
                 "make -j4",
                 "make install"
             ],
-            "build.qt5": [
-                "src=${root.tool}/z0-Source/qt",
-                "build=${root.build}/qt",
-                "install=${root.tool}/macLibraries/Qt/5.9.2/android_CUSTOM",
+            "qt4.8.7.build": [
+                "src=${root.tool}/z0-Source/qt-everywhere-opensource-src-4.8.7",
+                "build=${root.build}/qt4.8.7",
+                "install=${root.tool}/macLibraries/Qt/4.8.7/gcc_64",
                 "mkdir -p $build",
                 "cd $build",
                 "echo build $(pwd)",
-                "${src}/configure -prefix ${install} -hostprefix ${install} -xplatform android-g++ -release -nomake tests -nomake examples -android-ndk $ANDROID_NDK_ROOT -android-sdk $ANDROID_SDK_ROOT -android-ndk-host $ANDROID_NDK_HOST -android-toolchain-version $ANDROID_NDK_TOOLCHAIN_VERSION -skip qtwebkit-examples -no-warnings-are-errors",
+                "${src}/configure -prefix ${install}",
                 "make -j4",
                 "make install"
             ],
+            "qtsoap.build": [
+                "src=/Users/abel/Develop/c1-webrc/qt-solutions/qtsoap",
+                "build=${root.build}/qtsoap",
+                "install=/Users/abel/Develop/d1-product/QtSoap",
+                "cd $build",
+                "${src}/configure -library"
+            ],
+            "qqt.push": [
+                "src=${root.src}/LibQQt",
+                "cd $src",
+                "git push",
+                "git push --tag"
+            ],
+            "qqt.pull": [
+                "src=${root.src}/LibQQt",
+                "cd $src",
+                "git pull"
+            ],
+            "qqt.cloc": [
+                "src=${root.src}/LibQQt",
+                "cd $src",
+                "perl ${pymake}/demo/cloc-1.74.pl  .",
+                "date"
+            ],
             "android.sdk": [
-                "${root.tool}/macAndroidLibraries/android-sdk-macosx/tools/android"
+                "/Users/abel/Develop/b0-toolskits/macAndroidLibraries/android-sdk-macosx/tools/android"
+            ],
+            "test.2": [
+                "#echo $*",
+                "param=$*",
+                "ping 127.0.0.1 $param"
+            ],
+            "open-dir": [
+                "open $1"
+            ],
+            "daily.qqt": [
+                "src_path=/Users/abel/Develop/a0-develop/LibQQt",
+                "src=$src_path/QQt.pro",
+                "build=/Users/abel/Develop/c0-buildstation/QQt/$QSYS/$QTVERSION/Debug",
+                "mkdir -p $build",
+                "cd $build",
+                "rm -rf src examples",
+                "qmake $src $QTSPEC $QTCONFIG CONFIG+=debug CONFIG+=qml_debug && make qmake_all",
+                "make -j4"
+            ],
+            "daily.qqt.release": [
+                "src_path=/Users/abel/Develop/a0-develop/LibQQt",
+                "src=$src_path/QQt.pro",
+                "build=/Users/abel/Develop/c0-buildstation/QQt/$QSYS/$QTVERSION/Release",
+                "mkdir -p $build",
+                "cd $build",
+                "rm -rf src examples",
+                "qmake $src $QTSPEC $QTCONFIG CONFIG+=release && make qmake_all",
+                "make -j4"
+            ],
+            "build.qqt": [
+                "src_path=/Users/abel/Develop/a0-develop/LibQQt",
+                "src=/Users/abel/Develop/a0-develop/LibQQt/QQt.pro",
+                "build=/Users/abel/Develop/c0-buildstation/QQt/$QSYS/$QTVERSION/Debug",
+                "mkdir -p $build",
+                "cd $build",
+                "echo build $(pwd)",
+                "qmake ${src} $QTSPEC CONFIG+=debug CONFIG+=qml_debug $QTCONFIG && make qmake_all",
+                "make -j4"
+            ],
+            "build.qqt.release": [
+                "src_path=/Users/abel/Develop/a0-develop/LibQQt",
+                "src=$src_path/QQt.pro",
+                "build=/Users/abel/Develop/c0-buildstation/QQt/$QSYS/$QTVERSION/Release",
+                "mkdir -p $build",
+                "cd $build",
+                "qmake $src $QTSPEC $QTCONFIG CONFIG+=release && make qmake_all",
+                "make -j4"
+            ],
+            "clean.qqt": [
+                "src=/Users/abel/Develop/a0-develop/LibQQt/QQt.pro",
+                "build=/Users/abel/Develop/c0-buildstation/QQt/$QSYS/$QTVERSION/Debug",
+                "cd $build",
+                "make clean"
+            ],
+            "clean.qqt.release": [
+                "src=/Users/abel/Develop/a0-develop/LibQQt/QQt.pro",
+                "build=/Users/abel/Develop/c0-buildstation/QQt/$QSYS/$QTVERSION/Release",
+                "cd $build",
+                "make clean"
+            ],
+            "check.qt": [
+                "src=/Users/abel/Develop/b0-toolskits/z0-Source/qt-everywhere-opensource-src-4.8.7",
+                "build=/Users/abel/Develop/c0-buildstation/qt4.8.7",
+                "install=/Users/abel/Develop/b0-toolskits/macLibraries/Qt/4.8.7/gcc_64",
+                "mkdir -p $build",
+                "cd $build",
+                "echo build $(pwd)",
+                "${src}/configure --help"
+            ],
+            "build.qt": [
+                "src=/Users/abel/Develop/b0-toolskits/z0-Source/qt",
+                "build=/Users/abel/Develop/c0-buildstation/qt",
+                "install=/Users/abel/Develop/b0-toolskits/macLibraries/Qt/4.8/gcc_64",
+                "mkdir -p $build",
+                "cd $build",
+                "echo build $(pwd)",
+                "CXXFLAGS=-stdlib=libc++",
+                "${src}/configure -prefix ${install}",
+                "make -j4",
+                "make install"
+            ],
+            "build.qt4.8.7": [
+                "src=/Users/abel/Develop/b0-toolskits/z0-Source/qt-everywhere-opensource-src-4.8.7",
+                "build=/Users/abel/Develop/c0-buildstation/qt4.8.7",
+                "install=/Users/abel/Develop/b0-toolskits/macLibraries/Qt/4.8.7/gcc_64",
+                "mkdir -p $build",
+                "cd $build",
+                "echo build $(pwd)",
+                "${src}/configure -prefix ${install}",
+                "make -j4",
+                "make install"
+            ],
+            "build.soap": [
+                "src=/Users/abel/Develop/c1-webrc/qt-solutions/qtsoap",
+                "build=/Users/abel/Develop/c0-buildstation/qtsoap",
+                "install=/Users/abel/Develop/d1-product/QtSoap",
+                "cd $build",
+                "${src}/configure -library"
+            ],
+            "push.qqt": [
+                "src=/Users/abel/Develop/a0-develop/LibQQt",
+                "cd $src",
+                "git push",
+                "git push --tag"
+            ],
+            "pull.qqt": [
+                "src=/Users/abel/Develop/a0-develop/LibQQt",
+                "cd $src",
+                "git pull"
+            ],
+            "cloc.qqt": [
+                "src=/Users/abel/Develop/a0-develop/LibQQt",
+                "cd $src",
+                "perl ${pymake}/demo/cloc-1.74.pl  .",
+                "date"
+            ],
+            "cloc.light": [
+                "src=/Users/abel/Develop/a0-develop/LightUnderWater/App",
+                "cd $src",
+                "perl /Users/abel/Develop/b1-buildshell/cloc-1.74.pl  .",
+                "date"
+            ],
+            "qtdir": [
+                "echo $QTDIR"
+            ],
+            "test.3": [
+                "#echo $*",
+                "ping $*"
+            ],
+            "test.4": [
+                "echo param1: $1",
+                "echo param2: $2",
+                "echo param3: $3",
+                "echo param4: $4"
+            ],
+            "build.qmake": [
+                "while [ 1 ]",
+                "do",
+                "if [ -f \"$1.pro\" ]; then",
+                "   echo $1.pro existed.",
+                "else",
+                "   echo has $1.pro? please add here command to restrict.",
+                "   break",
+                "fi",
+                "src_path=$(pwd)",
+                "profilename=$1",
+                "src=$src_path/$profilename.pro",
+                "build=${root.build}/$profilename/$QSYS/$QTVERSION/Debug",
+                "prod=${root.prod}/$profilename/$QSYS",
+                "sdk=${root.sdk}/$profilename/$QSYS",
+                "mkdir -p $build",
+                "cd $build",
+                "echo src file: $src",
+                "echo build at: $build",
+                "echo $QTSPEC $QTCONFIG",
+                "qmake $src $QTSPEC CONFIG+=debug CONFIG+=qml_debug $QTCONFIG && make qmake_all",
+                "make -j4",
+                "echo build inf $QTSPEC $QTCONFIG",
+                "echo src file: $src",
+                "echo build at: $build",
+                "echo sdk   at: $sdk",
+                "echo prod  at: $prod",
+                "echo sdk   at: $sdk",
+                "echo prod  at: $prod",
+                "break",
+                "done"
+            ],
+            "test.5": [
+                "exit 0"
             ]
         }
     }
