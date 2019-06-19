@@ -802,13 +802,20 @@ def main_function():
                     plat = getplatform()
                     cmd0 = ''
                     if(plat == "Windows"):
-                        cmd0 = "start " + file0
                         if (file0.__contains__(' ')):
                             cmd0 = 'start "" ' + '"%s"' % file0
+                        else:
+                            cmd0 = "start " + file0
                     elif (plat == "Darwin"):
-                        cmd0 = "open " + file0
+                        if (file0.__contains__(' ')):
+                            cmd0 = 'open ' + '"%s"' % file0
+                        else:
+                            cmd0 = "open " + file0
                     else:
-                        cmd0 = "xdg-open " + file0
+                        if (file0.__contains__(' ')):
+                            cmd0 = 'xdg-open ' + '"%s"' % file0
+                        else:
+                            cmd0 = "xdg-open " + file0
                     os.system(cmd0)
                     print('successed: %s' % file0)
                     return
@@ -3819,9 +3826,15 @@ def main_function():
                 else:
                     cmd0 = "start " + path0
             elif (plat == "Darwin"):
-                cmd0 = "open " + path0
+                if(path0.__contains__(' ')):
+                    cmd0 = 'open ' + '"%s"' % path0
+                else:
+                    cmd0 = "open " + path0
             else:
-                cmd0 = "xdg-open " + path0
+                if(path0.__contains__(' ')):
+                    cmd0 = 'xdg-open ' + '"%s"' % path0
+                else:
+                    cmd0 = "xdg-open " + path0
             cmd_list.append(cmd0)
 
         return cmd_list
