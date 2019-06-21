@@ -103,3 +103,28 @@ set command=pymake language ccvp "cmd /c" test.7  "ÄãºÃ ÖÐ¹ú" "ÄãºÃ ÃÀ¹ú" \" Äãº
 echo %command%
 call %command%
 echo --------------------------------------------
+
+set command=pymake language ccvp py pyÖÐÎÄ.bat ÄãºÃ --suffix=.py
+echo %command%
+call %command%
+echo --------------------------------------------
+
+set command=pymake language ccvp py pyÖÐÎÄ --suffix .py
+echo %command%
+call %command%
+echo --------------------------------------------
+
+set command=pymake language ccvp py pyÖÐÎÄ.py --suffix .bat
+echo %command%
+call %command%
+echo --------------------------------------------
+
+set command=pymake language ccvp py pyÖÐÎÄ.py --suffix .py
+echo %command%
+call %command%
+echo --------------------------------------------
+
+set command=pymake language ccvp py pyÖÐÎÄb.py ÄãºÃ --suffix=.py
+echo %command%
+call %command%
+echo --------------------------------------------

@@ -1,3 +1,4 @@
+@echo off
 echo HEIHEI 2，你知道中文吗，Windows？
 echo %*
 echo %1
