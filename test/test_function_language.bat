@@ -128,3 +128,49 @@ set command=pymake language ccvp py pyÖÐÎÄb.py ÄãºÃ --suffix=.py
 echo %command%
 call %command%
 echo --------------------------------------------
+
+set command=mm language ccvp "python -c" "import os,sys;print(os.getcwd())"
+echo %command%
+call %command%
+echo --------------------------------------------
+
+rem inside
+set command=mm language ccvp call test.6
+echo %command%
+call %command%
+echo --------------------------------------------
+
+set command=mm language ccvp call test.7
+echo %command%
+call %command%
+echo --------------------------------------------
+
+set command=mm language ccvp call test.7.bat
+echo %command%
+call %command%
+echo --------------------------------------------
+
+set command=mm language ccvp call test.7.bat --suffix .bat
+echo %command%
+call %command%
+echo --------------------------------------------
+
+set command=mm language ccvp call test.7 --suffix .bat
+echo %command%
+call %command%
+echo --------------------------------------------
+
+set command=mm language ccvp call test.55555
+echo %command%
+call %command%
+echo --------------------------------------------
+
+set command=mm language ccvp call test.55555.bat
+echo %command%
+call %command%
+echo --------------------------------------------
+
+set command=mm language ccvp call test.55555.bat --suffix .bat
+echo %command%
+call %command%
+echo --------------------------------------------

@@ -9163,7 +9163,7 @@ def main_function():
                         break
 
                     # none? a language command, or language command-line.
-                    languageparams = param1 + cmd_suffix_language
+                    languageparams = param1
                     break
 
                     # print(2, languageparams)
