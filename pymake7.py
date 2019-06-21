@@ -9116,53 +9116,6 @@ def main_function():
                         break
 
                     # none? a language command, or language command-line.
-                    #languageparams = param1
-                    #if(cmd_suffix_language == ''):
-                    #    break
-
-                    # clear repeat postfix.
-                    #if (str(param1).endswith(cmd_suffix_language)):
-                    #    cmd_suffix_language = ''
-
-                    # find in current path [+--workroot]
-                    languageparams = os.getcwd() + os.path.sep + param1 + cmd_suffix_language
-                    # print(2, languageparams)
-                    if (os.path.exists(languageparams)):
-                        break
-                    languageparams = pymakeworkpath + os.path.sep + param1 + cmd_suffix_language
-                    # print(2, languageparams)
-                    if (os.path.exists(languageparams)):
-                        break
-
-                    # find in .json environ
-                    separateenvlistpath = os.path.pathsep.join(rawconfig['environ'][env_name]['path+'])
-                    separateenvlistpath = separateenvlistpath.split(os.path.pathsep)
-                    separateenvlistpath.reverse()
-                    #for path0 in separateenvlistpath:
-                    #    print(path0)
-                    find_flag = 0
-                    for path0 in separateenvlistpath:
-                        languageparams = path0 + os.path.sep + param1 + cmd_suffix_language
-                        #print(2, languageparams)
-                        if (os.path.exists(languageparams)):
-                            find_flag = 1
-                            break
-                    if (find_flag == 1):
-                        break
-
-                    # find in basic environ [custom+]
-                    env = os.environ
-                    find_flag = 0
-                    for path0 in env["PATH"].split(os.path.pathsep):
-                        languageparams = path0 + os.path.sep + param1 + cmd_suffix_language
-                        # print(2, languageparams)
-                        if (os.path.exists(languageparams)):
-                            find_flag = 1
-                            break
-                    if (find_flag == 1):
-                        break
-
-                    # none? a language command, or language command-line.
                     languageparams = param1
                     break
 
