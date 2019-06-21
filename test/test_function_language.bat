@@ -174,3 +174,8 @@ set command=mm language ccvp call test.55555.bat --suffix .bat
 echo %command%
 call %command%
 echo --------------------------------------------
+
+set command=mm language ccvp "powershell -c" "Write-Host \"Hello,$args\"" ÄãºÃ
+echo %command%
+call %command%
+echo --------------------------------------------
