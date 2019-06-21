@@ -135,42 +135,42 @@ call %command%
 echo --------------------------------------------
 
 rem inside
-set command=mm language ccvp call test.6
+set command=mm language ccvp "cmd /c" test.6
 echo %command%
 call %command%
 echo --------------------------------------------
 
-set command=mm language ccvp call test.7
+set command=mm language ccvp "cmd /c" test.7
 echo %command%
 call %command%
 echo --------------------------------------------
 
-set command=mm language ccvp call test.7.bat
+set command=mm language ccvp "cmd /c" test.7.bat
 echo %command%
 call %command%
 echo --------------------------------------------
 
-set command=mm language ccvp call test.7.bat --suffix .bat
+set command=mm language ccvp "cmd /c" test.7.bat --suffix .bat
 echo %command%
 call %command%
 echo --------------------------------------------
 
-set command=mm language ccvp call test.7 --suffix .bat
+set command=mm language ccvp "cmd /c" test.7 --suffix .bat
 echo %command%
 call %command%
 echo --------------------------------------------
 
-set command=mm language ccvp call test.55555
+set command=mm language ccvp "cmd /c" test.55555
 echo %command%
 call %command%
 echo --------------------------------------------
 
-set command=mm language ccvp call test.55555.bat
+set command=mm language ccvp "cmd /c" test.55555.bat
 echo %command%
 call %command%
 echo --------------------------------------------
 
-set command=mm language ccvp call test.55555.bat --suffix .bat
+set command=mm language ccvp "cmd /c" test.55555.bat --suffix .bat
 echo %command%
 call %command%
 echo --------------------------------------------

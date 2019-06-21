@@ -9116,9 +9116,9 @@ def main_function():
                         break
 
                     # none? a language command, or language command-line.
-                    languageparams = param1
-                    if(cmd_suffix_language == ''):
-                        break
+                    #languageparams = param1
+                    #if(cmd_suffix_language == ''):
+                    #    break
 
                     # clear repeat postfix.
                     #if (str(param1).endswith(cmd_suffix_language)):
