@@ -44,13 +44,16 @@ set command=mm open \"${py}\" --envname android.mobile
 echo %command%
 call %command%
 
-set command=mm open \"${py}\" android.mobile
+set command=mm open \"${py}\" --envname android.mobile
 echo %command%
 call %command%
 
-set command=mm open ${py} android.mobile
+set command=mm open ${py} --envname android.mobile
 echo %command%
 call %command%
+
+set command=mm open sdk -c
+call :execmd
 
 set command=mm open sdk --custom
 call :execmd
