@@ -1,7 +1,6 @@
 @echo off
 
 for /F %%i in ('"pymake get default exec root"') do ( set "WORKROOT=%%i" )
-set WORKROOT=%WORKROOT%\MyShell
 set WORKROOT=%WORKROOT:/=\\%
 md %WORKROOT%
 

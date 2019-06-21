@@ -8980,7 +8980,7 @@ def main_function():
         #return file name
         return current_var, cmd_effect, cmd_unset
 
-    # language [ .bat .sh ] [windows unix] --suffix --encoding
+    # language [ .bat .sh ... ] [windows unix] --suffix --encoding
     def createCmdList07(suffix = None, encoding = None, env_name = None, local = True, list0 = [], params0 = []):
         cmd_list = []
 
@@ -9022,14 +9022,9 @@ def main_function():
         if(env_name == "current"):
             env_name = rawconfig['environ']['current']
 
-        cmd_suffix_language = cmd_suffix
-        cmd_codec_language = cmd_codec
+        cmd_suffix_language = ''#cmd_suffix
+        cmd_codec_language = 'utf8'#cmd_codec
         cmd_return_language = cmd_return
-
-        if(suffix is not None):
-            cmd_suffix_language = suffix
-        if(encoding is not None):
-            cmd_codec_language = encoding
 
         list1 = []
         # for current_var in str(args['<command-param>']).split():
@@ -9039,6 +9034,28 @@ def main_function():
             list1.append(current_var)
             params0.pop(0)
         #print(list1)
+
+        #fix default encoding
+        if(getplatform() == 'Windows'):
+            for param1 in list1:
+                if(str(param1).endswith('.bat') or cmd_suffix_language == '.bat'
+                or str(param1).endswith('.cmd') or cmd_suffix_language == '.cmd'
+                or str(param1).endswith('.ps1') or cmd_suffix_language == '.ps1'):
+                    cmd_codec_language = 'ansi'
+                    if(getplatform_release() == 'XP'):
+                        cmd_codec_language = None
+        else:
+            for param1 in list1:
+                if(str(param1).endswith('.bat') or cmd_suffix_language == '.bat'):
+                    cmd_codec_language = 'ansi'
+                    if(getplatform_release() == 'XP'):
+                        cmd_codec_language = None
+
+        # user settings is effected exactly.
+        if(suffix is not None):
+            cmd_suffix_language = suffix
+        if(encoding is not None):
+            cmd_codec_language = encoding
 
         params_string = ""
         for param in params0:
