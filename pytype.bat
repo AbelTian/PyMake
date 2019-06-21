@@ -63,4 +63,4 @@ rem for /F %%i in ('"%PYPROGRAMPATHNAME%" get default exec root') do ( set "PYMM
 rem echo exec root: [%PYMMSHELLROOT%] [default]
 rem echo exec root: [%CD%] [here]
 
-call "%PYPROGRAMPATHNAME%" use %PYENVNAME% type here %PYEXECNAME% %PYSCRIPTNAME%
+call "%PYPROGRAMPATHNAME%" use %PYENVNAME% type2 here %PYEXECNAME% to %PYSCRIPTNAME%

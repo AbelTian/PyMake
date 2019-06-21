@@ -1,3 +1,7 @@
 @echo off
-set filepath=%~dp0
-call %filepath%pymake.bat %*
+
+set PYPROGRAMPATH=%~dp0
+set PYPROGRAMNAME=pymake.bat
+set PYPROGRAMPATHNAME=%PYPROGRAMPATH%%PYPROGRAMNAME%
+
+call "%PYPROGRAMPATHNAME%" %*

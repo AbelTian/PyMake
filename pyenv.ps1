@@ -69,29 +69,33 @@ Set-Variable PYPROGRAMPATHNAME $PYPROGRAMPATH/$PYPROGRAMNAME
 Write-Output "preparing env ..."
 
 $PYENVINDEX = Get-Random
-Write-Output "env index: [$PYENVINDEX]"
+#Write-Output "env index: [$PYENVINDEX]"
 
-Invoke-Expression "$PYPROGRAMPATHNAME source root" | Set-Variable PYMMSOURCEROOT
-Write-Output "location : [$PYMMSOURCEROOT]"
+#Invoke-Expression "$PYPROGRAMPATHNAME source root" | Set-Variable PYMMSOURCEROOT
+#Write-Output "location : [$PYMMSOURCEROOT]"
 
-& "$PYPROGRAMPATHNAME" source config | Set-Variable PYMMSOURCECONFIG
-Write-Output "configure: [$PYMMSOURCECONFIG] [1]"
+#& "$PYPROGRAMPATHNAME" source config | Set-Variable PYMMSOURCECONFIG
+#Write-Output "configure: [$PYMMSOURCECONFIG] [1]"
 
-& "$PYPROGRAMPATHNAME" get current env | Set-Variable PYMMDEFAULTENVNAME
-echo "environme: [$PYMMDEFAULTENVNAME] [default]"
+#& "$PYPROGRAMPATHNAME" get current env | Set-Variable PYMMDEFAULTENVNAME
+#echo "environme: [$PYMMDEFAULTENVNAME] [default]"
 
-& "$PYPROGRAMPATHNAME" have env $PYENVNAME | Set-Variable PYENVEXISTEDFLAG
-if ("$PYENVEXISTEDFLAG" -eq "False") {
-    Write-Output "environme: [$PYENVNAME] is not existed."
-    exit 0
+#& "$PYPROGRAMPATHNAME" have env $PYENVNAME | Set-Variable PYENVEXISTEDFLAG
+#if ("$PYENVEXISTEDFLAG" -eq "False") {
+#    Write-Output "environme: [$PYENVNAME] is not existed."
+#    exit 0
+#}
+#Write-Output "environme: [$PYENVNAME] [$PYENVEXISTEDFLAG] [USED]"
+
+#& "$PYPROGRAMPATHNAME" get default exec root | Set-Variable PYMMSHELLROOT
+#Write-Output "exec root: [$PYMMSHELLROOT] [default]"
+#Write-Output "exec root: [$PWD] [here]"
+Set-Variable PYMMSHELLROOT $PWD
+
+& "$PYPROGRAMPATHNAME" export2 powershell here $PYENVNAME to $PYENVINDEX --local --custom
+if ($LASTEXITCODE -ne 0) {
+    exit $LASTEXITCODE
 }
-Write-Output "environme: [$PYENVNAME] [$PYENVEXISTEDFLAG] [USED]"
-
-& "$PYPROGRAMPATHNAME" get default exec root | Set-Variable PYMMSHELLROOT
-Write-Output "exec root: [$PYMMSHELLROOT] [default]"
-Write-Output "exec root: [$PWD] [here]"
-
-& "$PYPROGRAMPATHNAME" export2 powershell $PYENVNAME to $PYENVINDEX --local --custom
 
 if ("$PYENVFLAG" -eq "False") {
     . "$PYMMSHELLROOT/${PYENVINDEX}_unset.ps1"

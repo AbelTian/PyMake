@@ -107,7 +107,7 @@ export PYPROGRAMPATHNAME=$PYPROGRAMPATH/$PYPROGRAMNAME
 #echo exec root: \[$PYMMSHELLROOT\] \[default\]
 #echo exec root: \[$(pwd)\] \[here\]
 
-"$PYPROGRAMPATHNAME" use $PYENVNAME type here $PYEXECNAME $PYSCRIPTNAME
+"$PYPROGRAMPATHNAME" use $PYENVNAME type2 here $PYEXECNAME to $PYSCRIPTNAME
 
 
 break

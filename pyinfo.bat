@@ -1,3 +1,7 @@
 @echo off
-set filepath=%~dp0
-call py %filepath%pyinfo.py %*
+
+set PYPROGRAMPATH=%~dp0
+set PYPROGRAMNAME=pyinfo.py
+set PYPROGRAMPATHNAME=%PYPROGRAMPATH%%PYPROGRAMNAME%
+
+call py "%PYPROGRAMPATHNAME%" %*

@@ -1,3 +1,7 @@
 @echo off
-set filepath=%~dp0
-call %filepath%pyexecvp.bat %*
+
+set PYPROGRAMPATH=%~dp0
+set PYPROGRAMNAME=pyexecvp.bat
+set PYPROGRAMPATHNAME=%PYPROGRAMPATH%%PYPROGRAMNAME%
+
+call "%PYPROGRAMPATHNAME%" %*

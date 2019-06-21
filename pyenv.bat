@@ -52,17 +52,21 @@ rem for /F %%i in ('"%PYPROGRAMPATHNAME%" source config') do ( set "PYMMSOURCECO
 rem echo configure: [%PYMMSOURCECONFIG%] [1]
 rem for /F %%i in ('"%PYPROGRAMPATHNAME%" get current env') do ( set "PYMMDEFAULTENVNAME=%%i" )
 rem echo environme: [%PYMMDEFAULTENVNAME%] [default]
-for /F %%i in ('"%PYPROGRAMPATHNAME%" have env %PYENVNAME%') do ( set "PYENVEXISTEDFLAG=%%i" )
-if "%PYENVEXISTEDFLAG%" == "False" (
-    echo environme: [%PYENVNAME%] is not existed.
-    exit /b 0
-)
-echo environme: [%PYENVNAME%] [%PYENVEXISTEDFLAG%] [USED]
-for /F %%i in ('"%PYPROGRAMPATHNAME%" get default exec root') do ( set "PYMMSHELLROOT=%%i" )
-echo exec root: [%PYMMSHELLROOT%] [default]
+rem for /F %%i in ('"%PYPROGRAMPATHNAME%" have env %PYENVNAME%') do ( set "PYENVEXISTEDFLAG=%%i" )
+rem if "%PYENVEXISTEDFLAG%" == "False" (
+rem     echo environme: [%PYENVNAME%] is not existed.
+rem     exit /b 0
+rem )
+rem echo environme: [%PYENVNAME%] [%PYENVEXISTEDFLAG%] [USED]
+rem for /F %%i in ('"%PYPROGRAMPATHNAME%" get default exec root') do ( set "PYMMSHELLROOT=%%i" )
+rem echo exec root: [%PYMMSHELLROOT%] [default]
 rem echo exec root: [%CD%] [here]
+set PYMMSHELLROOT=%CD%
 
-call "%PYPROGRAMPATHNAME%" export2 %PYENVNAME% to %PYENVINDEX% --local --custom
+call "%PYPROGRAMPATHNAME%" export2 here %PYENVNAME% to %PYENVINDEX% --local --custom
+if not "%ERRORLEVEL%" == "0" (
+    exit /b %ERRORLEVEL%
+)
 
 if "%PYENVFLAG%" == "False" (
     call "%PYMMSHELLROOT%\%PYENVINDEX%_unset.bat"
@@ -83,9 +87,9 @@ rem set PYENVNAME=
 rem set PYMMDEFAULTENVNAME=
 rem set PYMMSOURCECONFIG=
 rem set PYMMSOURCEROOT=
-rem set PYPROGRAMNAME=
-rem set PYPROGRAMPATH=
-rem set PYPROGRAMPATHNAME=
 rem set PYMMSHELLROOT=
+rem set PYPROGRAMPATH=
+rem set PYPROGRAMNAME=
+rem set PYPROGRAMPATHNAME=
 
 exit /b 0

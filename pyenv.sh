@@ -4,7 +4,7 @@ while [ 1 ]
 do
 
 
-export PYENVFLAG=1
+PYENVFLAG=1
 if [ "$1" = "" ]
 then
     echo usage:
@@ -28,7 +28,7 @@ then
         echo please appoint a env name.
         break
     fi
-    export PYENVNAME=$2
+    PYENVNAME=$2
 elif [ "$1" = "close" ]
 then
     if [ "$2" = "" ]
@@ -42,10 +42,10 @@ then
         echo please appoint a env name.
         break
     fi
-    export PYENVNAME=$2
-    export PYENVFLAG=0
+    PYENVNAME=$2
+    PYENVFLAG=0
 else
-    export PYENVNAME=$1
+    PYENVNAME=$1
 fi
 
 
@@ -53,7 +53,7 @@ fi
 #这些都只是获取到了工作路径
 #used for a link to sh
 #file=$(readlink -n "$0")
-#export PYPROGRAMPATH=${file%/*}
+#PYPROGRAMPATH=${file%/*}
 #if [ "${PYPROGRAMPATH}" != "" ]; then
 #    PYPROGRAMPATH=$PYPROGRAMPATH/..
 #else
@@ -62,7 +62,7 @@ fi
 #fi
 
 #used for call directory to this sh, include source[.] call.
-#export PYPROGRAMPATH=$(cd ..; pwd)
+#PYPROGRAMPATH=$(cd ..; pwd)
 
 #这个有价值，这个可以获得 source 直接调用的文件名。但是还没有达到目的。source调用的必须找到真的文件。
 #DIR_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
@@ -84,9 +84,9 @@ done
 DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null && pwd )"
 #echo .... $DIR
 
-export PYPROGRAMPATH=${DIR}
-export PYPROGRAMNAME=pymake.sh
-export PYPROGRAMPATHNAME=$PYPROGRAMPATH/$PYPROGRAMNAME
+PYPROGRAMPATH=${DIR}
+PYPROGRAMNAME=pymake.sh
+PYPROGRAMPATHNAME=$PYPROGRAMPATH/$PYPROGRAMNAME
 
 #echo $file
 #echo $PYPROGRAMPATH
@@ -97,29 +97,33 @@ export PYPROGRAMPATHNAME=$PYPROGRAMPATH/$PYPROGRAMNAME
 #echo $0 | awk -F'\' '{print $NF}'
 
 echo preparing env ...
-export PYENVINDEX=$(echo $RANDOM)
-echo env index: \[$PYENVINDEX\]
+PYENVINDEX=$(echo $RANDOM)
+#echo env index: \[$PYENVINDEX\]
 
-export PYMMSOURCEROOT=$("${PYPROGRAMPATHNAME}" source root)
-echo location : \[$PYMMSOURCEROOT\]
+#PYMMSOURCEROOT=$("${PYPROGRAMPATHNAME}" source root)
+#echo location : \[$PYMMSOURCEROOT\]
 
-export PYMMSOURCECONFIG=$("$PYPROGRAMPATHNAME" source config)
-echo configure: \[$PYMMSOURCECONFIG\] \[1\]
+#PYMMSOURCECONFIG=$("$PYPROGRAMPATHNAME" source config)
+#echo configure: \[$PYMMSOURCECONFIG\] \[1\]
 
-export PYMMDEFAULTENVNAME=$("$PYPROGRAMPATHNAME" get current env)
-echo environme: \[$PYMMDEFAULTENVNAME\] \[default\]
-export PYENVEXISTEDFLAG=$("$PYPROGRAMPATHNAME" have env $PYENVNAME)
-if [ "$PYENVEXISTEDFLAG" = "False" ]; then
-    echo environme: \[$PYENVNAME\] is not existed.
+#PYMMDEFAULTENVNAME=$("$PYPROGRAMPATHNAME" get current env)
+#echo environme: \[$PYMMDEFAULTENVNAME\] \[default\]
+#PYENVEXISTEDFLAG=$("$PYPROGRAMPATHNAME" have env $PYENVNAME)
+#if [ "$PYENVEXISTEDFLAG" = "False" ]; then
+#    echo environme: \[$PYENVNAME\] is not existed.
+#    break
+#fi
+#echo environme: \[$PYENVNAME\] \[$PYENVEXISTEDFLAG\] \[USED\]
+
+#PYMMSHELLROOT=$("$PYPROGRAMPATHNAME" get default exec root)
+#echo exec root: \[$PYMMSHELLROOT\] \[default\]
+#echo exec root: \[$(pwd)\] \[here\]
+PYMMSHELLROOT=$(pwd)
+
+"$PYPROGRAMPATHNAME" export2 here $PYENVNAME to $PYENVINDEX --local --custom
+if [ $? -ne 0 ]; then
     break
 fi
-echo environme: \[$PYENVNAME\] \[$PYENVEXISTEDFLAG\] \[USED\]
-
-export PYMMSHELLROOT=$("$PYPROGRAMPATHNAME" get default exec root)
-echo exec root: \[$PYMMSHELLROOT\] \[default\]
-echo exec root: \[$(pwd)\] \[here\]
-
-"$PYPROGRAMPATHNAME" export2 $PYENVNAME to $PYENVINDEX --local --custom
 
 if [ $PYENVFLAG -eq 0 ]; then
     if [ -f "${PYMMSHELLROOT}/${PYENVINDEX}_unset.sh" ]; then

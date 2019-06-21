@@ -80,20 +80,21 @@ $PYENVINDEX = Get-Random
 #& "$PYPROGRAMPATHNAME" get current env | Set-Variable PYMMDEFAULTENVNAME
 #echo "environme: [$PYMMDEFAULTENVNAME] [default]"
 
-& "$PYPROGRAMPATHNAME" have env $PYENVNAME | Set-Variable PYENVEXISTEDFLAG
-if ("$PYENVEXISTEDFLAG" -eq "False") {
-    Write-Output "environme: [$PYENVNAME] is not existed."
-    exit 0
-}
-Write-Output "environme: [$PYENVNAME] [$PYENVEXISTEDFLAG] [USED]"
+#& "$PYPROGRAMPATHNAME" have env $PYENVNAME | Set-Variable PYENVEXISTEDFLAG
+#if ("$PYENVEXISTEDFLAG" -eq "False") {
+#    Write-Output "environme: [$PYENVNAME] is not existed."
+#    exit 0
+#}
+#Write-Output "environme: [$PYENVNAME] [$PYENVEXISTEDFLAG] [USED]"
 
-& "$PYPROGRAMPATHNAME" get default exec root | Set-Variable PYMMSHELLROOT
-Write-Output "exec root: [$PYMMSHELLROOT] [default]"
+#& "$PYPROGRAMPATHNAME" get default exec root | Set-Variable PYMMSHELLROOT
+#Write-Output "exec root: [$PYMMSHELLROOT] [default]"
 #Write-Output "exec root: [$PWD] [here]"
+Set-Variable PYMMSHELLROOT $PWD
 
-& "$PYPROGRAMPATHNAME" vc export2 powershell $PYENVNAME to $PYENVINDEX --local --custom
+& "$PYPROGRAMPATHNAME" vc export2 powershell here $PYENVNAME to $PYENVINDEX --local --custom
 if ($LASTEXITCODE -ne 0) {
-    exit 0
+    exit $LASTEXITCODE
 }
 
 if ("$PYENVFLAG" -eq "False") {

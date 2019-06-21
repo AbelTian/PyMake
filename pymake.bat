@@ -1,3 +1,7 @@
 @echo off
-set filepath=%~dp0
-call py %filepath%pymake7.py %*
+
+set PYPROGRAMPATH=%~dp0
+set PYPROGRAMNAME=pymake7.py
+set PYPROGRAMPATHNAME=%PYPROGRAMPATH%%PYPROGRAMNAME%
+
+call py "%PYPROGRAMPATHNAME%" %*
