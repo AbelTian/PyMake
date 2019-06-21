@@ -121,8 +121,9 @@ PYENVINDEX=$(echo $RANDOM)
 PYMMSHELLROOT=$(pwd)
 
 "$PYPROGRAMPATHNAME" export2 here $PYENVNAME to $PYENVINDEX --local --custom
-if [ $? -ne 0 ]; then
-    break
+exportreturncode=$?
+if [ $exportreturncode -ne 0 ]; then
+    exit $exportreturncode
 fi
 
 if [ $PYENVFLAG -eq 0 ]; then

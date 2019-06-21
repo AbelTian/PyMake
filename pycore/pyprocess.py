@@ -49,7 +49,13 @@ def read_thread_function(p):
     global cmd_event
     global cmd_exit_flag
     while (True):
-        l = p.stdout.readline().rstrip().decode(cmd_codec)
+        l = p.stdout.readline().rstrip()
+        #print(l)
+        try:
+            l = l.decode(cmd_codec)
+        except:
+            l = str(l).encode('raw_unicode_escape')
+            l = l.decode(cmd_codec)
         #print(l)
 
         if (l is None):
