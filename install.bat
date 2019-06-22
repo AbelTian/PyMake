@@ -48,6 +48,11 @@ set filepath=%~dp0
 set sourcefile=pyvcpowershell.bat
 call :install %*
 
+set mmfile=pyvclanguage.bat
+set filepath=%~dp0
+set sourcefile=pyvclanguage.bat
+call :install %*
+
 set mmfile=pytype.bat
 set filepath=%~dp0
 set sourcefile=pytype.bat

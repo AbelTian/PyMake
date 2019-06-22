@@ -39,6 +39,10 @@ set sourcefile=pyvcpowershell.bat
 set mmfile=pyvcpowershell.bat
 call :uninstall
 
+set sourcefile=pyvclanguage.bat
+set mmfile=pyvclanguage.bat
+call :uninstall
+
 set sourcefile=pytype.bat
 set mmfile=pytype.bat
 call :uninstall
