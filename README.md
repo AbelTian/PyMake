@@ -889,14 +889,15 @@ User support shell module, user can install them to share their functions.
 | pymake.py | pylanguage |  |
 | pymake.py | pypowershell.bat |  |
 | pymake.py | pyenv.ps1 |  |
-| pymake.py | | pyvc.ps1 |  |
-| pymake.py | | pyvc.bat |  |
-| pymake.py | | pyvcccvp.bat |  |
-| pymake.py | | pyvcpowershell.bat |  |
-| pymake.py | | pyvcpython.bat |  |
-| pymake.py | | pyvcexport.bat |  |
-| pyinfo.py | pyinfo || 
-| pypaths.py | pypaths || 
+| pymake.py | | pyvc.ps1 | 
+| pymake.py | | pyvc.bat | 
+| pymake.py | | pyvcccvp.bat | 
+| pymake.py | | pyvcpowershell.bat | 
+| pymake.py | | pyvcpython.bat | 
+| pymake.py | | pyvclanguage.bat | 
+| pymake.py | | pyvcexport.bat | 
+| pyinfo.py | pyinfo | |
+| pypaths.py | pypaths | |
 | pycodec.py | | |
 | ... |  | install,uninstall |  
 

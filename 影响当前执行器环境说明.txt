@@ -3,10 +3,10 @@
     pyinfo.bat pypaths.bat
     pycmd.bat pyexecvp.bat pyccvp.bat
     pypowershell.bat pypython.bat pylanguage.bat 
-    pyvcccvp.bat pyvcexport.bat pyvcpowershell.bat pyvcpython.bat [non-.sh]
+    pyvcccvp.bat pyvcexport.bat pyvcpowershell.bat pyvcpython.bat pyvclanguage.bat[non-.sh]
     pyexport.bat pytype.bat
     pyclean.bat
-    
+
 影响当前执行器环境
     pyenv.bat pyvc.bat
     
