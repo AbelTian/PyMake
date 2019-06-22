@@ -672,6 +672,11 @@ R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource\MyShell>
 
 ```
 
+## Custom Environ Config Files   
+custom environ config files .ini.  
+
+![custom environ](screenshot/b16.png)
+  
 
 ## Environment    
 
