@@ -5715,6 +5715,251 @@ def main_function():
 
         return cmd_list, name
 
+    def vc_language_createCmdList08(shellenvname = None, suffix = None, encoding = None, env_name = None, local = True, list0 = [], params0 = []):
+        cmd_list = []
+
+        name = uuid.uuid4().__str__()
+        name = name.split('-')[0]
+        #print (name)
+
+        plat = getplatform()
+        if (plat == "Windows"):
+            cmd_status = "echo pymake-command-status:%ERRORLEVEL%"
+            cmd_sep = '&'
+            cmd_codec = "ansi"
+            if (getplatform_release() == "XP"):
+                cmd_codec = None
+            # but windows, it is \r\n, python helpping me?
+            cmd_return = "\n"
+            cmd_exit = 'exit /b %ERRORLEVEL%'
+            cmd_suffix = ".bat"
+            cmd_header = "@echo off"
+            cmd_call = "call "
+            # window close echo, close promot
+            cmd_list.append(cmd_header)
+            # os.system("type env_effect.bat > cmd_exec.bat")
+            cmd_list.append("call %s_effect.bat" % name)
+            if (shellenvname is not None):
+                cmd_list.append('call \"%s_effect%s\"' % (shellenvname, cmd_suffix))
+        else:
+            cmd_status = "echo pymake-command-status:$?"
+            cmd_sep = ';'
+            cmd_suffix = ".sh"
+            cmd_exit = 'exit $?'
+            cmd_codec = "utf8"
+            cmd_return = "\n"
+            cmd_header = "#!/usr/bin/env bash"
+            cmd_call = "./"
+            cmd_list.append(cmd_header)
+            cmd_list.append("source %s_effect.sh" % name)
+            if (shellenvname is not None):
+                cmd_list.append('source \"%s_effect%s\"' % (shellenvname, cmd_suffix))
+
+        if(env_name is None):
+            env_name = rawconfig['environ']['current']
+        if(env_name == "current"):
+            env_name = rawconfig['environ']['current']
+
+        cmd_suffix_language = cmd_suffix
+        cmd_codec_language = cmd_codec
+        cmd_return_language = cmd_return
+
+        if(suffix is not None):
+            cmd_suffix_language = suffix
+        if(encoding is not None):
+            cmd_codec_language = encoding
+
+        list1 = []
+        # for current_var in str(args['<command-param>']).split():
+        #    list1.append(current_var)
+        if (params0.__len__() > 0):
+            current_var = params0[0]
+            list1.append(current_var)
+            params0.pop(0)
+        #print(list1)
+
+        params_string = ""
+        for param in params0:
+            if(str(param).__contains__(' ')):
+                params_string += '"' + param + '"' + ' '
+            else:
+                params_string += param + ' '
+        #print(params_string)
+
+        local2 = True
+        if (list1.__len__() > 0):
+            current_var = list1[0]
+            if (current_var in rawconfig['command']):
+                local2 = True
+            else:
+                local2 = False
+
+        languageparams = ''
+        #actually only one param.
+        if (local2 is True):
+            for param1 in list1:
+                languageparams += param1
+        else:
+            for param1 in list1:
+                # warning: now pymake is in user setted workroot.
+
+                languageparams = ""
+                while (True):
+                    # find in current path [+--workroot]
+                    languageparams = os.getcwd() + os.path.sep + param1
+                    # print(2, languageparams)
+                    if (os.path.exists(languageparams)):
+                        break
+                    languageparams = pymakeworkpath + os.path.sep + param1
+                    # print(2, languageparams)
+                    if (os.path.exists(languageparams)):
+                        break
+
+                    # find in .json environ
+                    separateenvlistpath = os.path.pathsep.join(rawconfig['environ'][env_name]['path+'])
+                    separateenvlistpath = separateenvlistpath.split(os.path.pathsep)
+                    separateenvlistpath.reverse()
+                    #for path0 in separateenvlistpath:
+                    #    print(path0)
+                    find_flag = 0
+                    for path0 in separateenvlistpath:
+                        languageparams = path0 + os.path.sep + param1
+                        #print(2, languageparams)
+                        if (os.path.exists(languageparams)):
+                            find_flag = 1
+                            break
+                    if (find_flag == 1):
+                        break
+
+                    # find in basic environ [custom+]
+                    env = os.environ
+                    find_flag = 0
+                    for path0 in env["PATH"].split(os.path.pathsep):
+                        languageparams = path0 + os.path.sep + param1
+                        # print(2, languageparams)
+                        if (os.path.exists(languageparams)):
+                            find_flag = 1
+                            break
+                    if (find_flag == 1):
+                        break
+
+                    # none? a language command, or language command-line.
+                    languageparams = param1
+                    break
+
+                    # print(2, languageparams)
+                    # cmd_list.append(languageparams + ' ' + params_string)
+
+        if(list1.__len__() >0):
+            ''
+            if(local2 is True):
+                ''
+                current_var = env_name
+                local_command = raw_command(current_var)
+                dict0 = copy.deepcopy(local_command)
+
+                inside_name = name + '_2'
+                languageparams = inside_name + '_exec' + cmd_suffix_language
+
+                with open(languageparams, 'w', encoding=cmd_codec_language) as f:
+                    for cmd1 in list1:
+                        for cmd in dict0[cmd1]:
+                            f.write(cmd + cmd_return_language)
+
+                #print(1, cmd_suffix_language)
+                #print(1, cmd_return_language)
+                #print(1, cmd_codec_language)
+                #print(1, languageparams)
+            else:
+                ''
+
+        #print(3, languageparams)
+        if(list1.__len__() >0 ):
+            if(local2 is True):
+                params_string = languageparams + ' ' + params_string
+            else:
+                if(str(languageparams).__contains__(' ')):
+                    params_string = '"' + languageparams + '"' + ' ' + params_string
+                else:
+                    params_string = languageparams + ' ' + params_string
+        #print(params_string)
+
+        languageexecfile = ''
+        if ( local is True):
+            #fixed
+            #inside_name = name
+            #inside_name = hex( int( inside_name, 16 ) + 1).split('x')[1]
+            inside_name = name + '_1'
+            #print(inside_name)
+            languageexecfile = inside_name + '_exec' + cmd_suffix
+            with open(languageexecfile, 'w', encoding=cmd_codec) as f:
+                for cmd in list0:
+                    f.write(cmd + cmd_return)
+            #print(1, languageexecfile)
+        else:
+            languageexecfile = ''
+            #actually now has only one command.
+            for cmd in list0:
+                #actually this is a command.
+                if (str(cmd).__contains__(' ')):
+                    pycmd = which_command(env_name, str(cmd))
+                    #print(cmd)
+                    #print(pycmd)
+                    if(pycmd is not None and os.path.isfile(pycmd)):
+                        languageexecfile = '"' + cmd + '"'
+                    else:
+                        languageexecfile = cmd
+                else:
+                    languageexecfile = cmd
+
+        #print(3, languageexecfile)
+        if(plat == "Windows"):
+            cmd_list.append("call %s %s" % (languageexecfile, '%*'))
+        else:
+            if(languageexecfile.endswith('.sh')):
+                cmd_list.append("sh %s %s" % (languageexecfile, '"$@"'))
+            else:
+                cmd_list.append("%s %s" % (languageexecfile, '"$@"'))
+
+        # append exit 0
+        cmd_list.append(cmd_exit)
+
+        cmd_execute = name + "_exec" + cmd_suffix
+        with open(cmd_execute, "w", encoding=cmd_codec) as f:
+            for line in cmd_list:
+                f.write(line + cmd_return)
+
+        if(debugswitch == '1'):
+            print("IN: execute file: %s" % cmd_execute)
+            for cmd in cmd_list:
+                print(cmd)
+            print("---------------------------")
+
+        if (plat == "Windows"):
+            ""
+        else:
+            os.system("chmod +x " + cmd_execute)
+
+        cmd_list.clear()
+        if (plat == "Windows"):
+            cmd_list.append(cmd_header + ' ' + cmd_sep + ' ' + cmd_status)
+            #cmd_list.append("call " + cmd_execute + cmd_sep + ' ' + cmd_status)
+            cmd_list.append("call " + cmd_execute + ' '+ params_string + cmd_sep + ' ' + cmd_status)
+        else:
+            # cmd_list.append(cmd_header + ' ' + cmd_sep + ' ' + cmd_status)
+            #cmd_list.append("./" + cmd_execute + cmd_sep + ' ' + cmd_status)
+            cmd_list.append("./" + cmd_execute + ' ' + params_string + cmd_sep + ' ' + cmd_status)
+
+        cmd_list.append(cmd_exit)
+
+        if(debugswitch == '1'):
+            print("CMD: call execute file: %s" % cmd_execute)
+            for cmd in cmd_list:
+                print( cmd )
+            print("---------------------------")
+
+        return cmd_list, name, cmd_suffix, cmd_suffix_language
+
     #vc json export function
     def vc_json_export(dict0 = None, env_name = None, file_name = None):
         if(dict0 is None):
@@ -7118,6 +7363,8 @@ def main_function():
                     return
                 else:
                     ''
+                    return
+                return
             elif (args['python'] is True):
                 if (args['ccvp'] or args['execvp'] or args['exec-with-params'] is True):
                     current_env = ""
@@ -7292,8 +7539,194 @@ def main_function():
                     return
                 else:
                     ''
+                    return
+                return
             elif (args['language'] is True):
-                ''
+                if (args['ccvp'] or args['execvp'] or args['exec-with-params'] is True):
+                    current_env = ""
+                    if (args['use'] is True):
+                        if (args['<env-name>'] is None):
+                            print("please appoint a environ")
+                            return
+
+                        if (rawconfig['environ'].__contains__(args['<env-name>']) is False):
+                            print("please ensure the environ is right")
+                            return
+
+                        current_env = args['<env-name>']
+                        if (args['<env-name>'] == "current"):
+                            current_env = rawconfig['environ']['current']
+
+                        if (current_env == 'current'
+                            or rawconfig['environ'].__contains__(current_env) is False):
+                            print(".json file is broken, environ section current env config is lost, please use set command fix it.")
+                            return
+                    else:
+                        current_env = rawconfig['environ']['current']
+
+                    if (args['<command-name>'] is None):
+                        print("please appoint your command")
+                        return
+
+                    if (args['here'] or args['hh'] is True):
+                        os.chdir(pymakeworkpath)
+
+                    # print(args['--workroot'])
+                    if (args['--workroot'] is not None):
+                        if (os.path.isdir(args['--workroot'])
+                            and os.path.isabs(args['--workroot'])):
+                            os.chdir(args['--workroot'])
+                        else:
+                            print('please input an existed and legal work root.')
+                            return
+
+                    current_vcvarsall = 'vcvarsall'
+                    current_vcvarsallparam = 'vcvarsallparam'
+                    has_set = '0'
+                    native_dict = {}
+                    while (True):
+                        if (pymakesystemenviron.__contains__(current_vcvarsall) is True):
+                            native_dict = pymakesystemenviron
+                            has_set = "system env:"
+                        if (envcustomlistrawvars.__contains__(current_vcvarsall) is True):
+                            native_dict = envcustomlistrawvars
+                            has_set = "custom env:"
+                        if (rawconfig['environ'][current_env].__contains__(current_vcvarsall) is True):
+                            native_dict = rawconfig['environ'][current_env]
+                            has_set = str("env %s:" % current_env)
+                        break
+
+                    # print(has_set)
+                    # if(has_set != '0'):
+                    #    print(native_dict[current_vcvarsall])
+
+                    if (has_set is '0'):
+                        print("please set env variable: vcvarsall.")
+                        return
+
+                    if (native_dict.__contains__(current_vcvarsallparam) is False):
+                        print("please set env variable: vcvarsallparam.")
+                        return
+
+                    #print("source file: %s" % sourceconfigfile)
+
+                    #print(has_set)
+                    #print('  "vcvarsall": "%s"' % native_dict[current_vcvarsall])
+                    #print('  "vcvarsallparam": "%s"' % native_dict[current_vcvarsallparam])
+
+                    nowroot = os.getcwd()
+
+                    # dict1
+                    dict1 = copy.deepcopy(rawconfig['environ'][current_env])
+                    os.chdir(vcroot)
+                    jsonfile = 'pymake-vc-command.json'
+                    if (not os.path.exists(jsonfile)):
+                        print('please init vc.')
+                        return
+                    dict0 = readJsonData(jsonfile)
+                    if (dict0.__contains__('environ') is False):
+                        print('please init vc.')
+                        return
+                    if (dict0['environ'].__contains__(current_env) is False):
+                        print('please init vc for %s env.' % current_env)
+                        return
+                    for (key) in dict0['environ'][current_env]["path+"]:
+                        dict1['path+'].append(key)
+                    for (key, value) in dict0['environ'][current_env].items():
+                        if (key == 'path+'):
+                            continue
+                        dict1[key] = value
+                    if (dict1.__contains__('VISUALSTUDIOVERSION') is False):
+                        print('failed: env var VISUALSTUDIOVERSION is not defined in %s.' % native_dict[current_vcvarsall])
+                        return
+                    vcname = 'vc' + dict1['VISUALSTUDIOVERSION'] + '_' + native_dict[current_vcvarsallparam]
+                    filename = 'pymake_' + vcname
+                    shellenvname = vcroot + os.path.sep + filename
+                    #print(shellenvname)
+                    os.chdir(nowroot)
+
+                    # create cmd_list
+                    current_var = current_env
+                    local_command = raw_command(current_var)
+                    dict0 = copy.deepcopy(local_command)
+
+                    list0 = []
+                    local = True
+                    current_var = args['<command-name>']
+                    if (current_var in dict0):
+                        list0.extend(dict0[current_var])
+                        local = True
+                    else:
+                        list0.append(current_var)
+                        local = False
+
+                    params0 = []
+                    # print(args['--params'])
+                    # print(args['<command-params>'])
+                    for current_var in args['--params']:
+                        params0.append(current_var)
+                    for current_var in args['<command-params>']:
+                        params0.append(current_var)
+
+                    suffix = args['--suffix']
+                    encoding = args['--encoding']
+
+                    # print(list0)
+                    # print(params0)
+                    # print(suffix)
+                    # print(encoding)
+
+                    cmd_list = []
+                    temp_file_name = ""
+                    # if (getplatform() == "Windows"):
+                    #    cmd_list, temp_file_name = createCmdList0(list0)
+                    # else:
+                    #    cmd_list, temp_file_name = createCmdList01(list0)
+                    # good compatibility
+                    cmd_list, temp_file_name, cmd_suffix, cmd_suffix_language = vc_language_createCmdList08(shellenvname, suffix, encoding, current_env, local, list0, params0)
+
+                    # export env
+                    current_var = current_env
+                    # print (current_var, temp_file_name)
+                    vc_export(dict1, current_var, temp_file_name)
+
+                    ret = communicateWithCommandLine(cmd_list)
+
+                    # delete env file and cmd file
+                    cmd_prefix = ''
+                    temp_file = cmd_prefix + temp_file_name + "_1_exec" + cmd_suffix
+                    if (os.path.exists(temp_file)):
+                        os.remove(temp_file)
+                    temp_file = cmd_prefix + temp_file_name + "_2_exec" + cmd_suffix_language
+                    if (os.path.exists(temp_file)):
+                        os.remove(temp_file)
+
+                    if (getplatform() == "Windows"):
+                        temp_file = cmd_prefix + temp_file_name + "_exec.bat"
+                        if (os.path.exists(temp_file)):
+                            os.remove(temp_file)
+                        temp_file = cmd_prefix + temp_file_name + "_effect.bat"
+                        if (os.path.exists(temp_file)):
+                            os.remove(temp_file)
+                        temp_file = cmd_prefix + temp_file_name + "_unset.bat"
+                        if (os.path.exists(temp_file)):
+                            os.remove(temp_file)
+                    else:
+                        temp_file = cmd_prefix + temp_file_name + "_exec.sh"
+                        if (os.path.exists(temp_file)):
+                            os.remove(temp_file)
+                        temp_file = cmd_prefix + temp_file_name + "_effect.sh"
+                        if (os.path.exists(temp_file)):
+                            os.remove(temp_file)
+                        temp_file = cmd_prefix + temp_file_name + "_unset.sh"
+                        if (os.path.exists(temp_file)):
+                            os.remove(temp_file)
+
+                    os._exit(ret)
+                    return
+                else:
+                    ''
+                    return
                 return
             elif (args['ccvp'] or args['execvp'] or args['exec-with-params'] is True):
                 current_env = ""
@@ -7463,6 +7896,7 @@ def main_function():
                 return
             else:
                 vc_settings(None)
+                return
         else:
             ''
         break
