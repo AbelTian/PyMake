@@ -2237,7 +2237,7 @@ def main_function():
                         for fi in args['--filter']:
                             filterString += fi + '|'
                         filterList = filterString.split('|')
-                        if (filterList.__contains__('')):
+                        while (filterList.__contains__('')):
                             filterList.remove('')
                         #print(filterString)
                         #print(filterList)
@@ -2323,10 +2323,11 @@ def main_function():
                         for fi in args['--filter']:
                             filterString += fi + '|'
                         filterList = filterString.split('|')
-                        if (filterList.__contains__('')):
+                        while (filterList.__contains__('')):
                             filterList.remove('')
                         # print(filterString)
-                        # print(filterList)
+                        #print(filterList)
+                        #return
                         for fil in filterList:
                             fil = fil.strip()
                             for key in keylist1:
@@ -2385,7 +2386,7 @@ def main_function():
                             for fi in args['--filter']:
                                 filterString += fi + '|'
                             filterList = filterString.split('|')
-                            if(filterList.__contains__('')):
+                            while (filterList.__contains__('')):
                                 filterList.remove('')
                             # print(filterString)
                             # print(filterList)
@@ -3756,7 +3757,7 @@ def main_function():
                         if(filterString == None):
                             filterString = ''
                         filterList = filterString.split('|')
-                        if (filterList.__contains__('')):
+                        while (filterList.__contains__('')):
                             filterList.remove('')
                         # print(filterString)
                         # print(filterList)
@@ -3839,7 +3840,7 @@ def main_function():
                                 if (filterString == None):
                                     filterString = ''
                                 filterList = filterString.split('|')
-                                if (filterList.__contains__('')):
+                                while (filterList.__contains__('')):
                                     filterList.remove('')
                                 # print(filterString)
                                 # print(filterList)
@@ -3980,23 +3981,28 @@ def main_function():
         plat = getplatform()
         for (k, v) in pathgroup1.items():
             path0 = str(v)
-            cmd0 = ''
-            if (plat == "Windows"):
-                if(path0.__contains__(' ')):
-                    cmd0 = 'start "" ' + '"%s"' % path0
+            pathslist = path0.split(os.path.pathsep)
+            while (pathslist.__contains__('')):
+                pathslist.remove('')
+            #print(pathslist)
+            for path0 in pathslist:
+                cmd0 = ''
+                if (plat == "Windows"):
+                    if(path0.__contains__(' ')):
+                        cmd0 = 'start "" ' + '"%s"' % path0
+                    else:
+                        cmd0 = "start " + path0
+                elif (plat == "Darwin"):
+                    if(path0.__contains__(' ')):
+                        cmd0 = 'open ' + '"%s"' % path0
+                    else:
+                        cmd0 = "open " + path0
                 else:
-                    cmd0 = "start " + path0
-            elif (plat == "Darwin"):
-                if(path0.__contains__(' ')):
-                    cmd0 = 'open ' + '"%s"' % path0
-                else:
-                    cmd0 = "open " + path0
-            else:
-                if(path0.__contains__(' ')):
-                    cmd0 = 'xdg-open ' + '"%s" ' % path0 + ">/dev/null 2>&1"
-                else:
-                    cmd0 = "xdg-open " + '%s ' % path0 + ">/dev/null 2>&1"
-            cmd_list.append(cmd0)
+                    if(path0.__contains__(' ')):
+                        cmd0 = 'xdg-open ' + '"%s" ' % path0 + ">/dev/null 2>&1"
+                    else:
+                        cmd0 = "xdg-open " + '%s ' % path0 + ">/dev/null 2>&1"
+                cmd_list.append(cmd0)
 
         return cmd_list
 
@@ -4493,7 +4499,7 @@ def main_function():
                 # if(l == ''):
                 #    continue
                 custompaths.append(l)
-        # if(custompaths.__contains__('') is True):
+        # while(custompaths.__contains__('') is True):
         # custompaths.remove('')
         # print(custompaths)
         # print(os.linesep)
