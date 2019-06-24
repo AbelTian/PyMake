@@ -439,6 +439,7 @@
                 "${cmake.bin}",
                 "${qt5.12.winrt.arm.bin}"
             ],
+            "make0": "nmake",
             "vcvarsall": "${vcvarsall-2015}",
             "vcvarsallparam": "amd64_arm",
             "run-vcvarsall": "${vcvarsall} ${vcvarsallparam}",
@@ -456,6 +457,7 @@
                 "${cmake.bin}",
                 "${qt5.12.winrt.x64.bin}"
             ],
+            "make0": "nmake",
             "vcvarsall": "${vcvarsall-2015}",
             "vcvarsallparam": "x86_amd64",
             "run-vcvarsall": "${vcvarsall} ${vcvarsallparam}",

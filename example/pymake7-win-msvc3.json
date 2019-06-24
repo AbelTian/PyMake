@@ -130,6 +130,7 @@
                 "${ant.bin}",
                 "${ndk.arm.bin}"
             ],
+            "make0": "mingw32-make",
             "ANDROID_API_VERSION": "android-23",
             "ANDROID_SDK_ROOT": "${android.sdk}",
             "ANDROID_NDK_ROOT": "${android.ndk}",
@@ -162,6 +163,7 @@
                 "${ant.bin}",
                 "${ndk.x86.bin}"
             ],
+            "make0": "mingw32-make",
             "CLICOLOR": "1",
             "ANDROID_API_VERSION": "android-23",
             "ANDROID_SDK_ROOT": "${android.sdk}",
@@ -188,6 +190,7 @@
                 "${mingw32.bin}",
                 "${qt4.8.mingw32.bin}"
             ],
+            "make0": "mingw32-make",
             "QTVERSION": "${qt4.version}",
             "QTDIR": "${qt4.8.mingw32}",
             "QTSPEC": "-spec win32-g++",
@@ -201,6 +204,7 @@
                 "${VC6.BIN}",
                 "${qt5.5.vc6.bin}"
             ],
+            "make0": "nmake",
             "vcvarsall": "${vcvarsall-1998}",
             "vcvarsallparam": "x86",
             "run-vcvarsall": "\"${vcvarsall}\" ${vcvarsallparam}",
@@ -220,6 +224,7 @@
                 "${cmake.bin}",
                 "${qt5.5.vc6.bin}"
             ],
+            "make0": "nmake",
             "vcvarsall": "${vcvarsall-1998}",
             "vcvarsallparam": "x86",
             "run-vcvarsall": "\"${vcvarsall}\" ${vcvarsallparam}",
@@ -236,6 +241,7 @@
                 "${cmake.bin}",
                 "${qt5.9.msvc2015.bin}"
             ],
+            "make0": "nmake",
             "vcvarsall": "${vcvarsall-2015}",
             "vcvarsallparam": "amd64_x86",
             "BuildType": "Debug",
@@ -260,6 +266,7 @@
                 "${cmake.bin}",
                 "${qt5.12.msvc2015_64.bin}"
             ],
+            "make0": "nmake",
             "vcvarsall": "${vcvarsall-2015}",
             "vcvarsallparam": "x86_amd64",
             "run-vcvarsall": "${vcvarsall} ${vcvarsallparam}",
@@ -278,6 +285,7 @@
                 "${cmake.bin}",
                 "${qt5.12.winrt.arm.bin}"
             ],
+            "make0": "nmake",
             "vcvarsall": "${vcvarsall-2015}",
             "vcvarsallparam": "amd64_arm",
             "run-vcvarsall": "${vcvarsall} ${vcvarsallparam}",
@@ -296,6 +304,7 @@
                 "${cmake.bin}",
                 "${qt5.12.winrt.x64.bin}"
             ],
+            "make0": "nmake",
             "vcvarsall": "${vcvarsall-2015}",
             "vcvarsallparam": "x86_amd64",
             "run-vcvarsall": "${vcvarsall} ${vcvarsallparam}",
@@ -314,6 +323,7 @@
                 "${cmake.bin}",
                 "${qt5.9.msvc2015.bin}"
             ],
+            "make0": "nmake",
             "vcvarsall": "${vcvarsall-2012}",
             "vcvarsallparam": "x86",
             "run-vcvarsall": "\"${vcvarsall}\" ${vcvarsallparam}",
@@ -335,6 +345,7 @@
                 "${cmake.bin}",
                 "${qt5.9.msvc2015.bin}"
             ],
+            "make0": "nmake",
             "vcvarsall": "${vcvarsall-2013}",
             "vcvarsallparam": "x86",
             "run-vcvarsall": "\"${vcvarsall}\" ${vcvarsallparam}",
@@ -380,6 +391,7 @@
                 "${qt5.armhf32.bin}",
                 "${mingw32.bin}"
             ],
+            "make0": "mingw32-make",
             "QTVERSION": "${qt5.version}",
             "QTDIR": "${qt5.armhf32}",
             "QTSPEC": "-spec linux-arm-gnueabihf-g++",
@@ -789,7 +801,7 @@
             "echo prod at : %prod:\\=/%",
             "echo %QTSPEC% %QTCONFIG%",
             "qmake %src% %QTSPEC% CONFIG+=debug CONFIG+=qml_debug %QTCONFIG% && %make0% qmake_all",
-            "%make0% -j10",
+            "%make0%",
             "echo build inf %QTSPEC% %QTCONFIG%",
             "echo src file: %src:\\=/%",
             "echo src path: %src_path:\\=/%",
@@ -1003,13 +1015,13 @@
             "cd /d %build%",
             "rem del /f /q /s demo examples src test",
             "qmake %src% %QTSPEC% CONFIG+=debug CONFIG+=qml_debug %QTCONFIG% && %make0% qmake_all",
-            "%make0% -j10",
+            "%make0%",
             "set build=${root.build}/QQt/%QSYS%/%QTVERSION%/Release",
             "md %build:/=\\%",
             "cd /d %build%",
             "rem del /f /q /s demo examples src test",
             "qmake %src% %QTSPEC% CONFIG+=release CONFIG+=qml_release %QTCONFIG% && %make0% qmake_all",
-            "%make0% -j10"
+            "%make0%"
         ],
         "qqt.build": [
             "set src_path=${root.src}/LibQQt",
@@ -1019,7 +1031,7 @@
             "cd /d %build%",
             "rem del /f /q /s demo examples src test",
             "qmake %src% %QTSPEC% CONFIG+=debug CONFIG+=qml_debug %QTCONFIG% && %make0% qmake_all",
-            "%make0% -j10"
+            "%make0%"
         ],
         "build.go": [
             "if not exist \"*.go\" ( echo has any .go? please add here command to restrict. & exit /b 0 )",

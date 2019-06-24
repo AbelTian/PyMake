@@ -857,7 +857,7 @@
             "echo prod at : %prod:\\=/%",
             "echo %QTSPEC% %QTCONFIG%",
             "qmake %src% %QTSPEC% CONFIG+=debug CONFIG+=qml_debug %QTCONFIG% && %make0% qmake_all",
-            "%make0% -j10",
+            "%make0%",
             "echo build inf %QTSPEC% %QTCONFIG%",
             "echo src file: %src:\\=/%",
             "echo src path: %src_path:\\=/%",
@@ -1164,13 +1164,13 @@
             "cd /d %build%",
             "rem del /f /q /s demo examples src test",
             "qmake %src% %QTSPEC% CONFIG+=debug CONFIG+=qml_debug %QTCONFIG% && %make0% qmake_all",
-            "%make0% -j10",
+            "%make0%",
             "set build=${root.build}/QQt/%QSYS%/%QTVERSION%/Release",
             "md %build:/=\\%",
             "cd /d %build%",
             "rem del /f /q /s demo examples src test",
             "qmake %src% %QTSPEC% CONFIG+=release CONFIG+=qml_release %QTCONFIG% && %make0% qmake_all",
-            "%make0% -j10"
+            "%make0%"
         ],
         "qqt.build": [
             "set src_path=${root.src}/LibQQt",
@@ -1180,7 +1180,7 @@
             "cd /d %build%",
             "rem del /f /q /s demo examples src test",
             "qmake %src% %QTSPEC% CONFIG+=debug CONFIG+=qml_debug %QTCONFIG% && %make0% qmake_all",
-            "%make0% -j10"
+            "%make0%"
         ],
         "test.end": [
             "echo the env path: %Path%.",
