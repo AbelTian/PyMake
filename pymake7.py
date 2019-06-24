@@ -4516,19 +4516,19 @@ def main_function():
             storecustompaths[i] = l
 
         # default [ fixed ]
-        # add pymake default shell root to environ.
-        if (storecustompaths.__contains__(pymakeshellroot) is False):
-            storecustompaths.append(pymakeshellroot)
         # add pymake default source root to environ.
         if (storecustompaths.__contains__(pymakesourceroot) is False):
             storecustompaths.append(pymakesourceroot)
+        # add pymake default shell root to environ.
+        if (storecustompaths.__contains__(pymakeshellroot) is False):
+            storecustompaths.append(pymakeshellroot)
         # default [ movable, follow user source root ]
-        # add user shell root to environ.
-        if (shellroot != pymakeshellroot and storecustompaths.__contains__(shellroot) is False):
-            storecustompaths.append(shellroot)
         # add user source root to environ.
         if (sourceroot != pymakesourceroot and storecustompaths.__contains__(sourceroot) is False):
             storecustompaths.append(sourceroot)
+        # add user shell root to environ.
+        if (shellroot != pymakeshellroot and storecustompaths.__contains__(shellroot) is False):
+            storecustompaths.append(shellroot)
 
         #clean repeat path [for store]
         clean_list = []
