@@ -856,8 +856,8 @@
             "echo sdk at  : %sdk:\\=/%",
             "echo prod at : %prod:\\=/%",
             "echo %QTSPEC% %QTCONFIG%",
-            "qmake %src% %QTSPEC% CONFIG+=debug CONFIG+=qml_debug %QTCONFIG% && mingw32-make qmake_all",
-            "mingw32-make -j10",
+            "qmake %src% %QTSPEC% CONFIG+=debug CONFIG+=qml_debug %QTCONFIG% && %make0% qmake_all",
+            "%make0% -j10",
             "echo build inf %QTSPEC% %QTCONFIG%",
             "echo src file: %src:\\=/%",
             "echo src path: %src_path:\\=/%",
@@ -1163,14 +1163,14 @@
             "md %build:/=\\%",
             "cd /d %build%",
             "rem del /f /q /s demo examples src test",
-            "qmake %src% %QTSPEC% CONFIG+=debug CONFIG+=qml_debug %QTCONFIG% && mingw32-make qmake_all",
-            "mingw32-make -j10",
+            "qmake %src% %QTSPEC% CONFIG+=debug CONFIG+=qml_debug %QTCONFIG% && %make0% qmake_all",
+            "%make0% -j10",
             "set build=${root.build}/QQt/%QSYS%/%QTVERSION%/Release",
             "md %build:/=\\%",
             "cd /d %build%",
             "rem del /f /q /s demo examples src test",
-            "qmake %src% %QTSPEC% CONFIG+=release CONFIG+=qml_release %QTCONFIG% && mingw32-make qmake_all",
-            "mingw32-make -j10"
+            "qmake %src% %QTSPEC% CONFIG+=release CONFIG+=qml_release %QTCONFIG% && %make0% qmake_all",
+            "%make0% -j10"
         ],
         "qqt.build": [
             "set src_path=${root.src}/LibQQt",
@@ -1179,8 +1179,8 @@
             "md %build:/=\\%",
             "cd /d %build%",
             "rem del /f /q /s demo examples src test",
-            "qmake %src% %QTSPEC% CONFIG+=debug CONFIG+=qml_debug %QTCONFIG% && mingw32-make qmake_all",
-            "mingw32-make -j10"
+            "qmake %src% %QTSPEC% CONFIG+=debug CONFIG+=qml_debug %QTCONFIG% && %make0% qmake_all",
+            "%make0% -j10"
         ],
         "test.end": [
             "echo the env path: %Path%.",
