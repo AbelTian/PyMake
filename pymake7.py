@@ -6692,7 +6692,7 @@ def main_function():
                     for (k, v) in diff0.get_removed().items():
                         print('  %-30s %s' % (k,v))
                     print('VC CHANGED:')
-                    for (k1, k2) in diff0.get_changed().items():
+                    for (k1, k2) in diff0.get_changed():
                         for (k,v) in k1.items():
                             print('  %-30s %s' % (k,v))
 
