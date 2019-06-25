@@ -4697,587 +4697,6 @@ def main_function():
 
         break
 
-    # cmd type2 function
-    def cmd_type2 (cmd_name = None, file_name = None, env_name = None):
-
-        if (cmd_name is None):
-            for (key, value) in rawconfig['command'].items():
-                print(Fore.CYAN + "%s" % key)
-            return
-
-        if (rawconfig['command'].__contains__(cmd_name) is False):
-            print("please check your command name")
-            return
-
-        if (env_name is None or env_name == rawconfig['environ']['current']):
-            list0 = copy.deepcopy(rawconfig['command'][cmd_name])
-        else:
-            list0 = copy.deepcopy(raw_command(env_name)[cmd_name])
-
-        # for cmd in list0:
-        #    print(Fore.RED + "%s" % (cmd))
-
-        temp_file_name = ""
-        if (file_name is None):
-            temp_file_name = "cmd"
-        else:
-            temp_file_name = "" + file_name
-
-        cmd_header = ""
-        cmd_codec = "utf8"
-        # but windows, it is \r\n, python helpping me?
-        cmd_return = "\n"
-        cmd_suffix = ""
-        if (getplatform() == "Windows"):
-            cmd_codec = "ansi"
-            if (getplatform_release() == "XP"):
-                cmd_codec = None
-            cmd_header = "@echo off"
-            cmd_suffix = ".bat"
-        else:
-            cmd_codec = 'utf8'
-            cmd_header = "#!/usr/bin/env bash"
-            cmd_suffix = ".sh"
-
-        suffix = args['--suffix']
-        if (suffix is not None):
-            cmd_suffix = str("%s" % suffix)
-
-        encoding = args['--encoding']
-        if (encoding is not None):
-            cmd_codec = encoding
-
-        cmd_exec = temp_file_name + cmd_suffix
-        with open(cmd_exec, 'w', encoding=cmd_codec) as f:
-            # f.write(cmd_header + cmd_return)
-            cmd = ''
-            #add shebang line
-            if(list(list0).__len__()>0):
-                cmd = list0[0]
-            #print(".....")
-            if(getplatform() == "Windows"):
-                if (cmd_suffix == '.bat'):
-                    if (cmd.startswith('@echo') is False):
-                        f.write(cmd_header + cmd_return)
-            else:
-                if (cmd_suffix == '.sh'):
-                    if (cmd.startswith('#!') is False):
-                        f.write(cmd_header + cmd_return)
-
-            for cmd in list0:
-                f.write(cmd + cmd_return)
-
-        if (plat == "Windows"):
-            ""
-        else:
-            if(cmd_suffix == '.sh'):
-                os.system("chmod +x " + cmd_exec)
-
-        # print(cmd_codec)
-        # print(cmd_suffix)
-        # print(cmd_exec)
-
-        return cmd_exec
-
-    # type2 command
-    while (True):
-        if (args['type2'] == True):
-            current_env = ""
-
-            if (args['use'] is True):
-                if (args['<env-name>'] is None):
-                    print("please appoint a environ")
-                    return
-
-                if (rawconfig['environ'].__contains__(args['<env-name>']) is False):
-                    print("please ensure the environ is right")
-                    return
-
-                current_env = args['<env-name>']
-                if (args['<env-name>'] == "current"):
-                    current_env = rawconfig['environ']['current']
-
-                if (rawconfig['environ'].__contains__(current_env) is False):
-                    print(".json file is broken, environ section current env config is lost, please use set command fix it.")
-                    return
-            else:
-                current_env = rawconfig['environ']['current']
-
-            if (args['here'] or args['hh'] is True):
-                os.chdir(pymakeworkpath)
-
-            if(args['-a'] or args['--all'] is True):
-                ''
-                keys = config['command']
-                for cmd in keys:
-                    cmd_name = cmd
-                    file_name = cmd
-                    cmd_exec = cmd_type2(cmd_name, file_name, current_env)
-                    print("successed: use %s type %s to %s" % (current_env, file_name, cmd_exec))
-                return
-
-            if (args['<cmd-name>'] is None):
-                for (key, value) in rawconfig['command'].items():
-                    print(Fore.CYAN + "%s" % key)
-                return
-
-            if (rawconfig['command'].__contains__(args['<cmd-name>']) is False):
-                print("please check your command name")
-                return
-
-            if(args['--samename'] is True):
-                args['<file-name>'] = args['<cmd-name>']
-
-            if (args['<file-name>'] is None):
-                if (current_env == rawconfig['environ']['current']):
-                    list0 = copy.deepcopy(rawconfig['command'][args['<cmd-name>']])
-                else:
-                    list0 = copy.deepcopy(raw_command(current_env)[args['<cmd-name>']])
-
-                for cmd in list0:
-                    print(Fore.RED + "%s" % (cmd))
-                return
-
-            cmd_exec = cmd_type2(args['<cmd-name>'], args['<file-name>'], current_env)
-            print("successed: use %s type %s to %s" % (current_env, args['<cmd-name>'], cmd_exec))
-            return
-        else:
-            ""
-        break
-
-    # export2 command
-    while (True):
-        if( args['export2'] is True ) :
-            current_env = args['<env-name>']
-            if(args['<env-name>'] is None):
-                current_env = rawconfig['environ']['current']
-                print(Fore.CYAN + "%s" % current_env)
-                for key in rawconfig['environ'].keys() :
-                    if(key == 'current'):
-                        continue
-                    if(key == current_env):
-                        continue
-                    print("%s" % key)
-                return
-
-            if(rawconfig['environ'].__contains__(current_env) is False):
-                print("please ensure the environ is right")
-                return 1
-
-            if(args['<env-name>'] == "current"):
-                current_env = rawconfig['environ']['current']
-
-            if (rawconfig['environ'].__contains__(current_env) is False):
-                print(".json file is broken, environ section current env config is lost, please use set command fix it.")
-                return 1
-
-            if (args['here'] or args['hh'] is True):
-                os.chdir(pymakeworkpath)
-
-            current_var = ""
-            cmd_effect = ""
-            cmd_unset = ""
-            #current_var, cmd_effect, cmd_unset = env_export(current_env, args['<file-name>'])
-            env_name = current_env
-            file_name = args['<file-name>']
-
-            # select env
-            current_var = rawconfig['environ']['current']
-            if (env_name is not None):
-                current_var = env_name
-            dict0 = copy.deepcopy(rawconfig['environ'][current_var])
-
-            if(args['powershell'] is True):
-                cmd_suffix = ".ps1"
-                cmd_codec = 'ansi'
-                if (getplatform_release() == "XP"):
-                    cmd_codec = None
-                # but windows, it is \r\n, python helpping me?
-                cmd_return = "\n"
-                cmd_header = "#!/usr/bin/env bash" + cmd_return
-                env_set = ''
-
-                # export effect env
-                cmd_effect = 'env'
-                if (file_name is not None):
-                    cmd_effect = "" + file_name
-                cmd_effect += '_effect' + cmd_suffix
-
-                lines = ""
-
-                # +system
-                if (args['-s'] or args['--system'] is True):
-                    # export path
-                    # print(envcustomlistrawpaths)
-                    for (key) in pymakesystemenviron['PATH'].split(os.path.pathsep):
-                        lines += ("if ( !$env:Path.Contains(\"%s;\" ) ) { $env:Path = $env:Path.Insert(0, \"%s;\") }" % (key, key)) + cmd_return
-
-                    # export var
-                    for (key, value) in pymakesystemenviron.items():
-                        if (key == 'path+'):
-                            continue
-                        if (str(key).lower() == "path"):
-                            continue
-                        lines += ("${env:" + key + '} = \'' + value + '\'' + cmd_return)
-                else:
-                    ''
-
-                # +local
-                if (args['-l'] or args['--local'] is True):
-                    # export path
-                    for (key) in localenv['path+']:
-                        lines += ("if ( !$env:Path.Contains(\"%s;\" ) ) { $env:Path = $env:Path.Insert(0, \"%s;\") }" % (key, key)) + cmd_return
-
-                    # export var
-                    for (key, value) in localenv.items():
-                        if (key == 'path+'):
-                            continue
-                        lines += ("${env:" + key + '} = \'' + value + '\'' + cmd_return)
-                else:
-                    ''
-
-                # +custom
-                if (args['-c'] or args['--custom'] is True):
-                    # export path
-                    # print(envcustomlistrawpaths)
-                    for (key) in envcustomlistrawpaths:
-                        lines += ("if ( !$env:Path.Contains(\"%s;\" ) ) { $env:Path = $env:Path.Insert(0, \"%s;\") }" % (key, key)) + cmd_return
-
-                    # export var
-                    for (key, value) in envcustomlistrawvars.items():
-                        if (key == 'path+'):
-                            continue
-                        lines += ("${env:" + key + '} = \'' + value + '\'' + cmd_return)
-                else:
-                    ''
-
-                # export path
-                for (key) in dict0["path+"]:
-                    lines += ("if ( !$env:Path.Contains(\"%s;\" ) ) { $env:Path = $env:Path.Insert(0, \"%s;\") }" % (key, key)) + cmd_return
-
-                # export var
-                for (key, value) in dict0.items():
-                    if (key == 'path+'):
-                        continue
-                    lines += ("${env:" + key + '} = \'' + value + '\'' + cmd_return)
-
-                # print(lines.split('\n'))
-                with open(cmd_effect, 'w', encoding=cmd_codec) as f:
-                    # f.write(cmd_header)
-                    f.write(lines)
-
-                # export unset env
-                cmd_unset = 'env'
-                if (file_name is not None):
-                    cmd_unset = "" + file_name
-                cmd_unset += '_unset' + cmd_suffix
-
-                lines = ""
-
-                # +system
-                if (args['-s'] or args['--system'] is True):
-                    # export unset path
-                    for (key) in pymakesystemenviron['PATH'].split(os.path.pathsep):
-                        lines += ("if ( $env:Path.Contains(\"%s;\" ) ) { $env:Path = $env:Path.Replace(\"%s;\", \"\") }" % (key, key)) + cmd_return
-
-                    # export unset var
-                    for (key, value) in pymakesystemenviron.items():
-                        if (key == 'path+'):
-                            continue
-                        if (str(key).lower() == "path"):
-                            continue
-                        lines += ("${env:%s} = \"\"" % key) + cmd_return
-                else:
-                    ''
-
-                # +local
-                if (args['-l'] or args['--local'] is True):
-                    # export unset path
-                    for (key) in localenv['path+']:
-                        lines += ("if ( $env:Path.Contains(\"%s;\" ) ) { $env:Path = $env:Path.Replace(\"%s;\", \"\") }" % (key, key)) + cmd_return
-
-                    # export unset var
-                    for (key, value) in localenv.items():
-                        if (key == 'path+'):
-                            continue
-                        lines += ("${env:%s} = \"\"" % key) + cmd_return
-                else:
-                    ''
-
-                # +custom
-                if (args['-c'] or args['--custom'] is True):
-                    # export unset path
-                    for (key) in envcustomlistrawpaths:
-                        lines += ("if ( $env:Path.Contains(\"%s;\" ) ) { $env:Path = $env:Path.Replace(\"%s;\", \"\") }" % (key, key)) + cmd_return
-
-                    # export unset var
-                    for (key, value) in envcustomlistrawvars.items():
-                        if (key == 'path+'):
-                            continue
-                        lines += ("${env:%s} = \"\"" % key) + cmd_return
-                else:
-                    ''
-
-                # export unset path
-                for (key) in dict0["path+"]:
-                    # lines += ("$env:Path = $env:Path.Replace(\"%s;\", \"\")" % key) + cmd_return
-                    lines += ("if ( $env:Path.Contains(\"%s;\" ) ) { $env:Path = $env:Path.Replace(\"%s;\", \"\") }" % (key, key)) + cmd_return
-
-                # export unset var
-                for (key, value) in dict0.items():
-                    if (key == 'path+'):
-                        continue
-                    lines += ("${env:%s} = \"\"" % key) + cmd_return
-
-                with open(cmd_unset, 'w', encoding=cmd_codec) as f:
-                    # f.write(cmd_header)
-                    f.write(lines)
-
-                # +system
-                if (args['-s'] or args['--system'] is True):
-                    print("successed: export %s env to %s %s" % ('system', cmd_effect, cmd_unset))
-                else:
-                    ''
-                # +local
-                if (args['-l'] or args['--local'] is True):
-                    print("successed: export %s env to %s %s" % ('local', cmd_effect, cmd_unset))
-                else:
-                    ''
-                # +custom
-                if (args['-c'] or args['--custom'] is True):
-                    print("successed: export %s env to %s %s" % ('custom', cmd_effect, cmd_unset))
-                else:
-                    ''
-                print("successed: export %s env to %s %s" % (current_var, cmd_effect, cmd_unset))
-
-                return
-
-            plat = getplatform()
-            if (plat == "Windows"):
-                cmd_suffix = ".bat"
-                cmd_codec = "ansi"
-                if (getplatform_release() == "XP"):
-                    cmd_codec = None
-                cmd_return = "\n"
-                cmd_header = "@echo off" + cmd_return
-                env_set = 'set '
-            else:
-                cmd_suffix = ".sh"
-                cmd_codec = "utf8"
-                cmd_return = "\n"
-                cmd_header = "#!/usr/bin/env bash" + cmd_return
-                env_set = 'export '
-
-            # export effect env
-            cmd_effect = 'env'
-            if (file_name is not None):
-                cmd_effect = file_name
-            cmd_effect += '_effect' + cmd_suffix
-
-            lines = ""
-
-            # +system
-            if(args['-s'] or args['--system'] is True):
-                # export path
-                # print(envcustomlistrawpaths)
-                for (key) in pymakesystemenviron['PATH'].split(os.path.pathsep):
-                    if (plat == "Windows"):
-                        lines += (env_set + 'PATH=' + key + os.path.pathsep + '%PATH%' + cmd_return)
-                    else:
-                        lines += (env_set + 'PATH="' + key + '"' + os.path.pathsep + '$PATH' + cmd_return)
-
-                # export var
-                for (key, value) in pymakesystemenviron.items():
-                    if (key == 'path+'):
-                        continue
-                    if (str(key).lower() == "path"):
-                        continue
-                    if (plat == "Windows"):
-                        lines += (env_set + key + '=' + value + cmd_return)
-                    else:
-                        lines += (env_set + key + '=\"' + value + '\"' + cmd_return)
-            else:
-                ''
-
-            # +local
-            if(args['-l'] or args['--local'] is True):
-                # export path
-                for (key) in localenv['path+']:
-                    if (plat == "Windows"):
-                        lines += (env_set + 'PATH=' + key + os.path.pathsep + '%PATH%' + cmd_return)
-                    else:
-                        lines += (env_set + 'PATH="' + key + '"' + os.path.pathsep + '$PATH' + cmd_return)
-
-                # export var
-                for (key, value) in localenv.items():
-                    if (key == 'path+'):
-                        continue
-                    if (plat == "Windows"):
-                        lines += (env_set + key + '=' + value + cmd_return)
-                    else:
-                        lines += (env_set + key + '=\"' + value + '\"' + cmd_return)
-            else:
-                ''
-
-            # +custom
-            if(args['-c'] or args['--custom'] is True):
-                # export path
-                # print(envcustomlistrawpaths)
-                for (key) in envcustomlistrawpaths:
-                    if (plat == "Windows"):
-                        lines += (env_set + 'PATH=' + key + os.path.pathsep + '%PATH%' + cmd_return)
-                    else:
-                        lines += (env_set + 'PATH="' + key + '"' + os.path.pathsep + '$PATH' + cmd_return)
-
-                # export var
-                for (key, value) in envcustomlistrawvars.items():
-                    if (key == 'path+'):
-                        continue
-                    if (plat == "Windows"):
-                        lines += (env_set + key + '=' + value + cmd_return)
-                    else:
-                        lines += (env_set + key + '=\"' + value + '\"' + cmd_return)
-            else:
-                ''
-
-            # export path
-            for (key) in dict0["path+"]:
-                if (plat == "Windows"):
-                    lines += (env_set + 'PATH=' + key + os.path.pathsep + '%PATH%' + cmd_return)
-                else:
-                    lines += (env_set + 'PATH="' + key + '"' + os.path.pathsep + '$PATH' + cmd_return)
-
-            # export var
-            for (key, value) in dict0.items():
-                if (key == 'path+'):
-                    continue
-                if (plat == "Windows"):
-                    lines += (env_set + key + '=' + value + cmd_return)
-                else:
-                    lines += (env_set + key + '=\"' + value + '\"' + cmd_return)
-
-            with open(cmd_effect, 'w', encoding=cmd_codec) as f:
-                f.write(cmd_header)
-                f.write(lines)
-
-            # export unset env
-            cmd_unset = 'env'
-            if (file_name is not None):
-                cmd_unset = file_name
-            cmd_unset += '_unset' + cmd_suffix
-
-            lines = ""
-
-            # +system
-            if(args['-s'] or args['--system'] is True):
-                # export unset path
-                for (key) in pymakesystemenviron['PATH'].split(os.path.pathsep):
-                    if (plat == "Windows"):
-                        lines += (env_set + 'PATH=%PATH:' + key + ';=%' + cmd_return)
-                    else:
-                        lines += (env_set + 'PATH=$(' + 'echo ${PATH//' + key.replace('/', '\/') + ':/})' + cmd_return)
-
-                # export unset var
-                for (key, value) in pymakesystemenviron.items():
-                    if (key == 'path+'):
-                        continue
-                    if (str(key).lower() == "path"):
-                        continue
-                    if (plat == "Windows"):
-                        lines += ('set ' + key + '=' + cmd_return)
-                    else:
-                        lines += ('unset ' + key + cmd_return)
-            else:
-                ''
-
-            # +local
-            if(args['-l'] or args['--local'] is True):
-                # export unset path
-                for (key) in localenv['path+']:
-                    if (plat == "Windows"):
-                        lines += (env_set + 'PATH=%PATH:' + key + ';=%' + cmd_return)
-                    else:
-                        lines += (env_set + 'PATH=$(' + 'echo ${PATH//' + key.replace('/', '\/') + ':/})' + cmd_return)
-
-                # export unset var
-                for (key, value) in localenv.items():
-                    if (key == 'path+'):
-                        continue
-                    if (plat == "Windows"):
-                        lines += ('set ' + key + '=' + cmd_return)
-                    else:
-                        lines += ('unset ' + key + cmd_return)
-            else:
-                ''
-
-            # +custom
-            if(args['-c'] or args['--custom'] is True):
-                # export unset path
-                for (key) in envcustomlistrawpaths:
-                    if (plat == "Windows"):
-                        lines += (env_set + 'PATH=%PATH:' + key + ';=%' + cmd_return)
-                    else:
-                        lines += (env_set + 'PATH=$(' + 'echo ${PATH//' + key.replace('/', '\/') + ':/})' + cmd_return)
-
-                # export unset var
-                for (key, value) in envcustomlistrawvars.items():
-                    if (key == 'path+'):
-                        continue
-                    if (plat == "Windows"):
-                        lines += ('set ' + key + '=' + cmd_return)
-                    else:
-                        lines += ('unset ' + key + cmd_return)
-            else:
-                ''
-
-            # export unset path
-            for (key) in dict0["path+"]:
-                if (plat == "Windows"):
-                    lines += (env_set + 'PATH=%PATH:' + key + ';=%' + cmd_return)
-                else:
-                    lines += (env_set + 'PATH=$(' + 'echo ${PATH//' + key.replace('/', '\/') + ':/})' + cmd_return)
-
-            # export unset var
-            for (key, value) in dict0.items():
-                if (key == 'path+'):
-                    continue
-                if (plat == "Windows"):
-                    lines += ('set ' + key + '=' + cmd_return)
-                else:
-                    lines += ('unset ' + key + cmd_return)
-
-            with open(cmd_unset, 'w', encoding=cmd_codec) as f:
-                f.write(cmd_header)
-                f.write(lines)
-
-            if (plat == "Windows"):
-                ""
-            else:
-                os.system("chmod +x " + cmd_effect)
-                os.system("chmod +x " + cmd_unset)
-
-            # +system
-            if(args['-s'] or args['--system'] is True):
-                print("successed: export %s env to %s %s" % ('system', cmd_effect, cmd_unset))
-            else:
-                ''
-            # +local
-            if(args['-l'] or args['--local'] is True):
-                print("successed: export %s env to %s %s" % ('local', cmd_effect, cmd_unset))
-            else:
-                ''
-            # +custom
-            if(args['-c'] or args['--custom'] is True):
-                print("successed: export %s env to %s %s" % ('custom', cmd_effect, cmd_unset))
-            else:
-                ''
-            print("successed: export %s env to %s %s" % (current_var, cmd_effect, cmd_unset))
-
-            return
-        else:
-            ''
-        break
-
     #UserStaticShell
     # initial vc module
     vcroot = sourceroot + os.path.sep + "VCShell"
@@ -9020,7 +8439,7 @@ def main_function():
             ''
         break
 
-    # python
+    # python ccvp command
     while (True):
         if(args['python'] is True):
             if (args['ccvp'] or args['execvp'] or args['exec-with-params'] is True):
@@ -10160,6 +9579,587 @@ def main_function():
             else:
                 print("Normal.")
                 return
+        else:
+            ''
+        break
+
+    # cmd type2 function
+    def cmd_type2 (cmd_name = None, file_name = None, env_name = None):
+
+        if (cmd_name is None):
+            for (key, value) in rawconfig['command'].items():
+                print(Fore.CYAN + "%s" % key)
+            return
+
+        if (rawconfig['command'].__contains__(cmd_name) is False):
+            print("please check your command name")
+            return
+
+        if (env_name is None or env_name == rawconfig['environ']['current']):
+            list0 = copy.deepcopy(rawconfig['command'][cmd_name])
+        else:
+            list0 = copy.deepcopy(raw_command(env_name)[cmd_name])
+
+        # for cmd in list0:
+        #    print(Fore.RED + "%s" % (cmd))
+
+        temp_file_name = ""
+        if (file_name is None):
+            temp_file_name = "cmd"
+        else:
+            temp_file_name = "" + file_name
+
+        cmd_header = ""
+        cmd_codec = "utf8"
+        # but windows, it is \r\n, python helpping me?
+        cmd_return = "\n"
+        cmd_suffix = ""
+        if (getplatform() == "Windows"):
+            cmd_codec = "ansi"
+            if (getplatform_release() == "XP"):
+                cmd_codec = None
+            cmd_header = "@echo off"
+            cmd_suffix = ".bat"
+        else:
+            cmd_codec = 'utf8'
+            cmd_header = "#!/usr/bin/env bash"
+            cmd_suffix = ".sh"
+
+        suffix = args['--suffix']
+        if (suffix is not None):
+            cmd_suffix = str("%s" % suffix)
+
+        encoding = args['--encoding']
+        if (encoding is not None):
+            cmd_codec = encoding
+
+        cmd_exec = temp_file_name + cmd_suffix
+        with open(cmd_exec, 'w', encoding=cmd_codec) as f:
+            # f.write(cmd_header + cmd_return)
+            cmd = ''
+            #add shebang line
+            if(list(list0).__len__()>0):
+                cmd = list0[0]
+            #print(".....")
+            if(getplatform() == "Windows"):
+                if (cmd_suffix == '.bat'):
+                    if (cmd.startswith('@echo') is False):
+                        f.write(cmd_header + cmd_return)
+            else:
+                if (cmd_suffix == '.sh'):
+                    if (cmd.startswith('#!') is False):
+                        f.write(cmd_header + cmd_return)
+
+            for cmd in list0:
+                f.write(cmd + cmd_return)
+
+        if (plat == "Windows"):
+            ""
+        else:
+            if(cmd_suffix == '.sh'):
+                os.system("chmod +x " + cmd_exec)
+
+        # print(cmd_codec)
+        # print(cmd_suffix)
+        # print(cmd_exec)
+
+        return cmd_exec
+
+    # type2 command
+    while (True):
+        if (args['type2'] == True):
+            current_env = ""
+
+            if (args['use'] is True):
+                if (args['<env-name>'] is None):
+                    print("please appoint a environ")
+                    return
+
+                if (rawconfig['environ'].__contains__(args['<env-name>']) is False):
+                    print("please ensure the environ is right")
+                    return
+
+                current_env = args['<env-name>']
+                if (args['<env-name>'] == "current"):
+                    current_env = rawconfig['environ']['current']
+
+                if (rawconfig['environ'].__contains__(current_env) is False):
+                    print(".json file is broken, environ section current env config is lost, please use set command fix it.")
+                    return
+            else:
+                current_env = rawconfig['environ']['current']
+
+            if (args['here'] or args['hh'] is True):
+                os.chdir(pymakeworkpath)
+
+            if(args['-a'] or args['--all'] is True):
+                ''
+                keys = config['command']
+                for cmd in keys:
+                    cmd_name = cmd
+                    file_name = cmd
+                    cmd_exec = cmd_type2(cmd_name, file_name, current_env)
+                    print("successed: use %s type %s to %s" % (current_env, file_name, cmd_exec))
+                return
+
+            if (args['<cmd-name>'] is None):
+                for (key, value) in rawconfig['command'].items():
+                    print(Fore.CYAN + "%s" % key)
+                return
+
+            if (rawconfig['command'].__contains__(args['<cmd-name>']) is False):
+                print("please check your command name")
+                return
+
+            if(args['--samename'] is True):
+                args['<file-name>'] = args['<cmd-name>']
+
+            if (args['<file-name>'] is None):
+                if (current_env == rawconfig['environ']['current']):
+                    list0 = copy.deepcopy(rawconfig['command'][args['<cmd-name>']])
+                else:
+                    list0 = copy.deepcopy(raw_command(current_env)[args['<cmd-name>']])
+
+                for cmd in list0:
+                    print(Fore.RED + "%s" % (cmd))
+                return
+
+            cmd_exec = cmd_type2(args['<cmd-name>'], args['<file-name>'], current_env)
+            print("successed: use %s type %s cmd to %s" % (current_env, args['<cmd-name>'], cmd_exec))
+            return
+        else:
+            ""
+        break
+
+    # export2 command
+    while (True):
+        if( args['export2'] is True ) :
+            current_env = args['<env-name>']
+            if(args['<env-name>'] is None):
+                current_env = rawconfig['environ']['current']
+                print(Fore.CYAN + "%s" % current_env)
+                for key in rawconfig['environ'].keys() :
+                    if(key == 'current'):
+                        continue
+                    if(key == current_env):
+                        continue
+                    print("%s" % key)
+                return
+
+            if(rawconfig['environ'].__contains__(current_env) is False):
+                print("please ensure the environ is right")
+                return 1
+
+            if(args['<env-name>'] == "current"):
+                current_env = rawconfig['environ']['current']
+
+            if (rawconfig['environ'].__contains__(current_env) is False):
+                print(".json file is broken, environ section current env config is lost, please use set command fix it.")
+                return 1
+
+            if (args['here'] or args['hh'] is True):
+                os.chdir(pymakeworkpath)
+
+            current_var = ""
+            cmd_effect = ""
+            cmd_unset = ""
+            #current_var, cmd_effect, cmd_unset = env_export(current_env, args['<file-name>'])
+            env_name = current_env
+            file_name = args['<file-name>']
+
+            # select env
+            current_var = rawconfig['environ']['current']
+            if (env_name is not None):
+                current_var = env_name
+            dict0 = copy.deepcopy(rawconfig['environ'][current_var])
+
+            if(args['powershell'] is True):
+                cmd_suffix = ".ps1"
+                cmd_codec = 'ansi'
+                if (getplatform_release() == "XP"):
+                    cmd_codec = None
+                # but windows, it is \r\n, python helpping me?
+                cmd_return = "\n"
+                cmd_header = "#!/usr/bin/env bash" + cmd_return
+                env_set = ''
+
+                # export effect env
+                cmd_effect = 'env'
+                if (file_name is not None):
+                    cmd_effect = "" + file_name
+                cmd_effect += '_effect' + cmd_suffix
+
+                lines = ""
+
+                # +system
+                if (args['-s'] or args['--system'] is True):
+                    # export path
+                    # print(envcustomlistrawpaths)
+                    for (key) in pymakesystemenviron['PATH'].split(os.path.pathsep):
+                        lines += ("if ( !$env:Path.Contains(\"%s;\" ) ) { $env:Path = $env:Path.Insert(0, \"%s;\") }" % (key, key)) + cmd_return
+
+                    # export var
+                    for (key, value) in pymakesystemenviron.items():
+                        if (key == 'path+'):
+                            continue
+                        if (str(key).lower() == "path"):
+                            continue
+                        lines += ("${env:" + key + '} = \'' + value + '\'' + cmd_return)
+                else:
+                    ''
+
+                # +local
+                if (args['-l'] or args['--local'] is True):
+                    # export path
+                    for (key) in localenv['path+']:
+                        lines += ("if ( !$env:Path.Contains(\"%s;\" ) ) { $env:Path = $env:Path.Insert(0, \"%s;\") }" % (key, key)) + cmd_return
+
+                    # export var
+                    for (key, value) in localenv.items():
+                        if (key == 'path+'):
+                            continue
+                        lines += ("${env:" + key + '} = \'' + value + '\'' + cmd_return)
+                else:
+                    ''
+
+                # +custom
+                if (args['-c'] or args['--custom'] is True):
+                    # export path
+                    # print(envcustomlistrawpaths)
+                    for (key) in envcustomlistrawpaths:
+                        lines += ("if ( !$env:Path.Contains(\"%s;\" ) ) { $env:Path = $env:Path.Insert(0, \"%s;\") }" % (key, key)) + cmd_return
+
+                    # export var
+                    for (key, value) in envcustomlistrawvars.items():
+                        if (key == 'path+'):
+                            continue
+                        lines += ("${env:" + key + '} = \'' + value + '\'' + cmd_return)
+                else:
+                    ''
+
+                # export path
+                for (key) in dict0["path+"]:
+                    lines += ("if ( !$env:Path.Contains(\"%s;\" ) ) { $env:Path = $env:Path.Insert(0, \"%s;\") }" % (key, key)) + cmd_return
+
+                # export var
+                for (key, value) in dict0.items():
+                    if (key == 'path+'):
+                        continue
+                    lines += ("${env:" + key + '} = \'' + value + '\'' + cmd_return)
+
+                # print(lines.split('\n'))
+                with open(cmd_effect, 'w', encoding=cmd_codec) as f:
+                    # f.write(cmd_header)
+                    f.write(lines)
+
+                # export unset env
+                cmd_unset = 'env'
+                if (file_name is not None):
+                    cmd_unset = "" + file_name
+                cmd_unset += '_unset' + cmd_suffix
+
+                lines = ""
+
+                # +system
+                if (args['-s'] or args['--system'] is True):
+                    # export unset path
+                    for (key) in pymakesystemenviron['PATH'].split(os.path.pathsep):
+                        lines += ("if ( $env:Path.Contains(\"%s;\" ) ) { $env:Path = $env:Path.Replace(\"%s;\", \"\") }" % (key, key)) + cmd_return
+
+                    # export unset var
+                    for (key, value) in pymakesystemenviron.items():
+                        if (key == 'path+'):
+                            continue
+                        if (str(key).lower() == "path"):
+                            continue
+                        lines += ("${env:%s} = \"\"" % key) + cmd_return
+                else:
+                    ''
+
+                # +local
+                if (args['-l'] or args['--local'] is True):
+                    # export unset path
+                    for (key) in localenv['path+']:
+                        lines += ("if ( $env:Path.Contains(\"%s;\" ) ) { $env:Path = $env:Path.Replace(\"%s;\", \"\") }" % (key, key)) + cmd_return
+
+                    # export unset var
+                    for (key, value) in localenv.items():
+                        if (key == 'path+'):
+                            continue
+                        lines += ("${env:%s} = \"\"" % key) + cmd_return
+                else:
+                    ''
+
+                # +custom
+                if (args['-c'] or args['--custom'] is True):
+                    # export unset path
+                    for (key) in envcustomlistrawpaths:
+                        lines += ("if ( $env:Path.Contains(\"%s;\" ) ) { $env:Path = $env:Path.Replace(\"%s;\", \"\") }" % (key, key)) + cmd_return
+
+                    # export unset var
+                    for (key, value) in envcustomlistrawvars.items():
+                        if (key == 'path+'):
+                            continue
+                        lines += ("${env:%s} = \"\"" % key) + cmd_return
+                else:
+                    ''
+
+                # export unset path
+                for (key) in dict0["path+"]:
+                    # lines += ("$env:Path = $env:Path.Replace(\"%s;\", \"\")" % key) + cmd_return
+                    lines += ("if ( $env:Path.Contains(\"%s;\" ) ) { $env:Path = $env:Path.Replace(\"%s;\", \"\") }" % (key, key)) + cmd_return
+
+                # export unset var
+                for (key, value) in dict0.items():
+                    if (key == 'path+'):
+                        continue
+                    lines += ("${env:%s} = \"\"" % key) + cmd_return
+
+                with open(cmd_unset, 'w', encoding=cmd_codec) as f:
+                    # f.write(cmd_header)
+                    f.write(lines)
+
+                # +system
+                if (args['-s'] or args['--system'] is True):
+                    print("successed: export %s env to %s %s" % ('system', cmd_effect, cmd_unset))
+                else:
+                    ''
+                # +local
+                if (args['-l'] or args['--local'] is True):
+                    print("successed: export %s env to %s %s" % ('local', cmd_effect, cmd_unset))
+                else:
+                    ''
+                # +custom
+                if (args['-c'] or args['--custom'] is True):
+                    print("successed: export %s env to %s %s" % ('custom', cmd_effect, cmd_unset))
+                else:
+                    ''
+                print("successed: export %s env to %s %s" % (current_var, cmd_effect, cmd_unset))
+
+                return
+
+            plat = getplatform()
+            if (plat == "Windows"):
+                cmd_suffix = ".bat"
+                cmd_codec = "ansi"
+                if (getplatform_release() == "XP"):
+                    cmd_codec = None
+                cmd_return = "\n"
+                cmd_header = "@echo off" + cmd_return
+                env_set = 'set '
+            else:
+                cmd_suffix = ".sh"
+                cmd_codec = "utf8"
+                cmd_return = "\n"
+                cmd_header = "#!/usr/bin/env bash" + cmd_return
+                env_set = 'export '
+
+            # export effect env
+            cmd_effect = 'env'
+            if (file_name is not None):
+                cmd_effect = file_name
+            cmd_effect += '_effect' + cmd_suffix
+
+            lines = ""
+
+            # +system
+            if(args['-s'] or args['--system'] is True):
+                # export path
+                # print(envcustomlistrawpaths)
+                for (key) in pymakesystemenviron['PATH'].split(os.path.pathsep):
+                    if (plat == "Windows"):
+                        lines += (env_set + 'PATH=' + key + os.path.pathsep + '%PATH%' + cmd_return)
+                    else:
+                        lines += (env_set + 'PATH="' + key + '"' + os.path.pathsep + '$PATH' + cmd_return)
+
+                # export var
+                for (key, value) in pymakesystemenviron.items():
+                    if (key == 'path+'):
+                        continue
+                    if (str(key).lower() == "path"):
+                        continue
+                    if (plat == "Windows"):
+                        lines += (env_set + key + '=' + value + cmd_return)
+                    else:
+                        lines += (env_set + key + '=\"' + value + '\"' + cmd_return)
+            else:
+                ''
+
+            # +local
+            if(args['-l'] or args['--local'] is True):
+                # export path
+                for (key) in localenv['path+']:
+                    if (plat == "Windows"):
+                        lines += (env_set + 'PATH=' + key + os.path.pathsep + '%PATH%' + cmd_return)
+                    else:
+                        lines += (env_set + 'PATH="' + key + '"' + os.path.pathsep + '$PATH' + cmd_return)
+
+                # export var
+                for (key, value) in localenv.items():
+                    if (key == 'path+'):
+                        continue
+                    if (plat == "Windows"):
+                        lines += (env_set + key + '=' + value + cmd_return)
+                    else:
+                        lines += (env_set + key + '=\"' + value + '\"' + cmd_return)
+            else:
+                ''
+
+            # +custom
+            if(args['-c'] or args['--custom'] is True):
+                # export path
+                # print(envcustomlistrawpaths)
+                for (key) in envcustomlistrawpaths:
+                    if (plat == "Windows"):
+                        lines += (env_set + 'PATH=' + key + os.path.pathsep + '%PATH%' + cmd_return)
+                    else:
+                        lines += (env_set + 'PATH="' + key + '"' + os.path.pathsep + '$PATH' + cmd_return)
+
+                # export var
+                for (key, value) in envcustomlistrawvars.items():
+                    if (key == 'path+'):
+                        continue
+                    if (plat == "Windows"):
+                        lines += (env_set + key + '=' + value + cmd_return)
+                    else:
+                        lines += (env_set + key + '=\"' + value + '\"' + cmd_return)
+            else:
+                ''
+
+            # export path
+            for (key) in dict0["path+"]:
+                if (plat == "Windows"):
+                    lines += (env_set + 'PATH=' + key + os.path.pathsep + '%PATH%' + cmd_return)
+                else:
+                    lines += (env_set + 'PATH="' + key + '"' + os.path.pathsep + '$PATH' + cmd_return)
+
+            # export var
+            for (key, value) in dict0.items():
+                if (key == 'path+'):
+                    continue
+                if (plat == "Windows"):
+                    lines += (env_set + key + '=' + value + cmd_return)
+                else:
+                    lines += (env_set + key + '=\"' + value + '\"' + cmd_return)
+
+            with open(cmd_effect, 'w', encoding=cmd_codec) as f:
+                f.write(cmd_header)
+                f.write(lines)
+
+            # export unset env
+            cmd_unset = 'env'
+            if (file_name is not None):
+                cmd_unset = file_name
+            cmd_unset += '_unset' + cmd_suffix
+
+            lines = ""
+
+            # +system
+            if(args['-s'] or args['--system'] is True):
+                # export unset path
+                for (key) in pymakesystemenviron['PATH'].split(os.path.pathsep):
+                    if (plat == "Windows"):
+                        lines += (env_set + 'PATH=%PATH:' + key + ';=%' + cmd_return)
+                    else:
+                        lines += (env_set + 'PATH=$(' + 'echo ${PATH//' + key.replace('/', '\/') + ':/})' + cmd_return)
+
+                # export unset var
+                for (key, value) in pymakesystemenviron.items():
+                    if (key == 'path+'):
+                        continue
+                    if (str(key).lower() == "path"):
+                        continue
+                    if (plat == "Windows"):
+                        lines += ('set ' + key + '=' + cmd_return)
+                    else:
+                        lines += ('unset ' + key + cmd_return)
+            else:
+                ''
+
+            # +local
+            if(args['-l'] or args['--local'] is True):
+                # export unset path
+                for (key) in localenv['path+']:
+                    if (plat == "Windows"):
+                        lines += (env_set + 'PATH=%PATH:' + key + ';=%' + cmd_return)
+                    else:
+                        lines += (env_set + 'PATH=$(' + 'echo ${PATH//' + key.replace('/', '\/') + ':/})' + cmd_return)
+
+                # export unset var
+                for (key, value) in localenv.items():
+                    if (key == 'path+'):
+                        continue
+                    if (plat == "Windows"):
+                        lines += ('set ' + key + '=' + cmd_return)
+                    else:
+                        lines += ('unset ' + key + cmd_return)
+            else:
+                ''
+
+            # +custom
+            if(args['-c'] or args['--custom'] is True):
+                # export unset path
+                for (key) in envcustomlistrawpaths:
+                    if (plat == "Windows"):
+                        lines += (env_set + 'PATH=%PATH:' + key + ';=%' + cmd_return)
+                    else:
+                        lines += (env_set + 'PATH=$(' + 'echo ${PATH//' + key.replace('/', '\/') + ':/})' + cmd_return)
+
+                # export unset var
+                for (key, value) in envcustomlistrawvars.items():
+                    if (key == 'path+'):
+                        continue
+                    if (plat == "Windows"):
+                        lines += ('set ' + key + '=' + cmd_return)
+                    else:
+                        lines += ('unset ' + key + cmd_return)
+            else:
+                ''
+
+            # export unset path
+            for (key) in dict0["path+"]:
+                if (plat == "Windows"):
+                    lines += (env_set + 'PATH=%PATH:' + key + ';=%' + cmd_return)
+                else:
+                    lines += (env_set + 'PATH=$(' + 'echo ${PATH//' + key.replace('/', '\/') + ':/})' + cmd_return)
+
+            # export unset var
+            for (key, value) in dict0.items():
+                if (key == 'path+'):
+                    continue
+                if (plat == "Windows"):
+                    lines += ('set ' + key + '=' + cmd_return)
+                else:
+                    lines += ('unset ' + key + cmd_return)
+
+            with open(cmd_unset, 'w', encoding=cmd_codec) as f:
+                f.write(cmd_header)
+                f.write(lines)
+
+            if (plat == "Windows"):
+                ""
+            else:
+                os.system("chmod +x " + cmd_effect)
+                os.system("chmod +x " + cmd_unset)
+
+            # +system
+            if(args['-s'] or args['--system'] is True):
+                print("successed: export %s env to %s %s" % ('system', cmd_effect, cmd_unset))
+            else:
+                ''
+            # +local
+            if(args['-l'] or args['--local'] is True):
+                print("successed: export %s env to %s %s" % ('local', cmd_effect, cmd_unset))
+            else:
+                ''
+            # +custom
+            if(args['-c'] or args['--custom'] is True):
+                print("successed: export %s env to %s %s" % ('custom', cmd_effect, cmd_unset))
+            else:
+                ''
+            print("successed: export %s env to %s %s" % (current_var, cmd_effect, cmd_unset))
+
+            return
         else:
             ''
         break
