@@ -112,19 +112,19 @@ Usage:
   pymake7.py  hh exec-with-params [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
   pymake7.py  hh use <env-name> exec-with-params [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
   pymake7.py  -------------------------------------------------------------
-  pymake7.py  execvp [ here | hh ] [ <command-name> ] [ <command-params> ... ]
-  pymake7.py  use <env-name> execvp [ here | hh ] [ <command-name> ] [ <command-params> ... ]
-  pymake7.py  here execvp [ <command-name> ] [ <command-params> ... ]
-  pymake7.py  here use <env-name> ccvp [ <command-name> ] [ <command-params> ... ]
-  pymake7.py  hh ccvp [ <command-name> ] [ <command-params> ... ]
-  pymake7.py  hh use <env-name> ccvp [ <command-name> ] [ <command-params> ... ]
+  pymake7.py  execvp [ here | hh ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  use <env-name> execvp [ here | hh ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  here execvp [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  here use <env-name> ccvp [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  hh ccvp [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  hh use <env-name> ccvp [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
   pymake7.py  -------------------------------------------------------------
-  pymake7.py  ccvp [ here | hh ] [ <command-name> ] [ <command-params> ... ]
-  pymake7.py  use <env-name> ccvp [ here | hh ] [ <command-name> ] [ <command-params> ... ]
-  pymake7.py  here ccvp [ <command-name> ] [ <command-params> ... ]
-  pymake7.py  here use <env-name> execvp [ <command-name> ] [ <command-params> ... ]
-  pymake7.py  hh execvp [ <command-name> ] [ <command-params> ... ]
-  pymake7.py  hh use <env-name> execvp [ <command-name> ] [ <command-params> ... ]
+  pymake7.py  ccvp [ here | hh ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  use <env-name> ccvp [ here | hh ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  here ccvp [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  here use <env-name> execvp [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  hh execvp [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  hh use <env-name> execvp [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
   pymake7.py  -------------------------------------------------------------
   pymake7.py  import cmd [ hh | here ] [ <script-file> ] [ to <command-name> ] [ -a | --all ] [ -f | --force ] [ --recursive ] [ --encoding=<encoding-name> ] [ --filter=<name-filter> ... ]
   pymake7.py  here import cmd [ <script-file> ] [ to <command-name> ] [ -a | --all ] [ -f | --force ] [ --recursive ] [ --encoding=<encoding-name> ] [ --filter=<name-filter> ... ]
@@ -152,10 +152,10 @@ Usage:
   pymake7.py  system env [ -r | --raw ]
   pymake7.py  system exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
   pymake7.py  system use <env-name> exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
-  pymake7.py  system execvp [ here | hh ] [ <command-name> ] [ <command-params> ... ]
-  pymake7.py  system use <env-name> execvp [ here | hh ] [ <command-name> ] [ <command-params> ... ]
-  pymake7.py  system ccvp [ here | hh ] [ <command-name> ] [ <command-params> ... ]
-  pymake7.py  system use <env-name> ccvp [ here | hh ] [ <command-name> ] [ <command-params> ... ]
+  pymake7.py  system execvp [ here | hh ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  system use <env-name> execvp [ here | hh ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  system ccvp [ here | hh ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  system use <env-name> ccvp [ here | hh ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
   pymake7.py  -------------------------------------------------------------
   pymeke7.py  local
   pymake7.py  local [ open | close ]
@@ -167,10 +167,10 @@ Usage:
   pymake7.py  local export [ here | hh ] [ to <file-name> ]
   pymake7.py  local exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
   pymake7.py  local use <env-name> exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
-  pymake7.py  local execvp [ here | hh ] [ <command-name> ] [ <command-params> ... ]
-  pymake7.py  local use <env-name> execvp [ here | hh ] [ <command-name> ] [ <command-params> ... ]
-  pymake7.py  local ccvp [ here | hh ] [ <command-name> ] [ <command-params> ... ]
-  pymake7.py  local use <env-name> ccvp [ here | hh ] [ <command-name> ] [ <command-params> ... ]
+  pymake7.py  local execvp [ here | hh ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  local use <env-name> execvp [ here | hh ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  local ccvp [ here | hh ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  local use <env-name> ccvp [ here | hh ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
   pymake7.py  -------------------------------------------------------------
   pymeke7.py  custom
   pymake7.py  custom [ open | close ]
@@ -182,10 +182,10 @@ Usage:
   pymake7.py  custom export [ here | hh ] [ to <file-name> ]
   pymake7.py  custom exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
   pymake7.py  custom use <env-name> exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
-  pymake7.py  custom execvp [ here | hh ] [ <command-name> ] [ <command-params> ... ]
-  pymake7.py  custom use <env-name> execvp [ here | hh ] [ <command-name> ] [ <command-params> ... ]
-  pymake7.py  custom ccvp [ here | hh ] [ <command-name> ] [ <command-params> ... ]
-  pymake7.py  custom use <env-name> ccvp [ here | hh ] [ <command-name> ] [ <command-params> ... ]
+  pymake7.py  custom execvp [ here | hh ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  custom use <env-name> execvp [ here | hh ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  custom ccvp [ here | hh ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  custom use <env-name> ccvp [ here | hh ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
   pymake7.py  -------------------------------------------------------------
   pymake7.py  powershell
   pymake7.py  powershell [ info | information ]
@@ -237,20 +237,19 @@ Usage:
   pymake7.py  vc [ info | information ]
   pymake7.py  vc [ stat | status ]
   pymake7.py  vc settings [ <env-name> ]
-  pymake7.py  vc init [ <env-name> ]
+  pymake7.py  vc init [ <env-name> ] [ -a | --all ]
   pymake7.py  vc deinit [ <env-name> ]
-  pymake7.py  vc ( kan | check ) [ <env-name> ]
-  pymake7.py  vc detail [ <env-name> ]
+  pymake7.py  vc ( kan | check | detail ) [ <env-name> ]
   pymake7.py  vc clean [ here | hh ]
   pymake7.py  vc type [ here | hh ] [ <cmd-name> ] [ to <file-name> ]
   pymake7.py  vc use <env-name> type [ here | hh ] [ <cmd-name> ]  [ to <file-name> ]
   pymake7.py  vc export [ here | hh ] [ <env-name> ] [ to <file-name> ]
   pymake7.py  vc exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
   pymake7.py  vc use <env-name> exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
-  pymake7.py  vc execvp [ here | hh ] [ <command-name> ] [ <command-params> ... ]
-  pymake7.py  vc use <env-name> execvp [ here | hh ] [ <command-name> ] [ <command-params> ... ]
-  pymake7.py  vc ccvp [ here | hh ] [ <command-name> ] [ <command-params> ... ]
-  pymake7.py  vc use <env-name> ccvp [ here | hh ] [ <command-name> ] [ <command-params> ... ]
+  pymake7.py  vc execvp [ here | hh ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  vc use <env-name> execvp [ here | hh ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  vc ccvp [ here | hh ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  vc use <env-name> ccvp [ here | hh ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
   pymake7.py  vc powershell exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
   pymake7.py  vc powershell use <env-name> exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
   pymake7.py  vc powershell execvp [ here | hh ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
@@ -6612,6 +6611,9 @@ def main_function():
                 else:
                     current_env = rawconfig['environ']['current']
 
+                if (args['-a'] or args['--all'] is True):
+                    break
+
                 current_vcvarsall = 'vcvarsall'
                 current_vcvarsallparam = 'vcvarsallparam'
                 has_set = '0'
@@ -7928,6 +7930,201 @@ def main_function():
             else:
                 vc_settings(None)
                 return
+        else:
+            ''
+        break
+
+    # vc command
+    while (True):
+        if(args['vc'] is True):
+            if(args['init'] is True):
+                if(args['-a'] or args['--all'] is True):
+                    current_env = ""
+
+                    if (args['<env-name>'] is not None):
+                        if (args['<env-name>'] is None):
+                            print("please appoint a environ")
+                            return
+
+                        if (rawconfig['environ'].__contains__(args['<env-name>']) is False):
+                            print("please ensure the environ is right")
+                            return
+
+                        current_env = args['<env-name>']
+                        if (args['<env-name>'] == "current"):
+                            current_env = rawconfig['environ']['current']
+
+                        if (rawconfig['environ'].__contains__(current_env) is False):
+                            print(".json file is broken, environ section current env config is lost, please use set command fix it.")
+                            return
+                    else:
+                        current_env = rawconfig['environ']['current']
+
+                    print("source file: %s" % sourceconfigfile)
+                    print("inited at: %s" % (vcroot))
+
+                    for (current_env, env_value) in rawconfig['environ'].items():
+                        if(current_env == 'current'):
+                            continue
+
+                        print('-------------------------------------------------')
+
+                        current_vcvarsall = 'vcvarsall'
+                        current_vcvarsallparam = 'vcvarsallparam'
+                        has_set = '0'
+                        native_dict = {}
+                        while (True):
+                            if (pymakesystemenviron.__contains__(current_vcvarsall) is True):
+                                native_dict = pymakesystemenviron
+                                has_set = "system env:"
+                            if (envcustomlistrawvars.__contains__(current_vcvarsall) is True):
+                                native_dict = envcustomlistrawvars
+                                has_set = "custom env:"
+                            if (rawconfig['environ'][current_env].__contains__(current_vcvarsall) is True):
+                                native_dict = rawconfig['environ'][current_env]
+                                has_set = str("env %s:" % current_env)
+                            break
+
+                        # print(has_set)
+                        # if(has_set != '0'):
+                        #    print(native_dict[current_vcvarsall])
+
+                        if (has_set is '0'):
+                            print('please set env variable vcvarsall in %s, env %s.' % (sourcefile, current_env))
+                            continue
+
+                        if (native_dict.__contains__(current_vcvarsallparam) is False):
+                            print('please set env variable vcvarsallparam in %s, env %s.' % (sourcefile, current_env))
+                            continue
+
+                        print(has_set)
+                        print('  "vcvarsall": "%s"' % native_dict[current_vcvarsall])
+                        print('  "vcvarsallparam": "%s"' % native_dict[current_vcvarsallparam])
+
+                        plat = getplatform()
+                        if (plat != "Windows"):
+                            print('pymake vc command cant support non-windows system.')
+                            continue
+
+                        if (os.path.isfile(native_dict[current_vcvarsall]) is False):
+                            print('failed: %s is not existed.' % native_dict[current_vcvarsall])
+                            continue
+
+                        if (debugswitch == '1'):
+                            print("debug:")
+                            cmd_string = str('call "%s" %s' % (native_dict[current_vcvarsall], native_dict[current_vcvarsallparam]))
+                            print("  ", cmd_string)
+                            result = subprocess.getoutput(cmd_string)
+                            print("  ", result)
+
+                        cmd_string = str('call "%s" %s 1>nul 2>nul & set' % (native_dict[current_vcvarsall], native_dict[current_vcvarsallparam]))
+                        result = subprocess.getoutput(cmd_string)
+                        # print(result)
+                        # print(cmd_string)
+                        list1 = result.split('\n')
+                        # print(list1)
+                        dict1 = {}
+                        for l in list1:
+                            key = str(l).split('=')[0].strip()
+                            value = '='.join(str(l).split('=')[1:]).strip()
+                            dict1[key.upper()] = value
+                        # print(dict1)
+                        # for (key, value) in dict1.items():
+                        #    print("%-30s %s" % (key, value))
+
+                        dict2 = {k.upper(): v for k, v in os.environ.items()}
+                        # print(dict2)
+                        # for (key, value) in dict2.items():
+                        #    print("%-30s %s" % (key, value))
+
+                        diff0 = DiffDict(dict1, dict2)
+                        if (debugswitch == '1'):
+                            print("debug: VC ALL")
+                            print('VC ADDED:')
+                            for (k, v) in diff0.get_added().items():
+                                print('  %-30s %s' % (k, v))
+                            print('VC REMOVED:')
+                            for (k, v) in diff0.get_removed().items():
+                                print('  %-30s %s' % (k, v))
+                            print('VC CHANGED:')
+                            k1, k2 = diff0.get_changed()
+                            for (k, v) in k1.items():
+                                print('  %-30s %s' % (k, v))
+
+                        dict11, dict21 = diff0.get_changed()
+                        # print(dict11)
+                        # print(dict21)
+                        if (dict11.__contains__('PATH') is False):
+                            print('failed: %s execute failed.' % native_dict[current_vcvarsall])
+                            continue
+
+                        diff1 = DiffList(dict11['PATH'].split(os.path.pathsep), dict21['PATH'].split(os.path.pathsep))
+                        # print(dict11['PATH'])
+                        # print(dict21['PATH'])
+                        # print('AAAAA', diff1.get_added())
+                        # print('BBBBB', diff1.get_removed())
+                        # print('CCCCC', diff1.get_changed())
+                        if (debugswitch == '1'):
+                            print("debug: VC PATH")
+                            print('VC ADDED:')
+                            for k in diff1.get_added():
+                                print('  %s' % k)
+                            print('VC REMOVED:')
+                            for k in diff1.get_removed():
+                                print('  %s' % k)
+                            print('VC CHANGED:')
+                            k1, k2 = diff1.get_changed()
+                            for k in k1:
+                                print('  %s' % k)
+                            # print('VC MIXED:')
+                            # k1, k2 = diff1.get_mixed()
+                            # for k in k1:
+                            #    print('%s' % k)
+
+                        dict3 = {}
+                        pathlist0, pathlist1 = diff1.get_changed()
+                        dict3['path+'] = copy.deepcopy(pathlist0)
+                        vardict = copy.deepcopy(diff0.get_added())
+                        dict3.update(vardict)
+                        # for (key, value) in vardict.items():
+                        #    if (key == 'PATH'):
+                        #        continue
+                        #    if (key == 'path+'):
+                        #        continue
+                        #    dict3[key]=value
+                        # print(dict3)
+
+                        os.chdir(vcroot)
+
+                        if (dict3.__contains__('VISUALSTUDIOVERSION') is False):
+                            print('failed: env var VISUALSTUDIOVERSION is not defined in %s.' % native_dict[current_vcvarsall])
+                            print('  1. your shell env is not pure.')
+                            print('  2. your vcvarsall.bat is not legal.')
+                            continue
+
+                        # export json
+                        jsonfile = 'pymake-vc-command'
+                        f0 = vc_json_export(dict3, current_env, jsonfile)
+
+                        # export
+                        vcname = 'vc' + dict3['VISUALSTUDIOVERSION'] + '_' + native_dict[current_vcvarsallparam]
+                        filename = 'pymake_' + vcname
+                        f11, f12 = vc_export(dict3, current_env, filename)
+
+                        # export powershell
+                        f21, f22 = vc_powershell_export(dict3, current_env, filename)
+
+                        print("inited at: %s%s%s" % (vcroot, os.path.sep, f0))
+                        print('  %s, %s' % (f11, f12))
+                        print('  %s, %s' % (f21, f22))
+
+                    print('-------------------------------------------------')
+                    print("successed")
+                    return
+                else:
+                    ''
+            else:
+                ''
         else:
             ''
         break
