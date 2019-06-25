@@ -6686,14 +6686,15 @@ def main_function():
                 print("VC ALL:")
                 if (debugswitch == '1'):
                     print('VC ADDED:')
-                    for (k, v) in diff0.get_added():
+                    for (k, v) in diff0.get_added().items():
                         print('  %-30s %s' % (k,v))
                     print('VC REMOVED:')
-                    for (k, v) in diff0.get_removed():
+                    for (k, v) in diff0.get_removed().items():
                         print('  %-30s %s' % (k,v))
                     print('VC CHANGED:')
-                    for (k, v) in diff0.get_changed():
-                        print('  %-30s %s' % (k,v))
+                    for (k1, k2) in diff0.get_changed().items():
+                        for (k,v) in k1.items():
+                            print('  %-30s %s' % (k,v))
 
                 dict11, dict21 = diff0.get_changed()
                 #print(dict11)
