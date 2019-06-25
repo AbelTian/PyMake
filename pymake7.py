@@ -6683,8 +6683,8 @@ def main_function():
                 #    print("%-30s %s" % (key, value))
 
                 diff0 = DiffDict(dict1, dict2)
-                print("debug: VC ALL")
                 if (debugswitch == '1'):
+                    print("debug: VC ALL")
                     print('VC ADDED:')
                     for (k, v) in diff0.get_added().items():
                         print('  %-30s %s' % (k,v))
@@ -6709,8 +6709,8 @@ def main_function():
                 #print('AAAAA', diff1.get_added())
                 #print('BBBBB', diff1.get_removed())
                 #print('CCCCC', diff1.get_changed())
-                print("debug: VC PATH")
                 if (debugswitch == '1'):
+                    print("debug: VC PATH")
                     print('VC ADDED:')
                     for k in diff1.get_added():
                         print('  %s' % k)
