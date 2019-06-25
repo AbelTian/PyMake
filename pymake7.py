@@ -7380,7 +7380,7 @@ def main_function():
                         current_env = rawconfig['environ']['current']
 
                     print("source file: %s" % sourceconfigfile)
-                    print("inited at: %s" % (vcroot))
+                    print("init   root: %s" % (vcroot))
 
                     for (current_env, env_value) in rawconfig['environ'].items():
                         if(current_env == 'current'):
@@ -7533,7 +7533,8 @@ def main_function():
                         # export powershell
                         f21, f22 = vc_powershell_export(dict3, current_env, filename)
 
-                        print("inited at: %s%s%s" % (vcroot, os.path.sep, f0))
+                        print("inited at: %s" % vcroot)
+                        print('  %s' % f0)
                         print('  %s, %s' % (f11, f12))
                         print('  %s, %s' % (f21, f22))
 
@@ -9699,7 +9700,7 @@ def main_function():
                     cmd_name = cmd
                     file_name = cmd
                     cmd_exec = cmd_type2(cmd_name, file_name, current_env)
-                    print("successed: use %s type %s to %s" % (current_env, file_name, cmd_exec))
+                    print("successed: use %s type %s cmd to %s" % (current_env, file_name, cmd_exec))
                 return
 
             if (args['<cmd-name>'] is None):
