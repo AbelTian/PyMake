@@ -6692,9 +6692,9 @@ def main_function():
                     for (k, v) in diff0.get_removed().items():
                         print('  %-30s %s' % (k,v))
                     print('VC CHANGED:')
-                    for (k1, k2) in diff0.get_changed():
-                        for (k,v) in k1.items():
-                            print('  %-30s %s' % (k,v))
+                    k1, k2 = diff0.get_changed()
+                    for (k,v) in k1.items():
+                        print('  %-30s %s' % (k,v))
 
                 dict11, dict21 = diff0.get_changed()
                 #print(dict11)
@@ -6718,12 +6718,13 @@ def main_function():
                     for k in diff1.get_removed():
                         print('  %s' % k)
                     print('VC CHANGED:')
-                    for (k1, k2) in diff1.get_changed():
-                        for k in k1:
-                            print('%s' % k)
+                    k1, k2 = diff1.get_changed()
+                    for k in k1:
+                        print('%s' % k)
                     #print('VC MIXED:')
-                    #for k in diff1.get_mixed():
-                    #    print('  %s' % k)
+                    #k1, k2 = diff1.get_mixed()
+                    #for k in k1:
+                    #    print('%s' % k)
 
                 dict3 = {}
                 pathlist0, pathlist1 = diff1.get_changed()
