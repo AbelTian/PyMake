@@ -7353,7 +7353,7 @@ def main_function():
             ''
         break
 
-    # vc command
+    # vc init command
     while (True):
         if(args['vc'] is True):
             if(args['init'] is True):
@@ -7533,8 +7533,7 @@ def main_function():
                         # export powershell
                         f21, f22 = vc_powershell_export(dict3, current_env, filename)
 
-                        print("inited at: %s" % vcroot)
-                        print('  %s' % f0)
+                        print("inited at: %s%s%s" % (vcroot, os.path.sep, f0))
                         print('  %s, %s' % (f11, f12))
                         print('  %s, %s' % (f21, f22))
 
