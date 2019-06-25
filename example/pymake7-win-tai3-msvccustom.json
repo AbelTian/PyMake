@@ -263,7 +263,7 @@
         "VC6.BIN": "${VC6}/VC98/Bin;${VC6}/Common/MSDev98/Bin;${VC6}/Common/Tools",
         "VC6.INCLUDE": "${VC6}/VC98/Include;${VC6}/VC98/MFC/Include",
         "VC6.LIB": "${VC6}/VC98/Lib;${VC6}/VC98/MFC/Lib",
-        "vcvarsall-1998": "${wincc}/VC6CN/VC98/vcvarsall.bat",
+        "vcvarsall-1998": "${wincc}/VC6CN/vcvarsall.bat",
         "vcvarsall-2003": "${wincc}/msvc2003/vcvarsall.bat",
         "vcvarsall-2005": "${wincc}/MSVC2005/vcvarsall.bat",
         "vcvarsall-2008": "${wincc}/MSVC2008/vcvarsall.bat",
