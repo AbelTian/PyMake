@@ -6720,7 +6720,7 @@ def main_function():
                     print('VC CHANGED:')
                     k1, k2 = diff1.get_changed()
                     for k in k1:
-                        print('%s' % k)
+                        print('  %s' % k)
                     #print('VC MIXED:')
                     #k1, k2 = diff1.get_mixed()
                     #for k in k1:
