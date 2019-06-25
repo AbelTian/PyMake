@@ -6659,7 +6659,7 @@ def main_function():
                     cmd_string = str('call "%s" %s' % (native_dict[current_vcvarsall], native_dict[current_vcvarsallparam]))
                     result = subprocess.getoutput(cmd_string)
                     print("debug:" )
-                    print("  ",cmd_string)
+                    print("  ", cmd_string)
                     print("  ", result)
 
                 cmd_string = str('call "%s" %s 1>nul 2>nul & set' % (native_dict[current_vcvarsall], native_dict[current_vcvarsallparam]))
@@ -6683,9 +6683,17 @@ def main_function():
                 #    print("%-30s %s" % (key, value))
 
                 diff0 = DiffDict(dict1, dict2)
-                #print('AAAA', diff0.get_added())
-                #print('BBBB', diff0.get_removed())
-                #print('CCCC', diff0.get_changed())
+                print("VC ALL:")
+                if (debugswitch == '1'):
+                    print('VC ADDED:')
+                    for (k, v) in diff0.get_added():
+                        print('  %-30s %s' % (k,v))
+                    print('VC REMOVED:')
+                    for (k, v) in diff0.get_removed():
+                        print('  %-30s %s' % (k,v))
+                    print('VC CHANGED:')
+                    for (k, v) in diff0.get_changed():
+                        print('  %-30s %s' % (k,v))
 
                 dict11, dict21 = diff0.get_changed()
                 #print(dict11)
@@ -6700,6 +6708,21 @@ def main_function():
                 #print('AAAAA', diff1.get_added())
                 #print('BBBBB', diff1.get_removed())
                 #print('CCCCC', diff1.get_changed())
+                print("VC PATH:")
+                if (debugswitch == '1'):
+                    print('VC ADDED:')
+                    for k in diff1.get_added():
+                        print('  %s' % k)
+                    print('VC REMOVED:')
+                    for k in diff1.get_removed():
+                        print('  %s' % k)
+                    print('VC CHANGED:')
+                    for (k1, k2) in diff1.get_changed():
+                        for k in k1:
+                            print('%s' % k)
+                    #print('VC MIXED:')
+                    #for k in diff1.get_mixed():
+                    #    print('  %s' % k)
 
                 dict3 = {}
                 pathlist0, pathlist1 = diff1.get_changed()
