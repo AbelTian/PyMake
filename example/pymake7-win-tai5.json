@@ -1,4 +1,12 @@
 {
+    "Path.Tips": {
+        "OLDNAME": "variable-assemblage",
+        "MyName": "T.D.R.",
+        "TIPS": "If you lost variable content or command content, please record to there, I wont delete them.",
+        "Start": "路径集是PyMake工具一切的开始。用户只需要把电脑上的路径在路径集里部署一次即可。最好部署全面。使用很方便，可以在environ里使用，可以在command里使用，可以在custom.path+.ini和custom.var+.ini里使用。",
+        "Pyvenv.Tips": "创建Python虚拟环境的时候，不要继承site-packages。",
+        "Python命令": "PyMake提供python命令，内部使用'python'进行调用。python有能力同时具有多个执行环境，为了方便切换，用户不要把python加入系统路径。加到这个文件里最好。"
+    },
     "path-assemblage": {
         "root": "R:/Develop",
         "root2": "V:/Develop",
@@ -12,7 +20,6 @@
         "root.test": "${root}/e3-test",
         "root.webrc": "${root}/e2-webrc",
         "cc": "${root.tool}/a0-compiler",
-        "wincc": "${root.tool}/winCompilers",
         "python-install": "C:/Users/Administrator/AppData/Local/Programs/Python",
         "py27": "${python-install}/Python27",
         "py36": "${python-install}/Python36",
@@ -24,10 +31,11 @@
         "py.bin": "${py};${py}/Scripts",
         "pymake": "${root.tool}/a0-compiler/PyMake",
         "pymake.env": "${pymake}/UserSource",
-        "pymake.shell": "${pymake.env}/UserShell",
+        "pymake.usershell": "${pymake.env}/UserShell",
         "pymake.vcshell": "${pymake.env}/VCShell",
         "pymake.winshell": "${pymake.env}/WinShell",
         "pymake.myshell": "${pymake.env}/MyShell",
+        "wincc": "${root.tool}/winCompilers",
         "cmake3.12": "${wincc}/CMAKE/cmake-3.12.0-win64-x64",
         "cmake3.9": "${wincc}/CMAKE/cmake3.9.1_64",
         "cmake": "${cmake3.12}",
@@ -64,6 +72,14 @@
         "qt5.8.clang.bin": "${qt5.8.clang}/bin",
         "qt5.8.ios": "${qt}/${qt5.8.version}/ios",
         "qt5.8.ios.bin": "${qt5.8.ios}/bin",
+        "qt5.8.msvc2015": "${qt}/${qt5.8.version}/msvc2015",
+        "qt5.8.msvc2015.bin": "${qt5.8.msvc2015}/bin",
+        "qt5.8.msvc2015_64": "${qt}/${qt5.8.version}/msvc2015_64",
+        "qt5.8.msvc2015_64.bin": "${qt5.8.msvc2015_64}/bin",
+        "qt5.8.winrt_arm": "${qt}/${qt5.8.version}/winrt_armv7_msvc2015",
+        "qt5.8.winrt_arm.bin": "${qt5.8.winrt_arm}/bin",
+        "qt5.8.winrt_x64": "${qt}/${qt5.8.version}/winrt_x64_msvc2015",
+        "qt5.8.winrt_x64.bin": "${qt5.8.winrt_x64}/bin",
         "qt5.9.version": "5.9.2",
         "qt5.9.mingw32": "${qt}/${qt5.9.version}/mingw53_32",
         "qt5.9.mingw32.bin": "${qt5.9.mingw32}/bin",
@@ -89,17 +105,21 @@
         "qt5.9.msvc2017.bin": "${qt5.9.msvc2017}/bin",
         "qt5.9.msvc2017_64": "${qt}/${qt5.9.version}/msvc2017_64",
         "qt5.9.msvc2017_64.bin": "${qt5.9.msvc2017_64}/bin",
-        "qt5.9.msvc": "${qt}/${qt5.9.version}/msvc2015",
-        "qt5.9.msvc.bin": "${qt5.9.msvc}/bin",
-        "qt5.9.msvc_64": "${qt}/${qt5.9.version}/msvc2015_64",
-        "qt5.9.msvc_64.bin": "${qt5.9.msvc_64}/bin",
-        "qt5.9.winrt": "${qt}/${qt5.9.version}/winrt_armv7_msvc2015",
-        "qt5.9.winrt.bin": "${qt5.9.winrt}/bin",
-        "qt5.9.winrt.simulator": "${qt}/${qt5.9.version}/winrt_x64_msvc2015",
-        "qt5.9.winrt.simulator.bin": "${qt5.9.winrt}/bin",
+        "qt5.9.winrt_arm": "${qt}/${qt5.9.version}/winrt_armv7_msvc2015",
+        "qt5.9.winrt_arm.bin": "${qt5.9.winrt_arm}/bin",
+        "qt5.9.winrt_x64": "${qt}/${qt5.9.version}/winrt_x64_msvc2015",
+        "qt5.9.winrt_x64.bin": "${qt5.9.winrt_x64}/bin",
         "qt5.12.version": "5.12.2",
         "qt5.12.mingw64": "${qt}/${qt5.12.version}/mingw73_64",
         "qt5.12.mingw64.bin": "${qt5.12.mingw64}/bin",
+        "qt5.12.msvc2015": "${qt}/${qt5.12.version}/msvc2015",
+        "qt5.12.msvc2015.bin": "${qt5.12.msvc2015}/bin",
+        "qt5.12.msvc2015_64": "${qt}/${qt5.12.version}/msvc2015_64",
+        "qt5.12.msvc2015_64.bin": "${qt5.12.msvc2015_64}/bin",
+        "qt5.12.winrt_arm": "${qt}/${qt5.12.version}/winrt_armv7_msvc2015",
+        "qt5.12.winrt_arm.bin": "${qt}/${qt5.12.version}/winrt_armv7_msvc2015/bin",
+        "qt5.12.winrt_x64": "${qt}/${qt5.12.version}/winrt_x64_msvc2015",
+        "qt5.12.winrt_x64.bin": "${qt}/${qt5.12.version}/winrt_x64_msvc2015/bin",
         "qt4.mingw32.version": "${qt4.8.version}",
         "qt4.mingw32": "${qt}/${qt4.8.version}/mingw32",
         "qt4.mingw32.bin": "${qt4.8.mingw32}/bin",
@@ -121,6 +141,15 @@
         "qt5.android_x86.version": "${qt5.9.version}",
         "qt5.android_x86": "${qt5.9.android_x86}",
         "qt5.android_x86.bin": "${qt5.9.android_x86}/bin",
+        "qt5.msvc2015.version": "${qt5.9.version}",
+        "qt5.msvc2015": "${qt}/${qt5.msvc2015.version}/msvc2015",
+        "qt5.msvc2015.bin": "${qt5.9.msvc2015.bin}",
+        "qt5.msvc2015_64.version": "${qt5.9.version}",
+        "qt5.msvc2015_64": "${qt}/${qt5.msvc2015_64.version}/msvc2015_64",
+        "qt5.msvc2015_64.bin": "${qt5.9.msvc2015_64.bin}",
+        "qt5.winrt_arm.version": "${qt5.9.version}",
+        "qt5.winrt_arm": "${qt5.9.winrt_arm}",
+        "qt5.winrt_arm.bin": "${qt5.9.winrt_arm}/bin",
         "mingw32": "${qt}/Tools/mingw530_32",
         "mingw32.bin": "${mingw32}/bin",
         "mingw64": "${qt}/Tools/mingw730_64",
@@ -321,14 +350,6 @@
         "vcvarsall-2017-2": "${VS2017}/Enterprise/VC/Auxiliary/Build/vcvarsall.bat",
         "vcvarsall-2019-2": "${VS2019}/Enterprise/VC/Auxiliary/Build/vcvarsall.bat"
     },
-    "Path.Tips": {
-        "OLDNAME": "variable-assemblage",
-        "MyName": "T.D.R.",
-        "TIPS": "If you lost variable content or command content, please record to there, I wont delete them.",
-        "Start": "路径集是PyMake工具一切的开始。用户只需要把电脑上的路径在路径集里部署一次即可。最好部署全面。使用很方便，可以在environ里使用，可以在command里使用，可以在custom.path+.ini和custom.var+.ini里使用。",
-        "Pyvenv.Tips": "创建Python虚拟环境的时候，不要继承site-packages。",
-        "Python命令": "PyMake提供python命令，内部使用'python'进行调用。python有能力同时具有多个执行环境，为了方便切换，用户不要把python加入系统路径。加到这个文件里最好。"
-    },
     "Environ.Tips": {
         "Tips.Separate": "上边配置的每个环境都是互相冲突的。",
         "system": "PyMake给用户提供system命令，查看系统环境，但是，不允许修改。如果用户希望修改，建议使用rapidee修改。",
@@ -336,21 +357,9 @@
         "custom": "custom环境，是PyMake允许用户设置的公共环境。custom.ini决定自定义环境的开关。custom.path+.ini配置环境路径，custom.var+.ini配置环境变量。",
         "mingw32": "mingw32、msvc，每个环境默认都增加了Qt5支持。"
     },
-    "Command.Tips": {
-        "OLDNAME": "command-assemblage",
-        "hello.work": "hello world.",
-        "go.build": "go build -ldflags=\"-H windowsgui\"",
-        "build.qmake": "也叫做build.pro，在Qt Source路径编译源代码",
-        "cmake": "在source路径打开cmake-gui。这个cmake到底怎么从命令行配置？再等等谁出一个cmake命令行的丰富用法。",
-        "build.cmake": "开启cmake的make编译。",
-        "open.run": "编译完，运行一下。",
-        "watcom": "watcom提供CL 13，和MSVC CL 13冲突，也不要给MinGW环境用，冲突。",
-        "configure.qt5.mingw32.static": "need python2 for webengine."
-    },
     "environ": {
         "android.mobile": {
             "path+": [
-                "${cmake.bin}",
                 "${qt5.android_arm.bin}",
                 "${mingw32.bin}",
                 "${java1.8.bin}",
@@ -362,6 +371,7 @@
                 "${ndk.arm.bin}"
             ],
             "make0": "mingw32-make",
+            "CMAKEGENERATOR": "MinGW Makefiles",
             "ANDROID_API_VERSION": "android-23",
             "ANDROID_HOME": "${android.sdk}",
             "ANDROID_SDK_ROOT": "${android.sdk}",
@@ -386,7 +396,6 @@
         },
         "android.x86": {
             "path+": [
-                "${cmake.bin}",
                 "${qt5.android_x86.bin}",
                 "${mingw32.bin}",
                 "${java1.8.bin}",
@@ -398,6 +407,7 @@
                 "${ndk.x86.bin}"
             ],
             "make0": "mingw32-make",
+            "CMAKEGENERATOR": "MinGW Makefiles",
             "CLICOLOR": "1",
             "ANDROID_API_VERSION": "android-23",
             "ANDROID_HOME": "${android.sdk}",
@@ -423,11 +433,11 @@
         },
         "qt4": {
             "path+": [
-                "${cmake.bin}",
                 "${mingw32.bin}",
                 "${qt4.mingw32.bin}"
             ],
             "make0": "mingw32-make",
+            "CMAKEGENERATOR": "MinGW Makefiles",
             "QTVERSION": "${qt4.mingw32.version}",
             "QTDIR": "${qt4.mingw32}",
             "QTSPEC": "-spec win32-g++",
@@ -437,12 +447,11 @@
         },
         "mingw32": {
             "path+": [
-                "${cmake.bin}",
                 "${mingw32.bin}",
                 "${qt5.mingw32.bin}"
             ],
-            "CMAKEGENERATOR": "MinGW Makefiles",
             "make0": "mingw32-make",
+            "CMAKEGENERATOR": "MinGW Makefiles",
             "QTVERSION": "${qt5.mingw32.version}",
             "QTDIR": "${qt5.mingw32}",
             "QTSPEC": "-spec win32-g++",
@@ -452,11 +461,11 @@
         },
         "mingw64": {
             "path+": [
-                "${cmake.bin}",
                 "${mingw64.bin}",
                 "${qt5.mingw64.bin}"
             ],
             "make0": "mingw32-make",
+            "CMAKEGENERATOR": "MinGW Makefiles",
             "QTVERSION": "${qt5.mingw64.version}",
             "QTDIR": "${qt5.mingw64}",
             "QTSPEC": "-spec win32-g++",
@@ -466,11 +475,11 @@
         },
         "arm32": {
             "path+": [
-                "${cmake.bin}",
                 "${qt5.arm32.bin}",
                 "${mingw32.bin}"
             ],
             "make0": "mingw32-make",
+            "CMAKEGENERATOR": "MinGW Makefiles",
             "QTVERSION": "${qt5.arm32.version}",
             "QTDIR": "${qt5.arm32}",
             "QTSPEC": "-spec linux-arm-gnueabi-g++",
@@ -480,11 +489,11 @@
         },
         "armhf32": {
             "path+": [
-                "${cmake.bin}",
                 "${qt5.armhf32.bin}",
                 "${mingw32.bin}"
             ],
             "make0": "mingw32-make",
+            "CMAKEGENERATOR": "MinGW Makefiles",
             "QTVERSION": "${qt5.armhf32.version}",
             "QTDIR": "${qt5.armhf32}",
             "QTSPEC": "-spec linux-arm-gnueabihf-g++",
@@ -494,11 +503,11 @@
         },
         "mips32": {
             "path+": [
-                "${cmake.bin}",
                 "${qt5.mips32.bin}",
                 "${mingw32.bin}"
             ],
             "make0": "mingw32-make",
+            "CMAKEGENERATOR": "MinGW Makefiles",
             "QTVERSION": "${qt5.mips32.version}",
             "QTDIR": "${qt5.mips32}",
             "QTSPEC": "-spec linux-mips-gnueabi-g++",
@@ -577,8 +586,8 @@
                 "${mingw32.bin}",
                 "${qt5.mingw32.bin}"
             ],
-            "CMAKEGENERATOR": "MinGW Makefiles",
             "make0": "mingw32-make",
+            "CMAKEGENERATOR": "MinGW Makefiles",
             "QTVERSION": "${qt5.mingw32.version}",
             "QTDIR": "${qt5.mingw32}",
             "QTSPEC": "-spec win32-g++",
@@ -586,13 +595,13 @@
             "QKIT": "WIN32",
             "QSYS": "Windows"
         },
-        "vc6.0": {
+        "vc6": {
             "path+": [
-                "${cmake.bin}",
                 "${VC6.BIN}",
                 "${qt5.5.vc6.bin}"
             ],
             "make0": "nmake",
+            "CMAKEGENERATOR": "NMake Makefiles",
             "vcvarsall": "${vcvarsall-1998}",
             "vcvarsallparam": "x86",
             "run-vcvarsall": "\"${vcvarsall}\" ${vcvarsallparam}",
@@ -604,15 +613,14 @@
             "QTSPEC": "-spec win32-msvc",
             "QTCONFIG": "",
             "QKIT": "WIN32",
-            "QSYS": "MSVC",
-            "MSMAKE": "${make2}"
+            "QSYS": "MSVC"
         },
-        "vc6": {
+        "vc1998": {
             "path+": [
-                "${cmake.bin}",
                 "${qt5.5.vc6.bin}"
             ],
             "make0": "nmake",
+            "CMAKEGENERATOR": "NMake Makefiles",
             "vcvarsall": "${vcvarsall-1998}",
             "vcvarsallparam": "x86",
             "run-vcvarsall": "\"${vcvarsall}\" ${vcvarsallparam}",
@@ -621,137 +629,130 @@
             "QTSPEC": "-spec win32-msvc",
             "QTCONFIG": "",
             "QKIT": "WIN32",
-            "QSYS": "MSVC",
-            "MSMAKE": "${make2}"
+            "QSYS": "MSVC"
         },
         "msvc2015": {
             "path+": [
-                "${cmake.bin}",
-                "${qt5.9.msvc2015.bin}"
+                "${qt5.msvc2015.bin}"
             ],
             "make0": "nmake",
+            "CMAKEGENERATOR": "NMake Makefiles",
             "vcvarsall": "${vcvarsall-2015}",
             "vcvarsallparam": "amd64_x86",
-            "BuildType": "Debug",
-            "BuildTarget": "Win32",
             "run-vcvarsall": "\"${vcvarsall}\" ${vcvarsallparam}",
             "MSBuild": "C:\\Program Files (x86)\\MSBuild\\14.0\\Bin\\amd64\\MSBuild.exe",
-            "VS110COMNTOOLS": "C:/Program Files (x86)/Microsoft Visual Studio 11.0/Common7/Tools/",
-            "VS120COMNTOOLS": "C:/Program Files (x86)/Microsoft Visual Studio 12.0/Common7/Tools/",
-            "VS140COMNTOOLS": "C:/Program Files (x86)/Microsoft Visual Studio 14.0/Common7/Tools/",
-            "VSSDK140Install": "C:/Program Files (x86)/Microsoft Visual Studio 14.0/VSSDK/",
             "QtMsBuild": "${QtMsBuild}",
-            "QTVERSION": "${qt5.9.version}",
-            "QTDIR": "${qt5.9.msvc2015}",
+            "QTVERSION": "${qt5.msvc2015.version}",
+            "QTDIR": "${qt5.msvc2015}",
             "QTSPEC": "-spec win32-msvc",
             "QTCONFIG": "",
             "QKIT": "WIN32",
-            "QSYS": "MSVC",
-            "MSMAKE": "${make2}"
+            "QSYS": "MSVC"
         },
         "msvc2015.x64": {
             "path+": [
-                "${cmake.bin}",
-                "${qt5.12.msvc2015_64.bin}"
+                "${qt5.msvc2015_64.bin}"
             ],
             "make0": "nmake",
+            "CMAKEGENERATOR": "NMake Makefiles",
             "vcvarsall": "${vcvarsall-2015}",
             "vcvarsallparam": "x86_amd64",
             "run-vcvarsall": "${vcvarsall} ${vcvarsallparam}",
             "MSBuild": "C:\\Program Files (x86)\\MSBuild\\14.0\\Bin\\MSBuild.exe",
             "QtMsBuild": "${QtMsBuild}",
-            "QTVERSION": "${qt5.12.version}",
-            "QTDIR": "${qt5.12.msvc2015_64}",
+            "QTVERSION": "${qt5.msvc2015_64.version}",
+            "QTDIR": "${qt5.msvc2015_64}",
             "QTSPEC": "-spec win32-msvc",
             "QTCONFIG": "",
             "QKIT": "WIN32",
-            "QSYS": "MSVC64",
-            "MSMAKE": "${make2}"
+            "QSYS": "MSVC64"
         },
         "msvc2015.winrt": {
             "path+": [
-                "${cmake.bin}",
-                "${qt5.12.winrt.arm.bin}"
+                "${qt5.winrt_arm.bin}"
             ],
             "make0": "nmake",
+            "CMAKEGENERATOR": "NMake Makefiles",
             "vcvarsall": "${vcvarsall-2015}",
             "vcvarsallparam": "amd64_arm",
             "run-vcvarsall": "${vcvarsall} ${vcvarsallparam}",
             "MSBuild": "C:\\Program Files (x86)\\MSBuild\\14.0\\Bin\\amd64\\MSBuild.exe",
             "QtMsBuild": "${QtMsBuild}",
-            "QTVERSION": "${qt5.12.version}",
-            "QTDIR": "${qt5.12.winrt.arm}",
+            "QTVERSION": "${qt5.winrt_arm.version}",
+            "QTDIR": "${qt5.winrt_arm}",
             "QTSPEC": "-spec winrt-arm-msvc2015",
             "QTCONFIG": "",
             "QKIT": "WIN32",
-            "QSYS": "WinRT",
-            "MSMAKE": "${make2}"
+            "QSYS": "WinRT"
         },
-        "msvc2015.winrt.simulator": {
+        "msvc2015.winrt_x64": {
             "path+": [
-                "${cmake.bin}",
-                "${qt5.12.winrt.x64.bin}"
+                "${qt5.winrt_x64.bin}"
             ],
             "make0": "nmake",
+            "CMAKEGENERATOR": "NMake Makefiles",
             "vcvarsall": "${vcvarsall-2015}",
             "vcvarsallparam": "x86_amd64",
             "run-vcvarsall": "${vcvarsall} ${vcvarsallparam}",
             "MSBuild": "C:\\Program Files (x86)\\MSBuild\\14.0\\Bin\\MSBuild.exe",
             "QtMsBuild": "${QtMsBuild}",
-            "QTVERSION": "${qt5.12.version}",
-            "QTDIR": "${qt5.12.winrt.x64}",
+            "QTVERSION": "${qt5.winrt_x64.version}",
+            "QTDIR": "${qt5.winrt_x64}",
             "QTSPEC": "-spec winrt-x64-msvc2015",
             "QTCONFIG": "",
             "QKIT": "WIN32",
-            "QSYS": "WinRTSimulator",
-            "MSMAKE": "${make2}"
+            "QSYS": "WinRTSimulator"
         },
         "msvc2012": {
             "path+": [
-                "${cmake.bin}",
-                "${qt5.9.msvc2015.bin}"
+                "${qt5.msvc2015.bin}"
             ],
             "make0": "nmake",
+            "CMAKEGENERATOR": "NMake Makefiles",
             "vcvarsall": "${vcvarsall-2012}",
             "vcvarsallparam": "x86",
             "run-vcvarsall": "\"${vcvarsall}\" ${vcvarsallparam}",
-            "VS110COMNTOOLS": "C:/Program Files (x86)/Microsoft Visual Studio 11.0/Common7/Tools/",
-            "VS120COMNTOOLS": "C:/Program Files (x86)/Microsoft Visual Studio 12.0/Common7/Tools/",
-            "VS140COMNTOOLS": "C:/Program Files (x86)/Microsoft Visual Studio 14.0/Common7/Tools/",
-            "VSSDK140Install": "C:/Program Files (x86)/Microsoft Visual Studio 14.0/VSSDK/",
+            "MSBuild": "C:\\Program Files (x86)\\MSBuild\\12.0\\Bin\\MSBuild.exe",
             "QtMsBuild": "${QtMsBuild}",
-            "QTVERSION": "${qt5.9.version}",
-            "QTDIR": "${qt5.9.msvc2015}",
+            "QTVERSION": "${qt5.msvc2015.version}",
+            "QTDIR": "${qt5.msvc2015}",
             "QTSPEC": "-spec win32-msvc",
             "QTCONFIG": "",
             "QKIT": "WIN32",
-            "QSYS": "MSVC",
-            "MSMAKE": "${make2}"
+            "QSYS": "MSVC"
         },
         "msvc2013": {
             "path+": [
-                "${cmake.bin}",
-                "${qt5.9.msvc2015.bin}"
+                "${qt5.msvc2015.bin}"
             ],
             "make0": "nmake",
+            "CMAKEGENERATOR": "NMake Makefiles",
             "vcvarsall": "${vcvarsall-2013}",
             "vcvarsallparam": "x86",
             "run-vcvarsall": "\"${vcvarsall}\" ${vcvarsallparam}",
             "MSBuild": "C:\\Program Files (x86)\\MSBuild\\12.0\\Bin\\MSBuild.exe",
-            "VS110COMNTOOLS": "C:/Program Files (x86)/Microsoft Visual Studio 11.0/Common7/Tools/",
-            "VS120COMNTOOLS": "C:/Program Files (x86)/Microsoft Visual Studio 12.0/Common7/Tools/",
-            "VS140COMNTOOLS": "C:/Program Files (x86)/Microsoft Visual Studio 14.0/Common7/Tools/",
-            "VSSDK140Install": "C:/Program Files (x86)/Microsoft Visual Studio 14.0/VSSDK/",
             "QtMsBuild": "${QtMsBuild}",
-            "QTVERSION": "${qt5.9.version}",
-            "QTDIR": "${qt5.9.msvc2015}",
+            "QTVERSION": "${qt5.msvc2015.version}",
+            "QTDIR": "${qt5.msvc2015}",
             "QTSPEC": "-spec win32-msvc",
             "QTCONFIG": "",
             "QKIT": "WIN32",
-            "QSYS": "MSVC",
-            "MSMAKE": "${make2}"
+            "QSYS": "MSVC"
         },
         "current": "mingw32"
+    },
+    "Command.Tips": {
+        "OLDNAME": "command-assemblage",
+        "hello.work": "hello world.",
+        "go.build": "go build -ldflags=\"-H windowsgui\"",
+        "build.qmake": "也叫做build.pro，在Qt Source路径编译源代码",
+        "cmake": "在source路径打开cmake-gui。这个cmake到底怎么从命令行配置？再等等谁出一个cmake命令行的丰富用法。",
+        "build.cmake": "开启cmake的make编译。",
+        "open.run": "编译完，运行一下。",
+        "watcom": "watcom提供CL 13，和MSVC CL 13冲突，也不要给MinGW环境用，冲突。",
+        "configure.qt5.mingw32.static": "need python2 for webengine.",
+        "7z.zip": "7z a -tzip -r AAA.zip %*",
+        "7z.unzip": "7z x -tzip -y AAA.zip -o %1"
     },
     "command": {
         "cc0": [],
@@ -1119,7 +1120,7 @@
             "echo prod at : %prod:\\=/%",
             "cd /d %src_path%"
         ],
-        "build.cmake": [
+        "cmake": [
             "if not exist \"CMakeLists.txt\" ( echo has any CMakeLists.txt? please add here command to restrict. & exit /b 0 )",
             "set src_path=%CD%",
             "set profilename=%1",
@@ -1369,6 +1370,59 @@
             "echo prod at : %prod:\\=/%",
             "cd /d %src_path%"
         ],
+        "build.devenv": [
+            "if not exist \"*.sln\" ( echo has any .sln? please add here command to restrict. & exit /b 0 )",
+            "set src_path=%CD%",
+            "set profilename=%1",
+            "set prod=${root.prod}/%profilename%/%QSYS%",
+            "set sdk=${root.sdk}/%profilename%/%QSYS%",
+            "set src=%src_path%/%profilename%.sln",
+            "if not exist \"%src%\" ( echo %profilename%.sln is not exist. & exit /b 0)",
+            "set build=${root.build}/%profilename%/%QSYS%/%QTVERSION%/Debug",
+            "md %build:/=\\%",
+            "cd /d %build%",
+            "rem del /f /q demo examples src test",
+            "echo src file: %src:\\=/%",
+            "echo build at: %build:\\=/%",
+            "echo sdk at  : %sdk:\\=/%",
+            "echo prod at : %prod:\\=/%",
+            "echo %QTSPEC% %QTCONFIG%",
+            "devenv.com %src% /Build \"Debug|Win32\"",
+            "echo build inf %QTSPEC% %QTCONFIG%",
+            "echo src file: %src:\\=/%",
+            "echo build at: %build:\\=/%",
+            "echo sdk at  : %sdk:\\=/%",
+            "echo prod at : %prod:\\=/%",
+            "cd /d %src_path%"
+        ],
+        "build.MSBuild": [
+            "if not exist \"*.sln\" ( echo has any .sln? please add here command to restrict. & exit /b 0 )",
+            "set src_path=%CD%",
+            "set profilename=%1",
+            "set prod=${root.prod}/%profilename%/%QSYS%",
+            "set sdk=${root.sdk}/%profilename%/%QSYS%",
+            "set src=%src_path%/%profilename%.sln",
+            "if not exist \"%src%\" ( echo %profilename%.sln is not exist. & exit /b 0)",
+            "set build=${root.build}/%profilename%/%QSYS%/%QTVERSION%/Debug",
+            "md %build:/=\\%",
+            "cd /d %build%",
+            "rem del /f /q demo examples src test",
+            "echo src file: %src:\\=/%",
+            "echo build at: %build:\\=/%",
+            "echo sdk at  : %sdk:\\=/%",
+            "echo prod at : %prod:\\=/%",
+            "echo %QTSPEC% %QTCONFIG%",
+            "\"%MSBuild%\" %src% /m /t:Build",
+            "echo build inf %QTSPEC% %QTCONFIG%",
+            "echo src file: %src:\\=/%",
+            "echo build at: %build:\\=/%",
+            "echo sdk at  : %sdk:\\=/%",
+            "echo prod at : %prod:\\=/%",
+            "cd /d %src_path%"
+        ],
+        "MSBuild": [
+            "\"%MSBuild%\" %*"
+        ],
         "configure.qt5.android": [
             "mkdir -p ${qt5.build.path}",
             "cd ${qt5.build.path}",
@@ -1393,7 +1447,7 @@
             "echo %build%",
             "echo %sdk_path%"
         ],
-        "build.qt5.mingw32.static": [
+        "configure.qt5.mingw32.build": [
             "set src_path=${root.webrc}/qt-everywhere-opensource-src-5.9.2",
             "set build=${root.build}/Qt5_static/%QTVERSION%/%QSYS%/Debug",
             "set sdk_path=${root.tool}/winLibraries/Qt/%QTVERSION%/mingw53_32_static",
@@ -1404,6 +1458,22 @@
             "echo %src_path%",
             "echo %build%",
             "echo %sdk_path%"
+        ],
+        "Qt.update": [
+            "set qtroot=%QTDIR%\\..\\..",
+            "cd /d %qtroot:/=\\%",
+            "set maintool=\"%qtroot%\\MaintenanceTool.exe\"",
+            "start \"\" \"%maintool%\""
+        ],
+        "Qt.move": [
+            "set srcdir=%1",
+            "set srcver=%2",
+            "if \"\"%1\"\" == \"\"\"\" ( echo please input old qtdir. & exit /b 0 )",
+            "if \"\"%2\"\" == \"\"\"\" ( echo please input old qtvertion. & exit /b 0 )",
+            "mv %srcdir%/%srcver%/* Qt2/%srcver%/",
+            "mv %srcdir%/Docs/* Qt2/Docs/",
+            "mv %srcdir%/Examples/* Qt2/Examples/",
+            "mv %srcdir%/Tools/*.zip Qt2/Tools/"
         ],
         "qqt.sh": [
             "cd ${root.src}",
