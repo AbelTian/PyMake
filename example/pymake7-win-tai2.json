@@ -265,7 +265,9 @@
         "vcvarsall-2013": "C:/Program Files (x86)/Microsoft Visual Studio 12.0/VC/vcvarsall.bat",
         "vcvarsall-2015": "C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/vcvarsall.bat",
         "vcvarsall-2017": "C:/Program Files (x86)/Microsoft Visual Studio/2017/Community/VC/Auxiliary/Build/vcvarsall.bat",
-        "vcvarsall-2017-2": "C:/Program Files (x86)/Microsoft Visual Studio/2017/Enterprise/VC/Auxiliary/Build/vcvarsall.bat"
+        "vcvarsall-2017-2": "C:/Program Files (x86)/Microsoft Visual Studio/2017/Enterprise/VC/Auxiliary/Build/vcvarsall.bat",
+        "vcvarsall-2019": "C:/Program Files (x86)/Microsoft Visual Studio/2019/Community/VC/Auxiliary/Build/vcvarsall.bat",
+        "vcvarsall-2019-2": "C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/Auxiliary/Build/vcvarsall.bat"
     },
     "environ": {
         "android.mobile": {

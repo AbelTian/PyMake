@@ -1257,6 +1257,11 @@
             "qmake %src% %QTSPEC% CONFIG+=debug CONFIG+=qml_debug %QTCONFIG% && mingw32-make qmake_all",
             "mingw32-make -j10"
         ],
+        "qt.update": [
+            "set QTROOT=${qt}",
+            "cd /d %QTROOT:/=\\%",
+            "start \"\" \"%QTROOT:/=\\%\\MaintenanceTool.exe\""
+        ],
         "vcvarsall-2003": [
             "set VisualStudioVersion=7.0",
             "set PATH=%~dp0\\bin;%PATH%",
