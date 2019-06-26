@@ -157,7 +157,7 @@ Usage:
   pymake7.py  system ccvp [ here | hh ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
   pymake7.py  system use <env-name> ccvp [ here | hh ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
   pymake7.py  -------------------------------------------------------------
-  pymeke7.py  local
+  pymake7.py  local
   pymake7.py  local [ open | close ]
   pymake7.py  local [ stat | status ]
   pymake7.py  local [ info | information ]
@@ -172,7 +172,7 @@ Usage:
   pymake7.py  local ccvp [ here | hh ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
   pymake7.py  local use <env-name> ccvp [ here | hh ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
   pymake7.py  -------------------------------------------------------------
-  pymeke7.py  custom
+  pymake7.py  custom
   pymake7.py  custom [ open | close ]
   pymake7.py  custom [ stat | status ]
   pymake7.py  custom [ info | information ]
