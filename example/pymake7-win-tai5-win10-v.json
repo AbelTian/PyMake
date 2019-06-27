@@ -7,29 +7,9 @@
         "Pyvenv.Tips": "创建Python虚拟环境的时候，不要继承site-packages。",
         "Python命令": "PyMake提供python命令，内部使用'python'进行调用。python有能力同时具有多个执行环境，为了方便切换，用户不要把python加入系统路径。加到这个文件里最好。"
     },
-    "Environ.Tips": {
-        "Tips.Separate": "上边配置的每个环境都是互相冲突的。",
-        "system": "PyMake给用户提供system命令，查看系统环境，但是，不允许修改。如果用户希望修改，建议使用rapidee修改。",
-        "local": "local环境，是PyMake给用户提供的内部的公共环境，只读。",
-        "custom": "custom环境，是PyMake允许用户设置的公共环境。custom.ini决定自定义环境的开关。custom.path+.ini配置环境路径，custom.var+.ini配置环境变量。",
-        "mingw32": "mingw32、msvc，每个环境默认都增加了Qt5支持。"
-    },
-    "Command.Tips": {
-        "OLDNAME": "command-assemblage",
-        "hello.work": "hello world.",
-        "go.build": "go build -ldflags=\"-H windowsgui\"",
-        "build.qmake": "也叫做build.pro，在Qt Source路径编译源代码",
-        "cmake": "在source路径打开cmake-gui。这个cmake到底怎么从命令行配置？再等等谁出一个cmake命令行的丰富用法。",
-        "build.cmake": "开启cmake的make编译。",
-        "open.run": "编译完，运行一下。",
-        "watcom": "watcom提供CL 13，和MSVC CL 13冲突，也不要给MinGW环境用，冲突。",
-        "configure.qt5.mingw32.static": "need python2 for webengine.",
-        "7z.zip": "7z a -tzip -r AAA.zip %*",
-        "7z.unzip": "7z x -tzip -y AAA.zip -o %1"
-    },
     "path-assemblage": {
-        "root": "R:/Develop",
-        "root2": "V:/Develop",
+        "root": "C:/Users/Administrator/Develop",
+        "root2": "D:/Develop",
         "root3": "C:/Users/Administrator",
         "root.src": "${root}/a0-develop",
         "root.prod": "${root2}/d0-product",
@@ -39,20 +19,18 @@
         "root.build": "${root2}/c0-buildstation",
         "root.test": "${root}/e3-test",
         "root.webrc": "${root}/e2-webrc",
-        "cc": "${root.tool}/a0-compiler",
+        "cc": "${root.tool}",
         "wincc": "${root.tool}/winCompilers",
         "python-install": "C:/Users/Administrator/AppData/Local/Programs/Python",
-        "python-install-2": "${wincc}/Python",
         "py27": "${python-install}/Python27",
         "py36": "${python-install}/Python36",
         "py37": "${python-install}/Python37",
-        "py37.2": "${python-install-2}/Python37",
         "py27venv": "${cc}/Pyvenv/Python27",
         "py36venv": "${cc}/Pyvenv/Python36",
         "py37venv": "${cc}/Pyvenv/Python37",
-        "py": "${py37venv}",
+        "py": "${py36venv}",
         "py.bin": "${py};${py}/Scripts",
-        "pymake": "${root.tool}/a0-compiler/PyMake",
+        "pymake": "${cc}/PyMake",
         "pymake.env": "${pymake}/UserSource",
         "pymake.usershell": "${pymake.env}/UserShell",
         "pymake.vcshell": "${pymake.env}/VCShell",
@@ -371,6 +349,13 @@
         "vcvarsall-2019": "${VS2019}/Community/VC/Auxiliary/Build/vcvarsall.bat",
         "vcvarsall-2017-2": "${VS2017}/Enterprise/VC/Auxiliary/Build/vcvarsall.bat",
         "vcvarsall-2019-2": "${VS2019}/Enterprise/VC/Auxiliary/Build/vcvarsall.bat"
+    },
+    "Environ.Tips": {
+        "Tips.Separate": "上边配置的每个环境都是互相冲突的。",
+        "system": "PyMake给用户提供system命令，查看系统环境，但是，不允许修改。如果用户希望修改，建议使用rapidee修改。",
+        "local": "local环境，是PyMake给用户提供的内部的公共环境，只读。",
+        "custom": "custom环境，是PyMake允许用户设置的公共环境。custom.ini决定自定义环境的开关。custom.path+.ini配置环境路径，custom.var+.ini配置环境变量。",
+        "mingw32": "mingw32、msvc，每个环境默认都增加了Qt5支持。"
     },
     "environ": {
         "android.mobile": {
@@ -754,7 +739,39 @@
             "QKIT": "WIN32",
             "QSYS": "MSVC"
         },
-        "current": "mingw32"
+        "msvc2019": {
+            "path+": [
+                "${qt5.msvc2015.bin}"
+            ],
+            "make0": "NMAKE.exe",
+            "CMAKEGENERATOR": "NMake Makefiles",
+            "vcvarsall": "${vcvarsall-2019}",
+            "vcvarsallparam": "amd64_x86",
+            "run-vcvarsall": "\"${vcvarsall}\" ${vcvarsallparam}",
+            "MSBuild": "C:\\Program Files (x86)\\MSBuild\\14.0\\Bin\\amd64\\MSBuild.exe",
+            "QtMsBuild": "${QtMsBuild}",
+            "QTVERSION": "${qt5.msvc2015.version}",
+            "QTDIR": "${qt5.msvc2015}",
+            "QTSPEC": "-spec win32-msvc",
+            "QTCONFIG": "",
+            "QKIT": "WIN32",
+            "QSYS": "MSVC",
+            "MSMAKE": "${make2}"
+        },
+        "current": "msvc2015"
+    },
+    "Command.Tips": {
+        "OLDNAME": "command-assemblage",
+        "hello.work": "hello world.",
+        "go.build": "go build -ldflags=\"-H windowsgui\"",
+        "build.qmake": "也叫做build.pro，在Qt Source路径编译源代码",
+        "cmake": "在source路径打开cmake-gui。这个cmake到底怎么从命令行配置？再等等谁出一个cmake命令行的丰富用法。",
+        "build.cmake": "开启cmake的make编译。",
+        "open.run": "编译完，运行一下。",
+        "watcom": "watcom提供CL 13，和MSVC CL 13冲突，也不要给MinGW环境用，冲突。",
+        "configure.qt5.mingw32.static": "need python2 for webengine.",
+        "7z.zip": "7z a -tzip -r AAA.zip %*",
+        "7z.unzip": "7z x -tzip -y AAA.zip -o %1"
     },
     "command": {
         "cc0": [],
@@ -1472,6 +1489,7 @@
             "set srcver=%2",
             "if \"\"%1\"\" == \"\"\"\" ( echo please input old qtdir. & exit /b 0 )",
             "if \"\"%2\"\" == \"\"\"\" ( echo please input old qtvertion. & exit /b 0 )",
+            "mkdir Qt2\\%srcver%",
             "mv %srcdir%/%srcver%/* Qt2/%srcver%/",
             "mv %srcdir%/Docs/* Qt2/Docs/",
             "mv %srcdir%/Examples/* Qt2/Examples/",
