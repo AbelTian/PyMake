@@ -232,7 +232,7 @@ Usage:
   pymake7.py  use <env-name> type2 [ here | hh ] [ <cmd-name> ] [ to <file-name> ] [ --suffix=<.suffix-name> ] [ --encoding=<encoding-name> ] [ --samename ] [ -a | --all ]
   pymake7.py  open [ <path-name> ... ] [ -c | --custom ] [ --current ] [ --envname=<env-name> ] [ -i | --ignorecase ]
   pymake7.py  use <env-name> open [ <path-name> ... ] [ -i | --ignorecase ]
-  pymake7.py  check [ -c | --custom ] [ -s | --system ] [ --envname=<env-name> ] [ -a | --all ]
+  pymake7.py  check [ info | information ] [ -c | --custom ] [ -s | --system ] [ --current ] [ --envname=<env-name> ] [ -a | --all ]
   pymake7.py  -------------------------------------------------------------
   pymake7.py  vc
   pymake7.py  vc [ info | information ]
@@ -4841,6 +4841,16 @@ def main_function():
             value = '='.join(str(l).split('=')[1:]).strip()
             envcustomlistrawvars[key] = value
 
+        break
+
+    # check command
+    while (True):
+        if(args['check'] is True):
+            ''
+            current_env = args['--envname']
+
+        else:
+            ''
         break
 
     # export2 command
