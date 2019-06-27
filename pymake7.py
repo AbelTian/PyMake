@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #!/usr/bin/env python
-"""PyMake 7.7.1.
+"""PyMake 7.8.
 
 Usage:
   pymake7.py  source
@@ -989,7 +989,7 @@ def main_function():
         conf.set('source', 'config', pymakedefaultsourcefile)
         conf.write(open(pymakeini, 'w'))
 
-    args = docopt(__doc__, version='pymake7.py v7.7.1')
+    args = docopt(__doc__, version='pymake7.py v7.8')
     #print(args)
 
     #initialize

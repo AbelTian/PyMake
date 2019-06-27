@@ -322,7 +322,7 @@
         "QtMsBuild": "C:/Users/Administrator/AppData/Local/QtMsBuild",
         "VC6.SYSTEM": "C:/Program Files (x86)/Microsoft Visual Studio",
         "VC6.CUSTOM": "${wincc}/VC6CN",
-        "VC6": "${VC6.CUSTOM}",
+        "VC6": "${VC6.SYSTEM}",
         "VC6.BIN": "${VC6}/VC98/Bin;${VC6}/Common/MSDev98/Bin;${VC6}/Common/Tools",
         "VC6.INCLUDE": "${VC6}/VC98/Include;${VC6}/VC98/MFC/Include",
         "VC6.LIB": "${VC6}/VC98/Lib;${VC6}/VC98/MFC/Lib",
