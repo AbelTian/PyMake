@@ -911,6 +911,10 @@ R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource\MyShell>
 
 ```
 
+# Environ Structure
+![env struct](screenshot/b17.png)
+
+
 # Command  
 [PyMake Command](./COMMAND.md)  
 
