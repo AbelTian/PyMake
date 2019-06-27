@@ -9,7 +9,7 @@ import json
 import platform
 from collections import OrderedDict
 from .colorama import init, Fore, Back, Style
-
+from .collections_extended import bag, frozenbag, setlist, frozensetlist, bijection
 
 init(autoreset=True)
 
@@ -52,27 +52,27 @@ class DiffDict(object):
     def __init__(self, current, last):
         self.current = current
         self.last = last
-        self.set_current = set(current)
-        self.set_last = set(last)
+        self.set_current = frozensetlist(current)
+        self.set_last = frozensetlist(last)
         self.intersect_keys = self.set_current & self.set_last
 
     def get_added(self):
         """current - mixed = added key"""
         added_keys = self.set_current - self.intersect_keys
-        return {key : self.current.get(key) for key in added_keys}
+        return OrderedDict([(key, self.current.get(key)) for key in added_keys])
 
     def get_removed(self):
         """last - mixed = removed key"""
         removed_keys = self.set_last - self.intersect_keys
-        return {key : self.current.get(key) for key in removed_keys}
+        return OrderedDict([(key, self.current.get(key)) for key in removed_keys])
 
     def get_mixed(self):
-        return { key: self.current.get(key) for key in self.intersect_keys }, { key: self.last.get(key) for key in self.intersect_keys }
+        return OrderedDict([(key, self.current.get(key)) for key in self.intersect_keys ]), OrderedDict([(key, self.last.get(key)) for key in self.intersect_keys ])
 
     def get_changed(self):
         """not equal keys in mixed"""
-        changed_keys = set(o for o in self.intersect_keys if self.current.get(o) != self.last.get(o))
-        return { key: self.current.get(key) for key in changed_keys }, { key: self.last.get(key) for key in changed_keys }
+        changed_keys = frozensetlist(o for o in self.intersect_keys if self.current.get(o) != self.last.get(o))
+        return OrderedDict([(key, self.current.get(key)) for key in changed_keys ]), OrderedDict([(key, self.last.get(key)) for key in changed_keys ])
 
 class DiffList(object):
     """get diff between two lists"""
@@ -80,8 +80,8 @@ class DiffList(object):
     def __init__(self, current, last):
         self.current = current
         self.last = last
-        self.set_current = set(current)
-        self.set_last = set(last)
+        self.set_current = frozensetlist(current)
+        self.set_last = frozensetlist(last)
         self.intersect_keys = self.set_current & self.set_last
 
     def get_added(self):

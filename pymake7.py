@@ -6893,6 +6893,7 @@ def main_function():
                 if (debugswitch == '1'):
                     print("debug: VC ALL")
                     print('VC ADDED:')
+                    #print(diff0.get_added())
                     for (k, v) in diff0.get_added().items():
                         print('  %-30s %s' % (k,v))
                     print('VC REMOVED:')
@@ -6936,6 +6937,7 @@ def main_function():
                 dict3 = {}
                 pathlist0, pathlist1 = diff1.get_changed()
                 dict3['path+'] = copy.deepcopy(pathlist0)
+                dict3['path+'].reverse()
                 vardict = copy.deepcopy(diff0.get_added())
                 dict3.update(vardict)
                 #for (key, value) in vardict.items():
@@ -8289,6 +8291,7 @@ def main_function():
                         dict3 = {}
                         pathlist0, pathlist1 = diff1.get_changed()
                         dict3['path+'] = copy.deepcopy(pathlist0)
+                        dict3['path+'].reverse()
                         vardict = copy.deepcopy(diff0.get_added())
                         dict3.update(vardict)
                         # for (key, value) in vardict.items():
