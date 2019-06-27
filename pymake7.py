@@ -4910,6 +4910,14 @@ def main_function():
                             pathslist1.append(Fore.YELLOW + path1)
                             unknownerror_num = unknownerror_num + 1
                     path2 = os.path.pathsep.join(pathslist1)
+                    if(path2.__contains__(Fore.GREEN)):
+                        path2 = '%-100s %s %s' % (path2, Fore.RESET+'normal_num:', normal_num)
+                    if(path2.__contains__(Fore.MAGENTA)):
+                        path2 = '%-100s %s %s' % (path2, Fore.RESET+'unparsed_num:', unparsed_num)
+                    if(path2.__contains__(Fore.RED)):
+                        path2 = '%-100s %s %s' % (path2, Fore.RESET+'unexisted_num:', unexisted_num)
+                    if(path2.__contains__(Fore.YELLOW)):
+                        path2 = '%-100s %s %s' % (path2, Fore.RESET+'unknownstring_num:', unknownerror_num)
                     print('  ' + path2)
                 print('variable:')
                 for (key, value) in pymakesystemenviron.items():
@@ -4937,7 +4945,15 @@ def main_function():
                             pathslist1.append(Fore.YELLOW + path1)
                             unknownerror_num = unknownerror_num + 1
                     path2 = os.path.pathsep.join(pathslist1)
-                    print('  %-30s %s' %(Fore.GREEN+key, path2))
+                    if(path2.__contains__(Fore.GREEN)):
+                        path2 = '%-100s %s %s' % (path2, Fore.RESET+'normal_num:', normal_num)
+                    if(path2.__contains__(Fore.MAGENTA)):
+                        path2 = '%-100s %s %s' % (path2, Fore.RESET+'unparsed_num:', unparsed_num)
+                    if(path2.__contains__(Fore.RED)):
+                        path2 = '%-100s %s %s' % (path2, Fore.RESET+'unexisted_num:', unexisted_num)
+                    if(path2.__contains__(Fore.YELLOW)):
+                        path2 = '%-100s %s %s' % (path2, Fore.RESET+'unknownstring_num:', unknownerror_num)
+                    print('  %-30s %s' %(Fore.GREEN + key, path2))
 
             if(args['-l'] or args['--local'] is True):
                 print('local env')
@@ -4963,6 +4979,14 @@ def main_function():
                             pathslist1.append(Fore.YELLOW + path1)
                             unknownerror_num = unknownerror_num + 1
                     path2 = os.path.pathsep.join(pathslist1)
+                    if(path2.__contains__(Fore.GREEN)):
+                        path2 = '%-100s %s %s' % (path2, Fore.RESET+'normal_num:', normal_num)
+                    if(path2.__contains__(Fore.MAGENTA)):
+                        path2 = '%-100s %s %s' % (path2, Fore.RESET+'unparsed_num:', unparsed_num)
+                    if(path2.__contains__(Fore.RED)):
+                        path2 = '%-100s %s %s' % (path2, Fore.RESET+'unexisted_num:', unexisted_num)
+                    if(path2.__contains__(Fore.YELLOW)):
+                        path2 = '%-100s %s %s' % (path2, Fore.RESET+'unknownstring_num:', unknownerror_num)
                     print('  ' + path2)
                 print('variable:')
                 for (key, value) in localenv.items():
@@ -4988,6 +5012,14 @@ def main_function():
                             pathslist1.append(Fore.YELLOW + path1)
                             unknownerror_num = unknownerror_num + 1
                     path2 = os.path.pathsep.join(pathslist1)
+                    if(path2.__contains__(Fore.GREEN)):
+                        path2 = '%-100s %s %s' % (path2, Fore.RESET+'normal_num:', normal_num)
+                    if(path2.__contains__(Fore.MAGENTA)):
+                        path2 = '%-100s %s %s' % (path2, Fore.RESET+'unparsed_num:', unparsed_num)
+                    if(path2.__contains__(Fore.RED)):
+                        path2 = '%-100s %s %s' % (path2, Fore.RESET+'unexisted_num:', unexisted_num)
+                    if(path2.__contains__(Fore.YELLOW)):
+                        path2 = '%-100s %s %s' % (path2, Fore.RESET+'unknownstring_num:', unknownerror_num)
                     print('  %-30s %s' %(Fore.GREEN+key, path2))
 
             if(args['-c'] or args['--custom'] is True):
@@ -5014,6 +5046,14 @@ def main_function():
                             pathslist1.append(Fore.YELLOW + path1)
                             unknownerror_num = unknownerror_num + 1
                     path2 = os.path.pathsep.join(pathslist1)
+                    if(path2.__contains__(Fore.GREEN)):
+                        path2 = '%-100s %s %s' % (path2, Fore.RESET+'normal_num:', normal_num)
+                    if(path2.__contains__(Fore.MAGENTA)):
+                        path2 = '%-100s %s %s' % (path2, Fore.RESET+'unparsed_num:', unparsed_num)
+                    if(path2.__contains__(Fore.RED)):
+                        path2 = '%-100s %s %s' % (path2, Fore.RESET+'unexisted_num:', unexisted_num)
+                    if(path2.__contains__(Fore.YELLOW)):
+                        path2 = '%-100s %s %s' % (path2, Fore.RESET+'unknownstring_num:', unknownerror_num)
                     print('  ' + path2)
                 print('variable:')
                 for (key, value) in envcustomlistrawvars.items():
@@ -5039,6 +5079,14 @@ def main_function():
                             pathslist1.append(Fore.YELLOW + path1)
                             unknownerror_num = unknownerror_num + 1
                     path2 = os.path.pathsep.join(pathslist1)
+                    if(path2.__contains__(Fore.GREEN)):
+                        path2 = '%-100s %s %s' % (path2, Fore.RESET+'normal_num:', normal_num)
+                    if(path2.__contains__(Fore.MAGENTA)):
+                        path2 = '%-100s %s %s' % (path2, Fore.RESET+'unparsed_num:', unparsed_num)
+                    if(path2.__contains__(Fore.RED)):
+                        path2 = '%-100s %s %s' % (path2, Fore.RESET+'unexisted_num:', unexisted_num)
+                    if(path2.__contains__(Fore.YELLOW)):
+                        path2 = '%-100s %s %s' % (path2, Fore.RESET+'unknownstring_num:', unknownerror_num)
                     print('  %-30s %s' %(Fore.GREEN+key, path2))
 
             if(current_env is not None):
@@ -5065,6 +5113,14 @@ def main_function():
                             pathslist1.append(Fore.YELLOW + path1)
                             unknownerror_num = unknownerror_num + 1
                     path2 = os.path.pathsep.join(pathslist1)
+                    if(path2.__contains__(Fore.GREEN)):
+                        path2 = '%-100s %s %s' % (path2, Fore.RESET+'normal_num:', normal_num)
+                    if(path2.__contains__(Fore.MAGENTA)):
+                        path2 = '%-100s %s %s' % (path2, Fore.RESET+'unparsed_num:', unparsed_num)
+                    if(path2.__contains__(Fore.RED)):
+                        path2 = '%-100s %s %s' % (path2, Fore.RESET+'unexisted_num:', unexisted_num)
+                    if(path2.__contains__(Fore.YELLOW)):
+                        path2 = '%-100s %s %s' % (path2, Fore.RESET+'unknownstring_num:', unknownerror_num)
                     print('  ' + path2)
                 print('variable:')
                 for (key, value) in rawconfig['environ'][current_env].items():
@@ -5090,6 +5146,14 @@ def main_function():
                             pathslist1.append(Fore.YELLOW + path1)
                             unknownerror_num = unknownerror_num + 1
                     path2 = os.path.pathsep.join(pathslist1)
+                    if(path2.__contains__(Fore.GREEN)):
+                        path2 = '%-100s %s %s' % (path2, Fore.RESET+'normal_num:', normal_num)
+                    if(path2.__contains__(Fore.MAGENTA)):
+                        path2 = '%-100s %s %s' % (path2, Fore.RESET+'unparsed_num:', unparsed_num)
+                    if(path2.__contains__(Fore.RED)):
+                        path2 = '%-100s %s %s' % (path2, Fore.RESET+'unexisted_num:', unexisted_num)
+                    if(path2.__contains__(Fore.YELLOW)):
+                        path2 = '%-100s %s %s' % (path2, Fore.RESET+'unknownstring_num:', unknownerror_num)
                     print('  %-30s %s' %(Fore.GREEN+key, path2))
 
                 while (args['vc'] is True):
@@ -5170,6 +5234,14 @@ def main_function():
                                 pathslist1.append(Fore.YELLOW + path1)
                                 unknownerror_num = unknownerror_num + 1
                         path2 = os.path.pathsep.join(pathslist1)
+                        if (path2.__contains__(Fore.GREEN)):
+                            path2 = '%-100s %s %s' % (path2, Fore.RESET + 'normal_num:', normal_num)
+                        if (path2.__contains__(Fore.MAGENTA)):
+                            path2 = '%-100s %s %s' % (path2, Fore.RESET + 'unparsed_num:', unparsed_num)
+                        if (path2.__contains__(Fore.RED)):
+                            path2 = '%-100s %s %s' % (path2, Fore.RESET + 'unexisted_num:', unexisted_num)
+                        if (path2.__contains__(Fore.YELLOW)):
+                            path2 = '%-100s %s %s' % (path2, Fore.RESET + 'unknownstring_num:', unknownerror_num)
                         print('  ' + path2)
                     print('variable:')
                     for (key, value) in dict1.items():
@@ -5195,6 +5267,14 @@ def main_function():
                                 pathslist1.append(Fore.YELLOW + path1)
                                 unknownerror_num = unknownerror_num + 1
                         path2 = os.path.pathsep.join(pathslist1)
+                        if (path2.__contains__(Fore.GREEN)):
+                            path2 = '%-100s %s %s' % (path2, Fore.RESET + 'normal_num:', normal_num)
+                        if (path2.__contains__(Fore.MAGENTA)):
+                            path2 = '%-100s %s %s' % (path2, Fore.RESET + 'unparsed_num:', unparsed_num)
+                        if (path2.__contains__(Fore.RED)):
+                            path2 = '%-100s %s %s' % (path2, Fore.RESET + 'unexisted_num:', unexisted_num)
+                        if (path2.__contains__(Fore.YELLOW)):
+                            path2 = '%-100s %s %s' % (path2, Fore.RESET + 'unknownstring_num:', unknownerror_num)
                         print('  %-30s %s' % (Fore.GREEN + key, path2))
 
                     break
@@ -5230,6 +5310,14 @@ def main_function():
                                 pathslist1.append(Fore.YELLOW + path1)
                                 unknownerror_num = unknownerror_num + 1
                         path2 = os.path.pathsep.join(pathslist1)
+                        if (path2.__contains__(Fore.GREEN)):
+                            path2 = '%-100s %s %s' % (path2, Fore.RESET + 'normal_num:', normal_num)
+                        if (path2.__contains__(Fore.MAGENTA)):
+                            path2 = '%-100s %s %s' % (path2, Fore.RESET + 'unparsed_num:', unparsed_num)
+                        if (path2.__contains__(Fore.RED)):
+                            path2 = '%-100s %s %s' % (path2, Fore.RESET + 'unexisted_num:', unexisted_num)
+                        if (path2.__contains__(Fore.YELLOW)):
+                            path2 = '%-100s %s %s' % (path2, Fore.RESET + 'unknownstring_num:', unknownerror_num)
                         print('  ' + path2)
                     print('variable:')
                     for (key, value) in rawconfig['environ'][current_env].items():
@@ -5255,6 +5343,14 @@ def main_function():
                                 pathslist1.append(Fore.YELLOW + path1)
                                 unknownerror_num = unknownerror_num + 1
                         path2 = os.path.pathsep.join(pathslist1)
+                        if (path2.__contains__(Fore.GREEN)):
+                            path2 = '%-100s %s %s' % (path2, Fore.RESET + 'normal_num:', normal_num)
+                        if (path2.__contains__(Fore.MAGENTA)):
+                            path2 = '%-100s %s %s' % (path2, Fore.RESET + 'unparsed_num:', unparsed_num)
+                        if (path2.__contains__(Fore.RED)):
+                            path2 = '%-100s %s %s' % (path2, Fore.RESET + 'unexisted_num:', unexisted_num)
+                        if (path2.__contains__(Fore.YELLOW)):
+                            path2 = '%-100s %s %s' % (path2, Fore.RESET + 'unknownstring_num:', unknownerror_num)
                         print('  %-30s %s' % (Fore.GREEN + key, path2))
 
                     while (args['vc'] is True):
@@ -5335,6 +5431,14 @@ def main_function():
                                     pathslist1.append(Fore.YELLOW + path1)
                                     unknownerror_num = unknownerror_num + 1
                             path2 = os.path.pathsep.join(pathslist1)
+                            if (path2.__contains__(Fore.GREEN)):
+                                path2 = '%-100s %s %s' % (path2, Fore.RESET + 'normal_num:', normal_num)
+                            if (path2.__contains__(Fore.MAGENTA)):
+                                path2 = '%-100s %s %s' % (path2, Fore.RESET + 'unparsed_num:', unparsed_num)
+                            if (path2.__contains__(Fore.RED)):
+                                path2 = '%-100s %s %s' % (path2, Fore.RESET + 'unexisted_num:', unexisted_num)
+                            if (path2.__contains__(Fore.YELLOW)):
+                                path2 = '%-100s %s %s' % (path2, Fore.RESET + 'unknownstring_num:', unknownerror_num)
                             print('  ' + path2)
                         print('variable:')
                         for (key, value) in dict1.items():
@@ -5360,6 +5464,14 @@ def main_function():
                                     pathslist1.append(Fore.YELLOW + path1)
                                     unknownerror_num = unknownerror_num + 1
                             path2 = os.path.pathsep.join(pathslist1)
+                            if (path2.__contains__(Fore.GREEN)):
+                                path2 = '%-100s %s %s' % (path2, Fore.RESET + 'normal_num:', normal_num)
+                            if (path2.__contains__(Fore.MAGENTA)):
+                                path2 = '%-100s %s %s' % (path2, Fore.RESET + 'unparsed_num:', unparsed_num)
+                            if (path2.__contains__(Fore.RED)):
+                                path2 = '%-100s %s %s' % (path2, Fore.RESET + 'unexisted_num:', unexisted_num)
+                            if (path2.__contains__(Fore.YELLOW)):
+                                path2 = '%-100s %s %s' % (path2, Fore.RESET + 'unknownstring_num:', unknownerror_num)
                             print('  %-30s %s' % (Fore.GREEN + key, path2))
 
                         break
