@@ -104,6 +104,7 @@ Usage:
   pymake7.py  translate section
   pymake7.py  translate section <section-name> [ to <target-section-name> ] [ -f | --force ]
   pymake7.py  translate section [ -a | --all ] [ -f | --force ]
+  pymake7.py  translate config [ -f | --force ]
   pymake7.py  -------------------------------------------------------------
   pymake7.py  exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
   pymake7.py  use <env-name> exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
@@ -2206,6 +2207,17 @@ def main_function():
                         key2 = str("[EMPTY] %s" % count)
                         count += 1
                     print("%-30s%-30s%s" % (key1, key2, '[NORMAL]'))
+                return
+            elif (args['config'] is True):
+                if(not os.path.exists(porttargetconfigfile)
+                or args['-f'] is True or args['--force'] is True):
+                    ''
+                    shutil.copyfile(portsourceconfigfile, porttargetconfigfile)
+                    print('successed.')
+                elif (os.path.exists(porttargetconfigfile) is True):
+                    print('%s is existed.' % porttargetconfigfile)
+                else:
+                    ''
                 return
             else:
                 print(Fore.CYAN + "all sections:")
