@@ -28,8 +28,8 @@
         "7z.unzip": "7z x -tzip -y AAA.zip -o %1"
     },
     "path-assemblage": {
-        "root": "R:/Develop",
-        "root2": "V:/Develop",
+        "root": "C:/Users/Administrator/Develop",
+        "root2": "D:/Develop",
         "root3": "C:/Users/Administrator",
         "root.src": "${root}/a0-develop",
         "root.prod": "${root2}/d0-product",
@@ -757,7 +757,7 @@
             "QKIT": "WIN32",
             "QSYS": "WinRTSimulator"
         },
-        "current": "mingw32"
+        "current": "msvc2015"
     },
     "command": {
         "cc0": [],
