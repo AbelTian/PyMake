@@ -404,8 +404,6 @@ def main_function():
             "ndk.arm.bin": "${ndk.arm}/bin",
             "ndk.x86.bin": "${ndk.x86}/bin",
             "ndk.x86_64.bin": "${ndk.x86_64}/bin",
-
-
             "ios.simulator.sysroot": "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk",
             "xcode.bin": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin",
             "mac.sysroot": "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk"
@@ -4262,10 +4260,18 @@ def main_function():
         localenv['PYMAKESOURCEROOT'] = sourceroot
         localenv['PYMAKESOURCECONFIG'] = sourcefile
         localenv['PYMAKEDEFAULTWORKROOT'] = shellroot
+        localenv['PYMAKEWORKROOT'] = shellroot
         if(args['here'] or args['hh'] is True):
             localenv['PYMAKEWORKROOT'] = pymakeworkpath
-        else:
-            localenv['PYMAKEWORKROOT'] = shellroot
+
+        if (args['--workroot'] is not None):
+            if (os.path.isdir(args['--workroot'])
+                and os.path.isabs(args['--workroot'])):
+                localenv['PYMAKEWORKROOT'] = args['--workroot']
+                #os.chdir(args['--workroot'])
+            else:
+                print('please input a legal work root.')
+                return
 
         localenv['PYMAKEPROGRAM'] = os.path.realpath(__file__)
         localenv['PYMAKEPROGRAMROOT'] = os.path.split(os.path.realpath(__file__))[0]
@@ -12551,6 +12557,9 @@ def main_function():
                     else:
                         print('please input a legal work root.')
                         return
+
+                #print(localenv['PYMAKEWORKROOT'])
+                #print(os.getcwd())
 
                 # create cmd_list
                 current_var = current_env
