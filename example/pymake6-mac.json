@@ -64,6 +64,8 @@
         "root.webrc": "${root}/e0-webrc",
         "cc": "${root.tool}/a0-compiler",
         "pymake": "${cc}/PyMake",
+        "wincc": "${root.tool}/macCompilers",
+        "cmake.bin": "${wincc}/CMake.app/Contents/bin",
         "qt": "${root.tool}/macLibraries/Qt",
         "qt4.8.version": "4.8.6",
         "qt4.8.clang": "${qt}/${qt4.8.version}/clang_64",
@@ -107,8 +109,6 @@
         "ndk.arm.bin": "${ndk.arm}/bin",
         "ndk.x86.bin": "${ndk.x86}/bin",
         "ndk.x86_64.bin": "${ndk.x86_64}/bin",
-        "wincc": "${root.tool}/macCompilers",
-        "cmake.bin": "${wincc}/CMake.app/Contents/bin",
         "ios.simulator.sysroot": "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk",
         "xcode.bin": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin",
         "mac.sysroot": "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk"

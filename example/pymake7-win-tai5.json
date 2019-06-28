@@ -633,7 +633,7 @@
             "QKIT": "WIN32",
             "QSYS": "MSVC"
         },
-        "vc1998": {
+        "msvc1998": {
             "path+": [
                 "${qt5.5.vc6.bin}"
             ],
@@ -644,6 +644,42 @@
             "run-vcvarsall": "\"${vcvarsall}\" ${vcvarsallparam}",
             "QTVERSION": "${qt5.5.version}",
             "QTDIR": "${qt5.5.vc6}",
+            "QTSPEC": "-spec win32-msvc",
+            "QTCONFIG": "",
+            "QKIT": "WIN32",
+            "QSYS": "MSVC"
+        },
+        "msvc2012": {
+            "path+": [
+                "${qt5.msvc2015.bin}"
+            ],
+            "make0": "nmake",
+            "CMAKEGENERATOR": "NMake Makefiles",
+            "vcvarsall": "${vcvarsall-2012}",
+            "vcvarsallparam": "x86",
+            "run-vcvarsall": "\"${vcvarsall}\" ${vcvarsallparam}",
+            "MSBuild": "C:\\Program Files (x86)\\MSBuild\\12.0\\Bin\\MSBuild.exe",
+            "QtMsBuild": "${QtMsBuild}",
+            "QTVERSION": "${qt5.msvc2015.version}",
+            "QTDIR": "${qt5.msvc2015}",
+            "QTSPEC": "-spec win32-msvc",
+            "QTCONFIG": "",
+            "QKIT": "WIN32",
+            "QSYS": "MSVC"
+        },
+        "msvc2013": {
+            "path+": [
+                "${qt5.msvc2015.bin}"
+            ],
+            "make0": "nmake",
+            "CMAKEGENERATOR": "NMake Makefiles",
+            "vcvarsall": "${vcvarsall-2013}",
+            "vcvarsallparam": "x86",
+            "run-vcvarsall": "\"${vcvarsall}\" ${vcvarsallparam}",
+            "MSBuild": "C:\\Program Files (x86)\\MSBuild\\12.0\\Bin\\MSBuild.exe",
+            "QtMsBuild": "${QtMsBuild}",
+            "QTVERSION": "${qt5.msvc2015.version}",
+            "QTDIR": "${qt5.msvc2015}",
             "QTSPEC": "-spec win32-msvc",
             "QTCONFIG": "",
             "QKIT": "WIN32",
@@ -720,42 +756,6 @@
             "QTCONFIG": "",
             "QKIT": "WIN32",
             "QSYS": "WinRTSimulator"
-        },
-        "msvc2012": {
-            "path+": [
-                "${qt5.msvc2015.bin}"
-            ],
-            "make0": "nmake",
-            "CMAKEGENERATOR": "NMake Makefiles",
-            "vcvarsall": "${vcvarsall-2012}",
-            "vcvarsallparam": "x86",
-            "run-vcvarsall": "\"${vcvarsall}\" ${vcvarsallparam}",
-            "MSBuild": "C:\\Program Files (x86)\\MSBuild\\12.0\\Bin\\MSBuild.exe",
-            "QtMsBuild": "${QtMsBuild}",
-            "QTVERSION": "${qt5.msvc2015.version}",
-            "QTDIR": "${qt5.msvc2015}",
-            "QTSPEC": "-spec win32-msvc",
-            "QTCONFIG": "",
-            "QKIT": "WIN32",
-            "QSYS": "MSVC"
-        },
-        "msvc2013": {
-            "path+": [
-                "${qt5.msvc2015.bin}"
-            ],
-            "make0": "nmake",
-            "CMAKEGENERATOR": "NMake Makefiles",
-            "vcvarsall": "${vcvarsall-2013}",
-            "vcvarsallparam": "x86",
-            "run-vcvarsall": "\"${vcvarsall}\" ${vcvarsallparam}",
-            "MSBuild": "C:\\Program Files (x86)\\MSBuild\\12.0\\Bin\\MSBuild.exe",
-            "QtMsBuild": "${QtMsBuild}",
-            "QTVERSION": "${qt5.msvc2015.version}",
-            "QTDIR": "${qt5.msvc2015}",
-            "QTSPEC": "-spec win32-msvc",
-            "QTCONFIG": "",
-            "QKIT": "WIN32",
-            "QSYS": "MSVC"
         },
         "current": "mingw32"
     },
@@ -1429,14 +1429,17 @@
             "\"%MSBuild%\" %*"
         ],
         "configure.qt5.android": [
-            "mkdir -p ${qt5.build.path}",
-            "cd ${qt5.build.path}",
-            "${qt5.source}/configure -prefix ${qqt.install.path} -hostprefix ${qqt.install.path} -xplatform android-g++ -release -nomake tests -nomake examples -android-ndk $ANDROID_NDK_ROOT -android-sdk $ANDROID_SDK_ROOT -android-ndk-host $ANDROID_NDK_HOST -android-toolchain-version $ANDROID_NDK_TOOLCHAIN_VERSION -skip qtwebkit-examples -no-warnings-are-errors"
+            "set src_path=${root.webrc}/qt-everywhere-opensource-src-5.9.2",
+            "set build=${root.build}/Qt5/%QTVERSION%/%QSYS%/Debug",
+            "set sdk_path=${root.tool}/winLibraries/Qt/%QTVERSION%/android_armv7_2",
+            "md %build:/=\\%",
+            "cd /d %build%",
+            "%src_path%/configure -prefix %sdk_path% -hostprefix %sdk_path% -xplatform android-g++ -release -nomake tests -nomake examples -android-ndk $ANDROID_NDK_ROOT -android-sdk $ANDROID_SDK_ROOT -android-ndk-host $ANDROID_NDK_HOST -android-toolchain-version $ANDROID_NDK_TOOLCHAIN_VERSION -skip qtwebkit-examples -no-warnings-are-errors"
         ],
         "configure.qt5.armhf32": [
             "set src_path=${root.webrc}/qt-everywhere-opensource-src-5.9.2",
             "set build=${root.build}/Qt5/%QTVERSION%/%QSYS%/Debug",
-            "set sdk_path=${root.tool}/winLibraries/Qt/%QTVERSION%/armhf32",
+            "set sdk_path=${root.tool}/winLibraries/Qt/%QTVERSION%/armhf32_2",
             "md %build:/=\\%",
             "cd /d %build%",
             "%src_path%/configure -opensource -confirm-license -shared --sysroot=${qt5.5.armhf32.sysroot} --prefix=%sdk_path% -xplatform linux-arm-gnueabihf-g++ -nomake tests -nomake examples -no-warnings-are-errors"
@@ -1509,6 +1512,40 @@
             "rem del /f /q /s demo examples src test",
             "qmake %src% %QTSPEC% CONFIG+=debug CONFIG+=qml_debug %QTCONFIG% && %make0% qmake_all",
             "%make0%"
+        ],
+        "qqt.build.all": [
+            "@echo off",
+            "rem cd /d ${root.src}",
+            "",
+            "setlocal enabledelayedexpansion",
+            "set MODULEARRAY=QQt QQtTool ",
+            "rem QQtExquisite QQtHighGrade QQtInput QQtInstallFramework QQtMediaExtention QQtRuntimeExtention QQtStyle QQtSupport",
+            "set ENVARRAY=mingw32 mingw64 android.mobile android.x86",
+            "for %%i in  (%MODULEARRAY%) do ( ",
+            "    rem echo %%i ",
+            "    for %%j in (%ENVARRAY%) do (",
+            "        set MODULENAME=%%i",
+            "        set ENVNAME=%%j",
+            "        set WORKROOT=",
+            "        rem echo !MODULENAME! !ENVNAME!",
+            "        call :build !ENVNAME! !MODULENAME! !WORKROOT!",
+            "        call ping 127.0.0.1 -n 2 1>nul",
+            "    )",
+            ")",
+            "exit /b 0",
+            "",
+            ":build ",
+            "if \"%ENVNAME%\" == \"\" ( SET ENVNAME=current )",
+            "if \"%MODULENAME%\" == \"\" ( SET MODULENAME=QQt )",
+            "if \"%MODULENAME%\" == \"QQt\" ( SET WORKROOT=LibQQt )",
+            "if \"%WORKROOT%\" == \"\" ( SET WORKROOT=%MODULENAME% )",
+            "if not \"%1\" == \"\" ( SET ENVNAME=%1 )",
+            "if not \"\"%2\"\" == \"\"\"\" ( SET MODULENAME=%2 )",
+            "if not \"%3\" == \"\" ( SET WORKROOT=%3 )",
+            "rem echo %ENVNAME% %MODULENAME% %WORKROOT%",
+            "echo start cmd /k \"pyenv %ENVNAME% && cd /d %CD%\\%WORKROOT% && build.qmake %MODULENAME%\"",
+            "start cmd /k \"pyenv %ENVNAME% && cd /d %CD%\\%WORKROOT% && build.qmake %MODULENAME%\"",
+            "goto :eof"
         ],
         "test.end": [
             "echo the env path: %Path%.",
