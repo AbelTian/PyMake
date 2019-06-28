@@ -236,6 +236,9 @@ Usage:
   pymake7.py  check path [ <item-name> ] [ --item=<item-name> ] [ -a | --all ]
   pymake7.py  check cmd [ <item-name> ] [ --item=<item-name> ] [ -a | --all ]
   pymake7.py  check [ env ] [ vc ] [ <env-name> ] [ --current ] [ --envname=<env-name> ] [ -a | --all ] [ -s | --system ] [ -l | --local ] [ -c | --custom ]
+  pymake7.py  chk path [ <item-name> ] [ --item=<item-name> ] [ -a | --all ]
+  pymake7.py  chk cmd [ <item-name> ] [ --item=<item-name> ] [ -a | --all ]
+  pymake7.py  chk [ env ] [ vc ] [ <env-name> ] [ --current ] [ --envname=<env-name> ] [ -a | --all ] [ -s | --system ] [ -l | --local ] [ -c | --custom ]
   pymake7.py  -------------------------------------------------------------
   pymake7.py  vc
   pymake7.py  vc [ info | information ]
@@ -4871,7 +4874,7 @@ def main_function():
 
     # check command
     while (True):
-        if(args['check'] is True):
+        if(args['chk'] or args['check'] is True):
             ''
             normal_num = 0
             unparsed_num = 0
