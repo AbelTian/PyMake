@@ -8,7 +8,7 @@
         "root.build": "${root}/c0-buildstation",
         "root.test": "${root}/e3-test",
         "root.webrc": "${root}/e2-webrc",
-        "cc": "${root.tool}/compiler",
+        "cc": "${root.tool}/a0-compiler",
 	    "pymake": "${cc}/PyMake",
         "wincc": "${root.tool}/linuxCompilers",
         "cmake": "${cc}/CMake.app/Contents",
@@ -195,7 +195,7 @@
             "mkdir -p $build",
             "cd $build",
             "rm -rf ./*",
-            "rm -rf ${src_path}/../QQt/$QSYS/$QTVERSION/Debug",
+            "rm -rf $src_path/../QQt/$QSYS/$QTVERSION/Debug",
             "qmake $src $QTSPEC $QTCONFIG CONFIG+=debug && make qmake_all",
             "make -j4"
         ],
@@ -206,7 +206,7 @@
             "mkdir -p $build",
             "cd $build",
             "rm -rf ./*",
-            "rm -rf ${src_path}/../QQt/$QSYS/$QTVERSION/Release",
+            "rm -rf $src_path/../QQt/$QSYS/$QTVERSION/Release",
             "qmake $src $QTSPEC $QTCONFIG CONFIG+=release && make qmake_all",
             "make -j4"
         ],
@@ -218,7 +218,7 @@
             "cd $build",
             "echo build $(pwd)",
             "#rm -rf src/bin examples/*/bin",
-            "#rm -rf ${src_path}/../QQt/$QSYS/$QTVERSION/Debug",
+            "#rm -rf $src_path/../QQt/$QSYS/$QTVERSION/Debug",
             "qmake $src $QTSPEC CONFIG+=debug CONFIG+=qml_debug $QTCONFIG && make qmake_all",
             "make -j4"
         ],
@@ -229,7 +229,7 @@
             "mkdir -p $build",
             "cd $build",
             "rm -rf src/bin examples/*/bin",
-            "rm -rf ${src_path}/../QQt/$QSYS/$QTVERSION/Release",
+            "rm -rf $src_path/../QQt/$QSYS/$QTVERSION/Release",
             "qmake $src $QTSPEC $QTCONFIG CONFIG+=release && make qmake_all",
             "make -j4"
         ],
