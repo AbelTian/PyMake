@@ -19,7 +19,7 @@
         "qt4.clang.bin": "${qt4.clang}/bin",
         "qt4.gcc_64": "${qt}/${qt4.version}/gcc_64",
         "qt4.gcc_64.bin": "${qt4.gcc_64}/bin",
-        "qt4.mips32": "${qt}/${qt4.version}/mips32/disk2/ylguo/ingenic_buildroot/output/host/usr",
+        "qt4.mips32": "${qt}/4.8.5/mips32/disk2/ylguo/ingenic_buildroot/output/host/usr",
         "qt4.mips32.bin": "${qt4.mips32}/bin",
         "qt4.arm32": "${qt}/4.8.5/mips32/disk2/ylguo/ingenic_buildroot/output/host/usr",
         "qt4.arm32.bin": "${qt4.arm32}/bin",
