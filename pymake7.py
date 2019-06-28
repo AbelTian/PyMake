@@ -233,7 +233,7 @@ Usage:
   pymake7.py  use <env-name> type2 [ here | hh ] [ <cmd-name> ] [ to <file-name> ] [ --suffix=<.suffix-name> ] [ --encoding=<encoding-name> ] [ --samename ] [ -a | --all ]
   pymake7.py  open [ <path-name> ... ] [ -c | --custom ] [ --current ] [ --envname=<env-name> ] [ -i | --ignorecase ]
   pymake7.py  use <env-name> open [ <path-name> ... ] [ -i | --ignorecase ]
-  pymake7.py  check [ vc ] [ -l | --local ] [ -c | --custom ] [ -s | --system ] [ --current ] [ --envname=<env-name> ] [ -a | --all ]
+  pymake7.py  check [ vc ] [ <env-name> ] [ -l | --local ] [ -c | --custom ] [ -s | --system ] [ --current ] [ --envname=<env-name> ] [ -a | --all ]
   pymake7.py  -------------------------------------------------------------
   pymake7.py  vc
   pymake7.py  vc [ info | information ]
@@ -4875,6 +4875,14 @@ def main_function():
             if (args['--current'] is True):
                 current_env = rawconfig['environ']['current']
 
+            if (args['<env-name>'] is not None):
+                current_var = args['<env-name>']
+                if (current_var is None):
+                    current_var = rawconfig['environ']['current']
+                elif (current_var == "current"):
+                    current_var = rawconfig['environ']['current']
+                current_env = current_var
+
             if (args['--envname'] is not None):
                 current_var = args['--envname']
                 if (current_var is None):
@@ -4883,14 +4891,6 @@ def main_function():
                     current_var = rawconfig['environ']['current']
                 current_env = current_var
 
-            if (args['<env-name>'] is not None):
-                current_var = args['<env-name>']
-                if (current_var is None):
-                    current_var = rawconfig['environ']['current']
-                elif (current_var == "current"):
-                    current_var = rawconfig['environ']['current']
-                current_env = current_var
-                
             if (args['-a'] or args['--all'] is True):
                 current_env = rawconfig['environ']['current']
                 
