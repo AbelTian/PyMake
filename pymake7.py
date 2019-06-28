@@ -233,7 +233,9 @@ Usage:
   pymake7.py  use <env-name> type2 [ here | hh ] [ <cmd-name> ] [ to <file-name> ] [ --suffix=<.suffix-name> ] [ --encoding=<encoding-name> ] [ --samename ] [ -a | --all ]
   pymake7.py  open [ <path-name> ... ] [ -c | --custom ] [ --current ] [ --envname=<env-name> ] [ -i | --ignorecase ]
   pymake7.py  use <env-name> open [ <path-name> ... ] [ -i | --ignorecase ]
-  pymake7.py  check [ vc ] [ <env-name> ] [ -l | --local ] [ -c | --custom ] [ -s | --system ] [ --current ] [ --envname=<env-name> ] [ -a | --all ]
+  pymake7.py  check path [ <item-name> ] [ --item=<item-name> ] [ -a | --all ]
+  pymake7.py  check cmd [ <item-name> ] [ --item=<item-name> ] [ -a | --all ]
+  pymake7.py  check [ env ] [ vc ] [ <env-name> ] [ --current ] [ --envname=<env-name> ] [ -a | --all ] [ -s | --system ] [ -l | --local ] [ -c | --custom ]
   pymake7.py  -------------------------------------------------------------
   pymake7.py  vc
   pymake7.py  vc [ info | information ]
@@ -4871,145 +4873,30 @@ def main_function():
     while (True):
         if(args['check'] is True):
             ''
-            current_env = None
-            if (args['--current'] is True):
-                current_env = rawconfig['environ']['current']
-
-            if (args['<env-name>'] is not None):
-                current_var = args['<env-name>']
-                if (current_var is None):
-                    current_var = rawconfig['environ']['current']
-                elif (current_var == "current"):
-                    current_var = rawconfig['environ']['current']
-                current_env = current_var
-
-            if (args['--envname'] is not None):
-                current_var = args['--envname']
-                if (current_var is None):
-                    current_var = rawconfig['environ']['current']
-                elif (current_var == "current"):
-                    current_var = rawconfig['environ']['current']
-                current_env = current_var
-
-            if (args['-a'] or args['--all'] is True):
-                current_env = rawconfig['environ']['current']
-                
-            if(current_env is not None):
-                if (rawconfig['environ'].__contains__(current_env) is False):
-                    print("please ensure the environ is right")
-                    return
-                
             normal_num = 0
             unparsed_num = 0
             unexisted_num = 0
             unknownerror_num = 0
 
-            if (args['-s'] or args['--system'] is True):
-                print('system env')
-                print('path+:')
-                for (key) in pymakesystemenviron['PATH'].split(os.path.pathsep):
-                    path0 = str(key)
-                    pathslist = path0.split(os.path.pathsep)
-                    while (pathslist.__contains__('')):
-                        pathslist.remove('')
-                    # print(pathslist)
-                    pathslist1 = []
-                    for path1 in pathslist:
-                        if(os.path.isabs(path1) and os.path.exists(path1)):
-                            pathslist1.append(Fore.GREEN + path1)
-                            normal_num = normal_num + 1
-                        elif(path1.__contains__('${') and path1.__contains__('}')):
-                            pathslist1.append(Fore.MAGENTA + path1)
-                            unparsed_num = unparsed_num + 1
-                        elif(os.path.isabs(path1) and os.path.exists(path1) is False):
-                            pathslist1.append(Fore.RED + path1)
-                            unexisted_num = unexisted_num + 1
-                        else:
-                            pathslist1.append(Fore.YELLOW + path1)
-                            unknownerror_num = unknownerror_num + 1
-                    path2 = os.path.pathsep.join(pathslist1)
-                    if(path2.__contains__(Fore.GREEN)):
-                        path2 = '%-100s %s %s' % (path2, Fore.RESET+'normal_num:', normal_num)
-                    if(path2.__contains__(Fore.MAGENTA)):
-                        path2 = '%-100s %s %s' % (path2, Fore.RESET+'unparsed_num:', unparsed_num)
-                    if(path2.__contains__(Fore.RED)):
-                        path2 = '%-100s %s %s' % (path2, Fore.RESET+'unexisted_num:', unexisted_num)
-                    if(path2.__contains__(Fore.YELLOW)):
-                        path2 = '%-100s %s %s' % (path2, Fore.RESET+'unknownstring_num:', unknownerror_num)
-                    print('  ' + path2)
-                print('variable:')
-                for (key, value) in pymakesystemenviron.items():
-                    if (key == 'path+'):
-                        continue
-                    if (str(key).lower() == "path"):
-                        continue
-                    path0 = str(value)
-                    pathslist = path0.split(os.path.pathsep)
-                    while (pathslist.__contains__('')):
-                        pathslist.remove('')
-                    # print(pathslist)
-                    pathslist1 = []
-                    for path1 in pathslist:
-                        if(os.path.isabs(path1) and os.path.exists(path1)):
-                            pathslist1.append(Fore.GREEN + path1)
-                            normal_num = normal_num + 1
-                        elif(path1.__contains__('${') and path1.__contains__('}')):
-                            pathslist1.append(Fore.MAGENTA + path1)
-                            unparsed_num = unparsed_num + 1
-                        elif(os.path.isabs(path1) and os.path.exists(path1) is False):
-                            pathslist1.append(Fore.RED + path1)
-                            unexisted_num = unexisted_num + 1
-                        else:
-                            pathslist1.append(Fore.YELLOW + path1)
-                            unknownerror_num = unknownerror_num + 1
-                    path2 = os.path.pathsep.join(pathslist1)
-                    if(path2.__contains__(Fore.GREEN)):
-                        path2 = '%-100s %s %s' % (path2, Fore.RESET+'normal_num:', normal_num)
-                    if(path2.__contains__(Fore.MAGENTA)):
-                        path2 = '%-100s %s %s' % (path2, Fore.RESET+'unparsed_num:', unparsed_num)
-                    if(path2.__contains__(Fore.RED)):
-                        path2 = '%-100s %s %s' % (path2, Fore.RESET+'unexisted_num:', unexisted_num)
-                    if(path2.__contains__(Fore.YELLOW)):
-                        path2 = '%-100s %s %s' % (path2, Fore.RESET+'unknownstring_num:', unknownerror_num)
-                    print('  %-30s %s' %(Fore.GREEN + key, path2))
-
-            if(args['-l'] or args['--local'] is True):
-                print('local env')
-                print('path+:')
-                for (key) in localenv['path+']:
-                    path0 = str(key)
-                    pathslist = path0.split(os.path.pathsep)
-                    while (pathslist.__contains__('')):
-                        pathslist.remove('')
-                    # print(pathslist)
-                    pathslist1 = []
-                    for path1 in pathslist:
-                        if(os.path.isabs(path1) and os.path.exists(path1)):
-                            pathslist1.append(Fore.GREEN + path1)
-                            normal_num = normal_num + 1
-                        elif(path1.__contains__('${') and path1.__contains__('}')):
-                            pathslist1.append(Fore.MAGENTA + path1)
-                            unparsed_num = unparsed_num + 1
-                        elif(os.path.isabs(path1) and os.path.exists(path1) is False):
-                            pathslist1.append(Fore.RED + path1)
-                            unexisted_num = unexisted_num + 1
-                        else:
-                            pathslist1.append(Fore.YELLOW + path1)
-                            unknownerror_num = unknownerror_num + 1
-                    path2 = os.path.pathsep.join(pathslist1)
-                    if(path2.__contains__(Fore.GREEN)):
-                        path2 = '%-100s %s %s' % (path2, Fore.RESET+'normal_num:', normal_num)
-                    if(path2.__contains__(Fore.MAGENTA)):
-                        path2 = '%-100s %s %s' % (path2, Fore.RESET+'unparsed_num:', unparsed_num)
-                    if(path2.__contains__(Fore.RED)):
-                        path2 = '%-100s %s %s' % (path2, Fore.RESET+'unexisted_num:', unexisted_num)
-                    if(path2.__contains__(Fore.YELLOW)):
-                        path2 = '%-100s %s %s' % (path2, Fore.RESET+'unknownstring_num:', unknownerror_num)
-                    print('  ' + path2)
-                print('variable:')
-                for (key, value) in localenv.items():
-                    if (key == 'path+'):
-                        continue
+            if(args['path'] is True):
+                itemname = None
+                if(args['<item-name>'] is not None):
+                    itemname = args['<item-name>']
+                if(args['--item'] is not None):
+                    itemname = args['--item']
+                
+                itemgroup = {}
+                if(args['-a'] or args['--all'] is True):
+                    itemgroup = rawconfig['path-assemblage']
+                elif(itemname is None):
+                    ''
+                else:
+                    if(rawconfig['path-assemblage'].__contains__(itemname) is False):
+                        print('please input an existed path item.')
+                        return
+                    itemgroup.__setitem__(itemname, rawconfig['path-assemblage'][itemname])
+                print('path-assemblage:')
+                for (key, value) in itemgroup.items():
                     path0 = str(value)
                     pathslist = path0.split(os.path.pathsep)
                     while (pathslist.__contains__('')):
@@ -5040,198 +4927,27 @@ def main_function():
                         path2 = '%-100s %s %s' % (path2, Fore.RESET+'unknownstring_num:', unknownerror_num)
                     print('  %-30s %s' %(Fore.GREEN+key, path2))
 
-            if(args['-c'] or args['--custom'] is True):
-                print('custom env')
-                print('path+:')
-                for (key) in envcustomlistrawpaths:
-                    path0 = str(key)
-                    pathslist = path0.split(os.path.pathsep)
-                    while (pathslist.__contains__('')):
-                        pathslist.remove('')
-                    # print(pathslist)
-                    pathslist1 = []
-                    for path1 in pathslist:
-                        if(os.path.isabs(path1) and os.path.exists(path1)):
-                            pathslist1.append(Fore.GREEN + path1)
-                            normal_num = normal_num + 1
-                        elif(path1.__contains__('${') and path1.__contains__('}')):
-                            pathslist1.append(Fore.MAGENTA + path1)
-                            unparsed_num = unparsed_num + 1
-                        elif(os.path.isabs(path1) and os.path.exists(path1) is False):
-                            pathslist1.append(Fore.RED + path1)
-                            unexisted_num = unexisted_num + 1
-                        else:
-                            pathslist1.append(Fore.YELLOW + path1)
-                            unknownerror_num = unknownerror_num + 1
-                    path2 = os.path.pathsep.join(pathslist1)
-                    if(path2.__contains__(Fore.GREEN)):
-                        path2 = '%-100s %s %s' % (path2, Fore.RESET+'normal_num:', normal_num)
-                    if(path2.__contains__(Fore.MAGENTA)):
-                        path2 = '%-100s %s %s' % (path2, Fore.RESET+'unparsed_num:', unparsed_num)
-                    if(path2.__contains__(Fore.RED)):
-                        path2 = '%-100s %s %s' % (path2, Fore.RESET+'unexisted_num:', unexisted_num)
-                    if(path2.__contains__(Fore.YELLOW)):
-                        path2 = '%-100s %s %s' % (path2, Fore.RESET+'unknownstring_num:', unknownerror_num)
-                    print('  ' + path2)
-                print('variable:')
-                for (key, value) in envcustomlistrawvars.items():
-                    if (key == 'path+'):
-                        continue
-                    path0 = str(value)
-                    pathslist = path0.split(os.path.pathsep)
-                    while (pathslist.__contains__('')):
-                        pathslist.remove('')
-                    # print(pathslist)
-                    pathslist1 = []
-                    for path1 in pathslist:
-                        if(os.path.isabs(path1) and os.path.exists(path1)):
-                            pathslist1.append(Fore.GREEN + path1)
-                            normal_num = normal_num + 1
-                        elif(path1.__contains__('${') and path1.__contains__('}')):
-                            pathslist1.append(Fore.MAGENTA + path1)
-                            unparsed_num = unparsed_num + 1
-                        elif(os.path.isabs(path1) and os.path.exists(path1) is False):
-                            pathslist1.append(Fore.RED + path1)
-                            unexisted_num = unexisted_num + 1
-                        else:
-                            pathslist1.append(Fore.YELLOW + path1)
-                            unknownerror_num = unknownerror_num + 1
-                    path2 = os.path.pathsep.join(pathslist1)
-                    if(path2.__contains__(Fore.GREEN)):
-                        path2 = '%-100s %s %s' % (path2, Fore.RESET+'normal_num:', normal_num)
-                    if(path2.__contains__(Fore.MAGENTA)):
-                        path2 = '%-100s %s %s' % (path2, Fore.RESET+'unparsed_num:', unparsed_num)
-                    if(path2.__contains__(Fore.RED)):
-                        path2 = '%-100s %s %s' % (path2, Fore.RESET+'unexisted_num:', unexisted_num)
-                    if(path2.__contains__(Fore.YELLOW)):
-                        path2 = '%-100s %s %s' % (path2, Fore.RESET+'unknownstring_num:', unknownerror_num)
-                    print('  %-30s %s' %(Fore.GREEN+key, path2))
+            elif(args['cmd'] is True):
+                itemname = None
+                if (args['<item-name>'] is not None):
+                    itemname = args['<item-name>']
+                if (args['--item'] is not None):
+                    itemname = args['--item']
 
-            if(current_env is not None):
-                print('env %s' % current_env)
-                print('path+:')
-                for (key) in rawconfig['environ'][current_env]['path+']:
-                    path0 = str(key)
-                    pathslist = path0.split(os.path.pathsep)
-                    while (pathslist.__contains__('')):
-                        pathslist.remove('')
-                    # print(pathslist)
-                    pathslist1 = []
-                    for path1 in pathslist:
-                        if(os.path.isabs(path1) and os.path.exists(path1)):
-                            pathslist1.append(Fore.GREEN + path1)
-                            normal_num = normal_num + 1
-                        elif(path1.__contains__('${') and path1.__contains__('}')):
-                            pathslist1.append(Fore.MAGENTA + path1)
-                            unparsed_num = unparsed_num + 1
-                        elif(os.path.isabs(path1) and os.path.exists(path1) is False):
-                            pathslist1.append(Fore.RED + path1)
-                            unexisted_num = unexisted_num + 1
-                        else:
-                            pathslist1.append(Fore.YELLOW + path1)
-                            unknownerror_num = unknownerror_num + 1
-                    path2 = os.path.pathsep.join(pathslist1)
-                    if(path2.__contains__(Fore.GREEN)):
-                        path2 = '%-100s %s %s' % (path2, Fore.RESET+'normal_num:', normal_num)
-                    if(path2.__contains__(Fore.MAGENTA)):
-                        path2 = '%-100s %s %s' % (path2, Fore.RESET+'unparsed_num:', unparsed_num)
-                    if(path2.__contains__(Fore.RED)):
-                        path2 = '%-100s %s %s' % (path2, Fore.RESET+'unexisted_num:', unexisted_num)
-                    if(path2.__contains__(Fore.YELLOW)):
-                        path2 = '%-100s %s %s' % (path2, Fore.RESET+'unknownstring_num:', unknownerror_num)
-                    print('  ' + path2)
-                print('variable:')
-                for (key, value) in rawconfig['environ'][current_env].items():
-                    if (key == 'path+'):
-                        continue
-                    path0 = str(value)
-                    pathslist = path0.split(os.path.pathsep)
-                    while (pathslist.__contains__('')):
-                        pathslist.remove('')
-                    # print(pathslist)
-                    pathslist1 = []
-                    for path1 in pathslist:
-                        if(os.path.isabs(path1) and os.path.exists(path1)):
-                            pathslist1.append(Fore.GREEN + path1)
-                            normal_num = normal_num + 1
-                        elif(path1.__contains__('${') and path1.__contains__('}')):
-                            pathslist1.append(Fore.MAGENTA + path1)
-                            unparsed_num = unparsed_num + 1
-                        elif(os.path.isabs(path1) and os.path.exists(path1) is False):
-                            pathslist1.append(Fore.RED + path1)
-                            unexisted_num = unexisted_num + 1
-                        else:
-                            pathslist1.append(Fore.YELLOW + path1)
-                            unknownerror_num = unknownerror_num + 1
-                    path2 = os.path.pathsep.join(pathslist1)
-                    if(path2.__contains__(Fore.GREEN)):
-                        path2 = '%-100s %s %s' % (path2, Fore.RESET+'normal_num:', normal_num)
-                    if(path2.__contains__(Fore.MAGENTA)):
-                        path2 = '%-100s %s %s' % (path2, Fore.RESET+'unparsed_num:', unparsed_num)
-                    if(path2.__contains__(Fore.RED)):
-                        path2 = '%-100s %s %s' % (path2, Fore.RESET+'unexisted_num:', unexisted_num)
-                    if(path2.__contains__(Fore.YELLOW)):
-                        path2 = '%-100s %s %s' % (path2, Fore.RESET+'unknownstring_num:', unknownerror_num)
-                    print('  %-30s %s' %(Fore.GREEN+key, path2))
+                itemgroup = {}
+                if (args['-a'] is True or args['--all'] is True):
+                    itemgroup = rawconfig['command']
+                elif(itemname is None):
+                    ''
+                else:
+                    if (rawconfig['command'].__contains__(itemname) is False):
+                        print('please input an existed cmd item.')
+                        return
+                    itemgroup.__setitem__(itemname, rawconfig['command'][itemname])
 
-                while (args['vc'] is True):
-                    print('env %s - vc env' % current_env)
-                    current_vcvarsall = 'vcvarsall'
-                    current_vcvarsallparam = 'vcvarsallparam'
-                    has_set = '0'
-                    native_dict = {}
-                    while(True):
-                        if (pymakesystemenviron.__contains__(current_vcvarsall) is True):
-                            native_dict = pymakesystemenviron
-                            has_set = "system env:"
-                        if (envcustomlistrawvars.__contains__(current_vcvarsall) is True):
-                            native_dict = envcustomlistrawvars
-                            has_set = "custom env:"
-                        if (rawconfig['environ'][current_env].__contains__(current_vcvarsall) is True):
-                            native_dict = rawconfig['environ'][current_env]
-                            has_set = str("env %s:" % current_env)
-                        break
-
-                    #print(has_set)
-                    #if(has_set != '0'):
-                    #    print(native_dict[current_vcvarsall])
-
-                    if(has_set is '0'):
-                        print("please set env variable: vcvarsall.")
-                        break
-
-                    if(native_dict.__contains__(current_vcvarsallparam) is False):
-                        print("please set env variable: vcvarsallparam.")
-                        break
-
-                    print(has_set + ' %s %s' % (native_dict[current_vcvarsall],native_dict[current_vcvarsallparam]))
-
-                    nowroot = os.getcwd()
-                    dict1 = copy.deepcopy(rawconfig['environ'][current_env])
-                    #for (k,v) in dict1.items():
-                    #    print(k, v)
-                    os.chdir(vcroot)
-                    jsonfile = 'pymake-vc-command.json'
-                    if(not os.path.exists(jsonfile)):
-                        print('please init vc.')
-                        break
-                    dict0 = readJsonData(jsonfile)
-                    if(dict0.__contains__('environ') is False):
-                        print('please init vc.')
-                        break
-                    if(dict0['environ'].__contains__(current_env) is False):
-                        print('please init vc for %s env.' % current_env)
-                        break
-                    for (key) in dict0['environ'][current_env]["path+"]:
-                        dict1['path+'].append(key)
-                    for (key, value) in dict0['environ'][current_env].items():
-                        if (key == 'path+'):
-                            continue
-                        dict1[key]=value
-                    os.chdir(nowroot)
-
-                    print('path+:')
-                    for (key) in dict1['path+']:
+                for (current_cmd, env_value) in itemgroup.items():
+                    print('cmd %s:' % current_cmd)
+                    for (key) in rawconfig['command'][current_cmd]:
                         path0 = str(key)
                         pathslist = path0.split(os.path.pathsep)
                         while (pathslist.__contains__('')):
@@ -5261,8 +4977,140 @@ def main_function():
                         if (path2.__contains__(Fore.YELLOW)):
                             path2 = '%-100s %s %s' % (path2, Fore.RESET + 'unknownstring_num:', unknownerror_num)
                         print('  ' + path2)
+
+            else:
+                current_env = None
+                if (args['<env-name>'] is not None):
+                    current_var = args['<env-name>']
+                    if (current_var is None):
+                        current_var = rawconfig['environ']['current']
+                    elif (current_var == "current"):
+                        current_var = rawconfig['environ']['current']
+                    current_env = current_var
+
+                if (args['--current'] is True):
+                    current_env = rawconfig['environ']['current']
+
+                if (args['--envname'] is not None):
+                    current_var = args['--envname']
+                    if (current_var is None):
+                        current_var = rawconfig['environ']['current']
+                    elif (current_var == "current"):
+                        current_var = rawconfig['environ']['current']
+                    current_env = current_var
+
+                if (args['-a'] or args['--all'] is True):
+                    current_env = rawconfig['environ']['current']
+
+                if (current_env is not None):
+                    if (rawconfig['environ'].__contains__(current_env) is False):
+                        print("please ensure the environ is right")
+                        return
+
+                if (args['-s'] or args['--system'] is True):
+                    print('system env')
+                    print('path+:')
+                    for (key) in pymakesystemenviron['PATH'].split(os.path.pathsep):
+                        path0 = str(key)
+                        pathslist = path0.split(os.path.pathsep)
+                        while (pathslist.__contains__('')):
+                            pathslist.remove('')
+                        # print(pathslist)
+                        pathslist1 = []
+                        for path1 in pathslist:
+                            if(os.path.isabs(path1) and os.path.exists(path1)):
+                                pathslist1.append(Fore.GREEN + path1)
+                                normal_num = normal_num + 1
+                            elif(path1.__contains__('${') and path1.__contains__('}')):
+                                pathslist1.append(Fore.MAGENTA + path1)
+                                unparsed_num = unparsed_num + 1
+                            elif(os.path.isabs(path1) and os.path.exists(path1) is False):
+                                pathslist1.append(Fore.RED + path1)
+                                unexisted_num = unexisted_num + 1
+                            else:
+                                pathslist1.append(Fore.YELLOW + path1)
+                                unknownerror_num = unknownerror_num + 1
+                        path2 = os.path.pathsep.join(pathslist1)
+                        if(path2.__contains__(Fore.GREEN)):
+                            path2 = '%-100s %s %s' % (path2, Fore.RESET+'normal_num:', normal_num)
+                        if(path2.__contains__(Fore.MAGENTA)):
+                            path2 = '%-100s %s %s' % (path2, Fore.RESET+'unparsed_num:', unparsed_num)
+                        if(path2.__contains__(Fore.RED)):
+                            path2 = '%-100s %s %s' % (path2, Fore.RESET+'unexisted_num:', unexisted_num)
+                        if(path2.__contains__(Fore.YELLOW)):
+                            path2 = '%-100s %s %s' % (path2, Fore.RESET+'unknownstring_num:', unknownerror_num)
+                        print('  ' + path2)
                     print('variable:')
-                    for (key, value) in dict1.items():
+                    for (key, value) in pymakesystemenviron.items():
+                        if (key == 'path+'):
+                            continue
+                        if (str(key).lower() == "path"):
+                            continue
+                        path0 = str(value)
+                        pathslist = path0.split(os.path.pathsep)
+                        while (pathslist.__contains__('')):
+                            pathslist.remove('')
+                        # print(pathslist)
+                        pathslist1 = []
+                        for path1 in pathslist:
+                            if(os.path.isabs(path1) and os.path.exists(path1)):
+                                pathslist1.append(Fore.GREEN + path1)
+                                normal_num = normal_num + 1
+                            elif(path1.__contains__('${') and path1.__contains__('}')):
+                                pathslist1.append(Fore.MAGENTA + path1)
+                                unparsed_num = unparsed_num + 1
+                            elif(os.path.isabs(path1) and os.path.exists(path1) is False):
+                                pathslist1.append(Fore.RED + path1)
+                                unexisted_num = unexisted_num + 1
+                            else:
+                                pathslist1.append(Fore.YELLOW + path1)
+                                unknownerror_num = unknownerror_num + 1
+                        path2 = os.path.pathsep.join(pathslist1)
+                        if(path2.__contains__(Fore.GREEN)):
+                            path2 = '%-100s %s %s' % (path2, Fore.RESET+'normal_num:', normal_num)
+                        if(path2.__contains__(Fore.MAGENTA)):
+                            path2 = '%-100s %s %s' % (path2, Fore.RESET+'unparsed_num:', unparsed_num)
+                        if(path2.__contains__(Fore.RED)):
+                            path2 = '%-100s %s %s' % (path2, Fore.RESET+'unexisted_num:', unexisted_num)
+                        if(path2.__contains__(Fore.YELLOW)):
+                            path2 = '%-100s %s %s' % (path2, Fore.RESET+'unknownstring_num:', unknownerror_num)
+                        print('  %-30s %s' %(Fore.GREEN + key, path2))
+
+                if(args['-l'] or args['--local'] is True):
+                    print('local env')
+                    print('path+:')
+                    for (key) in localenv['path+']:
+                        path0 = str(key)
+                        pathslist = path0.split(os.path.pathsep)
+                        while (pathslist.__contains__('')):
+                            pathslist.remove('')
+                        # print(pathslist)
+                        pathslist1 = []
+                        for path1 in pathslist:
+                            if(os.path.isabs(path1) and os.path.exists(path1)):
+                                pathslist1.append(Fore.GREEN + path1)
+                                normal_num = normal_num + 1
+                            elif(path1.__contains__('${') and path1.__contains__('}')):
+                                pathslist1.append(Fore.MAGENTA + path1)
+                                unparsed_num = unparsed_num + 1
+                            elif(os.path.isabs(path1) and os.path.exists(path1) is False):
+                                pathslist1.append(Fore.RED + path1)
+                                unexisted_num = unexisted_num + 1
+                            else:
+                                pathslist1.append(Fore.YELLOW + path1)
+                                unknownerror_num = unknownerror_num + 1
+                        path2 = os.path.pathsep.join(pathslist1)
+                        if(path2.__contains__(Fore.GREEN)):
+                            path2 = '%-100s %s %s' % (path2, Fore.RESET+'normal_num:', normal_num)
+                        if(path2.__contains__(Fore.MAGENTA)):
+                            path2 = '%-100s %s %s' % (path2, Fore.RESET+'unparsed_num:', unparsed_num)
+                        if(path2.__contains__(Fore.RED)):
+                            path2 = '%-100s %s %s' % (path2, Fore.RESET+'unexisted_num:', unexisted_num)
+                        if(path2.__contains__(Fore.YELLOW)):
+                            path2 = '%-100s %s %s' % (path2, Fore.RESET+'unknownstring_num:', unknownerror_num)
+                        print('  ' + path2)
+                    print('variable:')
+                    for (key, value) in localenv.items():
                         if (key == 'path+'):
                             continue
                         path0 = str(value)
@@ -5272,39 +5120,97 @@ def main_function():
                         # print(pathslist)
                         pathslist1 = []
                         for path1 in pathslist:
-                            if (os.path.isabs(path1) and os.path.exists(path1)):
+                            if(os.path.isabs(path1) and os.path.exists(path1)):
                                 pathslist1.append(Fore.GREEN + path1)
                                 normal_num = normal_num + 1
-                            elif (path1.__contains__('${') and path1.__contains__('}')):
+                            elif(path1.__contains__('${') and path1.__contains__('}')):
                                 pathslist1.append(Fore.MAGENTA + path1)
                                 unparsed_num = unparsed_num + 1
-                            elif (os.path.isabs(path1) and os.path.exists(path1) is False):
+                            elif(os.path.isabs(path1) and os.path.exists(path1) is False):
                                 pathslist1.append(Fore.RED + path1)
                                 unexisted_num = unexisted_num + 1
                             else:
                                 pathslist1.append(Fore.YELLOW + path1)
                                 unknownerror_num = unknownerror_num + 1
                         path2 = os.path.pathsep.join(pathslist1)
-                        if (path2.__contains__(Fore.GREEN)):
-                            path2 = '%-100s %s %s' % (path2, Fore.RESET + 'normal_num:', normal_num)
-                        if (path2.__contains__(Fore.MAGENTA)):
-                            path2 = '%-100s %s %s' % (path2, Fore.RESET + 'unparsed_num:', unparsed_num)
-                        if (path2.__contains__(Fore.RED)):
-                            path2 = '%-100s %s %s' % (path2, Fore.RESET + 'unexisted_num:', unexisted_num)
-                        if (path2.__contains__(Fore.YELLOW)):
-                            path2 = '%-100s %s %s' % (path2, Fore.RESET + 'unknownstring_num:', unknownerror_num)
-                        print('  %-30s %s' % (Fore.GREEN + key, path2))
+                        if(path2.__contains__(Fore.GREEN)):
+                            path2 = '%-100s %s %s' % (path2, Fore.RESET+'normal_num:', normal_num)
+                        if(path2.__contains__(Fore.MAGENTA)):
+                            path2 = '%-100s %s %s' % (path2, Fore.RESET+'unparsed_num:', unparsed_num)
+                        if(path2.__contains__(Fore.RED)):
+                            path2 = '%-100s %s %s' % (path2, Fore.RESET+'unexisted_num:', unexisted_num)
+                        if(path2.__contains__(Fore.YELLOW)):
+                            path2 = '%-100s %s %s' % (path2, Fore.RESET+'unknownstring_num:', unknownerror_num)
+                        print('  %-30s %s' %(Fore.GREEN+key, path2))
 
-                    break
+                if(args['-c'] or args['--custom'] is True):
+                    print('custom env')
+                    print('path+:')
+                    for (key) in envcustomlistrawpaths:
+                        path0 = str(key)
+                        pathslist = path0.split(os.path.pathsep)
+                        while (pathslist.__contains__('')):
+                            pathslist.remove('')
+                        # print(pathslist)
+                        pathslist1 = []
+                        for path1 in pathslist:
+                            if(os.path.isabs(path1) and os.path.exists(path1)):
+                                pathslist1.append(Fore.GREEN + path1)
+                                normal_num = normal_num + 1
+                            elif(path1.__contains__('${') and path1.__contains__('}')):
+                                pathslist1.append(Fore.MAGENTA + path1)
+                                unparsed_num = unparsed_num + 1
+                            elif(os.path.isabs(path1) and os.path.exists(path1) is False):
+                                pathslist1.append(Fore.RED + path1)
+                                unexisted_num = unexisted_num + 1
+                            else:
+                                pathslist1.append(Fore.YELLOW + path1)
+                                unknownerror_num = unknownerror_num + 1
+                        path2 = os.path.pathsep.join(pathslist1)
+                        if(path2.__contains__(Fore.GREEN)):
+                            path2 = '%-100s %s %s' % (path2, Fore.RESET+'normal_num:', normal_num)
+                        if(path2.__contains__(Fore.MAGENTA)):
+                            path2 = '%-100s %s %s' % (path2, Fore.RESET+'unparsed_num:', unparsed_num)
+                        if(path2.__contains__(Fore.RED)):
+                            path2 = '%-100s %s %s' % (path2, Fore.RESET+'unexisted_num:', unexisted_num)
+                        if(path2.__contains__(Fore.YELLOW)):
+                            path2 = '%-100s %s %s' % (path2, Fore.RESET+'unknownstring_num:', unknownerror_num)
+                        print('  ' + path2)
+                    print('variable:')
+                    for (key, value) in envcustomlistrawvars.items():
+                        if (key == 'path+'):
+                            continue
+                        path0 = str(value)
+                        pathslist = path0.split(os.path.pathsep)
+                        while (pathslist.__contains__('')):
+                            pathslist.remove('')
+                        # print(pathslist)
+                        pathslist1 = []
+                        for path1 in pathslist:
+                            if(os.path.isabs(path1) and os.path.exists(path1)):
+                                pathslist1.append(Fore.GREEN + path1)
+                                normal_num = normal_num + 1
+                            elif(path1.__contains__('${') and path1.__contains__('}')):
+                                pathslist1.append(Fore.MAGENTA + path1)
+                                unparsed_num = unparsed_num + 1
+                            elif(os.path.isabs(path1) and os.path.exists(path1) is False):
+                                pathslist1.append(Fore.RED + path1)
+                                unexisted_num = unexisted_num + 1
+                            else:
+                                pathslist1.append(Fore.YELLOW + path1)
+                                unknownerror_num = unknownerror_num + 1
+                        path2 = os.path.pathsep.join(pathslist1)
+                        if(path2.__contains__(Fore.GREEN)):
+                            path2 = '%-100s %s %s' % (path2, Fore.RESET+'normal_num:', normal_num)
+                        if(path2.__contains__(Fore.MAGENTA)):
+                            path2 = '%-100s %s %s' % (path2, Fore.RESET+'unparsed_num:', unparsed_num)
+                        if(path2.__contains__(Fore.RED)):
+                            path2 = '%-100s %s %s' % (path2, Fore.RESET+'unexisted_num:', unexisted_num)
+                        if(path2.__contains__(Fore.YELLOW)):
+                            path2 = '%-100s %s %s' % (path2, Fore.RESET+'unknownstring_num:', unknownerror_num)
+                        print('  %-30s %s' %(Fore.GREEN+key, path2))
 
-            if(args['-a'] or args['--all'] is True):
-                ''
-                for (current_env, env_value) in rawconfig['environ'].items():
-                    if (current_env == 'current'):
-                        continue
-                    if (current_env == rawconfig['environ']['current']):
-                        continue
-
+                if(current_env is not None):
                     print('env %s' % current_env)
                     print('path+:')
                     for (key) in rawconfig['environ'][current_env]['path+']:
@@ -5315,27 +5221,27 @@ def main_function():
                         # print(pathslist)
                         pathslist1 = []
                         for path1 in pathslist:
-                            if (os.path.isabs(path1) and os.path.exists(path1)):
+                            if(os.path.isabs(path1) and os.path.exists(path1)):
                                 pathslist1.append(Fore.GREEN + path1)
                                 normal_num = normal_num + 1
-                            elif (path1.__contains__('${') and path1.__contains__('}')):
+                            elif(path1.__contains__('${') and path1.__contains__('}')):
                                 pathslist1.append(Fore.MAGENTA + path1)
                                 unparsed_num = unparsed_num + 1
-                            elif (os.path.isabs(path1) and os.path.exists(path1) is False):
+                            elif(os.path.isabs(path1) and os.path.exists(path1) is False):
                                 pathslist1.append(Fore.RED + path1)
                                 unexisted_num = unexisted_num + 1
                             else:
                                 pathslist1.append(Fore.YELLOW + path1)
                                 unknownerror_num = unknownerror_num + 1
                         path2 = os.path.pathsep.join(pathslist1)
-                        if (path2.__contains__(Fore.GREEN)):
-                            path2 = '%-100s %s %s' % (path2, Fore.RESET + 'normal_num:', normal_num)
-                        if (path2.__contains__(Fore.MAGENTA)):
-                            path2 = '%-100s %s %s' % (path2, Fore.RESET + 'unparsed_num:', unparsed_num)
-                        if (path2.__contains__(Fore.RED)):
-                            path2 = '%-100s %s %s' % (path2, Fore.RESET + 'unexisted_num:', unexisted_num)
-                        if (path2.__contains__(Fore.YELLOW)):
-                            path2 = '%-100s %s %s' % (path2, Fore.RESET + 'unknownstring_num:', unknownerror_num)
+                        if(path2.__contains__(Fore.GREEN)):
+                            path2 = '%-100s %s %s' % (path2, Fore.RESET+'normal_num:', normal_num)
+                        if(path2.__contains__(Fore.MAGENTA)):
+                            path2 = '%-100s %s %s' % (path2, Fore.RESET+'unparsed_num:', unparsed_num)
+                        if(path2.__contains__(Fore.RED)):
+                            path2 = '%-100s %s %s' % (path2, Fore.RESET+'unexisted_num:', unexisted_num)
+                        if(path2.__contains__(Fore.YELLOW)):
+                            path2 = '%-100s %s %s' % (path2, Fore.RESET+'unknownstring_num:', unknownerror_num)
                         print('  ' + path2)
                     print('variable:')
                     for (key, value) in rawconfig['environ'][current_env].items():
@@ -5348,28 +5254,28 @@ def main_function():
                         # print(pathslist)
                         pathslist1 = []
                         for path1 in pathslist:
-                            if (os.path.isabs(path1) and os.path.exists(path1)):
+                            if(os.path.isabs(path1) and os.path.exists(path1)):
                                 pathslist1.append(Fore.GREEN + path1)
                                 normal_num = normal_num + 1
-                            elif (path1.__contains__('${') and path1.__contains__('}')):
+                            elif(path1.__contains__('${') and path1.__contains__('}')):
                                 pathslist1.append(Fore.MAGENTA + path1)
                                 unparsed_num = unparsed_num + 1
-                            elif (os.path.isabs(path1) and os.path.exists(path1) is False):
+                            elif(os.path.isabs(path1) and os.path.exists(path1) is False):
                                 pathslist1.append(Fore.RED + path1)
                                 unexisted_num = unexisted_num + 1
                             else:
                                 pathslist1.append(Fore.YELLOW + path1)
                                 unknownerror_num = unknownerror_num + 1
                         path2 = os.path.pathsep.join(pathslist1)
-                        if (path2.__contains__(Fore.GREEN)):
-                            path2 = '%-100s %s %s' % (path2, Fore.RESET + 'normal_num:', normal_num)
-                        if (path2.__contains__(Fore.MAGENTA)):
-                            path2 = '%-100s %s %s' % (path2, Fore.RESET + 'unparsed_num:', unparsed_num)
-                        if (path2.__contains__(Fore.RED)):
-                            path2 = '%-100s %s %s' % (path2, Fore.RESET + 'unexisted_num:', unexisted_num)
-                        if (path2.__contains__(Fore.YELLOW)):
-                            path2 = '%-100s %s %s' % (path2, Fore.RESET + 'unknownstring_num:', unknownerror_num)
-                        print('  %-30s %s' % (Fore.GREEN + key, path2))
+                        if(path2.__contains__(Fore.GREEN)):
+                            path2 = '%-100s %s %s' % (path2, Fore.RESET+'normal_num:', normal_num)
+                        if(path2.__contains__(Fore.MAGENTA)):
+                            path2 = '%-100s %s %s' % (path2, Fore.RESET+'unparsed_num:', unparsed_num)
+                        if(path2.__contains__(Fore.RED)):
+                            path2 = '%-100s %s %s' % (path2, Fore.RESET+'unexisted_num:', unexisted_num)
+                        if(path2.__contains__(Fore.YELLOW)):
+                            path2 = '%-100s %s %s' % (path2, Fore.RESET+'unknownstring_num:', unknownerror_num)
+                        print('  %-30s %s' %(Fore.GREEN+key, path2))
 
                     while (args['vc'] is True):
                         print('env %s - vc env' % current_env)
@@ -5377,7 +5283,7 @@ def main_function():
                         current_vcvarsallparam = 'vcvarsallparam'
                         has_set = '0'
                         native_dict = {}
-                        while (True):
+                        while(True):
                             if (pymakesystemenviron.__contains__(current_vcvarsall) is True):
                                 native_dict = pymakesystemenviron
                                 has_set = "system env:"
@@ -5389,34 +5295,34 @@ def main_function():
                                 has_set = str("env %s:" % current_env)
                             break
 
-                        # print(has_set)
-                        # if(has_set != '0'):
+                        #print(has_set)
+                        #if(has_set != '0'):
                         #    print(native_dict[current_vcvarsall])
 
-                        if (has_set is '0'):
+                        if(has_set is '0'):
                             print("please set env variable: vcvarsall.")
                             break
 
-                        if (native_dict.__contains__(current_vcvarsallparam) is False):
+                        if(native_dict.__contains__(current_vcvarsallparam) is False):
                             print("please set env variable: vcvarsallparam.")
                             break
 
-                        print(has_set + ' %s %s' % (native_dict[current_vcvarsall], native_dict[current_vcvarsallparam]))
+                        print(has_set + ' %s %s' % (native_dict[current_vcvarsall],native_dict[current_vcvarsallparam]))
 
                         nowroot = os.getcwd()
                         dict1 = copy.deepcopy(rawconfig['environ'][current_env])
-                        # for (k,v) in dict1.items():
+                        #for (k,v) in dict1.items():
                         #    print(k, v)
                         os.chdir(vcroot)
                         jsonfile = 'pymake-vc-command.json'
-                        if (not os.path.exists(jsonfile)):
+                        if(not os.path.exists(jsonfile)):
                             print('please init vc.')
                             break
                         dict0 = readJsonData(jsonfile)
-                        if (dict0.__contains__('environ') is False):
+                        if(dict0.__contains__('environ') is False):
                             print('please init vc.')
                             break
-                        if (dict0['environ'].__contains__(current_env) is False):
+                        if(dict0['environ'].__contains__(current_env) is False):
                             print('please init vc for %s env.' % current_env)
                             break
                         for (key) in dict0['environ'][current_env]["path+"]:
@@ -5424,7 +5330,7 @@ def main_function():
                         for (key, value) in dict0['environ'][current_env].items():
                             if (key == 'path+'):
                                 continue
-                            dict1[key] = value
+                            dict1[key]=value
                         os.chdir(nowroot)
 
                         print('path+:')
@@ -5493,6 +5399,203 @@ def main_function():
                             print('  %-30s %s' % (Fore.GREEN + key, path2))
 
                         break
+
+                if(args['-a'] or args['--all'] is True):
+                    ''
+                    for (current_env, env_value) in rawconfig['environ'].items():
+                        if (current_env == 'current'):
+                            continue
+                        if (current_env == rawconfig['environ']['current']):
+                            continue
+
+                        print('env %s' % current_env)
+                        print('path+:')
+                        for (key) in rawconfig['environ'][current_env]['path+']:
+                            path0 = str(key)
+                            pathslist = path0.split(os.path.pathsep)
+                            while (pathslist.__contains__('')):
+                                pathslist.remove('')
+                            # print(pathslist)
+                            pathslist1 = []
+                            for path1 in pathslist:
+                                if (os.path.isabs(path1) and os.path.exists(path1)):
+                                    pathslist1.append(Fore.GREEN + path1)
+                                    normal_num = normal_num + 1
+                                elif (path1.__contains__('${') and path1.__contains__('}')):
+                                    pathslist1.append(Fore.MAGENTA + path1)
+                                    unparsed_num = unparsed_num + 1
+                                elif (os.path.isabs(path1) and os.path.exists(path1) is False):
+                                    pathslist1.append(Fore.RED + path1)
+                                    unexisted_num = unexisted_num + 1
+                                else:
+                                    pathslist1.append(Fore.YELLOW + path1)
+                                    unknownerror_num = unknownerror_num + 1
+                            path2 = os.path.pathsep.join(pathslist1)
+                            if (path2.__contains__(Fore.GREEN)):
+                                path2 = '%-100s %s %s' % (path2, Fore.RESET + 'normal_num:', normal_num)
+                            if (path2.__contains__(Fore.MAGENTA)):
+                                path2 = '%-100s %s %s' % (path2, Fore.RESET + 'unparsed_num:', unparsed_num)
+                            if (path2.__contains__(Fore.RED)):
+                                path2 = '%-100s %s %s' % (path2, Fore.RESET + 'unexisted_num:', unexisted_num)
+                            if (path2.__contains__(Fore.YELLOW)):
+                                path2 = '%-100s %s %s' % (path2, Fore.RESET + 'unknownstring_num:', unknownerror_num)
+                            print('  ' + path2)
+                        print('variable:')
+                        for (key, value) in rawconfig['environ'][current_env].items():
+                            if (key == 'path+'):
+                                continue
+                            path0 = str(value)
+                            pathslist = path0.split(os.path.pathsep)
+                            while (pathslist.__contains__('')):
+                                pathslist.remove('')
+                            # print(pathslist)
+                            pathslist1 = []
+                            for path1 in pathslist:
+                                if (os.path.isabs(path1) and os.path.exists(path1)):
+                                    pathslist1.append(Fore.GREEN + path1)
+                                    normal_num = normal_num + 1
+                                elif (path1.__contains__('${') and path1.__contains__('}')):
+                                    pathslist1.append(Fore.MAGENTA + path1)
+                                    unparsed_num = unparsed_num + 1
+                                elif (os.path.isabs(path1) and os.path.exists(path1) is False):
+                                    pathslist1.append(Fore.RED + path1)
+                                    unexisted_num = unexisted_num + 1
+                                else:
+                                    pathslist1.append(Fore.YELLOW + path1)
+                                    unknownerror_num = unknownerror_num + 1
+                            path2 = os.path.pathsep.join(pathslist1)
+                            if (path2.__contains__(Fore.GREEN)):
+                                path2 = '%-100s %s %s' % (path2, Fore.RESET + 'normal_num:', normal_num)
+                            if (path2.__contains__(Fore.MAGENTA)):
+                                path2 = '%-100s %s %s' % (path2, Fore.RESET + 'unparsed_num:', unparsed_num)
+                            if (path2.__contains__(Fore.RED)):
+                                path2 = '%-100s %s %s' % (path2, Fore.RESET + 'unexisted_num:', unexisted_num)
+                            if (path2.__contains__(Fore.YELLOW)):
+                                path2 = '%-100s %s %s' % (path2, Fore.RESET + 'unknownstring_num:', unknownerror_num)
+                            print('  %-30s %s' % (Fore.GREEN + key, path2))
+
+                        while (args['vc'] is True):
+                            print('env %s - vc env' % current_env)
+                            current_vcvarsall = 'vcvarsall'
+                            current_vcvarsallparam = 'vcvarsallparam'
+                            has_set = '0'
+                            native_dict = {}
+                            while (True):
+                                if (pymakesystemenviron.__contains__(current_vcvarsall) is True):
+                                    native_dict = pymakesystemenviron
+                                    has_set = "system env:"
+                                if (envcustomlistrawvars.__contains__(current_vcvarsall) is True):
+                                    native_dict = envcustomlistrawvars
+                                    has_set = "custom env:"
+                                if (rawconfig['environ'][current_env].__contains__(current_vcvarsall) is True):
+                                    native_dict = rawconfig['environ'][current_env]
+                                    has_set = str("env %s:" % current_env)
+                                break
+
+                            # print(has_set)
+                            # if(has_set != '0'):
+                            #    print(native_dict[current_vcvarsall])
+
+                            if (has_set is '0'):
+                                print("please set env variable: vcvarsall.")
+                                break
+
+                            if (native_dict.__contains__(current_vcvarsallparam) is False):
+                                print("please set env variable: vcvarsallparam.")
+                                break
+
+                            print(has_set + ' %s %s' % (native_dict[current_vcvarsall], native_dict[current_vcvarsallparam]))
+
+                            nowroot = os.getcwd()
+                            dict1 = copy.deepcopy(rawconfig['environ'][current_env])
+                            # for (k,v) in dict1.items():
+                            #    print(k, v)
+                            os.chdir(vcroot)
+                            jsonfile = 'pymake-vc-command.json'
+                            if (not os.path.exists(jsonfile)):
+                                print('please init vc.')
+                                break
+                            dict0 = readJsonData(jsonfile)
+                            if (dict0.__contains__('environ') is False):
+                                print('please init vc.')
+                                break
+                            if (dict0['environ'].__contains__(current_env) is False):
+                                print('please init vc for %s env.' % current_env)
+                                break
+                            for (key) in dict0['environ'][current_env]["path+"]:
+                                dict1['path+'].append(key)
+                            for (key, value) in dict0['environ'][current_env].items():
+                                if (key == 'path+'):
+                                    continue
+                                dict1[key] = value
+                            os.chdir(nowroot)
+
+                            print('path+:')
+                            for (key) in dict1['path+']:
+                                path0 = str(key)
+                                pathslist = path0.split(os.path.pathsep)
+                                while (pathslist.__contains__('')):
+                                    pathslist.remove('')
+                                # print(pathslist)
+                                pathslist1 = []
+                                for path1 in pathslist:
+                                    if (os.path.isabs(path1) and os.path.exists(path1)):
+                                        pathslist1.append(Fore.GREEN + path1)
+                                        normal_num = normal_num + 1
+                                    elif (path1.__contains__('${') and path1.__contains__('}')):
+                                        pathslist1.append(Fore.MAGENTA + path1)
+                                        unparsed_num = unparsed_num + 1
+                                    elif (os.path.isabs(path1) and os.path.exists(path1) is False):
+                                        pathslist1.append(Fore.RED + path1)
+                                        unexisted_num = unexisted_num + 1
+                                    else:
+                                        pathslist1.append(Fore.YELLOW + path1)
+                                        unknownerror_num = unknownerror_num + 1
+                                path2 = os.path.pathsep.join(pathslist1)
+                                if (path2.__contains__(Fore.GREEN)):
+                                    path2 = '%-100s %s %s' % (path2, Fore.RESET + 'normal_num:', normal_num)
+                                if (path2.__contains__(Fore.MAGENTA)):
+                                    path2 = '%-100s %s %s' % (path2, Fore.RESET + 'unparsed_num:', unparsed_num)
+                                if (path2.__contains__(Fore.RED)):
+                                    path2 = '%-100s %s %s' % (path2, Fore.RESET + 'unexisted_num:', unexisted_num)
+                                if (path2.__contains__(Fore.YELLOW)):
+                                    path2 = '%-100s %s %s' % (path2, Fore.RESET + 'unknownstring_num:', unknownerror_num)
+                                print('  ' + path2)
+                            print('variable:')
+                            for (key, value) in dict1.items():
+                                if (key == 'path+'):
+                                    continue
+                                path0 = str(value)
+                                pathslist = path0.split(os.path.pathsep)
+                                while (pathslist.__contains__('')):
+                                    pathslist.remove('')
+                                # print(pathslist)
+                                pathslist1 = []
+                                for path1 in pathslist:
+                                    if (os.path.isabs(path1) and os.path.exists(path1)):
+                                        pathslist1.append(Fore.GREEN + path1)
+                                        normal_num = normal_num + 1
+                                    elif (path1.__contains__('${') and path1.__contains__('}')):
+                                        pathslist1.append(Fore.MAGENTA + path1)
+                                        unparsed_num = unparsed_num + 1
+                                    elif (os.path.isabs(path1) and os.path.exists(path1) is False):
+                                        pathslist1.append(Fore.RED + path1)
+                                        unexisted_num = unexisted_num + 1
+                                    else:
+                                        pathslist1.append(Fore.YELLOW + path1)
+                                        unknownerror_num = unknownerror_num + 1
+                                path2 = os.path.pathsep.join(pathslist1)
+                                if (path2.__contains__(Fore.GREEN)):
+                                    path2 = '%-100s %s %s' % (path2, Fore.RESET + 'normal_num:', normal_num)
+                                if (path2.__contains__(Fore.MAGENTA)):
+                                    path2 = '%-100s %s %s' % (path2, Fore.RESET + 'unparsed_num:', unparsed_num)
+                                if (path2.__contains__(Fore.RED)):
+                                    path2 = '%-100s %s %s' % (path2, Fore.RESET + 'unexisted_num:', unexisted_num)
+                                if (path2.__contains__(Fore.YELLOW)):
+                                    path2 = '%-100s %s %s' % (path2, Fore.RESET + 'unknownstring_num:', unknownerror_num)
+                                print('  %-30s %s' % (Fore.GREEN + key, path2))
+
+                            break
 
             # calculate information
             print('------------------------------------------------------')
