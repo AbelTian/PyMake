@@ -927,6 +927,9 @@ R:\Develop\b0-toolkits\a0-compiler\PyMake\UserSource\MyShell>
 # Encoding  
 [PyMake Profile Encoding](./ENCODING.md)   
 
+# Notice  
+[PyMake Environ Notice](./NOTICE.md)   
+
 # User Support   
 User support shell module, user can install them to share their functions.   
 
