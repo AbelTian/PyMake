@@ -4166,11 +4166,19 @@ def main_function():
 
         return cmd_list
 
-    # open command
     #print(args)
+    # open command
     while (True):
         if(args['open'] is True):
             ''
+
+            if(args['debug'] is True):
+                break
+            if(args['local'] is True):
+                break
+            if(args['custom'] is True):
+                break
+
             if(args['<path-name>'] == []):
                 ''
                 dict0 = copy.deepcopy(rawconfig['path-assemblage'])
