@@ -272,7 +272,6 @@
     "environ": {
         "android.mobile": {
             "path+": [
-                "${cmake.bin}",
                 "${qt5.android_arm.bin}",
                 "${mingw32.bin}",
                 "${java1.8.bin}",
@@ -295,6 +294,13 @@
             "ANDROID_NDK_TOOLS_PREFIX": "arm-linux-androideabi",
             "NDK_TOOLCHAIN_PATH": "${ndk.arm.bin}",
             "NDK_TOOLS_PREFIX": "arm-linux-androideabi",
+            "CMAKEGENERATOR": "MinGW Makefiles",
+            "CMAKE_SYSTEM_NAME": "Android",
+            "CMAKE_C_COMPILER": "${NDK_TOOLS_PREFIX}-gcc",
+            "CMAKE_CXX_COMPILER": "${NDK_TOOLS_PREFIX}-g++",
+            "CMAKE_FIND_ROOT_PATH_MODE_PROGRAM": "NEVER",
+            "CMAKE_FIND_ROOT_PATH_MODE_INCLUDE": "ONLY",
+            "CMAKE_FIND_ROOT_PATH_MODE_LIBRARY": "ONLY",
             "QTDIR": "${qt5.android_arm}",
             "QTSPEC": "-spec android-g++",
             "QTCONFIG": "",
@@ -319,7 +325,6 @@
                 "${ndk.x86.bin}"
             ],
             "make0": "mingw32-make",
-            "CMAKEGENERATOR": "MinGW Makefiles",
             "CLICOLOR": "1",
             "ANDROID_API_VERSION": "android-23",
             "ANDROID_HOME": "${android.sdk}",
@@ -332,6 +337,13 @@
             "ANDROID_NDK_TOOLS_PREFIX": "i686-linux-android",
             "NDK_TOOLCHAIN_PATH": "${ndk.x86.bin}",
             "NDK_TOOLS_PREFIX": "i686-linux-android",
+            "CMAKEGENERATOR": "MinGW Makefiles",
+            "CMAKE_SYSTEM_NAME": "Android",
+            "CMAKE_C_COMPILER": "${NDK_TOOLS_PREFIX}-gcc",
+            "CMAKE_CXX_COMPILER": "${NDK_TOOLS_PREFIX}-g++",
+            "CMAKE_FIND_ROOT_PATH_MODE_PROGRAM": "NEVER",
+            "CMAKE_FIND_ROOT_PATH_MODE_INCLUDE": "ONLY",
+            "CMAKE_FIND_ROOT_PATH_MODE_LIBRARY": "ONLY",
             "PYMAKE_MYNAME": "T.D.R",
             "a_special_var_const": "hello world",
             "QTDIR": "${qt5.android_x86}",
