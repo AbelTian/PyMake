@@ -188,7 +188,7 @@
         "android.ant": "${android}/apache-ant-1.10.3",
         "android.java": "${android}/Java",
         "sdk.plat.tool": "${android.sdk}/platform-tools",
-        "sdk.build.tool": "${android.sdk}/build-tools",
+        "sdk.build.tool": "${android.sdk}/build-tools/26.0.2",
         "sdk.tool": "${android.sdk}/tools",
         "java1.7.home": "${android.java}/jdk1.7.0_79.jdk/Contents/Home",
         "java1.8.home": "${android.java}/jdk1.8.0_131",
@@ -585,7 +585,7 @@
                 "${haskell.perl}",
                 "${haskell.stack.bin}"
             ],
-            "STACK_ROOT": "${haskell}/Stack"
+            "STACK_ROOT": "${haskell}/../Stack"
         },
         "freepascal": {
             "path+": [
@@ -598,6 +598,63 @@
                 "${fpc.bin}"
             ]
         },
+        "other": {
+            "path+": [
+                "${doxygen.bin}",
+                "${graphviz.bin}",
+                "${cmake.bin}",
+                "${xmake}",
+                "${ninja}",
+                "${perl.bin}",
+                "${py.bin}",
+                "${lua}",
+                "${php}",
+                "${go.bin}",
+                "${ruby.bin}",
+                "${R.bin}",
+                "${node.js}",
+                "${rexx}",
+                "${nasm.bin}",
+                "${erlang.bin}",
+                "${dlang.bin}",
+                "${racket}",
+                "${GnuWin32.bin}",
+                "${msys-mod.bin}",
+                "${elixir.bin}",
+                "${nim.bin}",
+                "${MySQL.bin}",
+                "${java.bin}",
+                "${nginx}",
+                "${Apache.bin}",
+                "${Tomcat.bin}",
+                "${kafka.bin}",
+                "${hadoop.bin}",
+                "${groovy.bin}",
+                "${ant.bin}",
+                "${maven.bin}",
+                "${gradle.bin}",
+                "${gpg.bin}",
+                "${astyle.bin}",
+                "${bcompare}",
+                "${rapidee}",
+                "${7z}",
+                "${jcpicker}",
+                "${pycharm}",
+                "${root.src}",
+                "${pymake}",
+                "${pymake}/demo",
+                "${pymake}/test",
+                "${pymake}/test/带 空格路径",
+                "${pymake}/tools",
+                "${pymake}/tools/filetransporter",
+                "${pymake}/UserSource/带 空格路径",
+                "${pymake}/UserSource/UserShell",
+                "${pymake}/UserSource/MyShell",
+                "${pymake}/UserSource/VCShell",
+                "${pymake}/UserSource/WinShell",
+                "V:\\Develop\\d1-sdk\\FFmpeg3\\Windows\\bin"
+            ]
+        },
         "other2": {
             "path+": [
                 "${doxygen.bin}",
@@ -605,14 +662,53 @@
                 "${perl.bin}",
                 "${xmake}",
                 "${ninja}",
-                "${java1.8.bin}",
+                "${java.bin}",
+                "${elixir.bin}",
+                "${nim.bin}",
                 "${py.bin}",
                 "${lua}",
                 "${php}",
                 "${go.bin}",
                 "${ruby.bin}",
                 "${R.bin}",
+                "${rexx}",
+                "${nasm.bin}",
+                "${erlang.bin}",
+                "${dlang.bin}",
+                "${racket}",
                 "${gradle.bin}",
+                "${cmake.bin}",
+                "${mingw32.bin}",
+                "${qt5.mingw32.bin}"
+            ],
+            "make0": "mingw32-make",
+            "CMAKEGENERATOR": "MinGW Makefiles",
+            "JAVA_HOME": "${java}",
+            "CLASSPATH": ".:${JAVA_HOME}/lib/dt/jar:${JAVA_HOME}/lib/tools.jar",
+            "QTVERSION": "${qt5.mingw32.version}",
+            "QTDIR": "${qt5.mingw32}",
+            "QTSPEC": "-spec win32-g++",
+            "QTCONFIG": "",
+            "QKIT": "WIN32",
+            "QSYS": "Windows"
+        },
+        "apache": {
+            "path+": [
+                "${nginx}",
+                "${java.bin}",
+                "${Apache.bin}",
+                "${Tomcat.bin}",
+                "${kafka.bin}",
+                "${hadoop.bin}",
+                "${groovy.bin}",
+                "${ant.bin}",
+                "${maven.bin}",
+                "${gradle.bin}",
+                "${gpg.bin}",
+                "${php}",
+                "${node.js}",
+                "${ruby.bin}",
+                "${MySQL.bin}",
                 "${cmake.bin}",
                 "${mingw32.bin}",
                 "${qt5.mingw32.bin}"
@@ -624,7 +720,9 @@
             "QTSPEC": "-spec win32-g++",
             "QTCONFIG": "",
             "QKIT": "WIN32",
-            "QSYS": "Windows"
+            "QSYS": "Windows",
+            "JAVA_HOME": "${java}",
+            "CLASSPATH": ".:${JAVA_HOME}/lib/dt/jar:${JAVA_HOME}/lib/tools.jar"
         },
         "vc6": {
             "path+": [
@@ -824,6 +922,10 @@
         "libtool2": [
             "cd /d ${root.prod}/AddLibraryTool-Multiple/Windows",
             "start ${root.prod}/AddLibraryTool-Multiple/Windows/AddLibraryTool-Multiple.exe"
+        ],
+        "sdktool": [
+            "cd /d ${root.prod}/SdkListTool/Windows",
+            "start ${root.prod}/SdkListTool/Windows/SdkListTool.exe"
         ],
         "apptool": [
             "cd /d ${root.prod}/ProductExecTool/Windows",
@@ -1585,7 +1687,7 @@
             "    $environLists | foreach {",
             "        $environName = $_",
             "        Write-Output \"cmd /k pyenv open $environName && cd $projectPath && build.qmake $projectFile\"",
-            "        #Start-Process cmd -ArgumentList \"cmd /k pyenv open $environName && cd $projectPath && build.qmake $projectFile\"",
+            "        Start-Process cmd -ArgumentList \"cmd /k pyenv open $environName && cd $projectPath && build.qmake $projectFile\"",
             "    }",
             "}"
         ],

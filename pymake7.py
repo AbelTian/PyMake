@@ -10,7 +10,7 @@ Usage:
   pymake7.py  source config [ --del  ] [ <config-file-name> ]
   pymake7.py  source config [ --mod  ] [ <config-file-name> ] [<new-config-file-name>]
   pymake7.py  source config [ --switch  ] [ <config-file-name> ]
-  pymake7.py  source config [ --edit  ] [ <config-file-name> ]
+  pymake7.py  source config [ --edit  ] [ <config-file-name> ] [ -c | --custom ]
   pymake7.py  source config [ --restore  ]
   pymake7.py  source config [ --show ]
   pymake7.py  -------------------------------------------------------------
@@ -1109,25 +1109,35 @@ def main_function():
                             return
                         file0 = args['<config-file-name>']
 
-                    plat = getplatform()
-                    cmd0 = ''
-                    if(plat == "Windows"):
-                        if (file0.__contains__(' ')):
-                            cmd0 = 'start "" ' + '"%s"' % file0
+                    def open_file(file0):
+                        plat = getplatform()
+                        cmd0 = ''
+                        if(plat == "Windows"):
+                            if (file0.__contains__(' ')):
+                                cmd0 = 'start "" ' + '"%s"' % file0
+                            else:
+                                cmd0 = "start " + file0
+                        elif (plat == "Darwin"):
+                            if (file0.__contains__(' ')):
+                                cmd0 = 'open ' + '"%s"' % file0
+                            else:
+                                cmd0 = "open " + file0
                         else:
-                            cmd0 = "start " + file0
-                    elif (plat == "Darwin"):
-                        if (file0.__contains__(' ')):
-                            cmd0 = 'open ' + '"%s"' % file0
-                        else:
-                            cmd0 = "open " + file0
-                    else:
-                        if (file0.__contains__(' ')):
-                            cmd0 = 'xdg-open ' + '"%s" ' % file0 + ">/dev/null 2>&1"
-                        else:
-                            cmd0 = "xdg-open " + '%s ' % file0 + ">/dev/null 2>&1"
-                    os.system(cmd0)
-                    print('successed: %s' % file0)
+                            if (file0.__contains__(' ')):
+                                cmd0 = 'xdg-open ' + '"%s" ' % file0 + ">/dev/null 2>&1"
+                            else:
+                                cmd0 = "xdg-open " + '%s ' % file0 + ">/dev/null 2>&1"
+                        return cmd0
+
+                    cmd_list = []
+                    cmd_list.append(file0)
+                    if(args['-c'] or args['--custom'] is True):
+                        cmd_list.append('custom.path+.ini')
+                        cmd_list.append('custom.var+.ini')
+                    for file0 in cmd_list:
+                        cmd0 = open_file(file0)
+                        os.system(cmd0)
+                        print('successed: %s' % file0)
                     return
                 elif(args['--restore'] is True):
                     conf.set('source', 'config', 'pymake.json')
