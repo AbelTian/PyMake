@@ -6,12 +6,12 @@ Usage:
   pymake7.py  source
   pymake7.py  source file [ <source-path-file> ]
   pymake7.py  source root [ <source-root-path> ]
-  pymake7.py  source config [ --add  ] [ <config-file-name> ]
-  pymake7.py  source config [ --del  ] [ <config-file-name> ]
-  pymake7.py  source config [ --mod  ] [ <config-file-name> ] [<new-config-file-name>]
-  pymake7.py  source config [ --switch  ] [ <config-file-name> ]
-  pymake7.py  source config [ --edit  ] [ <config-file-name> ] [ -c | --custom ]
-  pymake7.py  source config [ --restore  ]
+  pymake7.py  source config [ --add ] [ <config-file-name> ]
+  pymake7.py  source config [ --del ] [ <config-file-name> ]
+  pymake7.py  source config [ --mod ] [ <config-file-name> ] [<new-config-file-name>]
+  pymake7.py  source config [ --switch ] [ <config-file-name> ]
+  pymake7.py  source config [ --edit ] [ <config-file-name> ]
+  pymake7.py  source config [ --restore ]
   pymake7.py  source config [ --show ]
   pymake7.py  -------------------------------------------------------------
   pymake7.py  set path ( --add | --del | --mod ) <name> [ <value> ]
@@ -177,6 +177,7 @@ Usage:
   pymake7.py  custom [ open | close ]
   pymake7.py  custom [ stat | status ]
   pymake7.py  custom [ info | information ]
+  pymake7.py  custom edit
   pymake7.py  custom path [ --add | --del ] [ <value> ]
   pymake7.py  custom var [ --add | --del ] [ <key> ] [ <value> ]
   pymake7.py  custom env [ -r | --raw ]
@@ -1041,6 +1042,26 @@ def main_function():
             if (not os.path.exists(defaultsourceconfigfile)):
                 writeJsonData(defaultsourceconfigfile, d)
 
+    def open_file(file0):
+        plat = getplatform()
+        cmd0 = ''
+        if (plat == "Windows"):
+            if (file0.__contains__(' ')):
+                cmd0 = 'start "" ' + '"%s"' % file0
+            else:
+                cmd0 = "start " + file0
+        elif (plat == "Darwin"):
+            if (file0.__contains__(' ')):
+                cmd0 = 'open ' + '"%s"' % file0
+            else:
+                cmd0 = "open " + file0
+        else:
+            if (file0.__contains__(' ')):
+                cmd0 = 'xdg-open ' + '"%s" ' % file0 + ">/dev/null 2>&1"
+            else:
+                cmd0 = "xdg-open " + '%s ' % file0 + ">/dev/null 2>&1"
+        return cmd0
+
     #record source config file postfix
     pymakesuffix = '.json'
     #source
@@ -1109,35 +1130,9 @@ def main_function():
                             return
                         file0 = args['<config-file-name>']
 
-                    def open_file(file0):
-                        plat = getplatform()
-                        cmd0 = ''
-                        if(plat == "Windows"):
-                            if (file0.__contains__(' ')):
-                                cmd0 = 'start "" ' + '"%s"' % file0
-                            else:
-                                cmd0 = "start " + file0
-                        elif (plat == "Darwin"):
-                            if (file0.__contains__(' ')):
-                                cmd0 = 'open ' + '"%s"' % file0
-                            else:
-                                cmd0 = "open " + file0
-                        else:
-                            if (file0.__contains__(' ')):
-                                cmd0 = 'xdg-open ' + '"%s" ' % file0 + ">/dev/null 2>&1"
-                            else:
-                                cmd0 = "xdg-open " + '%s ' % file0 + ">/dev/null 2>&1"
-                        return cmd0
-
-                    cmd_list = []
-                    cmd_list.append(file0)
-                    if(args['-c'] or args['--custom'] is True):
-                        cmd_list.append('custom.path+.ini')
-                        cmd_list.append('custom.var+.ini')
-                    for file0 in cmd_list:
-                        cmd0 = open_file(file0)
-                        os.system(cmd0)
-                        print('successed: %s' % file0)
+                    cmd0 = open_file(file0)
+                    os.system(cmd0)
+                    print('successed: %s' % file0)
                     return
                 elif(args['--restore'] is True):
                     conf.set('source', 'config', 'pymake.json')
@@ -10035,6 +10030,19 @@ def main_function():
 
                 print("successed: export custom env to %s %s" % (cmd_effect, cmd_unset))
                 return
+            elif (args['edit'] is True):
+                ''
+
+                os.chdir(sourceroot)
+                cmd_list = []
+                cmd_list.append('custom.path+.ini')
+                cmd_list.append('custom.var+.ini')
+                for file0 in cmd_list:
+                    cmd0 = open_file(file0)
+                    os.system(cmd0)
+                    print('successed: %s' % file0)
+                return
+
             elif(args['info'] or args['information'] is True):
                 print("CUSTOM SETTING: %s" % (pymakecustomini))
                 print("CUSTOM ENV+   : %s" % (customenvfile))
