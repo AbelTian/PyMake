@@ -5333,6 +5333,7 @@ def main_function():
                         nowroot = os.getcwd()
                         #dict1 = copy.deepcopy(rawconfig['environ'][current_env])
                         dict1 = {}
+                        dict1['path+'] = []
                         #for (k,v) in dict1.items():
                         #    print(k, v)
                         os.chdir(vcroot)
@@ -5531,6 +5532,7 @@ def main_function():
                             nowroot = os.getcwd()
                             # dict1 = copy.deepcopy(rawconfig['environ'][current_env])
                             dict1 = {}
+                            dict1['path+'] = []
                             # for (k,v) in dict1.items():
                             #    print(k, v)
                             os.chdir(vcroot)
