@@ -5331,7 +5331,8 @@ def main_function():
                         print(has_set + ' %s %s' % (native_dict[current_vcvarsall],native_dict[current_vcvarsallparam]))
 
                         nowroot = os.getcwd()
-                        dict1 = copy.deepcopy(rawconfig['environ'][current_env])
+                        #dict1 = copy.deepcopy(rawconfig['environ'][current_env])
+                        dict1 = {}
                         #for (k,v) in dict1.items():
                         #    print(k, v)
                         os.chdir(vcroot)
@@ -5528,7 +5529,8 @@ def main_function():
                             print(has_set + ' %s %s' % (native_dict[current_vcvarsall], native_dict[current_vcvarsallparam]))
 
                             nowroot = os.getcwd()
-                            dict1 = copy.deepcopy(rawconfig['environ'][current_env])
+                            # dict1 = copy.deepcopy(rawconfig['environ'][current_env])
+                            dict1 = {}
                             # for (k,v) in dict1.items():
                             #    print(k, v)
                             os.chdir(vcroot)
