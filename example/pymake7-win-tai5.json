@@ -188,7 +188,7 @@
         "android.ant": "${android}/apache-ant-1.10.3",
         "android.java": "${android}/Java",
         "sdk.plat.tool": "${android.sdk}/platform-tools",
-        "sdk.build.tool": "${android.sdk}/build-tools/26.0.2",
+        "sdk.build.tool": "${android.sdk}/build-tools",
         "sdk.tool": "${android.sdk}/tools",
         "java1.7.home": "${android.java}/jdk1.7.0_79.jdk/Contents/Home",
         "java1.8.home": "${android.java}/jdk1.8.0_131",
