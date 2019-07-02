@@ -727,7 +727,7 @@
             "CMAKEGENERATOR": "NMake Makefiles",
             "vcvarsall": "${vcvarsall-2015}",
             "vcvarsallparam": "x86_amd64",
-            "run-vcvarsall": "${vcvarsall} ${vcvarsallparam}",
+            "run-vcvarsall": "\"${vcvarsall}\" ${vcvarsallparam}",
             "MSBuild": "C:\\Program Files (x86)\\MSBuild\\14.0\\Bin\\MSBuild.exe",
             "QtMsBuild": "${QtMsBuild}",
             "QTVERSION": "${qt5.msvc2015_64.version}",
@@ -745,7 +745,7 @@
             "CMAKEGENERATOR": "NMake Makefiles",
             "vcvarsall": "${vcvarsall-2015}",
             "vcvarsallparam": "amd64_arm",
-            "run-vcvarsall": "${vcvarsall} ${vcvarsallparam}",
+            "run-vcvarsall": "\"${vcvarsall}\" ${vcvarsallparam}",
             "MSBuild": "C:\\Program Files (x86)\\MSBuild\\14.0\\Bin\\amd64\\MSBuild.exe",
             "QtMsBuild": "${QtMsBuild}",
             "QTVERSION": "${qt5.winrt_arm.version}",
@@ -763,7 +763,7 @@
             "CMAKEGENERATOR": "NMake Makefiles",
             "vcvarsall": "${vcvarsall-2015}",
             "vcvarsallparam": "x86_amd64",
-            "run-vcvarsall": "${vcvarsall} ${vcvarsallparam}",
+            "run-vcvarsall": "\"${vcvarsall}\" ${vcvarsallparam}",
             "MSBuild": "C:\\Program Files (x86)\\MSBuild\\14.0\\Bin\\MSBuild.exe",
             "QtMsBuild": "${QtMsBuild}",
             "QTVERSION": "${qt5.winrt_x64.version}",
@@ -772,6 +772,42 @@
             "QTCONFIG": "",
             "QKIT": "WIN32",
             "QSYS": "WinRTSimulator"
+        },
+        "msvc2019": {
+            "path+": [
+                "${qt5.msvc2019.bin}"
+            ],
+            "make0": "nmake",
+            "CMAKEGENERATOR": "NMake Makefiles",
+            "vcvarsall": "${vcvarsall-2019}",
+            "vcvarsallparam": "amd64_x86",
+            "run-vcvarsall": "\"${vcvarsall}\" ${vcvarsallparam}",
+            "MSBuild": "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\MSBuild\\Current\\Bin\\MSBuild.exe",
+            "QtMsBuild": "${QtMsBuild}",
+            "QTVERSION": "${qt5.msvc2019.version}",
+            "QTDIR": "${qt5.msvc2019}",
+            "QTSPEC": "-spec win32-msvc",
+            "QTCONFIG": "",
+            "QKIT": "WIN32",
+            "QSYS": "MSVC"
+        },
+        "msvc2019.x64": {
+            "path+": [
+                "${qt5.msvc2019_x64.bin}"
+            ],
+            "make0": "nmake",
+            "CMAKEGENERATOR": "NMake Makefiles",
+            "vcvarsall": "${vcvarsall-2019}",
+            "vcvarsallparam": "x86_amd64",
+            "run-vcvarsall": "\"${vcvarsall}\" ${vcvarsallparam}",
+            "MSBuild": "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\MSBuild\\Current\\Bin\\MSBuild.exe",
+            "QtMsBuild": "${QtMsBuild}",
+            "QTVERSION": "${qt5.msvc2019_x64.version}",
+            "QTDIR": "${qt5.msvc2019_x64}",
+            "QTSPEC": "-spec win32-msvc",
+            "QTCONFIG": "",
+            "QKIT": "WIN32",
+            "QSYS": "MSVC"
         },
         "current": "msvc2015"
     },
