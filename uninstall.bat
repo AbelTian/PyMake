@@ -1,7 +1,7 @@
 @echo off
 ::请使用 uninstall.bat 进行卸载
 
-set mmpath=C:\Windows
+set mmpath=%WINDIR%
 
 set sourcefile=mm.bat
 set mmfile=mm.bat

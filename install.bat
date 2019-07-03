@@ -1,7 +1,7 @@
 @echo off
 ::请使用 install.bat %* 进行安装
 
-set mmpath=C:\Windows
+set mmpath=%WINDIR%
 
 set mmfile=mm.bat
 set filepath=%~dp0

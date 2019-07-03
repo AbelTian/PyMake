@@ -70,9 +70,9 @@
         "qt4.8.clang.bin": "${qt4.8.clang}/bin",
         "qt4.8.mingw32": "${qt}/${qt4.8.version}/mingw32",
         "qt4.8.mingw32.bin": "${qt4.8.mingw32}/bin",
-        "qt5.5.version": "5.5.1",
+        "qt5.5.version": "5.5",
         "qt5.5.armhf32": "${qt}/${qt5.5.version}/armhf32",
-        "qt5.5.armhf32.bin": "${qt5.5.armhf32}/bin",
+        "qt5.5.armhf32.bin": "${qt5.5.armhf32}/sysroots/cortexa9hf-vfp-neon-poky-linux-gnueabi/usr/bin",
         "qt5.5.armhf32.sysroot": "${qt5.5.armhf32}/sysroots/cortexa9hf-vfp-neon-poky-linux-gnueabi",
         "qt5.7.version": "5.7.1",
         "qt5.7.gcc_64": "${qt}/${qt5.7.version}/gcc_64",
@@ -155,9 +155,9 @@
         "qt5.mingw64": "${qt5.12.mingw64}",
         "qt5.mingw64.bin": "${qt5.12.mingw64}/bin",
         "qt5.armhf32.version": "${qt5.5.version}",
-        "qt5.armhf32": "${qt}/${qt5.5.version}/armhf32",
-        "qt5.armhf32.bin": "${qt5.5.armhf32}/bin",
-        "qt5.armhf32.sysroot": "${qt5.5.armhf32}/sysroots/cortexa9hf-vfp-neon-poky-linux-gnueabi",
+        "qt5.armhf32": "${qt5.5.armhf32}",
+        "qt5.armhf32.bin": "${qt5.5.armhf32.bin}",
+        "qt5.armhf32.sysroot": "${qt5.5.armhf32.sysroot}",
         "qt5.android_arm.version": "${qt5.9.version}",
         "qt5.android_arm": "${qt5.9.android_arm}",
         "qt5.android_arm.bin": "${qt5.9.android_arm}/bin",
@@ -180,7 +180,11 @@
         "mingw32.bin": "${mingw32}/bin",
         "mingw64": "${qt}/Tools/mingw730_64",
         "mingw64.bin": "${mingw64}/bin",
-        "armhf32": "${qt}/Tools/gcc-linaro-5.4.1-2017.05-i686-mingw32_arm-linux-gnueabihf",
+        "armhf32-4-bad": "${qt}/Tools/gcc-linaro-4.9-2016.02-i686-mingw32_arm-linux-gnueabihf",
+        "armhf32-android-ignore": "${root.tool}/winAndroidLibraries/android-ndk-r13b/toolchains/arm-linux-androideabi-4.9/prebuilt/windows-x86_64",
+        "armhf32-4-linux": "${qt}/Tools/gcc-linaro-4.9-2016.02-x86_64_arm-linux-gnueabihf",
+        "armhf32-5": "${qt}/Tools/gcc-linaro-5.4.1-2017.05-i686-mingw32_arm-linux-gnueabihf",
+        "armhf32": "${armhf32-5}",
         "armhf32.bin": "${armhf32}/bin",
         "android": "${root.tool}/winAndroidLibraries",
         "android.sdk": "${android}/android-sdk-windows",
@@ -234,6 +238,8 @@
         "perl5.30": "${wincc}/perl/strawberry-perl-5.30.0.1-64bit",
         "perl": "${perl5.30}",
         "perl.bin": "${perl}/perl/bin",
+        "emsdk": "${wincc}/emsdk",
+        "emsdk.bin": "${emsdk}/bin",
         "xmake": "${wincc}/xmake",
         "ninja": "${wincc}/ninja",
         "scons": "${wincc}/scons-3.0.0",
@@ -521,7 +527,7 @@
         "armhf32": {
             "path+": [
                 "${qt5.armhf32.bin}",
-                "${mingw32.bin}"
+                "${armhf32.bin}"
             ],
             "make0": "mingw32-make",
             "CMAKEGENERATOR": "MinGW Makefiles",
@@ -592,11 +598,19 @@
                 "${FreePascal.bin}"
             ]
         },
-        "Lazarus": {
+        "lazarus": {
             "path+": [
                 "${Lazarus.bin}",
                 "${fpc.bin}"
             ]
+        },
+        "emsdk": {
+            "path+": [
+                "${emsdk}",
+                "${emsdk.bin}"
+            ],
+            "EMSDK": "${emsdk}",
+            "EM_CONFIG": "%USERPROFILE%\\.emscripten"
         },
         "other": {
             "path+": [
@@ -727,7 +741,7 @@
         "vc6": {
             "path+": [
                 "${VC6.BIN}",
-                "${qt5.5.vc6.bin}"
+                "${qt5.vc6.bin}"
             ],
             "make0": "nmake",
             "CMAKEGENERATOR": "NMake Makefiles",
@@ -737,8 +751,8 @@
             "VISUALSTUDIOVERSION": "6.0",
             "INCLUDE": "${VC6.INCLUDE}",
             "LIB": "${VC6.LIB}",
-            "QTVERSION": "${qt5.5.version}",
-            "QTDIR": "${qt5.5.vc6}",
+            "QTVERSION": "${qt5.vc6.version}",
+            "QTDIR": "${qt5.vc6}",
             "QTSPEC": "-spec win32-msvc",
             "QTCONFIG": "",
             "QKIT": "WIN32",
@@ -822,7 +836,7 @@
             "CMAKEGENERATOR": "NMake Makefiles",
             "vcvarsall": "${vcvarsall-2015}",
             "vcvarsallparam": "x86_amd64",
-            "run-vcvarsall": "${vcvarsall} ${vcvarsallparam}",
+            "run-vcvarsall": "\"${vcvarsall}\" ${vcvarsallparam}",
             "MSBuild": "C:\\Program Files (x86)\\MSBuild\\14.0\\Bin\\MSBuild.exe",
             "QtMsBuild": "${QtMsBuild}",
             "QTVERSION": "${qt5.msvc2015_64.version}",
@@ -840,7 +854,7 @@
             "CMAKEGENERATOR": "NMake Makefiles",
             "vcvarsall": "${vcvarsall-2015}",
             "vcvarsallparam": "amd64_arm",
-            "run-vcvarsall": "${vcvarsall} ${vcvarsallparam}",
+            "run-vcvarsall": "\"${vcvarsall}\" ${vcvarsallparam}",
             "MSBuild": "C:\\Program Files (x86)\\MSBuild\\14.0\\Bin\\amd64\\MSBuild.exe",
             "QtMsBuild": "${QtMsBuild}",
             "QTVERSION": "${qt5.winrt_arm.version}",
@@ -858,7 +872,7 @@
             "CMAKEGENERATOR": "NMake Makefiles",
             "vcvarsall": "${vcvarsall-2015}",
             "vcvarsallparam": "x86_amd64",
-            "run-vcvarsall": "${vcvarsall} ${vcvarsallparam}",
+            "run-vcvarsall": "\"${vcvarsall}\" ${vcvarsallparam}",
             "MSBuild": "C:\\Program Files (x86)\\MSBuild\\14.0\\Bin\\MSBuild.exe",
             "QtMsBuild": "${QtMsBuild}",
             "QTVERSION": "${qt5.winrt_x64.version}",
@@ -934,7 +948,7 @@
         "open.1": [
             "rem shift /2",
             "rem echo %0 %1 %2 %3",
-            "start \"\" \"%1\" %2 %3 %4 %5 %6 %7 %8 %9"
+            "start \"\" %1 %2 %3 %4 %5 %6 %7 %8 %9"
         ],
         "open.dir": [
             "echo [%1]",
@@ -968,6 +982,12 @@
             "set srcdir=%srcdir:/=\\%",
             "echo %srcdir%",
             "start %srcdir%"
+        ],
+        "open.ffmpeg": [
+            "start ${root.sdk}/FFmpeg3"
+        ],
+        "open.opencv": [
+            "start ${root.sdk}/OpenCV"
         ],
         "open.src": [
             "set src=%1",
@@ -1213,14 +1233,15 @@
             "start %sdktool% output \"%projectroot%\" "
         ],
         "build.qmake": [
+            "@echo off",
             "if not exist \"*.pro\" ( echo has any .pro? please add here command to restrict. & exit /b 0 )",
             "set src_path=%CD%",
             "set profilename=%1",
-            "set prod=${root.prod}/%profilename%/%QSYS%",
-            "set sdk=${root.sdk}/%profilename%/%QSYS%",
+            "set prod=V:/Develop/d0-product/%profilename%/%QSYS%",
+            "set sdk=V:/Develop/d1-sdk/%profilename%/%QSYS%",
             "set src=%src_path%/%profilename%.pro",
             "if not exist \"%src%\" ( echo %profilename%.pro is not exist. & exit /b 0)",
-            "set build=${root.build}/%profilename%/%QSYS%/%QTVERSION%/Debug",
+            "set build=V:/Develop/c0-buildstation/%profilename%/%QSYS%/%QTVERSION%/Debug",
             "md %build:/=\\%",
             "cd /d %build%",
             "rem del /f /q demo examples src test",
@@ -1229,16 +1250,50 @@
             "echo build at: %build:\\=/%",
             "echo sdk at  : %sdk:\\=/%",
             "echo prod at : %prod:\\=/%",
-            "echo %QTSPEC% %QTCONFIG%",
+            "echo build inf %QTSPEC% %QTCONFIG%",
+            "call :start_time",
             "qmake %src% %QTSPEC% CONFIG+=debug CONFIG+=qml_debug %QTCONFIG% && %make0% qmake_all",
             "%make0%",
+            "call :stop_time",
+            "call :diff_time",
             "echo build inf %QTSPEC% %QTCONFIG%",
             "echo src file: %src:\\=/%",
             "echo src path: %src_path:\\=/%",
             "echo build at: %build:\\=/%",
             "echo sdk at  : %sdk:\\=/%",
             "echo prod at : %prod:\\=/%",
-            "cd /d %src_path%"
+            "cd /d %src_path%",
+            "goto :eof",
+            "",
+            ":start_time",
+            "set a=%time%",
+            "echo .",
+            "echo 开始时间：%a%",
+            "goto :eof",
+            "",
+            ":stop_time",
+            "set b=%time%",
+            "echo .",
+            "echo 结束时间：%b%",
+            "echo .",
+            "goto :eof",
+            "",
+            ":diff_time",
+            "set /a h1=%a:~0,2%",
+            "set /a m1=1%a:~3,2%-100",
+            "set /a s1=1%a:~6,2%-100",
+            "set /a h2=%b:~0,2%",
+            "set /a m2=1%b:~3,2%-100",
+            "set /a s2=1%b:~6,2%-100",
+            "if %h2% LSS %h1% set /a h2=%h2%+24",
+            "set /a ts1=%h1%*3600+%m1%*60+%s1%",
+            "set /a ts2=%h2%*3600+%m2%*60+%s2%",
+            "set /a ts=%ts2%-%ts1%",
+            "set /a h=%ts%/3600",
+            "set /a m=(%ts%-%h%*3600)/60",
+            "set /a s=%ts%%%60",
+            "echo 耗时%h%小时%m%分%s%秒",
+            "goto :eof"
         ],
         "build.cmake.gui": [
             "if not exist \"CMakeLists.txt\" ( echo has any CMakeLists.txt? please add here command to restrict. & exit /b 0 )",
@@ -1510,7 +1565,7 @@
             "echo sdk at  : %sdk:\\=/%",
             "echo prod at : %prod:\\=/%",
             "echo %QTSPEC% %QTCONFIG%",
-            "devenv.com %src% /Build \"Debug|Win32\"",
+            "rem devenv.com %src% /Build \"Debug|Win32\"",
             "echo build inf %QTSPEC% %QTCONFIG%",
             "echo src file: %src:\\=/%",
             "echo build at: %build:\\=/%",
