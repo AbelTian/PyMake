@@ -131,12 +131,12 @@ Usage:
   pymake7.py  here import cmd [ <script-file> ] [ to <command-name> ] [ -a | --all ] [ -f | --force ] [ --recursive ] [ --encoding=<encoding-name> ] [ --filter=<name-filter> ... ]
   pymake7.py  hh import cmd [ <script-file> ] [ to <command-name> ] [ -a | --all ] [ -f | --force ] [ --recursive ] [ --encoding=<encoding-name> ] [ --filter=<name-filter> ... ]
   pymake7.py  -------------------------------------------------------------
-  pymake7.py  outport cmd [ hh | here ] [ <command-name> ] [ to <script-file> ] [ -a | --all ] [ -f | --force ] [ --recursive ] [ --encoding=<encoding-name> ] [ --suffix=<.suffix-name> ]
-  pymake7.py  here outport cmd [ <command-name> ] [ to <script-file> ] [ -a | --all ] [ -f | --force ] [ --recursive ] [ --encoding=<encoding-name> ] [ --suffix=<.suffix-name> ]
-  pymake7.py  hh outport cmd [ <command-name> ] [ to <script-file> ] [ -a | --all ] [ -f | --force ] [ --recursive ] [ --encoding=<encoding-name> ] [ --suffix=<.suffix-name> ]
-  pymake7.py  use <env-name> outport cmd [ hh | here ] [ <command-name> ] [ to <script-file> ] [ -a | --all ] [ -f | --force ] [ --recursive ] [ --encoding=<encoding-name> ] [ --suffix=<.suffix-name> ]
-  pymake7.py  here use <env-name> outport cmd [ <command-name> ] [ to <script-file> ] [ -a | --all ] [ -f | --force ] [ --recursive ] [ --encoding=<encoding-name> ] [ --suffix=<.suffix-name> ]
-  pymake7.py  hh use <env-name> outport cmd [ <command-name> ] [ to <script-file> ] [ -a | --all ] [ -f | --force ] [ --recursive ] [ --encoding=<encoding-name> ] [ --suffix=<.suffix-name> ]
+  pymake7.py  outport cmd [ hh | here ] [ <command-name> ] [ to <script-file> ] [ -r | --raw ] [ -a | --all ] [ -f | --force ] [ --recursive ] [ --encoding=<encoding-name> ] [ --suffix=<.suffix-name> ]
+  pymake7.py  here outport cmd [ <command-name> ] [ to <script-file> ] [ -r | --raw ] [ -a | --all ] [ -f | --force ] [ --recursive ] [ --encoding=<encoding-name> ] [ --suffix=<.suffix-name> ]
+  pymake7.py  hh outport cmd [ <command-name> ] [ to <script-file> ] [ -r | --raw ] [ -a | --all ] [ -f | --force ] [ --recursive ] [ --encoding=<encoding-name> ] [ --suffix=<.suffix-name> ]
+  pymake7.py  use <env-name> outport cmd [ hh | here ] [ <command-name> ] [ to <script-file> ] [ -r | --raw ] [ -a | --all ] [ -f | --force ] [ --recursive ] [ --encoding=<encoding-name> ] [ --suffix=<.suffix-name> ]
+  pymake7.py  here use <env-name> outport cmd [ <command-name> ] [ to <script-file> ] [ -r | --raw ] [ -a | --all ] [ -f | --force ] [ --recursive ] [ --encoding=<encoding-name> ] [ --suffix=<.suffix-name> ]
+  pymake7.py  hh use <env-name> outport cmd [ <command-name> ] [ to <script-file> ] [ -r | --raw ] [ -a | --all ] [ -f | --force ] [ --recursive ] [ --encoding=<encoding-name> ] [ --suffix=<.suffix-name> ]
   pymake7.py  -------------------------------------------------------------
   pymake7.py  backup [ here | hh ] [ <zip-file-name> ]
   pymake7.py  here backup [ <zip-file-name> ]
@@ -3768,10 +3768,15 @@ def main_function():
                     current_env = rawconfig['environ']['current']
 
                 dict0 = {}
-                if (current_env == rawconfig['environ']['current']):
-                    dict0 = copy.deepcopy(rawconfig['command'])
+                #print(args)
+                #args['-r'] or args['--raw'] all can effect here.
+                if(args['--raw'] is True):
+                    if (current_env == rawconfig['environ']['current']):
+                        dict0 = copy.deepcopy(rawconfig['command'])
+                    else:
+                        dict0 = copy.deepcopy(raw_command(current_env))
                 else:
-                    dict0 = copy.deepcopy(raw_command(current_env))
+                    dict0 = copy.deepcopy(config['command'])
 
                 import itertools
 
@@ -3835,9 +3840,13 @@ def main_function():
                         if (plat == "Windows"):
                             if (cmd_header_custom.startswith('@echo') is False):
                                 cmd_header_custom = cmd_header
+                            else:
+                                cmd_header_custom = ''
                         else:
                             if (cmd_header_custom.startswith('#!') is False):
                                 cmd_header_custom = cmd_header
+                            else:
+                                cmd_header_custom = ''
 
                         if(cmd_suffix_custom != cmd_suffix):
                             cmd_header_custom = ''
@@ -4078,16 +4087,22 @@ def main_function():
                     # add shebang line
                     if (list(dict0[command_name]).__len__() > 0):
                         cmd_header_custom = dict0[command_name][0]
-                    # print(".....")
+                    #print(cmd_header_custom)
                     if (plat == "Windows"):
+                        #print(cmd_header_custom.startswith('@echo'))
                         if (cmd_header_custom.startswith('@echo') is False):
                             cmd_header_custom = cmd_header
+                        else:
+                            cmd_header_custom = ''
                     else:
                         if (cmd_header_custom.startswith('#!') is False):
                             cmd_header_custom = cmd_header
+                        else:
+                            cmd_header_custom = ''
 
                     if (cmd_suffix_custom != cmd_suffix):
                         cmd_header_custom = ''
+                    #print(cmd_header_custom)
 
                     # print(args)
                     if (os.path.exists(local_path) is True):
