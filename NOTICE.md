@@ -5,9 +5,14 @@
 1. If you installed VC6, please check system environment, VC6 will add INCLUDE/LIB/LIBPATH to system environment, it has positive effects to pymake vc command.  
     - pymake vc command will make added env var and path to effect exec env.  
 
-#### ${xxx}/%XXXX%/$XXXX
 
-1. In .json env file, ${} is the substitute character.%XXXX% is win bat env s.c., $XXXX is unix's.  
+#### replace character
+
+```bash   
+# ${xxx}/%XXXX%/$XXXX
+# In .json env file, ${} is the substitute character.%XXXX% is win bat env s.c., $XXXX is unix's.  
+
+```
 
 #### type2/export2 default behavior  
 

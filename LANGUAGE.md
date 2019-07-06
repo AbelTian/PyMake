@@ -44,13 +44,13 @@
             "All commands are here, they will be executed step by step.",
             "This is a command, step 2",
             "${p2}/cmd2 ${VARXXX}",
-            "You can use ${var-name} in path-assemblage and current environ to abb command line content."
+            "You can use ${var-name} in path-assemblage and $var-name/%var-name% in environ to abb command line content."
         ],
         "command-name-2": [
             "All commands are here, they will be executed step by step.",
             "This is a command, step 2",
             "${p2}/cmd2 ${VARXXX}",
-            "You can use ${var-name} in path-assemblage and current environ to abb command line content."
+            "You can use ${var-name} in path-assemblage and $var-name/%var-name% in environ to abb command line content."
         ]
     },
     "Tips": "User can delete these Tips group."
