@@ -113,7 +113,7 @@
         "macOS": {},
         "macJava": {
             "JAVA_HOME": "${dev-root}/b0-toolskits/macAndroidLibraries/java-macosx/Java/JavaVirtualMachines/jdk1.8.0_111.jdk/Contents/Home",
-            "CLASSPATH": ".:${JAVA_HOME}/lib/dt/jar:${JAVA_HOME}/lib/tools.jar"
+            "CLASSPATH": ".:${JAVA_HOME}/lib/dt.jar:${JAVA_HOME}/lib/tools.jar"
         },
         "android-arm": {
             "ANDROID_API_VERSION": "android-23",

@@ -438,7 +438,7 @@
             "QTSPEC": "-spec android-g++",
             "QTCONFIG": "",
             "JAVA_HOME": "${java1.8.home}",
-            "CLASSPATH": ".:${JAVA_HOME}/lib/dt/jar:${JAVA_HOME}/lib/tools.jar",
+            "CLASSPATH": ".:${JAVA_HOME}/lib/dt.jar:${JAVA_HOME}/lib/tools.jar",
             "PYMAKE_MYNAME": "T.D.R",
             "a_special_var_const": "hello world",
             "QTVERSION": "${qt5.android_arm.version}",
@@ -483,7 +483,7 @@
             "QTSPEC": "-spec android-g++",
             "QTCONFIG": "",
             "JAVA_HOME": "${java1.8.home}",
-            "CLASSPATH": ".:${JAVA_HOME}/lib/dt/jar:${JAVA_HOME}/lib/tools.jar",
+            "CLASSPATH": ".:${JAVA_HOME}/lib/dt.jar:${JAVA_HOME}/lib/tools.jar",
             "QTVERSION": "${qt5.android_x86.version}",
             "QKIT": "ANDROIDX86",
             "QSYS": "AndroidX86"
@@ -718,7 +718,7 @@
             "make0": "mingw32-make",
             "CMAKEGENERATOR": "MinGW Makefiles",
             "JAVA_HOME": "${java}",
-            "CLASSPATH": ".:${JAVA_HOME}/lib/dt/jar:${JAVA_HOME}/lib/tools.jar",
+            "CLASSPATH": ".:${JAVA_HOME}/lib/dt.jar:${JAVA_HOME}/lib/tools.jar",
             "QTVERSION": "${qt5.mingw32.version}",
             "QTDIR": "${qt5.mingw32}",
             "QTSPEC": "-spec win32-g++",
@@ -772,7 +772,7 @@
             "QKIT": "WIN32",
             "QSYS": "Windows",
             "JAVA_HOME": "${java}",
-            "CLASSPATH": ".:${JAVA_HOME}/lib/dt/jar:${JAVA_HOME}/lib/tools.jar"
+            "CLASSPATH": ".:${JAVA_HOME}/lib/dt.jar:${JAVA_HOME}/lib/tools.jar"
         },
         "vc6": {
             "path+": [

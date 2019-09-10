@@ -415,7 +415,7 @@
             "QTSPEC": "-spec android-g++",
             "QTCONFIG": "",
             "JAVA_HOME": "${java1.8.home}",
-            "CLASSPATH": ".:${JAVA_HOME}/lib/dt/jar:${JAVA_HOME}/lib/tools.jar",
+            "CLASSPATH": ".:${JAVA_HOME}/lib/dt.jar:${JAVA_HOME}/lib/tools.jar",
             "PYMAKE_MYNAME": "T.D.R",
             "a_special_var_const": "hello world",
             "QTVERSION": "${qt5.android_arm.version}",
@@ -460,7 +460,7 @@
             "QTSPEC": "-spec android-g++",
             "QTCONFIG": "",
             "JAVA_HOME": "${java1.8.home}",
-            "CLASSPATH": ".:${JAVA_HOME}/lib/dt/jar:${JAVA_HOME}/lib/tools.jar",
+            "CLASSPATH": ".:${JAVA_HOME}/lib/dt.jar:${JAVA_HOME}/lib/tools.jar",
             "QTVERSION": "${qt5.android_x86.version}",
             "QKIT": "ANDROIDX86",
             "QSYS": "AndroidX86"

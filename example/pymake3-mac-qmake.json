@@ -25,7 +25,7 @@
             "QKIT": "macOS",
             "dev-root": "/Users/abel/Develop",
             "JAVA_HOME":"${dev-root}/b0-toolskits/AndroidGroupLibraries/java-macosx/Java/JavaVirtualMachines/jdk-9.jdk/Contents/Home",
-            "CLASSPATH":".:${JAVA_HOME}/lib/dt/jar:${JAVA_HOME}/lib/tools.jar",
+            "CLASSPATH":".:${JAVA_HOME}/lib/dt.jar:${JAVA_HOME}/lib/tools.jar",
             "ANDROID_API_VERSION":"android-23",
             "ANDROID_SDK_ROOT":"${dev-root}/b0-toolskits/AndroidGroupLibraries/android-sdk-macosx",
             "ANDROID_NDK_ROOT":"${dev-root}/b0-toolskits/AndroidGroupLibraries/android-ndk-r13b",
