@@ -64,7 +64,7 @@
         "py27venv": "${cc}/Pyvenv/Python27",
         "py36venv": "${cc}/Pyvenv/Python36",
         "py37venv": "${cc}/Pyvenv/Python37",
-        "py": "${py27venv}",
+        "py": "${py37venv}",
         "py.bin": "${py};${py}/Scripts",
         "pymake": "${root.tool}/a0-compiler/PyMake",
         "pymake.env": "${pymake}/UserSource",
@@ -971,6 +971,9 @@
         "test.6": [
             "echo %Path%"
         ],
+        "test.7": [
+            "exit 1"
+        ],
         "test.c": [
             "#include <stdio.h>",
             "void main()",
@@ -1094,18 +1097,6 @@
             "set sdk=%PYMAKEPROGRAMROOT%",
             "start %sdk%"
         ],
-        "open.prod": [
-            "set prod=%1",
-            "cd /d ${root.prod}/%prod%/Windows",
-            "start ${root.prod}/%prod%/Windows/%prod%.exe"
-        ],
-        "open.prodd": [
-            "set prod=%1",
-            "echo %prod%",
-            "echo ${root.prod}/%prod%/Windows/%prod%d.exe",
-            "cd /d ${root.prod}/%prod%/Windows",
-            "start ${root.prod}/%prod%/Windows/%prod%d.exe"
-        ],
         "open.webrc": [
             "set src=%1",
             "set srcdir=${root.webrc}",
@@ -1113,12 +1104,6 @@
             "set srcdir=%srcdir:/=\\%",
             "echo %srcdir%",
             "start %srcdir%"
-        ],
-        "open.ffmpeg": [
-            "start ${root.sdk}/FFmpeg3"
-        ],
-        "open.opencv": [
-            "start ${root.sdk}/OpenCV"
         ],
         "open.src": [
             "set src=%1",
@@ -1158,7 +1143,13 @@
             "echo prod at : %prod:\\=/%",
             "cd /d %src_path%"
         ],
-        "open.run.d": [
+        "open.ffmpeg": [
+            "start ${root.sdk}/FFmpeg3"
+        ],
+        "open.opencv": [
+            "start ${root.sdk}/OpenCV"
+        ],
+        "run.d": [
             "rem if not exist \"*.pro\" ( echo has any .pro? please add here command to restrict. & exit /b 0 )",
             "set src_path=%CD%",
             "set profilename=%1",
@@ -1195,7 +1186,7 @@
             "echo prod at : %prod:\\=/%",
             "cd /d %src_path%"
         ],
-        "open.run": [
+        "run": [
             "rem if not exist \"*.pro\" ( echo has any .pro? please add here command to restrict. & exit /b 0 )",
             "set src_path=%CD%",
             "set profilename=%1",
@@ -1232,7 +1223,7 @@
             "echo prod at : %prod:\\=/%",
             "cd /d %src_path%"
         ],
-        "open.run.here": [
+        "run.here": [
             "rem if not exist \"*.pro\" ( echo has any .pro? please add here command to restrict. & exit /b 0 )",
             "set src_path=%CD%",
             "set profilename=%1",
@@ -1268,6 +1259,18 @@
             "echo sdk at  : %sdk:\\=/%",
             "echo prod at : %prod:\\=/%",
             "cd /d %src_path%"
+        ],
+        "run.prod": [
+            "set prod=%1",
+            "cd /d ${root.prod}/%prod%/Windows",
+            "start ${root.prod}/%prod%/Windows/%prod%.exe"
+        ],
+        "run.prod.d": [
+            "set prod=%1",
+            "echo %prod%",
+            "echo ${root.prod}/%prod%/Windows/%prod%d.exe",
+            "cd /d ${root.prod}/%prod%/Windows",
+            "start ${root.prod}/%prod%/Windows/%prod%d.exe"
         ],
         "add.project": [
             "set src_path=%CD%",
@@ -1395,6 +1398,27 @@
             "rem call %apptool% clean ",
             "start %apptool% output \"%projectroot%\" "
         ],
+        "build.info": [
+            "@echo off",
+            "rem if not exist \"*.pro\" ( echo has any .pro? please add here command to restrict. & exit /b 0 )",
+            "set src_path=%CD%",
+            "set profilename=%1",
+            "if \"\"%profilename%\"\" == \"\"\"\" ( echo please input a project name. & exit /b 0 )",
+            "set prod=${root.prod}/%profilename%/%QSYS%",
+            "set sdk=${root.sdk}/%profilename%/%QSYS%",
+            "set src=%src_path%/%profilename%.pro",
+            "rem if not exist \"%src%\" ( echo %profilename%.pro is not exist. & exit /b 0)",
+            "set build=${root.build}/%profilename%/%QSYS%/%QTVERSION%/Debug",
+            "echo src file: %src:\\=/%",
+            "echo src path: %src_path:\\=/%",
+            "echo build at: %build:\\=/%",
+            "echo sdk at  : %sdk:\\=/%",
+            "echo prod at : %prod:\\=/%",
+            "echo build inf %QTSPEC% %QTCONFIG%",
+            "echo target  : %build%/debug/bin/%profilename%.exe [MAYBE]",
+            "set a=%time%",
+            "echo 现在时间: %a%"
+        ],
         "build.qmake": [
             "@echo off",
             "if not exist \"*.pro\" ( echo has any .pro? please add here command to restrict. & exit /b 0 )",
@@ -1425,6 +1449,7 @@
             "echo build at: %build:\\=/%",
             "echo sdk at  : %sdk:\\=/%",
             "echo prod at : %prod:\\=/%",
+            "rem echo target  : %build%/debug/bin/%profilename%.exe",
             "cd /d %src_path%",
             "goto :eof",
             "",
@@ -1456,6 +1481,40 @@
             "set /a m=(%ts%-%h%*3600)/60",
             "set /a s=%ts%%%60",
             "echo 耗时%h%小时%m%分%s%秒",
+            "goto :eof"
+        ],
+        "build.qmake.all": [
+            "@echo off",
+            "rem cd /d ${root.src}",
+            "echo You must use pymake system ccvp command to execute this command.",
+            "",
+            "setlocal enabledelayedexpansion",
+            "set MODULEARRAY=%1 %2 %3 %4 %5 %6 %7 %8 %9",
+            "set ENVARRAY=mingw32 mingw64 android.mobile android.x86",
+            "for %%i in  (%MODULEARRAY%) do ( ",
+            "    rem echo %%i ",
+            "    for %%j in (%ENVARRAY%) do (",
+            "        set MODULENAME=%%i",
+            "        set ENVNAME=%%j",
+            "        set WORKROOT=",
+            "        rem echo !MODULENAME! !ENVNAME!",
+            "        call :build !ENVNAME! !MODULENAME! !WORKROOT!",
+            "        call ping 127.0.0.1 -n 2 1>nul",
+            "    )",
+            ")",
+            "exit /b 0",
+            "",
+            ":build ",
+            "if \"%ENVNAME%\" == \"\" ( SET ENVNAME=current )",
+            "if \"%MODULENAME%\" == \"\" ( SET MODULENAME=QQt )",
+            "if \"%MODULENAME%\" == \"QQt\" ( SET WORKROOT=LibQQt )",
+            "if \"%WORKROOT%\" == \"\" ( SET WORKROOT=%MODULENAME% )",
+            "if not \"%1\" == \"\" ( SET ENVNAME=%1 )",
+            "if not \"\"%2\"\" == \"\"\"\" ( SET MODULENAME=%2 )",
+            "if not \"%3\" == \"\" ( SET WORKROOT=%3 )",
+            "rem echo %ENVNAME% %MODULENAME% %WORKROOT%",
+            "echo start cmd /k \"pyenv %ENVNAME% && build.qmake %MODULENAME%\"",
+            "start cmd /k \"title %MODULENAME% - %ENVNAME% && pyenv %ENVNAME% && build.qmake %MODULENAME%\"",
             "goto :eof"
         ],
         "build.qmake.release": [
@@ -1521,7 +1580,7 @@
             "echo 耗时%h%小时%m%分%s%秒",
             "goto :eof"
         ],
-        "build.qmake.all": [
+        "build.qmake.release.all": [
             "@echo off",
             "rem cd /d ${root.src}",
             "echo You must use pymake system ccvp command to execute this command.",
@@ -1551,8 +1610,8 @@
             "if not \"\"%2\"\" == \"\"\"\" ( SET MODULENAME=%2 )",
             "if not \"%3\" == \"\" ( SET WORKROOT=%3 )",
             "rem echo %ENVNAME% %MODULENAME% %WORKROOT%",
-            "echo start cmd /k \"pyenv %ENVNAME% && build.qmake %MODULENAME%\"",
-            "start cmd /k \"pyenv %ENVNAME% && build.qmake %MODULENAME%\"",
+            "echo start cmd /k \"pyenv %ENVNAME% && build.qmake.release %MODULENAME%\"",
+            "start cmd /k \"title %MODULENAME% - %ENVNAME% && pyenv %ENVNAME% && build.qmake.release %MODULENAME%\"",
             "goto :eof"
         ],
         "build.cmake.gui": [
@@ -1758,7 +1817,7 @@
             "if \"%profilename%\" == \"\"\"\" ( echo you will build at %profilename%, but it is empty. & exit /b 0 )",
             "set prod=${root.prod}/%profilename%/%QSYS%",
             "set sdk=${root.sdk}/%profilename%/%QSYS%",
-            "set src=%src_path%/configure",
+            "set src=%src_path%\\configure",
             "if not exist \"%src%\" ( echo %src% is not exist. & exit /b 0)",
             "set build=${root.build}/%profilename%/%QSYS%/%QTVERSION%/Debug",
             "md %build:/=\\%",
@@ -1770,7 +1829,7 @@
             "echo sdk at  : %sdk:\\=/%",
             "echo prod at : %prod:\\=/%",
             "echo %QTSPEC% %QTCONFIG%",
-            "%src% %*",
+            "msys-sh %src:\\=/% %*",
             "echo build inf %QTSPEC% %QTCONFIG%",
             "echo src file: %src:\\=/%",
             "echo src path: %src_path:\\=/%",
@@ -2052,7 +2111,7 @@
             "echo 耗时%h%小时%m%分%s%秒",
             "goto :eof"
         ],
-        "configure.qt5.android": [
+        "qt5.configure.android": [
             "set src_path=${root.webrc}/qt-everywhere-opensource-src-5.9.2",
             "set build=${root.build}/Qt5/%QTVERSION%/%QSYS%/Debug",
             "set sdk_path=${root.tool}/winLibraries/Qt/%QTVERSION%/android_armv7_2",
@@ -2060,7 +2119,7 @@
             "cd /d %build%",
             "%src_path%/configure -prefix %sdk_path% -hostprefix %sdk_path% -xplatform android-g++ -release -nomake tests -nomake examples -android-ndk $ANDROID_NDK_ROOT -android-sdk $ANDROID_SDK_ROOT -android-ndk-host $ANDROID_NDK_HOST -android-toolchain-version $ANDROID_NDK_TOOLCHAIN_VERSION -skip qtwebkit-examples -no-warnings-are-errors"
         ],
-        "configure.qt5.armhf32": [
+        "qt5.configure.armhf32": [
             "set src_path=${root.webrc}/qt-everywhere-opensource-src-5.9.2",
             "set build=${root.build}/Qt5/%QTVERSION%/%QSYS%/Debug",
             "set sdk_path=${root.tool}/winLibraries/Qt/%QTVERSION%/armhf32_2",
@@ -2068,7 +2127,7 @@
             "cd /d %build%",
             "%src_path%/configure -opensource -confirm-license -shared --sysroot=${qt5.5.armhf32.sysroot} --prefix=%sdk_path% -xplatform linux-arm-gnueabihf-g++ -nomake tests -nomake examples -no-warnings-are-errors"
         ],
-        "configure.qt5.mingw32.static": [
+        "qt5.configure.mingw32.static": [
             "set src_path=${root.webrc}/qt-everywhere-opensource-src-5.9.2",
             "set build=${root.build}/Qt5_static/%QTVERSION%/%QSYS%/Debug",
             "set sdk_path=${root.tool}/winLibraries/Qt/%QTVERSION%/mingw53_32_static",
@@ -2079,7 +2138,7 @@
             "echo %build%",
             "echo %sdk_path%"
         ],
-        "configure.qt5.mingw32.build": [
+        "qt5.configure.mingw32.build": [
             "set src_path=${root.webrc}/qt-everywhere-opensource-src-5.9.2",
             "set build=${root.build}/Qt5_static/%QTVERSION%/%QSYS%/Debug",
             "set sdk_path=${root.tool}/winLibraries/Qt/%QTVERSION%/mingw53_32_static",
@@ -2167,7 +2226,7 @@
             "if not \"%3\" == \"\" ( SET WORKROOT=%3 )",
             "rem echo %ENVNAME% %MODULENAME% %WORKROOT%",
             "echo start cmd /k \"pyenv %ENVNAME% && cd /d %CD%\\%WORKROOT% && build.qmake %MODULENAME%\"",
-            "start cmd /k \"pyenv %ENVNAME% && cd /d %CD%\\%WORKROOT% && build.qmake %MODULENAME%\"",
+            "start cmd /k \"title %MODULENAME% - %ENVNAME% && pyenv %ENVNAME% && cd /d %CD%\\%WORKROOT% && build.qmake %MODULENAME%\"",
             "goto :eof"
         ],
         "qqt.build.all.ps1": [
@@ -2193,9 +2252,29 @@
             "    $environLists | foreach {",
             "        $environName = $_",
             "        Write-Output \"cmd /k pyenv open $environName && cd $projectPath && build.qmake $projectFile\"",
-            "        Start-Process cmd -ArgumentList \"cmd /k pyenv open $environName && cd $projectPath && build.qmake $projectFile\"",
+            "        Start-Process cmd -ArgumentList \"cmd /k title $projectFile - $environName && pyenv open $environName && cd $projectPath && build.qmake $projectFile\"",
             "    }",
             "}"
+        ],
+        "qqt.update": [
+            "set src_path=${root.src}/LibQQt",
+            "cd /d %src_path%",
+            "git pull"
+        ],
+        "qqt.update.multi-link": [
+            "set src_path=${root.src}/LibQQt",
+            "cd /d %src_path%",
+            "git submodule foreach git pull"
+        ],
+        "qqt.commit": [
+            "set src_path=${root.src}/LibQQt",
+            "cd /d %src_path%",
+            "git ci -m \"%*\""
+        ],
+        "qqt.commit.multi-link": [
+            "set src_path=${root.src}/LibQQt",
+            "cd /d %src_path%",
+            "git submodule foreach git pull & git ci -m \"use newer multi-link\""
         ],
         "vcvarsall-1998": [
             "@echo off",
