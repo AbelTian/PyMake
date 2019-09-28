@@ -9,7 +9,7 @@
         "root.test": "${root}/e3-test",
         "root.webrc": "${root}/e2-webrc",
         "cc": "${root.tool}/a0-compiler",
-	    "pymake": "${cc}/PyMake",
+        "pymake": "${cc}/PyMake",
         "wincc": "${root.tool}/linuxCompilers",
         "cmake": "${cc}/CMake.app/Contents",
         "cmake.bin": "${cmake}/MacOS",
@@ -125,11 +125,24 @@
             "QTCONFIG": "",
             "JAVA_HOME": "${java1.8.home}",
             "CLASSPATH": ".:${JAVA_HOME}/lib/dt.jar:${JAVA_HOME}/lib/tools.jar",
-            "QTVERSION": "${qt5.android_x86.version}",
+            "QTVERSION": "${qt5.version}",
             "QKIT": "ANDROIDX86",
             "QSYS": "AndroidX86"
         },
-        "gcc.mips32": {
+        "gcc": {
+            "path+": [
+                "${qt5.gcc_64.bin}"
+            ],
+            "make0": "make",
+            "CMAKEGENERATOR": "Unix Makefiles",
+            "QTVERSION": "${qt5.version}",
+            "QTDIR": "${qt5.gcc_64}",
+            "QTSPEC": "-spec linux-g++",
+            "QTCONFIG": "",
+            "QKIT": "LINUX64",
+            "QSYS": "Linux64"
+        },
+        "mips32": {
             "path+": [
                 "${qt4.mips32.bin}"
             ],
@@ -142,14 +155,14 @@
             "QKIT": "MIPS32",
             "QSYS": "Mips32"
         },
-        "gcc.armhf32": {
+        "armhf32": {
             "path+": [
                 "${armhf4.9}",
                 "${qt5.armhf32.bin}"
             ],
             "make0": "make",
             "CMAKEGENERATOR": "Unix Makefiles",
-            "QTVERSION": "${qt5.version}",
+            "QTVERSION": "5.5.1",
             "QTDIR": "${qt5.armhf32}",
             "QTSPEC": "-spec linux-arm-gnueabihf-g++",
             "QTCONFIG": "",
@@ -166,19 +179,6 @@
             "QTDIR": "${qt4.gcc_64}",
             "QTSPEC": "-spec linux-g++",
             "QTCONFIG": "CONFIG+=x86_64",
-            "QKIT": "LINUX64",
-            "QSYS": "Linux64"
-        },
-        "gcc": {
-            "path+": [
-                "${qt5.gcc_64.bin}"
-            ],
-            "make0": "make",
-            "CMAKEGENERATOR": "Unix Makefiles",
-            "QTVERSION": "${qt5.version}",
-            "QTDIR": "${qt5.gcc_64}",
-            "QTSPEC": "-spec linux-g++",
-            "QTCONFIG": "",
             "QKIT": "LINUX64",
             "QSYS": "Linux64"
         },
@@ -211,6 +211,20 @@
         ],
         "qtdir": [
             "echo $QTDIR"
+        ],
+        "current-dir": [
+            "echo $(pwd)"
+        ],
+        "android.sdk": [
+            "${root.tool}/macAndroidLibraries/android-sdk-macosx/tools/android"
+        ],
+        "open-prod": [
+            "open ${root.prod}"
+        ],
+        "sdklist": [
+            "prod=SdkListTool",
+            "cd ${root.prod}/$prod/Linux64",
+            "${root.prod}/$prod/Linux64/$prod"
         ],
         "prod": [
             "prod=ProductExecTool",
@@ -332,8 +346,8 @@
             "prod=${root.prod}/$profilename/$QSYS",
             "sdk=${root.sdk}/$profilename/$QSYS",
             "echo You must use pymake system ccvp here command to execute this command!",
-            "#envlist=(\"gcc\" \"gcc.armhf32\" \"android.mobile\" \"android.x86\")",
-            "envlist=(\"gcc\" \"gcc.armhf32\")",
+            "#envlist=(\"gcc\" \"armhf32\" \"android.mobile\" \"android.x86\")",
+            "envlist=(\"gcc\" \"armhf32\")",
             "length=${#envlist[@]}",
             "cmd0=${envlist[0]}",
             "#for envname in $envlist 这条命令没有发生循环",
@@ -683,19 +697,153 @@
             "break",
             "done"
         ],
-        "current-dir": [
-            "echo $(pwd)"
+        "run": [
+            "while [ 1 ]",
+            "do",
+            "src_path=$(pwd)",
+            "profilename=$1",
+            "if [ \"$profilename\" == \"\" ]; then",
+            "   echo please input a project name",
+            "   break",
+            "fi",
+            "src=$src_path/$profilename.pro",
+            "prod=${root.prod}/$profilename/$QSYS",
+            "sdk=${root.sdk}/$profilename/$QSYS",
+            "build=${root.build}/$profilename/$QSYS/$QTVERSION/Debug",
+            "echo src file: $src",
+            "echo src path: $src_path",
+            "echo sdk   at: $sdk",
+            "echo prod  at: $prod",
+            "echo build at: $build",
+            "echo build inf $QTSPEC $QTCONFIG",
+            "endtime=`date +'%Y-%m-%d %H:%M:%S'`",
+            "echo 现在时间：$endtime",
+            "mkdir -p $build/Debug/bin",
+            "relapath=$2",
+            "exeroot=$build/Debug/bin/$relapath",
+            "exe=$exeroot/$profilename",
+            "echo execute : $exe",
+            "if [ -f \"$exe\" ]; then",
+            "   echo $exe existed.",
+            "else",
+            "   echo $exe is not existed.",
+            "   break",
+            "fi",
+            "cd $exeroot",
+            "$exe &",
+            "break",
+            "done"
         ],
-        "android.sdk": [
-            "${root.tool}/macAndroidLibraries/android-sdk-macosx/tools/android"
+        "run.d": [
+            "while [ 1 ]",
+            "do",
+            "src_path=$(pwd)",
+            "profilename=$1",
+            "if [ \"$profilename\" == \"\" ]; then",
+            "   echo please input a project name",
+            "   break",
+            "fi",
+            "src=$src_path/$profilename.pro",
+            "prod=${root.prod}/$profilename/$QSYS",
+            "sdk=${root.sdk}/$profilename/$QSYS",
+            "build=${root.build}/$profilename/$QSYS/$QTVERSION/Debug",
+            "echo src file: $src",
+            "echo src path: $src_path",
+            "echo sdk   at: $sdk",
+            "echo prod  at: $prod",
+            "echo build at: $build",
+            "echo build inf $QTSPEC $QTCONFIG",
+            "endtime=`date +'%Y-%m-%d %H:%M:%S'`",
+            "echo 现在时间：$endtime",
+            "mkdir -p $build/Debug/bin",
+            "relapath=$2",
+            "exeroot=$build/Debug/bin/$relapath",
+            "exe=$exeroot/${profilename}",
+            "echo execute : $exe",
+            "if [ -f \"$exe\" ]; then",
+            "   echo $exe existed.",
+            "else",
+            "   echo $exe is not existed.",
+            "   break",
+            "fi",
+            "cd $exeroot",
+            "$exe &",
+            "break",
+            "done"
         ],
-        "open-prod": [
-            "open ${root.prod}"
+        "run.prod": [
+            "while [ 1 ]",
+            "do",
+            "src_path=$(pwd)",
+            "profilename=$1",
+            "if [ \"$profilename\" == \"\" ]; then",
+            "   echo please input a project name",
+            "   break",
+            "fi",
+            "src=$src_path/$profilename.pro",
+            "prod=${root.prod}/$profilename/$QSYS",
+            "sdk=${root.sdk}/$profilename/$QSYS",
+            "build=${root.build}/$profilename/$QSYS/$QTVERSION/Debug",
+            "echo src file: $src",
+            "echo src path: $src_path",
+            "echo sdk   at: $sdk",
+            "echo prod  at: $prod",
+            "echo build at: $build",
+            "echo build inf $QTSPEC $QTCONFIG",
+            "endtime=`date +'%Y-%m-%d %H:%M:%S'`",
+            "echo 现在时间：$endtime",
+            "#mkdir -p $build/Debug/bin",
+            "relapath=$2",
+            "exeroot=$prod/$relapath",
+            "exe=$exeroot/$profilename",
+            "echo execute : $exe",
+            "if [ -f \"$exe\" ]; then",
+            "   echo $exe existed.",
+            "else",
+            "   echo $exe is not existed.",
+            "   break",
+            "fi",
+            "cd $exeroot",
+            "$exe &",
+            "break",
+            "done"
         ],
-        "sdklist": [
-            "prod=SdkListTool",
-            "cd ${root.prod}/$prod/Linux64",
-            "${root.prod}/$prod/Linux64/$prod"
+        "run.prod.d": [
+            "while [ 1 ]",
+            "do",
+            "src_path=$(pwd)",
+            "profilename=$1",
+            "if [ \"$profilename\" == \"\" ]; then",
+            "   echo please input a project name",
+            "   break",
+            "fi",
+            "src=$src_path/$profilename.pro",
+            "prod=${root.prod}/$profilename/$QSYS",
+            "sdk=${root.sdk}/$profilename/$QSYS",
+            "build=${root.build}/$profilename/$QSYS/$QTVERSION/Debug",
+            "echo src file: $src",
+            "echo src path: $src_path",
+            "echo sdk   at: $sdk",
+            "echo prod  at: $prod",
+            "echo build at: $build",
+            "echo build inf $QTSPEC $QTCONFIG",
+            "endtime=`date +'%Y-%m-%d %H:%M:%S'`",
+            "echo 现在时间：$endtime",
+            "#mkdir -p $build/Debug/bin",
+            "relapath=$2",
+            "exeroot=$prod/$relapath",
+            "exe=$exeroot/${profilename}",
+            "echo execute : $exe",
+            "if [ -f \"$exe\" ]; then",
+            "   echo $exe existed.",
+            "else",
+            "   echo $exe is not existed.",
+            "   break",
+            "fi",
+            "cd $exeroot",
+            "$exe &",
+            "break",
+            "done"
         ],
         "qt4.build": [
             "src=${root.tool}/z0-Source/qt",
