@@ -226,6 +226,19 @@
             "QKIT": "macOS",
             "QSYS": "macOS"
         },
+        "qt5.10": {
+            "path+": [
+                "${qt}/5.10.0/clang_64/bin"
+            ],
+            "make0": "make",
+            "CMAKEGENERATOR": "Unix Makefiles",
+            "QTVERSION": "5.10.0",
+            "QTDIR": "${qt}/5.10.0/clang_64",
+            "QTSPEC": "-spec macx-clang",
+            "QTCONFIG": "CONFIG+=x86_64",
+            "QKIT": "macOS",
+            "QSYS": "macOS"
+        },
         "current": "macos"
     },
     "command": {
@@ -281,6 +294,102 @@
         ],
         "qtdir": [
             "echo $QTDIR"
+        ],
+        "add.project": [
+            "while [ 1 ]",
+            "do",
+            "src_path=$(pwd)",
+            "if [ \"$src_path\" == \"$PYMAKEDEFAULTWORKROOT\" ]; then",
+            "   echo please donnot create project in default exec root, please add here command to restrict.",
+            "   break",
+            "fi",
+            "profilename=$1",
+            "projectroot=$src_path",
+            "if [ \"$profilename\" != \"\" ]; then",
+            "   projectroot=$projectroot/$profilename",
+            "fi",
+            "echo $projectroot",
+            "mkdir -p $projectroot",
+            "cd $projectroot",
+            "apptoolroot=${root.prod}/QQtApplicationCreator/macOS",
+            "apptool=$apptoolroot/QQtApplicationCreator_debug.app/Contents/MacOS/QQtApplicationCreator_debug",
+            "echo $apptool",
+            "#$apptool clean",
+            "$apptool output \"$projectroot\"",
+            "break",
+            "done"
+        ],
+        "add.project.2": [
+            "while [ 1 ]",
+            "do",
+            "src_path=$(pwd)",
+            "if [ \"$src_path\" == \"$PYMAKEDEFAULTWORKROOT\" ]; then",
+            "   echo please donnot create project in default exec root, please add here command to restrict.",
+            "   break",
+            "fi",
+            "profilename=$1",
+            "projectroot=$src_path",
+            "if [ \"$profilename\" != \"\" ]; then",
+            "   projectroot=$projectroot/$profilename",
+            "fi",
+            "echo $projectroot",
+            "mkdir -p $projectroot",
+            "cd $projectroot",
+            "apptoolroot=${root.prod}/QQtApplicationCreator-Multipel/macOS",
+            "apptool=$apptoolroot/QQtApplicationCreator-Multipel_debug.app/Contents/MacOS/QQtApplicationCreator-Multipel_debug",
+            "echo $apptool",
+            "#$apptool clean",
+            "$apptool output \"$projectroot\"",
+            "break",
+            "done"
+        ],
+        "add.project.lib": [
+            "while [ 1 ]",
+            "do",
+            "src_path=$(pwd)",
+            "if [ \"$src_path\" == \"$PYMAKEDEFAULTWORKROOT\" ]; then",
+            "   echo please donnot create project in default exec root, please add here command to restrict.",
+            "   break",
+            "fi",
+            "profilename=$1",
+            "projectroot=$src_path",
+            "if [ \"$profilename\" != \"\" ]; then",
+            "   projectroot=$projectroot/$profilename",
+            "fi",
+            "echo $projectroot",
+            "mkdir -p $projectroot",
+            "cd $projectroot",
+            "apptoolroot=${root.prod}/QQtLibraryCreator/macOS",
+            "apptool=$apptoolroot/QQtLibraryCreator_debug.app/Contents/MacOS/QQtLibraryCreator_debug",
+            "echo $apptool",
+            "#$apptool clean",
+            "$apptool output \"$projectroot\"",
+            "break",
+            "done"
+        ],
+        "add.project.lib.2": [
+            "while [ 1 ]",
+            "do",
+            "src_path=$(pwd)",
+            "if [ \"$src_path\" == \"$PYMAKEDEFAULTWORKROOT\" ]; then",
+            "   echo please donnot create project in default exec root, please add here command to restrict.",
+            "   break",
+            "fi",
+            "profilename=$1",
+            "projectroot=$src_path",
+            "if [ \"$profilename\" != \"\" ]; then",
+            "   projectroot=$projectroot/$profilename",
+            "fi",
+            "echo $projectroot",
+            "mkdir -p $projectroot",
+            "cd $projectroot",
+            "apptoolroot=${root.prod}/QQtLibraryCreator-Multipel/macOS",
+            "apptool=$apptoolroot/QQtLibraryCreator-Multipel_debug.app/Contents/MacOS/QQtLibraryCreator-Multipel_debug",
+            "echo $apptool",
+            "#$apptool clean",
+            "$apptool output \"$projectroot\"",
+            "break",
+            "done"
         ],
         "build.info": [
             "while [ 1 ]",
@@ -1037,6 +1146,11 @@
             "cd $src",
             "perl ${pymake}/demo/cloc-1.74.pl  .",
             "date"
+        ],
+        "qqt.update": [
+            "srcpath=${root.src}/LibQQt",
+            "cd $srcpath",
+            "git pull"
         ]
     }
 }
