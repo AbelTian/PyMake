@@ -229,6 +229,19 @@ Usage:
   pymake7.py  language ccvp [ here | hh ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ] [ --suffix=<.suffix-name> ] [ --encoding=<encoding-name> ]
   pymake7.py  language use <env-name> ccvp [ here | hh ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ] [ --suffix=<.suffix-name> ] [ --encoding=<encoding-name> ]
   pymake7.py  -------------------------------------------------------------
+  pymake7.py  sys
+  pymake7.py  sys [ stat | status ]
+  pymake7.py  sys [ info | information ]
+  pymake7.py  sys path [ --add | --del ] [ <value> ]
+  pymake7.py  sys var [ --add | --del ] [ <key> ] [ <value> ]
+  pymake7.py  sys env [ -r | --raw ]
+  pymake7.py  sys exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  sys use <env-name> exec-with-params [ here | hh ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  sys execvp [ here | hh ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  sys use <env-name> execvp [ here | hh ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  sys ccvp [ here | hh ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  sys use <env-name> ccvp [ here | hh ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  -------------------------------------------------------------
   pymake7.py  export2 [ powershell ] [ here | hh ] [ <env-name> ] [ to <file-name> ] [ -c | --custom ] [ -l | --local ] [ -s | --system ]
   pymake7.py  type2 [ here | hh ] [ <cmd-name> ] [ to <file-name> ] [ --suffix=<.suffix-name> ] [ --encoding=<encoding-name> ] [ --samename ] [ -a | --all ]
   pymake7.py  use <env-name> type2 [ here | hh ] [ <cmd-name> ] [ to <file-name> ] [ --suffix=<.suffix-name> ] [ --encoding=<encoding-name> ] [ --samename ] [ -a | --all ]
@@ -3620,9 +3633,10 @@ def main_function():
         #return file name
         return current_var, cmd_effect, cmd_unset
 
+    #print(args)
     # system ccvp
     while (True):
-        if(args['system'] is True):
+        if(args['sys'] or args['system'] is True):
             # print('system ccvp command.')
             if(args['ccvp'] or args['execvp'] or args['exec-with-params'] is True):
                 current_env = ""
@@ -10311,7 +10325,7 @@ def main_function():
 
     #system command
     while (True):
-        if(args['system'] is True):
+        if(args['sys'] or args['system'] is True):
             ''
             if(args['stat'] or args['status'] is True):
                 plat = getplatform()
