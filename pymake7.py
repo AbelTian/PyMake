@@ -331,6 +331,7 @@ Command:
   outport           outport user path or env or cmd to script file. example, outport cmd [ <command-name> ] [ to <script-file>: ... ]
   language          find script file automatically and execute it. example, language ccvp java xxx.java ...
   local             using pymake local expanding environ, read only.
+  system            using system environ, read only.
   export2           output private environ and custom environ to a bat file or sh file, a powerfull function from export, support powershell also. [default:current, env]
   type2             output command to a bat file or sh file, user can appoint file suffix and encoding.
   open              open path by stored name in path-assemblage. support .../${path-name}/..., support search in env, support two or more path.
