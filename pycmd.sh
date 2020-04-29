@@ -5,9 +5,7 @@ while [ 1 ]
 do
 
 
-
 export PYEXECNAME=$1
-
 
 #if has source[.] call , failed. source default work path is user home.
 #这些都只是获取到了工作路径
