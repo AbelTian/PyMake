@@ -1,44 +1,47 @@
 {
-    "Path.Tips": {
-        "OLDNAME": "variable-assemblage",
-        "MyName": "T.D.R.",
-        "TIPS": "If you lost variable content or command content, please record to there, I wont delete them.",
-        "Start": "路径集是PyMake工具一切的开始。用户只需要把电脑上的路径在路径集里部署一次即可。最好部署全面。使用很方便，可以在environ里使用，可以在command里使用，可以在custom.path+.ini和custom.var+.ini里使用。",
-        "Pyvenv.Tips": "创建Python虚拟环境的时候，不要继承site-packages。",
-        "Python命令": "PyMake提供python命令，内部使用'python'进行调用。python有能力同时具有多个执行环境，为了方便切换，用户不要把python加入系统路径。加到这个文件里最好。"
-    },
-    "Environ.Tips": {
-        "Tips.Separate": "上边配置的每个环境都是互相冲突的。",
-        "system": "PyMake给用户提供system命令，查看系统环境，但是，不允许修改。如果用户希望修改，建议使用rapidee修改。",
-        "local": "local环境，是PyMake给用户提供的内部的公共环境，只读。",
-        "custom": "custom环境，是PyMake允许用户设置的公共环境。custom.ini决定自定义环境的开关。custom.path+.ini配置环境路径，custom.var+.ini配置环境变量。",
-        "mingw32": "mingw32、msvc，每个环境默认都增加了Qt5支持。"
-    },
-    "Command.Tips": {
-        "OLDNAME": "command-assemblage",
-        "hello.work": "hello world.",
-        "go.build": "go build -ldflags=\"-H windowsgui\"",
-        "build.qmake": "也叫做build.pro，在Qt App Source路径编译源代码",
-        "build.cmake.gui": "在app source路径打开cmake-gui。这个cmake到底怎么从命令行配置？再等等谁出一个cmake命令行的丰富用法。",
-        "build.cmake.sdk": "开启cmake的generate。build.cmake.app",
-        "build.make": "开启编译",
-        "build.make.install": "开启安装",
-        "open.run": "编译完，运行一下。",
-        "watcom": "watcom提供CL 13，和MSVC CL 13冲突，也不要给MinGW环境用，冲突。",
-        "configure.qt5.mingw32.static": "need python2 for webengine.",
-        "7z.zip": "7z a -tzip -r AAA.zip %*",
-        "7z.unzip": "7z x -tzip -y AAA.zip -o %1",
-        "c": "pymake language exec-with-params here gcc --params test.c --suffix .c --encoding utf8 --params \"-otest1.exe\" && test1.exe",
-        "分水岭": "下边几个语言都是基于c语言的。",
-        "c++": "pymake language exec-with-params here g++ --params test.c++ --suffix .cpp --encoding utf8 --params \"-otest2.exe\" && pyccvp test2.exe",
-        "java": "pymake type2 here test.java to HelloWorld --suffix .java --encoding utf8 && pymake language exec-with-params here javac --params HelloWorld.java && pyccvp java HelloWorld",
-        "go": "pymake type2 here test.go to test --suffix .go --encoding utf8 && pymake language exec-with-params here \"go build\"  --params -o --params test3.exe --params \"test.go\" --suffix .go --encoding utf8 && test3.exe",
-        "python": "pypython test.py",
-        "差异1": "python具备批处理的写作能力，和批处理的执行能力，写和执行都是源代码，可是功能却能覆盖以上所有语言。",
-        "差异2": "c编译时需要散库，运行时比较简单；C++编译时需要散库，运行时需要环境；java编译时需要整库，运行时需要java环境和库；go编译时需要整库，运行时不依赖go。Python编译时是源代码，运行时还是源代码，最方便。",
-        "html": "pymake type2 here test.html to test5 --suffix .html --encoding utf8 && start %CD%/test5.html",
-        "php": "pymake type2 here test.php to test5 --suffix .php --encoding utf8 && pyccvp start php -S localhost:778 -t %CD% && ping 127.0.0.1 -n 1 && start microsoft-edge:http://localhost:778/test5.php",
-        "Apache": "tomcat，groovy。 cgi。Apache系列使用phpStudy软件管理。"
+    "Tips": {
+        "Path.Tips": {
+            "OLDNAME": "variable-assemblage",
+            "MyName": "T.D.R.",
+            "TIPS": "If you lost variable content or command content, please record to there, I wont delete them.",
+            "assemblage": "path-assemblage will record all pc path named by you.",
+            "Start": "路径集是PyMake工具一切的开始。用户只需要把电脑上的路径在路径集里部署一次即可。最好部署全面。使用很方便，可以在environ里使用，可以在command里使用，可以在custom.path+.ini和custom.var+.ini里使用。",
+            "Pyvenv.Tips": "创建Python虚拟环境的时候，不要继承site-packages。",
+            "Python命令": "PyMake提供python命令，内部使用'python'进行调用。python有能力同时具有多个执行环境，为了方便切换，用户不要把python加入系统路径。加到这个文件里最好。"
+        },
+        "Environ.Tips": {
+            "Tips.Separate": "environ section里配置的每个环境都是互相冲突的。",
+            "system": "PyMake给用户提供system命令，查看系统环境，但是，不允许修改。如果用户希望修改，建议使用rapidee修改。",
+            "local": "local环境，是PyMake给用户提供的PyMake内部的公共环境，只读。local.ini决定内部环境的开关。",
+            "custom": "custom环境，是PyMake允许用户设置的公共环境。custom.ini决定自定义环境的开关。custom.path+.ini配置环境路径，custom.var+.ini配置环境变量。",
+            "mingw32": "mingw32、msvc，每个环境默认都增加了Qt5支持。"
+        },
+        "Command.Tips": {
+            "OLDNAME": "command-assemblage",
+            "hello.work": "hello world.",
+            "go.build": "go build -ldflags=\"-H windowsgui\"",
+            "build.qmake": "old name build.pro，在Qt App Source路径编译源代码",
+            "build.cmake.gui": "在app source路径打开cmake-gui。这个cmake到底怎么从命令行配置？再等等谁出一个cmake命令行的丰富用法。",
+            "build.cmake.sdk": "开启cmake的生成sdk的generate。还有build.cmake.app",
+            "build.make": "开启编译",
+            "build.make.install": "开启安装",
+            "open.run": "编译完，运行一下。",
+            "watcom": "watcom提供CL 13，和MSVC CL 13冲突，也不要给MinGW环境用，冲突。",
+            "configure.qt5.mingw32.static": "need python2 for webengine.",
+            "7z.zip": "7z a -tzip -r AAA.zip %*",
+            "7z.unzip": "7z x -tzip -y AAA.zip -o %1",
+            "c": "pymake language exec-with-params here gcc --params test.c --suffix .c --encoding utf8 --params \"-otest1.exe\" && test1.exe",
+            "分水岭": "下边几个语言都是基于c语言的。",
+            "c++": "pymake language exec-with-params here g++ --params test.c++ --suffix .cpp --encoding utf8 --params \"-otest2.exe\" && pyccvp test2.exe",
+            "java": "pymake type2 here test.java to HelloWorld --suffix .java --encoding utf8 && pymake language exec-with-params here javac --params HelloWorld.java && pyccvp java HelloWorld",
+            "go": "pymake type2 here test.go to test --suffix .go --encoding utf8 && pymake language exec-with-params here \"go build\"  --params -o --params test3.exe --params \"test.go\" --suffix .go --encoding utf8 && test3.exe",
+            "python": "pypython test.py",
+            "差异1": "python具备批处理的写作能力，和批处理的执行能力，写和执行都是源代码，可是功能却能覆盖以上所有语言。",
+            "差异2": "c编译时需要散库，运行时比较简单；C++编译时需要散库，运行时需要环境；java编译时需要整库，运行时需要java环境和库；go编译时需要整库，运行时不依赖go。Python编译时是源代码，运行时还是源代码，最方便。",
+            "html": "pymake type2 here test.html to test5 --suffix .html --encoding utf8 && start %CD%/test5.html",
+            "php": "pymake type2 here test.php to test5 --suffix .php --encoding utf8 && pyccvp start php -S localhost:778 -t %CD% && ping 127.0.0.1 -n 1 && start microsoft-edge:http://localhost:778/test5.php",
+            "Apache": "tomcat，groovy。 cgi。Apache系列使用phpStudy软件管理。"
+        }
     },
     "path-assemblage": {
         "root0": "C:/Users/Administrator",
@@ -85,6 +88,8 @@
         "qt4.8.mingw32": "${qt}/${qt4.8.version}/mingw32",
         "qt4.8.mingw32.bin": "${qt4.8.mingw32}/bin",
         "qt5.5.version": "5.5",
+        "qt5.5.mingw32": "${qt}/${qt5.5.version}/mingw492_32",
+        "qt5.5.mingw32.bin": "${qt5.5.mingw32}/bin",
         "qt5.5.armhf32": "${qt}/${qt5.5.version}/armhf32",
         "qt5.5.armhf32.bin": "${qt5.5.armhf32}/sysroots/cortexa9hf-vfp-neon-poky-linux-gnueabi/usr/bin",
         "qt5.5.armhf32.sysroot": "${qt5.5.armhf32}/sysroots/cortexa9hf-vfp-neon-poky-linux-gnueabi",
@@ -199,6 +204,8 @@
         "mingw32.bin": "${mingw32}/bin",
         "mingw64": "${qt}/Tools/mingw730_64",
         "mingw64.bin": "${mingw64}/bin",
+        "mingw32.4": "${qt}/Tools/mingw492_32",
+        "mingw32.4.bin": "${mingw32.4}/bin",
         "armhf32-4-bad": "${qt}/Tools/gcc-linaro-4.9-2016.02-i686-mingw32_arm-linux-gnueabihf",
         "armhf32-android-ignore": "${root.tool}/winAndroidLibraries/android-ndk-r13b/toolchains/arm-linux-androideabi-4.9/prebuilt/windows-x86_64",
         "armhf32-4-linux": "${qt}/Tools/gcc-linaro-4.9-2016.02-x86_64_arm-linux-gnueabihf",
@@ -773,6 +780,20 @@
             "QSYS": "Windows",
             "JAVA_HOME": "${java}",
             "CLASSPATH": ".:${JAVA_HOME}/lib/dt.jar:${JAVA_HOME}/lib/tools.jar"
+        },
+        "winxp": {
+            "path+": [
+                "${mingw32.4.bin}",
+                "${qt5.5.mingw32.bin}"
+            ],
+            "make0": "mingw32-make",
+            "CMAKEGENERATOR": "MinGW Makefiles",
+            "QTVERSION": "${qt5.5.version}",
+            "QTDIR": "${qt5.5.mingw32}",
+            "QTSPEC": "-spec win32-g++",
+            "QTCONFIG": "",
+            "QKIT": "WIN32",
+            "QSYS": "Windows"
         },
         "vc6": {
             "path+": [
@@ -1526,7 +1547,7 @@
             "set sdk=${root.sdk}/%profilename%/%QSYS%",
             "set src=%src_path%/%profilename%.pro",
             "if not exist \"%src%\" ( echo %profilename%.pro is not exist. & exit /b 0)",
-            "set build=${root.build}/%profilename%/%QSYS%/%QTVERSION%/Debug",
+            "set build=${root.build}/%profilename%/%QSYS%/%QTVERSION%/Release",
             "md %build:/=\\%",
             "cd /d %build%",
             "rem del /f /q demo examples src test",
@@ -2201,7 +2222,9 @@
             "rem cd /d ${root.src}",
             "",
             "setlocal enabledelayedexpansion",
-            "set MODULEARRAY=QQt QQtTool QQtExquisite QQtHighGrade QQtInput QQtInstallFramework QQtMediaExtention QQtRuntimeExtention QQtStyle QQtSupport",
+            "rem set MODULEARRAY=QQt QQtTool QQtExquisite QQtHighGrade QQtInput QQtInstallFramework QQtMediaExtention QQtRuntimeExtention QQtStyle QQtSupport",
+            "rem set ENVARRAY=mingw32 mingw64 android.mobile android.x86",
+            "set MODULEARRAY=QQtExquisite QQtHighGrade",
             "set ENVARRAY=mingw32 mingw64 android.mobile android.x86",
             "for %%i in  (%MODULEARRAY%) do ( ",
             "    rem echo %%i ",
