@@ -8,8 +8,11 @@ cd ..
 cd QQtStyle & git pull
 cd ..
 
-cd QQtDeviceSupport & git pull
+cd QQtSupport & git pull
 cd ..
 
 cd QQtExquisitePlugin & git pull
+cd ..
+
+cd QQtMobileOS & git pull
 cd ..
