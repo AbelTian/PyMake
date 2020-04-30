@@ -11,7 +11,8 @@ if [ "$1" = "" ]; then
     echo please appoint a cmd name.
     break
 fi
-export PYEXECNAME=$@
+export PYEXECNAME="$@"
+#echo $PYEXECNAME
 
 #if has source[.] call , failed. source default work path is user home.
 #这些都只是获取到了工作路径
@@ -97,7 +98,7 @@ export PYENVNAME=current
 #echo exec root: \[$PYMMSHELLROOT\] \[default\]
 #echo exec root: \[$(pwd)\] \[here\]
 
-"$PYPROGRAMPATHNAME" use $PYENVNAME cmd "$PYEXECNAME"
+"$PYPROGRAMPATHNAME" use $PYENVNAME cmd $PYEXECNAME
 exit $?
 
 break
