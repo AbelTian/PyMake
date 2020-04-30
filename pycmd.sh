@@ -4,8 +4,14 @@
 while [ 1 ]
 do
 
-
-export PYEXECNAME=$1
+if [ "$1" = "" ]; then
+    echo usage:
+    echo "  pycmd <cmd-name>"
+    echo ------
+    echo please appoint a cmd name.
+    break
+fi
+export PYEXECNAME=$@
 
 #if has source[.] call , failed. source default work path is user home.
 #这些都只是获取到了工作路径
@@ -91,7 +97,7 @@ export PYENVNAME=current
 #echo exec root: \[$PYMMSHELLROOT\] \[default\]
 #echo exec root: \[$(pwd)\] \[here\]
 
-"$PYPROGRAMPATHNAME" use $PYENVNAME cmd $PYEXECNAME
+"$PYPROGRAMPATHNAME" use $PYENVNAME cmd "$PYEXECNAME"
 exit $?
 
 break

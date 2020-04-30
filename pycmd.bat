@@ -2,7 +2,14 @@
 
 :: pycmd.bat 使用某个环境，在当前目录，执行命令。
 
-set PYEXECNAME=%1
+if ""%1"" == """" (
+    rem echo you can execute command with params in default env.
+    echo usage:
+    echo "  pycmd <cmd-name>"
+    echo ------
+    echo please appoint a cmd name. & exit /b 0
+)
+set PYEXECNAME=%*
 
 set PYPROGRAMPATH=%~dp0
 set PYPROGRAMNAME=pymake.bat
