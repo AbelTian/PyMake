@@ -1126,13 +1126,6 @@ def main_function():
             print("WORK CUSTOM   : %s" % (c))
             print("WORK STARTING : %s" % (pymakeshellroot))
 
-            #if(w == 'default'):
-            #    print("WORK STARTING : %s" % (pymakeshellroot))
-            #elif (w == 'here'):
-            #    print("WORK STARTING : %s" % (pymakeworkpath))
-            #elif (w == 'custom'):
-            #    print("WORK STARTING : %s" % (c))
-
             print("successed")
             return
         else:
@@ -1381,6 +1374,14 @@ def main_function():
     elif (workroottype == 'custom'):
        shellroot = customshellroot
 
+    # if(workroottype == 'default'):
+    #    print("WORK STARTING : %s" % (pymakeshellroot))
+    # elif (workroottype == 'here'):
+    #    print("WORK STARTING : %s" % (pymakeworkpath))
+    # elif (workroottype == 'custom'):
+    #    print("WORK STARTING : %s" % (c))
+    # print("execute directory: %s" % (shellroot) )
+
     # I set this,
     # pymake execute user bat/sh in shellroot,
     # user can use here param to restrict exec action.
@@ -1394,9 +1395,15 @@ def main_function():
     while (True):
         if ( args['backup'] is True ):
             import zipfile
-            os.chdir(sourceroot)
+
+            #os.chdir(sourceroot)
+
             if(args['here'] or args['hh'] is True):
                 os.chdir(pymakeworkpath)
+            elif(args['there'] or args['tt'] is True):
+                os.chdir(customshellroot)
+            elif(args['default'] or args['dd'] is True):
+                os.chdir(pymakeshellroot)
 
             #print(args['<zip-file-name>'])
             if(args['<zip-file-name>'] is None):
@@ -1433,9 +1440,15 @@ def main_function():
     while (True):
         if ( args['recovery'] is True ):
             import zipfile
-            os.chdir(sourceroot)
+
+            #os.chdir(sourceroot)
+
             if(args['here'] or args['hh'] is True):
                 os.chdir(pymakeworkpath)
+            elif(args['there'] or args['tt'] is True):
+                os.chdir(customshellroot)
+            elif(args['default'] or args['dd'] is True):
+                os.chdir(pymakeshellroot)
 
             #print(args['<zip-file-name>'])
             if(args['<zip-file-name>'] is None):
@@ -2482,6 +2495,10 @@ def main_function():
                 os.chdir(sourceroot)
                 if (args['here'] or args['hh'] is True):
                     os.chdir(pymakeworkpath)
+                elif (args['there'] or args['tt'] is True):
+                    os.chdir(customshellroot)
+                elif (args['default'] or args['dd'] is True):
+                    os.chdir(pymakeshellroot)
 
                 plat = getplatform()
                 if(plat == "Windows"):
@@ -3796,6 +3813,10 @@ def main_function():
                 #print(args['here'])
                 if (args['here'] or args['hh'] is True):
                     os.chdir(pymakeworkpath)
+                elif (args['there'] or args['tt'] is True):
+                    os.chdir(customshellroot)
+                elif (args['default'] or args['dd'] is True):
+                    os.chdir(pymakeshellroot)
 
                 #print(args['--workroot'])
                 if (args['--workroot'] is not None):
@@ -3925,6 +3946,10 @@ def main_function():
                 os.chdir(sourceroot)
                 if (args['here'] or args['hh'] is True):
                     os.chdir(pymakeworkpath)
+                elif (args['there'] or args['tt'] is True):
+                    os.chdir(customshellroot)
+                elif (args['default'] or args['dd'] is True):
+                    os.chdir(pymakeshellroot)
 
                 if (args['-a'] or args['--all'] is True):
                     # print('-a')
@@ -4436,8 +4461,13 @@ def main_function():
         localenv['PYMAKESOURCECONFIG'] = sourcefile
         localenv['PYMAKEDEFAULTWORKROOT'] = pymakeshellroot
         localenv['PYMAKEWORKROOT'] = shellroot
+
         if(args['here'] or args['hh'] is True):
             localenv['PYMAKEWORKROOT'] = pymakeworkpath
+        elif(args['there'] or args['tt'] is True):
+            localenv['PYMAKEWORKROOT'] = customshellroot
+        elif(args['default'] or args['dd'] is True):
+            localenv['PYMAKEWORKROOT'] = pymakeshellroot
 
         if (args['--workroot'] is not None):
             if (os.path.isdir(args['--workroot'])
@@ -4504,6 +4534,10 @@ def main_function():
             elif (args['export'] is True):
                 if (args['here'] or args['hh'] is True):
                     os.chdir(pymakeworkpath)
+                elif (args['there'] or args['tt'] is True):
+                    os.chdir(customshellroot)
+                elif (args['default'] or args['dd'] is True):
+                    os.chdir(pymakeshellroot)
 
                 plat = getplatform()
                 if (plat == "Windows"):
@@ -4624,6 +4658,10 @@ def main_function():
                 # print(args['here'])
                 if (args['here'] or args['hh'] is True):
                     os.chdir(pymakeworkpath)
+                elif (args['there'] or args['tt'] is True):
+                    os.chdir(customshellroot)
+                elif (args['default'] or args['dd'] is True):
+                    os.chdir(pymakeshellroot)
 
                 # print(args['--workroot'])
                 if (args['--workroot'] is not None):
@@ -7567,6 +7605,10 @@ def main_function():
 
                 if (args['here'] or args['hh'] is True):
                     os.chdir(pymakeworkpath)
+                elif (args['there'] or args['tt'] is True):
+                    os.chdir(customshellroot)
+                elif (args['default'] or args['dd'] is True):
+                    os.chdir(pymakeshellroot)
 
                 current_vcvarsall = 'vcvarsall'
                 current_vcvarsallparam = 'vcvarsallparam'
@@ -7656,6 +7698,10 @@ def main_function():
 
                 if (args['here'] or args['hh'] is True):
                     os.chdir(pymakeworkpath)
+                elif (args['there'] or args['tt'] is True):
+                    os.chdir(customshellroot)
+                elif (args['default'] or args['dd'] is True):
+                    os.chdir(pymakeshellroot)
 
 
                 current_vcvarsall = 'vcvarsall'
@@ -7770,6 +7816,10 @@ def main_function():
                     # print(args['here'])
                     if (args['here'] or args['hh'] is True):
                         os.chdir(pymakeworkpath)
+                    elif (args['there'] or args['tt'] is True):
+                        os.chdir(customshellroot)
+                    elif (args['default'] or args['dd'] is True):
+                        os.chdir(pymakeshellroot)
 
                     # print(args['--workroot'])
                     if (args['--workroot'] is not None):
@@ -7934,6 +7984,10 @@ def main_function():
 
                     if (args['here'] or args['hh'] is True):
                         os.chdir(pymakeworkpath)
+                    elif (args['there'] or args['tt'] is True):
+                        os.chdir(customshellroot)
+                    elif (args['default'] or args['dd'] is True):
+                        os.chdir(pymakeshellroot)
 
                     # print(args['--workroot'])
                     if (args['--workroot'] is not None):
@@ -8110,6 +8164,10 @@ def main_function():
 
                     if (args['here'] or args['hh'] is True):
                         os.chdir(pymakeworkpath)
+                    elif (args['there'] or args['tt'] is True):
+                        os.chdir(customshellroot)
+                    elif (args['default'] or args['dd'] is True):
+                        os.chdir(pymakeshellroot)
 
                     # print(args['--workroot'])
                     if (args['--workroot'] is not None):
@@ -8296,6 +8354,10 @@ def main_function():
 
                 if (args['here'] or args['hh'] is True):
                     os.chdir(pymakeworkpath)
+                elif (args['there'] or args['tt'] is True):
+                    os.chdir(customshellroot)
+                elif (args['default'] or args['dd'] is True):
+                    os.chdir(pymakeshellroot)
 
                 # print(args['--workroot'])
                 if (args['--workroot'] is not None):
@@ -8665,6 +8727,10 @@ def main_function():
 
             if (args['here'] or args['hh'] is True):
                 os.chdir(pymakeworkpath)
+            elif (args['there'] or args['tt'] is True):
+                os.chdir(customshellroot)
+            elif (args['default'] or args['dd'] is True):
+                os.chdir(pymakeshellroot)
 
             current_var = ""
             cmd_effect = ""
@@ -9296,6 +9362,10 @@ def main_function():
 
                 if (args['here'] or args['hh'] is True):
                     os.chdir(pymakeworkpath)
+                elif (args['there'] or args['tt'] is True):
+                    os.chdir(customshellroot)
+                elif (args['default'] or args['dd'] is True):
+                    os.chdir(pymakeshellroot)
 
                 current_var = ""
                 cmd_effect = ""
@@ -9328,6 +9398,10 @@ def main_function():
 
                 if (args['here'] or args['hh'] is True):
                     os.chdir(pymakeworkpath)
+                elif (args['there'] or args['tt'] is True):
+                    os.chdir(customshellroot)
+                elif (args['default'] or args['dd'] is True):
+                    os.chdir(pymakeshellroot)
 
                 if (args['<cmd-name>'] is None):
                     for (key, value) in rawconfig['command'].items():
@@ -9428,6 +9502,10 @@ def main_function():
                 #print(args['here'])
                 if (args['here'] or args['hh'] is True):
                     os.chdir(pymakeworkpath)
+                elif (args['there'] or args['tt'] is True):
+                    os.chdir(customshellroot)
+                elif (args['default'] or args['dd'] is True):
+                    os.chdir(pymakeshellroot)
 
                 #print(args['--workroot'])
                 if (args['--workroot'] is not None):
@@ -9496,6 +9574,10 @@ def main_function():
             elif (args['clean'] is True):
                 if (args['here'] or args['hh'] is True):
                     os.chdir(pymakeworkpath)
+                elif (args['there'] or args['tt'] is True):
+                    os.chdir(customshellroot)
+                elif (args['default'] or args['dd'] is True):
+                    os.chdir(pymakeshellroot)
 
                 plat = getplatform()
                 if (plat == "Windows"):
@@ -9855,6 +9937,10 @@ def main_function():
             elif (args['clean'] is True):
                 if (args['here'] or args['hh'] is True):
                     os.chdir(pymakeworkpath)
+                elif (args['there'] or args['tt'] is True):
+                    os.chdir(customshellroot)
+                elif (args['default'] or args['dd'] is True):
+                    os.chdir(pymakeshellroot)
 
                 plat = getplatform()
                 if (plat == "Windows"):
@@ -9887,6 +9973,10 @@ def main_function():
 
                 if (args['here'] or args['hh'] is True):
                     os.chdir(pymakeworkpath)
+                elif (args['there'] or args['tt'] is True):
+                    os.chdir(customshellroot)
+                elif (args['default'] or args['dd'] is True):
+                    os.chdir(pymakeshellroot)
 
                 if (args['<cmd-name>'] is None):
                     for (key, value) in rawconfig['command'].items():
@@ -9992,6 +10082,10 @@ def main_function():
 
                 if (args['here'] or args['hh'] is True):
                     os.chdir(pymakeworkpath)
+                elif (args['there'] or args['tt'] is True):
+                    os.chdir(customshellroot)
+                elif (args['default'] or args['dd'] is True):
+                    os.chdir(pymakeshellroot)
 
                 # print(args['--workroot'])
                 if (args['--workroot'] is not None):
@@ -10105,6 +10199,10 @@ def main_function():
             elif (args['export'] is True):
                 if (args['here'] or args['hh'] is True):
                     os.chdir(pymakeworkpath)
+                elif (args['there'] or args['tt'] is True):
+                    os.chdir(customshellroot)
+                elif (args['default'] or args['dd'] is True):
+                    os.chdir(pymakeshellroot)
 
                 plat = getplatform()
                 if (plat == "Windows"):
@@ -10238,6 +10336,10 @@ def main_function():
                 # print(args['here'])
                 if (args['here'] or args['hh'] is True):
                     os.chdir(pymakeworkpath)
+                elif (args['there'] or args['tt'] is True):
+                    os.chdir(customshellroot)
+                elif (args['default'] or args['dd'] is True):
+                    os.chdir(pymakeshellroot)
 
                 # print(args['--workroot'])
                 if (args['--workroot'] is not None):
@@ -10868,6 +10970,10 @@ def main_function():
             elif(args['clean'] is True):
                 if (args['here'] or args['hh'] is True):
                     os.chdir(pymakeworkpath)
+                elif (args['there'] or args['tt'] is True):
+                    os.chdir(customshellroot)
+                elif (args['default'] or args['dd'] is True):
+                    os.chdir(pymakeshellroot)
 
                 #print(args['--suffix'])
                 suffix = args['--suffix']
@@ -10906,6 +11012,10 @@ def main_function():
 
                 if (args['here'] or args['hh'] is True):
                     os.chdir(pymakeworkpath)
+                elif (args['there'] or args['tt'] is True):
+                    os.chdir(customshellroot)
+                elif (args['default'] or args['dd'] is True):
+                    os.chdir(pymakeshellroot)
 
                 if (args['<cmd-name>'] is None):
                     for (key, value) in rawconfig['command'].items():
@@ -11022,6 +11132,10 @@ def main_function():
 
                 if (args['here'] or args['hh'] is True):
                     os.chdir(pymakeworkpath)
+                elif (args['there'] or args['tt'] is True):
+                    os.chdir(customshellroot)
+                elif (args['default'] or args['dd'] is True):
+                    os.chdir(pymakeshellroot)
 
                 # print(args['--workroot'])
                 if (args['--workroot'] is not None):
@@ -11226,6 +11340,10 @@ def main_function():
 
             if (args['here'] or args['hh'] is True):
                 os.chdir(pymakeworkpath)
+            elif (args['there'] or args['tt'] is True):
+                os.chdir(customshellroot)
+            elif (args['default'] or args['dd'] is True):
+                os.chdir(pymakeshellroot)
 
             if(args['-a'] or args['--all'] is True):
                 ''
@@ -11327,6 +11445,10 @@ def main_function():
         if (args['clean'] == True):
             if (args['here'] or args['hh'] is True):
                 os.chdir(pymakeworkpath)
+            elif (args['there'] or args['tt'] is True):
+                os.chdir(customshellroot)
+            elif (args['default'] or args['dd'] is True):
+                os.chdir(pymakeshellroot)
 
             plat = getplatform()
             if(plat == "Windows"):
@@ -12109,6 +12231,10 @@ def main_function():
             if (args['type'] == True):
                 if (args['here'] or args['hh'] is True):
                     os.chdir(pymakeworkpath)
+                elif (args['there'] or args['tt'] is True):
+                    os.chdir(customshellroot)
+                elif (args['default'] or args['dd'] is True):
+                    os.chdir(pymakeshellroot)
 
                 if(args['<cmd-name>'] is None):
                     for (key, value) in rawconfig['command'].items():
@@ -12144,6 +12270,10 @@ def main_function():
         if (args['type'] == True):
             if (args['here'] or args['hh'] is True):
                 os.chdir(pymakeworkpath)
+            elif (args['there'] or args['tt'] is True):
+                os.chdir(customshellroot)
+            elif (args['default'] or args['dd'] is True):
+                os.chdir(pymakeshellroot)
 
             if (args['<cmd-name>'] is None):
                 for (key, value) in rawconfig['command'].items():
@@ -12283,6 +12413,10 @@ def main_function():
 
             if (args['here'] or args['hh'] is True):
                 os.chdir(pymakeworkpath)
+            elif (args['there'] or args['tt'] is True):
+                os.chdir(customshellroot)
+            elif (args['default'] or args['dd'] is True):
+                os.chdir(pymakeshellroot)
 
             current_var, cmd_effect, cmd_unset = env_export(current_env, args['<file-name>'])
 
@@ -12566,6 +12700,10 @@ def main_function():
 
                 if (args['here'] or args['hh'] is True):
                     os.chdir(pymakeworkpath)
+                elif (args['there'] or args['tt'] is True):
+                    os.chdir(customshellroot)
+                elif (args['default'] or args['dd'] is True):
+                    os.chdir(pymakeshellroot)
 
                 # create cmd_list
                 current_var = current_env
@@ -12648,6 +12786,10 @@ def main_function():
 
             if (args['here'] or args['hh'] is True):
                 os.chdir(pymakeworkpath)
+            elif (args['there'] or args['tt'] is True):
+                os.chdir(customshellroot)
+            elif (args['default'] or args['dd'] is True):
+                os.chdir(pymakeshellroot)
 
             #print ("group %s" % current_vars)
             dict0 = copy.deepcopy(rawconfig['command'])
@@ -12849,6 +12991,10 @@ def main_function():
 
                 if (args['here'] or args['hh'] is True):
                     os.chdir(pymakeworkpath)
+                elif (args['there'] or args['tt'] is True):
+                    os.chdir(customshellroot)
+                elif (args['default'] or args['dd'] is True):
+                    os.chdir(pymakeshellroot)
 
                 # print(args['--workroot'])
                 if (args['--workroot'] is not None):
@@ -12947,6 +13093,10 @@ def main_function():
             #print(args['hh'])
             if (args['here'] or args['hh'] is True):
                 os.chdir(pymakeworkpath)
+            elif (args['there'] or args['tt'] is True):
+                os.chdir(customshellroot)
+            elif (args['default'] or args['dd'] is True):
+                os.chdir(pymakeshellroot)
 
             #print(args['--workroot'])
             if(args['--workroot'] is not None):
@@ -13076,7 +13226,59 @@ def main_function():
     # there [False]
     while (False):
         if (args['there'] or args['tt'] is True):
-            os.chdir(pymakeworkpath)
+            os.chdir(customshellroot)
+
+            if (args['clean'] == True):
+                plat = getplatform()
+                if (plat == "Windows"):
+                    os.system("@del /f /q *_effect.bat *_unset.bat *_exec.bat")
+                else:
+                    os.system("rm -f *_effect.sh *_unset.sh *_exec.sh")
+                return
+
+            if (args['export'] == True):
+                current_env = args['<env-name>']
+                if (args['<env-name>'] is None):
+                    current_env = rawconfig['environ']['current']
+
+                if (rawconfig['environ'].__contains__(current_env) is False):
+                    print("please ensure the environ is right")
+                    return
+
+                if (args['<env-name>'] == "current"):
+                    current_env = rawconfig['environ']['current']
+
+                if (rawconfig['environ'].__contains__(current_env) is False):
+                    print(".json file is broken, environ section current env config is lost, please use set command fix it.")
+                    return
+
+                current_var, cmd_effect, cmd_unset = env_export(current_env, args['<file-name>'])
+                print("successed: export %s to %s %s" % (current_var, cmd_effect, cmd_unset))
+                return
+
+            if (args['type'] == True):
+                if (args['<cmd-name>'] is None):
+                    for (key, value) in rawconfig['command'].items():
+                        print(Fore.CYAN + "%s" % key)
+                    return
+
+                if (rawconfig['command'].__contains__(args['<cmd-name>']) is False):
+                    print("please check your command name")
+                    return
+
+                cmd_exec = cmd_type(args['<cmd-name>'], args['<file-name>'])
+
+                print("successed: type %s to %s" % (args['<cmd-name>'], cmd_exec))
+                return
+
+        else:
+            ""
+        break
+
+    # default [False]
+    while (False):
+        if (args['default'] or args['dd'] is True):
+            os.chdir(pymakeshellroot)
 
             if (args['clean'] == True):
                 plat = getplatform()
