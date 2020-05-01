@@ -169,6 +169,7 @@ Usage:
   pymake7.py  local [ open | close ]
   pymake7.py  local [ stat | status ]
   pymake7.py  local [ info | information ]
+  pymake7.py  local edit
   pymake7.py  local path [ --add | --del ] [ <value> ]
   pymake7.py  local var [ --add | --del ] [ <key> ] [ <value> ]
   pymake7.py  local env [ -r | --raw ]
@@ -4736,6 +4737,15 @@ def main_function():
                     os.system("chmod +x " + cmd_unset)
 
                 print("successed: export local env to %s %s" % (cmd_effect, cmd_unset))
+                return
+            elif (args['edit'] is True):
+                ''
+                cmd_list = []
+                cmd_list.append(sourceroot + os.path.sep + 'local.ini')
+                for file0 in cmd_list:
+                    cmd0 = open_file(file0)
+                    os.system(cmd0)
+                    print('successed: %s' % file0)
                 return
             elif(args['info'] or args['information'] is True):
                 print("LOCAL SETTING: %s" % (localini))
@@ -11776,11 +11786,15 @@ def main_function():
                     print("%s" % pymakeworkpath)
                     print("%s" % customshellroot)
                     print("%s" % pymakeshellroot)
+                    print("%s" % workroottype)
+                    print("%s" % shellroot)
                     return
                 elif (args['status'] is True):
-                    print("EXECUTE ROOT [HERE   ]: %s" % pymakeworkpath)
-                    print("EXECUTE ROOT [THERE  ]: %s" % customshellroot)
-                    print("EXECUTE ROOT [DEFAULT]: %s" % pymakeshellroot)
+                    print("EXECUTE ROOT [HERE    ]: %s" % pymakeworkpath)
+                    print("EXECUTE ROOT [THERE   ]: %s" % customshellroot)
+                    print("EXECUTE ROOT [DEFAULT ]: %s" % pymakeshellroot)
+                    print("EXECUTE ROOT [TYPE    ]: %s" % workroottype)
+                    print("EXECUTE ROOT [STARTING]: %s" % shellroot)
                     return
                 elif (args['info'] is True):
                     if(config.__contains__("environ") is True):
