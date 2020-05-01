@@ -87,6 +87,9 @@ Usage:
   pymake7.py  get custom exec root
   pymake7.py  get current exec root
   pymake7.py  get starting exec root
+  pymake7.py  set exec root at [ default | dd ] [ here | hh ] [ there | tt ]
+  pymake7.py  set [ current | starting ] exec root at [ default | dd ] [ here | hh ] [ there | tt ]
+  pymake7.py  set custom exec root at [ <work-root-path> ]
   pymake7.py  initialize
   pymake7.py  debug
   pymake7.py  debug [ open | close ]
@@ -389,8 +392,8 @@ Command:
   use               use selected env exec commands
   here              at here do exec commands e.g.
   hh                at here do exec commands e.g.
-  there             at user custom exec root do exec commands e.g.
-  tt                at user custom exec root do exec commands e.g.
+  there             at there (user custom exec root) do exec commands e.g.
+  tt                at there (user custom exec root) do exec commands e.g.
   default           at default exec root do exec commands e.g.
   dd                at default exec root do exec commands e.g.
   exec              exec commands list.
@@ -2800,6 +2803,59 @@ def main_function():
                     print('successed: %s' % command_name)
                     return
                 return
+            else:
+                ''
+        else:
+            ''
+        break
+
+    # set
+    while (True):
+        if(args['set'] is True):
+            if(args['exec'] is True):
+                if(args['custom'] is True):
+                    if(args['<work-root-path>'] is None):
+                        print("please appoint a work root path.")
+                        return
+                    workroot1 = args['<work-root-path>']
+                    if(os.path.isabs(workroot1) is False):
+                        print("please appoint an absolute work root for setting custom starting work root path.")
+                        return
+                    if(os.path.isdir(workroot1) is False):
+                        print("failed: %s is not a dir." % args['<work-root-path>'])
+                        return
+                    conf.set('work', 'custom', workroot1)
+                    conf.write(open(pymakeini, 'w'))
+                    print ("successed: change custom work root to %s" % workroot1)
+                    return
+                elif (args['current'] or args['starting'] is True):
+                    workroottype1 = 'default'
+                    if (args['here'] or args['hh'] is True):
+                        workroottype1 = 'here'
+                    elif (args['there'] or args['tt'] is True):
+                        workroottype1 = 'custom'
+                    elif (args['default'] or args['dd'] is True):
+                        workroottype1 = 'default'
+                    else:
+                        workroottype1 = 'default'
+                    conf.set('work', 'root', workroottype1)
+                    conf.write(open(pymakeini, 'w'))
+                    print ("successed: change starting work root to %s" % workroottype1)
+                    return
+                else:
+                    workroottype1 = 'default'
+                    if (args['here'] or args['hh'] is True):
+                        workroottype1 = 'here'
+                    elif (args['there'] or args['tt'] is True):
+                        workroottype1 = 'custom'
+                    elif (args['default'] or args['dd'] is True):
+                        workroottype1 = 'default'
+                    else:
+                        workroottype1 = 'default'
+                    conf.set('work', 'root', workroottype1)
+                    conf.write(open(pymakeini, 'w'))
+                    print ("successed: change starting work root to %s" % workroottype1)
+                    return
             else:
                 ''
         else:
