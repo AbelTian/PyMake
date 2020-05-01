@@ -76,6 +76,7 @@ Usage:
   pymake7.py  program configure
   pymake7.py  program configure root
   pymake7.py  program configure file
+  pymake7.py  program configure [ --edit ]
   pymake7.py  get all
   pymake7.py  get all ( info | information )
   pymake7.py  get all ( stat | status )
@@ -87,9 +88,9 @@ Usage:
   pymake7.py  get custom exec root
   pymake7.py  get current exec root
   pymake7.py  get starting exec root
-  pymake7.py  set exec root at [ default | dd ] [ here | hh ] [ there | tt ]
-  pymake7.py  set [ current | starting ] exec root at [ default | dd ] [ here | hh ] [ there | tt ]
-  pymake7.py  set custom exec root at [ <work-root-path> ]
+  pymake7.py  set exec root to [ default | dd ] [ here | hh ] [ there | tt ]
+  pymake7.py  set ( current | starting ) exec root to [ default | dd ] [ here | hh ] [ there | tt ]
+  pymake7.py  set custom exec root to [ <work-root-path> ]
   pymake7.py  initialize
   pymake7.py  debug
   pymake7.py  debug [ open | close ]
@@ -2422,6 +2423,14 @@ def main_function():
                 elif (args['file'] is True):
                     print("%s" % os.path.split(os.path.realpath(pymakeini))[1])
                     return
+                elif (args['--edit'] is True):
+                    cmd_list = []
+                    cmd_list.append(pymakeini)
+                    for file0 in cmd_list:
+                        cmd0 = open_file(file0)
+                        os.system(cmd0)
+                        print('successed: %s' % file0)
+                    return
                 else:
                     print("%s" % os.path.realpath(pymakeini))
                     return
@@ -2498,7 +2507,8 @@ def main_function():
 
                 import itertools
 
-                os.chdir(sourceroot)
+                #os.chdir(sourceroot)
+
                 if (args['here'] or args['hh'] is True):
                     os.chdir(pymakeworkpath)
                 elif (args['there'] or args['tt'] is True):
@@ -3026,8 +3036,22 @@ def main_function():
                 elif (args['current'] is True):
                     print("%s" % (shellroot))
                     return
+                elif (args['here'] or args['hh'] is True):
+                    print("%s" % (pymakeworkpath))
+                    return
+                elif (args['there'] or args['tt'] is True):
+                    print("%s" % (customshellroot))
+                    return
+                elif (args['default'] or args['dd'] is True):
+                    print("%s" % (pymakeshellroot))
+                    return
                 else:
-                    ''
+                    ""
+                #workroottype1 = conf.get("work", "root")
+                #print("WORK ROOT TYPE     : %s" % (workroottype1))
+                #print("STARTING WORK ROOT : %s" % (shellroot))
+                print("%s" % (shellroot))
+                return
             else:
                 ''
         else:
@@ -4026,7 +4050,8 @@ def main_function():
 
                 import itertools
 
-                os.chdir(sourceroot)
+                #os.chdir(sourceroot)
+
                 if (args['here'] or args['hh'] is True):
                     os.chdir(pymakeworkpath)
                 elif (args['there'] or args['tt'] is True):
@@ -10373,10 +10398,11 @@ def main_function():
             elif (args['edit'] is True):
                 ''
 
-                os.chdir(sourceroot)
+                #os.chdir(sourceroot)
+
                 cmd_list = []
-                cmd_list.append('custom.path+.ini')
-                cmd_list.append('custom.var+.ini')
+                cmd_list.append(sourceroot + os.path.sep + 'custom.path+.ini')
+                cmd_list.append(sourceroot + os.path.sep + 'custom.var+.ini')
                 for file0 in cmd_list:
                     cmd0 = open_file(file0)
                     os.system(cmd0)
@@ -11958,20 +11984,6 @@ def main_function():
                     print("failed: .json file is broken, environ section lost current key, please use set command fix it.")
                     return
                 #import return [ - env command ]
-                return
-            elif (args['exec'] is True):
-                if (args['here'] or args['hh'] is True):
-                    print("%s" % (pymakeworkpath))
-                    return
-                elif (args['there'] or args['tt'] is True):
-                    print("%s" % (customshellroot))
-                    return
-                elif (args['default'] or args['dd'] is True):
-                    print("%s" % (pymakeshellroot))
-                    return
-                else:
-                   ""
-                print("%s" % (shellroot))
                 return
             else:
                 ''
