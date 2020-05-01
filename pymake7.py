@@ -4567,7 +4567,10 @@ def main_function():
         localenv['PYMAKESOURCEFILE'] = sourceconfigfile
         localenv['PYMAKESOURCEROOT'] = sourceroot
         localenv['PYMAKESOURCECONFIG'] = sourcefile
+
         localenv['PYMAKEDEFAULTWORKROOT'] = pymakeshellroot
+        localenv['PYMAKETHEREROOT'] = customshellroot
+        localenv['PYMAKEHEREROOT'] = pymakeworkpath
         localenv['PYMAKEWORKROOT'] = shellroot
 
         if(args['here'] or args['hh'] is True):
@@ -4599,10 +4602,15 @@ def main_function():
         else:
             localenv['PYMAKEINSTALLROOT'] = '/usr/local/bin'
 
-        localenv['path+'].append(localenv['PYMAKEPROGRAMROOT'])
         localenv['path+'].append(localenv['PYMAKESOURCEROOT'])
+        localenv['path+'].append(localenv['PYMAKEPROGRAMROOT'])
         localenv['path+'].append(localenv['PYMAKEDEFAULTWORKROOT'])
-        localenv['path+'].append(localenv['PYMAKEWORKROOT'])
+        if(localenv['path+'].__contains__(localenv['PYMAKETHEREROOT']) is False):
+            localenv['path+'].append(localenv['PYMAKETHEREROOT'])
+        if(localenv['path+'].__contains__(localenv['PYMAKEHEREROOT']) is False):
+            localenv['path+'].append(localenv['PYMAKEHEREROOT'])
+        if(localenv['path+'].__contains__(localenv['PYMAKEWORKROOT']) is False):
+            localenv['path+'].append(localenv['PYMAKEWORKROOT'])
 
         #store to file
         for (key, value) in enumerate(localenv["path+"]):
@@ -4999,6 +5007,8 @@ def main_function():
             l = l.strip()
             storecustompaths[i] = l
 
+        # added by local, ignore
+        '''
         # default [ fixed ]
         # add pymake default source root to environ.
         if (storecustompaths.__contains__(pymakesourceroot) is False):
@@ -5013,9 +5023,12 @@ def main_function():
         # add user shell root to environ.
         if (customshellroot != pymakeshellroot and storecustompaths.__contains__(customshellroot) is False):
             storecustompaths.append(customshellroot)
+        if (pymakeworkpath != pymakeshellroot and storecustompaths.__contains__(pymakeworkpath) is False):
+            storecustompaths.append(pymakeworkpath)
         if (shellroot != pymakeshellroot and storecustompaths.__contains__(shellroot) is False):
             storecustompaths.append(shellroot)
-
+        '''
+        
         #clean repeat path [for store]
         clean_list = []
         temp_list = []
