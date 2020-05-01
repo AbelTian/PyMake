@@ -81,9 +81,11 @@ Usage:
   pymake7.py  get all ( stat | status )
   pymake7.py  get all settings [ path | env | cmd ] [<name>] [-r | --raw] [-a | --all]
   pymake7.py  get all settings [ -l | --local ] [ -c | --custom ] [ -s | --system ] [ --current ] [ --envname=<env-name> ]
-  pymake7.py  get default exec root
   pymake7.py  get exec root [ default | dd ] [ here | hh ] [ there | tt ]
   pymake7.py  get [ default | dd ] [ here | hh ] [ there | tt ] exec root
+  pymake7.py  get default exec root
+  pymake7.py  get custom exec root
+  pymake7.py  get current exec root
   pymake7.py  get starting exec root
   pymake7.py  initialize
   pymake7.py  debug
@@ -2453,6 +2455,7 @@ def main_function():
         debugconf.set('debug', 'switch', debugswitch)
         debugconf.write(open(debugini, 'w'))
 
+    # debug
     while (True):
         if(args['debug'] is True):
             if(args['open'] is True):
@@ -2947,6 +2950,30 @@ def main_function():
             # print(config)
             writeJsonData(sourceconfigfile, config)
             return
+        else:
+            ''
+        break
+
+    # get
+    while (True):
+        if(args['get'] is True):
+            if(args['exec'] is True):
+                if(args['custom'] is True):
+                    print("%s" % (customshellroot))
+                    return
+                elif (args['default'] is True):
+                    print("%s" % (pymakeshellroot))
+                    return
+                elif (args['starting'] is True):
+                    print("%s" % (shellroot))
+                    return
+                elif (args['current'] is True):
+                    print("%s" % (shellroot))
+                    return
+                else:
+                    ''
+            else:
+                ''
         else:
             ''
         break
@@ -11653,11 +11680,13 @@ def main_function():
             if (args['all'] is True):
                 if (args['stat'] is True):
                     print("%s" % pymakeworkpath)
-                    print("%s" % os.getcwd())
+                    print("%s" % customshellroot)
+                    print("%s" % pymakeshellroot)
                     return
                 elif (args['status'] is True):
                     print("EXECUTE ROOT [HERE   ]: %s" % pymakeworkpath)
-                    print("EXECUTE ROOT [DEFAULT]: %s" % os.getcwd())
+                    print("EXECUTE ROOT [THERE  ]: %s" % customshellroot)
+                    print("EXECUTE ROOT [DEFAULT]: %s" % pymakeshellroot)
                     return
                 elif (args['info'] is True):
                     if(config.__contains__("environ") is True):
@@ -11853,7 +11882,8 @@ def main_function():
                     print("PORT INI CONF : %s" % os.path.split(os.path.realpath(portinifile))[1])
                     print("-----------------------------------------")
                     print("EXECUTE ROOT [HERE   ]: %s" % pymakeworkpath)
-                    print("EXECUTE ROOT [DEFAULT]: %s" % os.getcwd())
+                    print("EXECUTE ROOT [THERE  ]: %s" % customshellroot)
+                    print("EXECUTE ROOT [DEFAULT]: %s" % pymakeshellroot)
                     print("-----------------------------------------")
                     plat = getplatform()
                     if (plat == "Windows"):
