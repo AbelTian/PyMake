@@ -84,12 +84,11 @@ Usage:
   pymake7.py  get all settings [ -l | --local ] [ -c | --custom ] [ -s | --system ] [ --current ] [ --envname=<env-name> ]
   pymake7.py  get exec root [ default | dd ] [ here | hh ] [ there | tt ]
   pymake7.py  get [ default | dd ] [ here | hh ] [ there | tt ] exec root
-  pymake7.py  get default exec root
-  pymake7.py  get custom exec root
-  pymake7.py  get current exec root
-  pymake7.py  get starting exec root
-  pymake7.py  set exec root to [ default | dd ] [ here | hh ] [ there | tt ]
-  pymake7.py  set ( current | starting ) exec root to [ default | dd ] [ here | hh ] [ there | tt ]
+  pymake7.py  get [ default | dd ] exec root
+  pymake7.py  get [ here | hh ] exec root
+  pymake7.py  get [ there | tt ] [ custom ] exec root
+  pymake7.py  get [ current | starting ] exec root
+  pymake7.py  set [ current | starting ] exec root to [ default | dd ] [ here | hh ] [ there | tt ]
   pymake7.py  set custom exec root to [ <work-root-path> ]
   pymake7.py  initialize
   pymake7.py  debug
@@ -2836,7 +2835,7 @@ def main_function():
                         return
                     conf.set('work', 'custom', workroot1)
                     conf.write(open(pymakeini, 'w'))
-                    print ("successed: change custom work root to %s" % workroot1)
+                    print ("successed: change custom work root to %s." % workroot1)
                     return
                 elif (args['current'] or args['starting'] is True):
                     workroottype1 = 'default'
@@ -2850,7 +2849,7 @@ def main_function():
                         workroottype1 = 'default'
                     conf.set('work', 'root', workroottype1)
                     conf.write(open(pymakeini, 'w'))
-                    print ("successed: change starting work root to %s" % workroottype1)
+                    print ("successed: change starting work root to %s." % workroottype1)
                     return
                 else:
                     workroottype1 = 'default'
@@ -2864,7 +2863,7 @@ def main_function():
                         workroottype1 = 'default'
                     conf.set('work', 'root', workroottype1)
                     conf.write(open(pymakeini, 'w'))
-                    print ("successed: change starting work root to %s" % workroottype1)
+                    print ("successed: change starting work root to %s." % workroottype1)
                     return
             else:
                 ''
@@ -4605,12 +4604,12 @@ def main_function():
         localenv['path+'].append(localenv['PYMAKESOURCEROOT'])
         localenv['path+'].append(localenv['PYMAKEPROGRAMROOT'])
         localenv['path+'].append(localenv['PYMAKEDEFAULTWORKROOT'])
-        if(localenv['path+'].__contains__(localenv['PYMAKETHEREROOT']) is False):
-            localenv['path+'].append(localenv['PYMAKETHEREROOT'])
-        if(localenv['path+'].__contains__(localenv['PYMAKEHEREROOT']) is False):
-            localenv['path+'].append(localenv['PYMAKEHEREROOT'])
-        if(localenv['path+'].__contains__(localenv['PYMAKEWORKROOT']) is False):
-            localenv['path+'].append(localenv['PYMAKEWORKROOT'])
+        #if(localenv['path+'].__contains__(localenv['PYMAKETHEREROOT']) is False):
+        localenv['path+'].append(localenv['PYMAKETHEREROOT'])
+        #if(localenv['path+'].__contains__(localenv['PYMAKEHEREROOT']) is False):
+        localenv['path+'].append(localenv['PYMAKEHEREROOT'])
+        #if(localenv['path+'].__contains__(localenv['PYMAKEWORKROOT']) is False):
+        localenv['path+'].append(localenv['PYMAKEWORKROOT'])
 
         #store to file
         for (key, value) in enumerate(localenv["path+"]):
