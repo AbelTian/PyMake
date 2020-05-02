@@ -3097,7 +3097,7 @@ def main_function():
                 else:
                     ""
                 if (args['--position'] or args['-p'] is True):
-                    print("%s [%s]" % (shellroot, workroottype))
+                    print("%s" % (workroottype))
                     return
                 #workroottype1 = conf.get("work", "root")
                 #print("WORK ROOT TYPE     : %s" % (workroottype1))
