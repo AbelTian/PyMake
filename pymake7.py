@@ -21,14 +21,14 @@ Usage:
   pymake7.py  list [ path | env | cmd ] [<name>] [-r | --raw] [-a | --all]
   pymake7.py  env [<name>] [-p | --path] [-v | --var] [-r | --raw] [-a | --all]
   pymake7.py  -------------------------------------------------------------
-  pymake7.py  clean [ default | dd ] [ here | hh ] [ there | tt ]
-  pymake7.py  export [ default | dd ] [ here | hh ] [ there | tt ] [ <env-name> ] [ to <file-name> ]
-  pymake7.py  type [ default | dd ] [ here | hh ] [ there | tt ] [ <cmd-name> ] [ to <file-name> ]
-  pymake7.py  exec [ default | dd ] [ here | hh ] [ there | tt ] [ <command-names> ... ]
-  pymake7.py  cc [ default | dd ] [ here | hh ] [ there | tt ] [ <command-names> ... ]
-  pymake7.py  use <env-name> type [ default | dd ] [ here | hh ] [ there | tt ] [ <cmd-name> ]  [ to <file-name> ]
-  pymake7.py  use <env-name> exec [ default | dd ] [ here | hh ] [ there | tt ] [ <command-names> ... ]
-  pymake7.py  use <env-name> cc [ default | dd ] [ here | hh ] [ there | tt ] [ <command-names> ... ]
+  pymake7.py  clean [ here | hh ] [ there | tt ] [ default | dd ]
+  pymake7.py  export [ here | hh ] [ there | tt ] [ default | dd ] [ <env-name> ] [ to <file-name> ]
+  pymake7.py  type [ here | hh ] [ there | tt ] [ default | dd ] [ <cmd-name> ] [ to <file-name> ]
+  pymake7.py  exec [ here | hh ] [ there | tt ] [ default | dd ] [ <command-names> ... ]
+  pymake7.py  cc [ here | hh ] [ there | tt ] [ default | dd ] [ <command-names> ... ]
+  pymake7.py  use <env-name> type [ here | hh ] [ there | tt ] [ default | dd ] [ <cmd-name> ]  [ to <file-name> ]
+  pymake7.py  use <env-name> exec [ here | hh ] [ there | tt ] [ default | dd ] [ <command-names> ... ]
+  pymake7.py  use <env-name> cc [ here | hh ] [ there | tt ] [ default | dd ] [ <command-names> ... ]
   pymake7.py  -------------------------------------------------------------
   pymake7.py  set current env <name>
   pymake7.py  set default env <name>
@@ -61,22 +61,32 @@ Usage:
   pymake7.py  program configure root
   pymake7.py  program configure file
   pymake7.py  program configure [ --edit ]
+  pymake7.py  initialize
+  pymake7.py  debug
+  pymake7.py  debug [ open | close ]
+  pymake7.py  -------------------------------------------------------------
   pymake7.py  get all
   pymake7.py  get all ( info | information )
   pymake7.py  get all ( stat | status )
   pymake7.py  get all settings [ path | env | cmd ] [<name>] [-r | --raw] [-a | --all]
   pymake7.py  get all settings [ -l | --local ] [ -c | --custom ] [ -s | --system ] [ --current ] [ --envname=<env-name> ]
-  pymake7.py  get exec root [ default | dd ] [ here | hh ] [ there | tt ]
-  pymake7.py  get [ default | dd ] [ here | hh ] [ there | tt ] exec root
+  pymake7.py  -------------------------------------------------------------
+  pymake7.py  set exec root
+  pymake7.py  set exec root [ to <work-root-path> ]
+  pymake7.py  set exec root to [ here | hh ] [ there | tt ] [ default | dd ]
+  pymake7.py  set [ default | dd ] exec root
+  pymake7.py  set [ there | tt ] exec root
+  pymake7.py  set [ here | hh ] exec root
+  pymake7.py  set [ there | tt ] exec root [ to <work-root-path> ]
+  pymake7.py  set [ current | starting ] exec root [ to <work-root-path> ]
+  pymake7.py  set [ current | starting ] exec root to [ here | hh ] [ there | tt ] [ default | dd ]
+  pymake7.py  get exec root
+  pymake7.py  get exec root [ here | hh ] [ there | tt ] [ default | dd ]
+  pymake7.py  get [ here | hh ] [ there | tt ] [ default | dd ] exec root
   pymake7.py  get [ default | dd ] exec root
+  pymake7.py  get [ there | tt ] exec root
   pymake7.py  get [ here | hh ] exec root
-  pymake7.py  get [ there | tt ] [ custom ] exec root
-  pymake7.py  get [ current | starting ] exec root
-  pymake7.py  set [ current | starting ] exec root to [ default | dd ] [ here | hh ] [ there | tt ]
-  pymake7.py  set custom exec root to [ <work-root-path> ]
-  pymake7.py  initialize
-  pymake7.py  debug
-  pymake7.py  debug [ open | close ]
+  pymake7.py  get [ current | starting ] exec root [ --position | -p ]
   pymake7.py  -------------------------------------------------------------
   pymake7.py  port
   pymake7.py  port root [ <source-config-root> ] [ to <target-config-root> ]
@@ -97,29 +107,29 @@ Usage:
   pymake7.py  translate section [ -a | --all ] [ -f | --force ]
   pymake7.py  translate config [ -f | --force ]
   pymake7.py  -------------------------------------------------------------
-  pymake7.py  exec-with-params [ default | dd ] [ here | hh ] [ there | tt ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
-  pymake7.py  use <env-name> exec-with-params [ default | dd ] [ here | hh ] [ there | tt ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
-  pymake7.py  execvp [ default | dd ] [ here | hh ] [ there | tt ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
-  pymake7.py  use <env-name> execvp [ default | dd ] [ here | hh ] [ there | tt ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
-  pymake7.py  ccvp [ default | dd ] [ here | hh ] [ there | tt ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
-  pymake7.py  use <env-name> ccvp [ default | dd ] [ here | hh ] [ there | tt ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
-  pymake7.py  import cmd [ default | dd ] [ here | hh ] [ there | tt ] [ <script-file> ] [ to <command-name> ] [ -a | --all ] [ -f | --force ] [ --recursive ] [ --encoding=<encoding-name> ] [ --filter=<name-filter> ... ]
-  pymake7.py  outport cmd [ default | dd ] [ here | hh ] [ there | tt ] [ <command-name> ] [ to <script-file> ] [ -r | --raw ] [ -a | --all ] [ -f | --force ] [ --recursive ] [ --encoding=<encoding-name> ] [ --suffix=<.suffix-name> ]
-  pymake7.py  use <env-name> outport cmd [ default | dd ] [ here | hh ] [ there | tt ] [ <command-name> ] [ to <script-file> ] [ -r | --raw ] [ -a | --all ] [ -f | --force ] [ --recursive ] [ --encoding=<encoding-name> ] [ --suffix=<.suffix-name> ]
-  pymake7.py  backup [ default | dd ] [ here | hh ] [ there | tt ] [ <zip-file-name> ]
-  pymake7.py  recovery [ default | dd ] [ here | hh ] [ there | tt ] [ <zip-file-name> ]
+  pymake7.py  exec-with-params [ here | hh ] [ there | tt ] [ default | dd ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  use <env-name> exec-with-params [ here | hh ] [ there | tt ] [ default | dd ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  execvp [ here | hh ] [ there | tt ] [ default | dd ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  use <env-name> execvp [ here | hh ] [ there | tt ] [ default | dd ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  ccvp [ here | hh ] [ there | tt ] [ default | dd ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  use <env-name> ccvp [ here | hh ] [ there | tt ] [ default | dd ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  import cmd [ here | hh ] [ there | tt ] [ default | dd ] [ <script-file> ] [ to <command-name> ] [ -a | --all ] [ -f | --force ] [ --recursive ] [ --encoding=<encoding-name> ] [ --filter=<name-filter> ... ]
+  pymake7.py  outport cmd [ here | hh ] [ there | tt ] [ default | dd ] [ <command-name> ] [ to <script-file> ] [ -r | --raw ] [ -a | --all ] [ -f | --force ] [ --recursive ] [ --encoding=<encoding-name> ] [ --suffix=<.suffix-name> ]
+  pymake7.py  use <env-name> outport cmd [ here | hh ] [ there | tt ] [ default | dd ] [ <command-name> ] [ to <script-file> ] [ -r | --raw ] [ -a | --all ] [ -f | --force ] [ --recursive ] [ --encoding=<encoding-name> ] [ --suffix=<.suffix-name> ]
+  pymake7.py  backup [ here | hh ] [ there | tt ] [ default | dd ] [ <zip-file-name> ]
+  pymake7.py  recovery [ here | hh ] [ there | tt ] [ default | dd ] [ <zip-file-name> ]
   pymake7.py  system
   pymake7.py  system [ stat | status ]
   pymake7.py  system [ info | information ]
   pymake7.py  system path [ --add | --del ] [ <value> ]
   pymake7.py  system var [ --add | --del ] [ <key> ] [ <value> ]
   pymake7.py  system env [ -r | --raw ]
-  pymake7.py  system exec-with-params [ default | dd ] [ here | hh ] [ there | tt ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
-  pymake7.py  system use <env-name> exec-with-params [ default | dd ] [ here | hh ] [ there | tt ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
-  pymake7.py  system execvp [ default | dd ] [ here | hh ] [ there | tt ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
-  pymake7.py  system use <env-name> execvp [ default | dd ] [ here | hh ] [ there | tt ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
-  pymake7.py  system ccvp [ default | dd ] [ here | hh ] [ there | tt ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
-  pymake7.py  system use <env-name> ccvp [ default | dd ] [ here | hh ] [ there | tt ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  system exec-with-params [ here | hh ] [ there | tt ] [ default | dd ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  system use <env-name> exec-with-params [ here | hh ] [ there | tt ] [ default | dd ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  system execvp [ here | hh ] [ there | tt ] [ default | dd ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  system use <env-name> execvp [ here | hh ] [ there | tt ] [ default | dd ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  system ccvp [ here | hh ] [ there | tt ] [ default | dd ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  system use <env-name> ccvp [ here | hh ] [ there | tt ] [ default | dd ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
   pymake7.py  -------------------------------------------------------------
   pymake7.py  local
   pymake7.py  local [ open | close ]
@@ -129,13 +139,13 @@ Usage:
   pymake7.py  local path [ --add | --del ] [ <value> ]
   pymake7.py  local var [ --add | --del ] [ <key> ] [ <value> ]
   pymake7.py  local env [ -r | --raw ]
-  pymake7.py  local export [ default | dd ] [ here | hh ] [ there | tt ] [ to <file-name> ]
-  pymake7.py  local exec-with-params [ default | dd ] [ here | hh ] [ there | tt ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
-  pymake7.py  local use <env-name> exec-with-params [ default | dd ] [ here | hh ] [ there | tt ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
-  pymake7.py  local execvp [ default | dd ] [ here | hh ] [ there | tt ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
-  pymake7.py  local use <env-name> execvp [ default | dd ] [ here | hh ] [ there | tt ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
-  pymake7.py  local ccvp [ default | dd ] [ here | hh ] [ there | tt ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
-  pymake7.py  local use <env-name> ccvp [ default | dd ] [ here | hh ] [ there | tt ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  local export [ here | hh ] [ there | tt ] [ default | dd ] [ to <file-name> ]
+  pymake7.py  local exec-with-params [ here | hh ] [ there | tt ] [ default | dd ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  local use <env-name> exec-with-params [ here | hh ] [ there | tt ] [ default | dd ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  local execvp [ here | hh ] [ there | tt ] [ default | dd ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  local use <env-name> execvp [ here | hh ] [ there | tt ] [ default | dd ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  local ccvp [ here | hh ] [ there | tt ] [ default | dd ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  local use <env-name> ccvp [ here | hh ] [ there | tt ] [ default | dd ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
   pymake7.py  -------------------------------------------------------------
   pymake7.py  custom
   pymake7.py  custom [ open | close ]
@@ -145,53 +155,53 @@ Usage:
   pymake7.py  custom path [ --add | --del ] [ <value> ]
   pymake7.py  custom var [ --add | --del ] [ <key> ] [ <value> ]
   pymake7.py  custom env [ -r | --raw ]
-  pymake7.py  custom export [ default | dd ] [ here | hh ] [ there | tt ] [ to <file-name> ]
-  pymake7.py  custom exec-with-params [ default | dd ] [ here | hh ] [ there | tt ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
-  pymake7.py  custom use <env-name> exec-with-params [ default | dd ] [ here | hh ] [ there | tt ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
-  pymake7.py  custom execvp [ default | dd ] [ here | hh ] [ there | tt ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
-  pymake7.py  custom use <env-name> execvp [ default | dd ] [ here | hh ] [ there | tt ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
-  pymake7.py  custom ccvp [ default | dd ] [ here | hh ] [ there | tt ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
-  pymake7.py  custom use <env-name> ccvp [ default | dd ] [ here | hh ] [ there | tt ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  custom export [ here | hh ] [ there | tt ] [ default | dd ] [ to <file-name> ]
+  pymake7.py  custom exec-with-params [ here | hh ] [ there | tt ] [ default | dd ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  custom use <env-name> exec-with-params [ here | hh ] [ there | tt ] [ default | dd ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  custom execvp [ here | hh ] [ there | tt ] [ default | dd ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  custom use <env-name> execvp [ here | hh ] [ there | tt ] [ default | dd ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  custom ccvp [ here | hh ] [ there | tt ] [ default | dd ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  custom use <env-name> ccvp [ here | hh ] [ there | tt ] [ default | dd ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
   pymake7.py  -------------------------------------------------------------
   pymake7.py  powershell
   pymake7.py  powershell [ info | information ]
   pymake7.py  powershell [ stat | status ]
-  pymake7.py  powershell clean [ default | dd ] [ here | hh ] [ there | tt ]
-  pymake7.py  powershell export [ default | dd ] [ here | hh ] [ there | tt ] [ <env-name> ] [ to <file-name> ]
-  pymake7.py  powershell type [ default | dd ] [ here | hh ] [ there | tt ] [ <cmd-name> ] [ to <file-name> ]
-  pymake7.py  powershell use <env-name> type [ default | dd ] [ here | hh ] [ there | tt ] [ <cmd-name> ]  [ to <file-name> ]
-  pymake7.py  powershell exec-with-params [ default | dd ] [ here | hh ] [ there | tt ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
-  pymake7.py  powershell use <env-name> exec-with-params [ default | dd ] [ here | hh ] [ there | tt ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
-  pymake7.py  powershell execvp [ default | dd ] [ here | hh ] [ there | tt ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
-  pymake7.py  powershell use <env-name> execvp [ default | dd ] [ here | hh ] [ there | tt ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
-  pymake7.py  powershell ccvp [ default | dd ] [ here | hh ] [ there | tt ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
-  pymake7.py  powershell use <env-name> ccvp [ default | dd ] [ here | hh ] [ there | tt ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  powershell clean [ here | hh ] [ there | tt ] [ default | dd ]
+  pymake7.py  powershell export [ here | hh ] [ there | tt ] [ default | dd ] [ <env-name> ] [ to <file-name> ]
+  pymake7.py  powershell type [ here | hh ] [ there | tt ] [ default | dd ] [ <cmd-name> ] [ to <file-name> ]
+  pymake7.py  powershell use <env-name> type [ here | hh ] [ there | tt ] [ default | dd ] [ <cmd-name> ]  [ to <file-name> ]
+  pymake7.py  powershell exec-with-params [ here | hh ] [ there | tt ] [ default | dd ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  powershell use <env-name> exec-with-params [ here | hh ] [ there | tt ] [ default | dd ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  powershell execvp [ here | hh ] [ there | tt ] [ default | dd ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  powershell use <env-name> execvp [ here | hh ] [ there | tt ] [ default | dd ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  powershell ccvp [ here | hh ] [ there | tt ] [ default | dd ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  powershell use <env-name> ccvp [ here | hh ] [ there | tt ] [ default | dd ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
   pymake7.py  -------------------------------------------------------------
   pymake7.py  python
   pymake7.py  python [ info | information ]
   pymake7.py  python [ stat | status ]
-  pymake7.py  python clean [ default | dd ] [ here | hh ] [ there | tt ]
-  pymake7.py  python type [ default | dd ] [ here | hh ] [ there | tt ] [ <cmd-name> ] [ to <file-name> ]
-  pymake7.py  python use <env-name> type [ default | dd ] [ here | hh ] [ there | tt ] [ <cmd-name> ]  [ to <file-name> ]
-  pymake7.py  python exec-with-params [ default | dd ] [ here | hh ] [ there | tt ][ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
-  pymake7.py  python use <env-name> exec-with-params [ default | dd ] [ here | hh ] [ there | tt ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
-  pymake7.py  python execvp [ default | dd ] [ here | hh ] [ there | tt ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
-  pymake7.py  python use <env-name> execvp [ default | dd ] [ here | hh ] [ there | tt ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
-  pymake7.py  python ccvp [ default | dd ] [ here | hh ] [ there | tt ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
-  pymake7.py  python use <env-name> ccvp [ default | dd ] [ here | hh ] [ there | tt ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  python clean [ here | hh ] [ there | tt ] [ default | dd ]
+  pymake7.py  python type [ here | hh ] [ there | tt ] [ default | dd ] [ <cmd-name> ] [ to <file-name> ]
+  pymake7.py  python use <env-name> type [ here | hh ] [ there | tt ] [ default | dd ] [ <cmd-name> ]  [ to <file-name> ]
+  pymake7.py  python exec-with-params [ here | hh ] [ there | tt ] [ default | dd ][ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  python use <env-name> exec-with-params [ here | hh ] [ there | tt ] [ default | dd ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  python execvp [ here | hh ] [ there | tt ] [ default | dd ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  python use <env-name> execvp [ here | hh ] [ there | tt ] [ default | dd ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  python ccvp [ here | hh ] [ there | tt ] [ default | dd ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  python use <env-name> ccvp [ here | hh ] [ there | tt ] [ default | dd ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
   pymake7.py  -------------------------------------------------------------
   pymake7.py  language
   pymake7.py  language [ info | information ]
   pymake7.py  language [ stat | status ]
-  pymake7.py  language clean [ default | dd ] [ here | hh ] [ there | tt ] [ --suffix=<.suffix-name> ]
-  pymake7.py  language type [ default | dd ] [ here | hh ] [ there | tt ] [ <cmd-name> ] [ to <file-name> ] [ --suffix=<.suffix-name> ] [ --encoding=<encoding-name> ]
-  pymake7.py  language use <env-name> type [ default | dd ] [ here | hh ] [ there | tt ] [ <cmd-name> ]  [ to <file-name> ] [ --suffix=<.suffix-name> ] [ --encoding=<encoding-name> ]
-  pymake7.py  language exec-with-params [ default | dd ] [ here | hh ] [ there | tt ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ] [ --suffix=<.suffix-name> ] [ --encoding=<encoding-name> ]
-  pymake7.py  language use <env-name> exec-with-params [ default | dd ] [ here | hh ] [ there | tt ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ] [ --suffix=<.suffix-name> ] [ --encoding=<encoding-name> ]
-  pymake7.py  language execvp [ default | dd ] [ here | hh ] [ there | tt ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ] [ --suffix=<.suffix-name> ] [ --encoding=<encoding-name> ]
-  pymake7.py  language use <env-name> execvp [ default | dd ] [ here | hh ] [ there | tt ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ] [ --suffix=<.suffix-name> ] [ --encoding=<encoding-name> ]
-  pymake7.py  language ccvp [ default | dd ] [ here | hh ] [ there | tt ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ] [ --suffix=<.suffix-name> ] [ --encoding=<encoding-name> ]
-  pymake7.py  language use <env-name> ccvp [ default | dd ] [ here | hh ] [ there | tt ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ] [ --suffix=<.suffix-name> ] [ --encoding=<encoding-name> ]
+  pymake7.py  language clean [ here | hh ] [ there | tt ] [ default | dd ] [ --suffix=<.suffix-name> ]
+  pymake7.py  language type [ here | hh ] [ there | tt ] [ default | dd ] [ <cmd-name> ] [ to <file-name> ] [ --suffix=<.suffix-name> ] [ --encoding=<encoding-name> ]
+  pymake7.py  language use <env-name> type [ here | hh ] [ there | tt ] [ default | dd ] [ <cmd-name> ]  [ to <file-name> ] [ --suffix=<.suffix-name> ] [ --encoding=<encoding-name> ]
+  pymake7.py  language exec-with-params [ here | hh ] [ there | tt ] [ default | dd ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ] [ --suffix=<.suffix-name> ] [ --encoding=<encoding-name> ]
+  pymake7.py  language use <env-name> exec-with-params [ here | hh ] [ there | tt ] [ default | dd ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ] [ --suffix=<.suffix-name> ] [ --encoding=<encoding-name> ]
+  pymake7.py  language execvp [ here | hh ] [ there | tt ] [ default | dd ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ] [ --suffix=<.suffix-name> ] [ --encoding=<encoding-name> ]
+  pymake7.py  language use <env-name> execvp [ here | hh ] [ there | tt ] [ default | dd ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ] [ --suffix=<.suffix-name> ] [ --encoding=<encoding-name> ]
+  pymake7.py  language ccvp [ here | hh ] [ there | tt ] [ default | dd ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ] [ --suffix=<.suffix-name> ] [ --encoding=<encoding-name> ]
+  pymake7.py  language use <env-name> ccvp [ here | hh ] [ there | tt ] [ default | dd ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ] [ --suffix=<.suffix-name> ] [ --encoding=<encoding-name> ]
   pymake7.py  -------------------------------------------------------------
   pymake7.py  sys
   pymake7.py  sys [ stat | status ]
@@ -199,16 +209,16 @@ Usage:
   pymake7.py  sys path [ --add | --del ] [ <value> ]
   pymake7.py  sys var [ --add | --del ] [ <key> ] [ <value> ]
   pymake7.py  sys env [ -r | --raw ]
-  pymake7.py  sys exec-with-params [ default | dd ] [ here | hh ] [ there | tt ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
-  pymake7.py  sys use <env-name> exec-with-params [ default | dd ] [ here | hh ] [ there | tt ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
-  pymake7.py  sys execvp [ default | dd ] [ here | hh ] [ there | tt ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
-  pymake7.py  sys use <env-name> execvp [ default | dd ] [ here | hh ] [ there | tt ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
-  pymake7.py  sys ccvp [ default | dd ] [ here | hh ] [ there | tt ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
-  pymake7.py  sys use <env-name> ccvp [ default | dd ] [ here | hh ] [ there | tt ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  sys exec-with-params [ here | hh ] [ there | tt ] [ default | dd ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  sys use <env-name> exec-with-params [ here | hh ] [ there | tt ] [ default | dd ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  sys execvp [ here | hh ] [ there | tt ] [ default | dd ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  sys use <env-name> execvp [ here | hh ] [ there | tt ] [ default | dd ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  sys ccvp [ here | hh ] [ there | tt ] [ default | dd ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  sys use <env-name> ccvp [ here | hh ] [ there | tt ] [ default | dd ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
   pymake7.py  -------------------------------------------------------------
-  pymake7.py  export2 [ powershell ] [ default | dd ] [ here | hh ] [ there | tt ] [ <env-name> ] [ to <file-name> ] [ -c | --custom ] [ -l | --local ] [ -s | --system ]
-  pymake7.py  type2 [ default | dd ] [ here | hh ] [ there | tt ] [ <cmd-name> ] [ to <file-name> ] [ --suffix=<.suffix-name> ] [ --encoding=<encoding-name> ] [ --samename ] [ -a | --all ]
-  pymake7.py  use <env-name> type2 [ default | dd ] [ here | hh ] [ there | tt ] [ <cmd-name> ] [ to <file-name> ] [ --suffix=<.suffix-name> ] [ --encoding=<encoding-name> ] [ --samename ] [ -a | --all ]
+  pymake7.py  export2 [ powershell ] [ here | hh ] [ there | tt ] [ default | dd ] [ <env-name> ] [ to <file-name> ] [ -c | --custom ] [ -l | --local ] [ -s | --system ]
+  pymake7.py  type2 [ here | hh ] [ there | tt ] [ default | dd ] [ <cmd-name> ] [ to <file-name> ] [ --suffix=<.suffix-name> ] [ --encoding=<encoding-name> ] [ --samename ] [ -a | --all ]
+  pymake7.py  use <env-name> type2 [ here | hh ] [ there | tt ] [ default | dd ] [ <cmd-name> ] [ to <file-name> ] [ --suffix=<.suffix-name> ] [ --encoding=<encoding-name> ] [ --samename ] [ -a | --all ]
   pymake7.py  open [ <path-name> ... ] [ -c | --custom ] [ --current ] [ --envname=<env-name> ] [ -i | --ignorecase ]
   pymake7.py  use <env-name> open [ <path-name> ... ] [ -i | --ignorecase ]
   pymake7.py  check path [ <item-name> ] [ --item=<item-name> ] [ -a | --all ]
@@ -225,35 +235,146 @@ Usage:
   pymake7.py  vc init [ <env-name> ] [ -a | --all ]
   pymake7.py  vc deinit [ <env-name> ]
   pymake7.py  vc env [ <env-name> ]
-  pymake7.py  vc clean [ default | dd ] [ here | hh ] [ there | tt ]
-  pymake7.py  vc type [ default | dd ] [ here | hh ] [ there | tt ] [ <cmd-name> ] [ to <file-name> ]
-  pymake7.py  vc use <env-name> type [ default | dd ] [ here | hh ] [ there | tt ] [ <cmd-name> ]  [ to <file-name> ]
-  pymake7.py  vc export [ default | dd ] [ here | hh ] [ there | tt ] [ <env-name> ] [ to <file-name> ]
-  pymake7.py  vc exec-with-params [ default | dd ] [ here | hh ] [ there | tt ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
-  pymake7.py  vc use <env-name> exec-with-params [ default | dd ] [ here | hh ] [ there | tt ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
-  pymake7.py  vc execvp [ default | dd ] [ here | hh ] [ there | tt ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
-  pymake7.py  vc use <env-name> execvp [ default | dd ] [ here | hh ] [ there | tt ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
-  pymake7.py  vc ccvp [ default | dd ] [ here | hh ] [ there | tt ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
-  pymake7.py  vc use <env-name> ccvp [ default | dd ] [ here | hh ] [ there | tt ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
-  pymake7.py  vc powershell exec-with-params [ default | dd ] [ here | hh ] [ there | tt ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
-  pymake7.py  vc powershell use <env-name> exec-with-params [ default | dd ] [ here | hh ] [ there | tt ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
-  pymake7.py  vc powershell execvp [ default | dd ] [ here | hh ] [ there | tt ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
-  pymake7.py  vc powershell use <env-name> execvp [ default | dd ] [ here | hh ] [ there | tt ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
-  pymake7.py  vc powershell ccvp [ default | dd ] [ here | hh ] [ there | tt ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
-  pymake7.py  vc powershell use <env-name> ccvp [ default | dd ] [ here | hh ] [ there | tt ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
-  pymake7.py  vc python exec-with-params [ default | dd ] [ here | hh ] [ there | tt ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
-  pymake7.py  vc python use <env-name> exec-with-params [ default | dd ] [ here | hh ] [ there | tt ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
-  pymake7.py  vc python execvp [ default | dd ] [ here | hh ] [ there | tt ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
-  pymake7.py  vc python use <env-name> execvp [ default | dd ] [ here | hh ] [ there | tt ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
-  pymake7.py  vc python ccvp [ default | dd ] [ here | hh ] [ there | tt ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
-  pymake7.py  vc python use <env-name> ccvp [ default | dd ] [ here | hh ] [ there | tt ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
-  pymake7.py  vc language exec-with-params [ default | dd ] [ here | hh ] [ there | tt ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ] [ --suffix=<.suffix-name> ] [ --encoding=<encoding-name> ]
-  pymake7.py  vc language use <env-name> exec-with-params [ default | dd ] [ here | hh ] [ there | tt ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ] [ --suffix=<.suffix-name> ] [ --encoding=<encoding-name> ]
-  pymake7.py  vc language execvp [ default | dd ] [ here | hh ] [ there | tt ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ] [ --suffix=<.suffix-name> ] [ --encoding=<encoding-name> ]
-  pymake7.py  vc language use <env-name> execvp [ default | dd ] [ here | hh ] [ there | tt ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ] [ --suffix=<.suffix-name> ] [ --encoding=<encoding-name> ]
-  pymake7.py  vc language ccvp [ default | dd ] [ here | hh ] [ there | tt ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ] [ --suffix=<.suffix-name> ] [ --encoding=<encoding-name> ]
-  pymake7.py  vc language use <env-name> ccvp [ default | dd ] [ here | hh ] [ there | tt ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ] [ --suffix=<.suffix-name> ] [ --encoding=<encoding-name> ]
-  pymake7.py  vc export2 [ powershell ] [ default | dd ] [ here | hh ] [ there | tt ] [ <env-name> ] [ to <file-name> ] [ -c | --custom ] [ -l | --local ] [ -s | --system ]
+  pymake7.py  vc clean [ here | hh ] [ there | tt ] [ default | dd ]
+  pymake7.py  vc type [ here | hh ] [ there | tt ] [ default | dd ] [ <cmd-name> ] [ to <file-name> ]
+  pymake7.py  vc use <env-name> type [ here | hh ] [ there | tt ] [ default | dd ] [ <cmd-name> ]  [ to <file-name> ]
+  pymake7.py  vc export [ here | hh ] [ there | tt ] [ default | dd ] [ <env-name> ] [ to <file-name> ]
+  pymake7.py  vc exec-with-params [ here | hh ] [ there | tt ] [ default | dd ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  vc use <env-name> exec-with-params [ here | hh ] [ there | tt ] [ default | dd ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  vc execvp [ here | hh ] [ there | tt ] [ default | dd ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  vc use <env-name> execvp [ here | hh ] [ there | tt ] [ default | dd ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  vc ccvp [ here | hh ] [ there | tt ] [ default | dd ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  vc use <env-name> ccvp [ here | hh ] [ there | tt ] [ default | dd ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  vc powershell exec-with-params [ here | hh ] [ there | tt ] [ default | dd ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  vc powershell use <env-name> exec-with-params [ here | hh ] [ there | tt ] [ default | dd ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  vc powershell execvp [ here | hh ] [ there | tt ] [ default | dd ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  vc powershell use <env-name> execvp [ here | hh ] [ there | tt ] [ default | dd ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  vc powershell ccvp [ here | hh ] [ there | tt ] [ default | dd ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  vc powershell use <env-name> ccvp [ here | hh ] [ there | tt ] [ default | dd ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  vc python exec-with-params [ here | hh ] [ there | tt ] [ default | dd ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  vc python use <env-name> exec-with-params [ here | hh ] [ there | tt ] [ default | dd ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  vc python execvp [ here | hh ] [ there | tt ] [ default | dd ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  vc python use <env-name> execvp [ here | hh ] [ there | tt ] [ default | dd ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  vc python ccvp [ here | hh ] [ there | tt ] [ default | dd ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  vc python use <env-name> ccvp [ here | hh ] [ there | tt ] [ default | dd ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  vc language exec-with-params [ here | hh ] [ there | tt ] [ default | dd ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ] [ --suffix=<.suffix-name> ] [ --encoding=<encoding-name> ]
+  pymake7.py  vc language use <env-name> exec-with-params [ here | hh ] [ there | tt ] [ default | dd ] [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ] [ --suffix=<.suffix-name> ] [ --encoding=<encoding-name> ]
+  pymake7.py  vc language execvp [ here | hh ] [ there | tt ] [ default | dd ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ] [ --suffix=<.suffix-name> ] [ --encoding=<encoding-name> ]
+  pymake7.py  vc language use <env-name> execvp [ here | hh ] [ there | tt ] [ default | dd ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ] [ --suffix=<.suffix-name> ] [ --encoding=<encoding-name> ]
+  pymake7.py  vc language ccvp [ here | hh ] [ there | tt ] [ default | dd ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ] [ --suffix=<.suffix-name> ] [ --encoding=<encoding-name> ]
+  pymake7.py  vc language use <env-name> ccvp [ here | hh ] [ there | tt ] [ default | dd ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ] [ --suffix=<.suffix-name> ] [ --encoding=<encoding-name> ]
+  pymake7.py  vc export2 [ powershell ] [ here | hh ] [ there | tt ] [ default | dd ] [ <env-name> ] [ to <file-name> ] [ -c | --custom ] [ -l | --local ] [ -s | --system ]
+  pymake7.py  -------------------------------------------------------------
+  pymake7.py  default clean
+  pymake7.py  default export [ <env-name> ] [ to <file-name> ]
+  pymake7.py  default type [ <cmd-name> ]  [ to <file-name> ]
+  pymake7.py  default use <env-name> exec [ <command-names> ... ]
+  pymake7.py  default exec [ <command-names> ... ]
+  pymake7.py  default use <env-name> cc [ <command-names> ... ]
+  pymake7.py  default cc [ <command-names> ... ]
+  pymake7.py  dd clean
+  pymake7.py  dd export [ <env-name> ] [ to <file-name> ]
+  pymake7.py  dd type [ <cmd-name> ]  [ to <file-name> ]
+  pymake7.py  dd use <env-name> exec [ <command-names> ... ]
+  pymake7.py  dd exec [ <command-names> ... ]
+  pymake7.py  dd use <env-name> cc [ <command-names> ... ]
+  pymake7.py  dd cc [ <command-names> ... ]
+  pymake7.py  default exec-with-params [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  default use <env-name> exec-with-params [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  dd exec-with-params [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  dd use <env-name> exec-with-params [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  default execvp [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  default use <env-name> execvp [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  dd execvp [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  dd use <env-name> execvp [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  default ccvp [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  default use <env-name> ccvp [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  dd ccvp [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  dd use <env-name> ccvp [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  default import cmd [ <script-file> ] [ to <command-name> ] [ -a | --all ] [ -f | --force ] [ --recursive ] [ --encoding=<encoding-name> ] [ --filter=<name-filter> ... ]
+  pymake7.py  dd import cmd [ <script-file> ] [ to <command-name> ] [ -a | --all ] [ -f | --force ] [ --recursive ] [ --encoding=<encoding-name> ] [ --filter=<name-filter> ... ]
+  pymake7.py  default outport cmd [ <command-name> ] [ to <script-file> ] [ -r | --raw ] [ -a | --all ] [ -f | --force ] [ --recursive ] [ --encoding=<encoding-name> ] [ --suffix=<.suffix-name> ]
+  pymake7.py  dd outport cmd [ <command-name> ] [ to <script-file> ] [ -r | --raw ] [ -a | --all ] [ -f | --force ] [ --recursive ] [ --encoding=<encoding-name> ] [ --suffix=<.suffix-name> ]
+  pymake7.py  default use <env-name> outport cmd [ <command-name> ] [ to <script-file> ] [ -r | --raw ] [ -a | --all ] [ -f | --force ] [ --recursive ] [ --encoding=<encoding-name> ] [ --suffix=<.suffix-name> ]
+  pymake7.py  dd use <env-name> outport cmd [ <command-name> ] [ to <script-file> ] [ -r | --raw ] [ -a | --all ] [ -f | --force ] [ --recursive ] [ --encoding=<encoding-name> ] [ --suffix=<.suffix-name> ]
+  pymake7.py  default backup [ <zip-file-name> ]
+  pymake7.py  dd backup [ <zip-file-name> ]
+  pymake7.py  default recovery [ <zip-file-name> ]
+  pymake7.py  dd recovery [ <zip-file-name> ]
+  pymake7.py  -------------------------------------------------------------
+  pymake7.py  there clean
+  pymake7.py  there export [ <env-name> ] [ to <file-name> ]
+  pymake7.py  there type [ <cmd-name> ]  [ to <file-name> ]
+  pymake7.py  there use <env-name> exec [ <command-names> ... ]
+  pymake7.py  there exec [ <command-names> ... ]
+  pymake7.py  there use <env-name> cc [ <command-names> ... ]
+  pymake7.py  there cc [ <command-names> ... ]
+  pymake7.py  tt clean
+  pymake7.py  tt export [ <env-name> ] [ to <file-name> ]
+  pymake7.py  tt type [ <cmd-name> ]  [ to <file-name> ]
+  pymake7.py  tt use <env-name> exec [ <command-names> ... ]
+  pymake7.py  tt exec [ <command-names> ... ]
+  pymake7.py  tt use <env-name> cc [ <command-names> ... ]
+  pymake7.py  tt cc [ <command-names> ... ]
+  pymake7.py  there exec-with-params [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  there use <env-name> exec-with-params [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  tt exec-with-params [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  tt use <env-name> exec-with-params [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  there execvp [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  there use <env-name> execvp [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  tt execvp [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  tt use <env-name> execvp [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  there ccvp [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  there use <env-name> ccvp [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  tt ccvp [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  tt use <env-name> ccvp [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  there import cmd [ <script-file> ] [ to <command-name> ] [ -a | --all ] [ -f | --force ] [ --recursive ] [ --encoding=<encoding-name> ] [ --filter=<name-filter> ... ]
+  pymake7.py  tt import cmd [ <script-file> ] [ to <command-name> ] [ -a | --all ] [ -f | --force ] [ --recursive ] [ --encoding=<encoding-name> ] [ --filter=<name-filter> ... ]
+  pymake7.py  there outport cmd [ <command-name> ] [ to <script-file> ] [ -r | --raw ] [ -a | --all ] [ -f | --force ] [ --recursive ] [ --encoding=<encoding-name> ] [ --suffix=<.suffix-name> ]
+  pymake7.py  tt outport cmd [ <command-name> ] [ to <script-file> ] [ -r | --raw ] [ -a | --all ] [ -f | --force ] [ --recursive ] [ --encoding=<encoding-name> ] [ --suffix=<.suffix-name> ]
+  pymake7.py  there use <env-name> outport cmd [ <command-name> ] [ to <script-file> ] [ -r | --raw ] [ -a | --all ] [ -f | --force ] [ --recursive ] [ --encoding=<encoding-name> ] [ --suffix=<.suffix-name> ]
+  pymake7.py  tt use <env-name> outport cmd [ <command-name> ] [ to <script-file> ] [ -r | --raw ] [ -a | --all ] [ -f | --force ] [ --recursive ] [ --encoding=<encoding-name> ] [ --suffix=<.suffix-name> ]
+  pymake7.py  there backup [ <zip-file-name> ]
+  pymake7.py  tt backup [ <zip-file-name> ]
+  pymake7.py  there recovery [ <zip-file-name> ]
+  pymake7.py  tt recovery [ <zip-file-name> ]
+  pymake7.py  -------------------------------------------------------------
+  pymake7.py  here clean
+  pymake7.py  here export [ <env-name> ] [ to <file-name> ]
+  pymake7.py  here type [ <cmd-name> ]  [ to <file-name> ]
+  pymake7.py  here use <env-name> exec [ <command-names> ... ]
+  pymake7.py  here exec [ <command-names> ... ]
+  pymake7.py  here use <env-name> cc [ <command-names> ... ]
+  pymake7.py  here cc [ <command-names> ... ]
+  pymake7.py  hh clean
+  pymake7.py  hh export [ <env-name> ] [ to <file-name> ]
+  pymake7.py  hh type [ <cmd-name> ]  [ to <file-name> ]
+  pymake7.py  hh use <env-name> exec [ <command-names> ... ]
+  pymake7.py  hh exec [ <command-names> ... ]
+  pymake7.py  hh use <env-name> cc [ <command-names> ... ]
+  pymake7.py  hh cc [ <command-names> ... ]
+  pymake7.py  here execvp [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  here use <env-name> execvp [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  hh execvp [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  hh use <env-name> execvp [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  here ccvp [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  here use <env-name> ccvp [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  hh ccvp [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  hh use <env-name> ccvp [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  here import cmd [ <script-file> ] [ to <command-name> ] [ -a | --all ] [ -f | --force ] [ --recursive ] [ --encoding=<encoding-name> ] [ --filter=<name-filter> ... ]
+  pymake7.py  hh import cmd [ <script-file> ] [ to <command-name> ] [ -a | --all ] [ -f | --force ] [ --recursive ] [ --encoding=<encoding-name> ] [ --filter=<name-filter> ... ]
+  pymake7.py  here outport cmd [ <command-name> ] [ to <script-file> ] [ -r | --raw ] [ -a | --all ] [ -f | --force ] [ --recursive ] [ --encoding=<encoding-name> ] [ --suffix=<.suffix-name> ]
+  pymake7.py  hh outport cmd [ <command-name> ] [ to <script-file> ] [ -r | --raw ] [ -a | --all ] [ -f | --force ] [ --recursive ] [ --encoding=<encoding-name> ] [ --suffix=<.suffix-name> ]
+  pymake7.py  here use <env-name> outport cmd [ <command-name> ] [ to <script-file> ] [ -r | --raw ] [ -a | --all ] [ -f | --force ] [ --recursive ] [ --encoding=<encoding-name> ] [ --suffix=<.suffix-name> ]
+  pymake7.py  hh use <env-name> outport cmd [ <command-name> ] [ to <script-file> ] [ -r | --raw ] [ -a | --all ] [ -f | --force ] [ --recursive ] [ --encoding=<encoding-name> ] [ --suffix=<.suffix-name> ]
+  pymake7.py  here backup [ <zip-file-name> ]
+  pymake7.py  hh backup [ <zip-file-name> ]
+  pymake7.py  here recovery [ <zip-file-name> ]
+  pymake7.py  hh recovery [ <zip-file-name> ]
+  pymake7.py  here exec-with-params [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  here use <env-name> exec-with-params [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  hh exec-with-params [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  hh use <env-name> exec-with-params [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
   pymake7.py  -------------------------------------------------------------
   pymake7.py  (-h | --help)
   pymake7.py  --version
@@ -273,12 +394,12 @@ Command:
   list              list config values, show command also too.
   set cur env       set default env, set current env.
   use               use selected env exec commands
+  default           at default ( pymake default exec root ) do exec commands e.g. [default]
+  dd                at default ( pymake default exec root ) do exec commands e.g. [default]
+  there             at there (user default exec root) do exec commands e.g.
+  tt                at there (user default exec root) do exec commands e.g.
   here              at here do exec commands e.g.
   hh                at here do exec commands e.g.
-  there             at there (user custom exec root) do exec commands e.g.
-  tt                at there (user custom exec root) do exec commands e.g.
-  default           at default exec root do exec commands e.g.
-  dd                at default exec root do exec commands e.g.
   exec              exec commands list.
   cc                exec commands list.
   have              check env or path or cmd item whether user has configured.
@@ -950,8 +1071,8 @@ def main_function():
     """
     [pymake]
     [work]
-    root = default;here;custom
-    custom = 
+    root = default;here;there
+    there = 
     [source]
     root = ~/.pymake;$pymakesourceroot
     config = pymake.json
@@ -986,8 +1107,8 @@ def main_function():
     if( not conf.has_option('work', 'root') ):
         conf.set('work', 'root', 'default')
         conf.write(open(pymakeini, 'w'))
-    if(not conf.has_option('work', 'custom')):
-        conf.set('work', 'custom', pymakeshellroot)
+    if(not conf.has_option('work', 'there')):
+        conf.set('work', 'there', pymakeshellroot)
         conf.write(open(pymakeini, 'w'))
 
     args = docopt(__doc__, version='pymake7.py v7.8.3')
@@ -1006,10 +1127,10 @@ def main_function():
             print("SOURCE CONFIG : %s" % (f))
 
             conf.set('work', 'root', 'default')
-            conf.set('work', 'custom', pymakeshellroot)
+            conf.set('work', 'there', pymakeshellroot)
             conf.write(open(pymakeini, 'w'))
             w = conf.get('work', 'root')
-            c = conf.get('work', 'custom')
+            c = conf.get('work', 'there')
             print("WORK ROOT     : %s" % (w))
             print("WORK CUSTOM   : %s" % (c))
             print("WORK STARTING : %s" % (pymakeshellroot))
@@ -1250,7 +1371,7 @@ def main_function():
     # support pymake default shell root, pymake custom shell root, pymake current shell root.
     # record pymake custom shell root [ user custom work path ]
     workroottype = conf.get('work', 'root')
-    customshellroot = conf.get('work', 'custom')
+    customshellroot = conf.get('work', 'there')
     if (not os.path.exists(customshellroot)):
         os.makedirs(customshellroot)
     #custom work root
@@ -1259,14 +1380,14 @@ def main_function():
        shellroot = pymakeshellroot
     elif (workroottype == 'here'):
        shellroot = pymakeworkpath
-    elif (workroottype == 'custom'):
+    elif (workroottype == 'there'):
        shellroot = customshellroot
 
     # if(workroottype == 'default'):
     #    print("WORK STARTING : %s" % (pymakeshellroot))
     # elif (workroottype == 'here'):
     #    print("WORK STARTING : %s" % (pymakeworkpath))
-    # elif (workroottype == 'custom'):
+    # elif (workroottype == 'there'):
     #    print("WORK STARTING : %s" % (c))
     # print("execute directory: %s" % (shellroot) )
 
@@ -2705,41 +2826,79 @@ def main_function():
     while (True):
         if(args['set'] is True):
             if(args['exec'] is True):
-                if(args['custom'] is True):
-                    if(args['<work-root-path>'] is None):
-                        print("please appoint a work root path.")
+                if(args['<work-root-path>'] is not None):
+
+                    #print(args['default'])
+                    #print(args['there'])
+                    #print(args['here'])
+
+                    if (args['here'] or args['hh'] is True
+                    or args['default'] or args['dd'] is True):
+                        workroottype1 = 'default'
+                        if (args['here'] or args['hh'] is True):
+                            workroottype1 = 'here'
+                        elif (args['default'] or args['dd'] is True):
+                            workroottype1 = 'default'
+                        else:
+                            workroottype1 = 'default'
+                        conf.set('work', 'root', workroottype1)
+                        conf.write(open(pymakeini, 'w'))
+                        print("successed: change work root to %s." % workroottype1)
                         return
+                    
+
+                    # force there
+                    if (args['there'] or args['tt'] is True):
+                        workroot1 = pymakeshellroot
+                        if (args['<work-root-path>'] == 'here' or args['<work-root-path>'] == 'hh' ):
+                            workroot1 = pymakeworkpath
+                        elif (args['<work-root-path>'] == 'there' or args['<work-root-path>'] == 'tt' ):
+                            workroot1 = customshellroot
+                        elif (args['<work-root-path>'] == 'default' or args['<work-root-path>'] == 'dd'  ):
+                            workroot1 = pymakeshellroot
+                        else:
+                            workroot1 = args['<work-root-path>']
+                            if (os.path.isabs(workroot1) is False):
+                                print("please appoint an absolute work root for setting there starting work root path.")
+                                return
+                            if (os.path.isdir(workroot1) is False):
+                                print("failed: %s is not a dir." % args['<work-root-path>'])
+                                return
+
+                        conf.set('work', 'there', workroot1)
+                        conf.write(open(pymakeini, 'w'))
+                        print("successed: change there work root to %s." % workroot1)
+                        return
+
+                    if(args['<work-root-path>'] == 'here' or args['<work-root-path>'] == 'hh'
+                    or args['<work-root-path>'] == 'there' or args['<work-root-path>'] == 'tt'
+                    or args['<work-root-path>'] == 'default' or args['<work-root-path>'] == 'dd' ):
+                        workroottype1 = args['<work-root-path>']
+                        conf.set('work', 'root', workroottype1)
+                        conf.write(open(pymakeini, 'w'))
+                        print("successed: change starting work root to %s." % workroottype1)
+                        return
+
                     workroot1 = args['<work-root-path>']
                     if(os.path.isabs(workroot1) is False):
-                        print("please appoint an absolute work root for setting custom starting work root path.")
+                        print("please appoint an absolute work root for setting there starting work root path.")
                         return
+
                     if(os.path.isdir(workroot1) is False):
                         print("failed: %s is not a dir." % args['<work-root-path>'])
                         return
-                    conf.set('work', 'custom', workroot1)
+
+                    conf.set('work', 'root', 'there')
+                    conf.set('work', 'there', workroot1)
                     conf.write(open(pymakeini, 'w'))
-                    print ("successed: change custom work root to %s." % workroot1)
-                    return
-                elif (args['current'] or args['starting'] is True):
-                    workroottype1 = 'default'
-                    if (args['here'] or args['hh'] is True):
-                        workroottype1 = 'here'
-                    elif (args['there'] or args['tt'] is True):
-                        workroottype1 = 'custom'
-                    elif (args['default'] or args['dd'] is True):
-                        workroottype1 = 'default'
-                    else:
-                        workroottype1 = 'default'
-                    conf.set('work', 'root', workroottype1)
-                    conf.write(open(pymakeini, 'w'))
-                    print ("successed: change starting work root to %s." % workroottype1)
+                    print ("successed: change work root to custom position %s." % workroot1)
                     return
                 else:
                     workroottype1 = 'default'
                     if (args['here'] or args['hh'] is True):
                         workroottype1 = 'here'
                     elif (args['there'] or args['tt'] is True):
-                        workroottype1 = 'custom'
+                        workroottype1 = 'there'
                     elif (args['default'] or args['dd'] is True):
                         workroottype1 = 'default'
                     else:
@@ -2906,19 +3065,7 @@ def main_function():
     while (True):
         if(args['get'] is True):
             if(args['exec'] is True):
-                if(args['custom'] is True):
-                    print("%s" % (customshellroot))
-                    return
-                elif (args['default'] is True):
-                    print("%s" % (pymakeshellroot))
-                    return
-                elif (args['starting'] is True):
-                    print("%s" % (shellroot))
-                    return
-                elif (args['current'] is True):
-                    print("%s" % (shellroot))
-                    return
-                elif (args['here'] or args['hh'] is True):
+                if (args['here'] or args['hh'] is True):
                     print("%s" % (pymakeworkpath))
                     return
                 elif (args['there'] or args['tt'] is True):
@@ -2929,6 +3076,9 @@ def main_function():
                     return
                 else:
                     ""
+                if (args['--position'] or args['-p'] is True):
+                    print("%s [%s]" % (shellroot, workroottype))
+                    return
                 #workroottype1 = conf.get("work", "root")
                 #print("WORK ROOT TYPE     : %s" % (workroottype1))
                 #print("STARTING WORK ROOT : %s" % (shellroot))
