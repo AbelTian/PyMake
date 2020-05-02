@@ -113,11 +113,13 @@ Usage:
   pymake7.py  use <env-name> execvp [ here | hh ] [ there | tt ] [ default | dd ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
   pymake7.py  ccvp [ here | hh ] [ there | tt ] [ default | dd ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
   pymake7.py  use <env-name> ccvp [ here | hh ] [ there | tt ] [ default | dd ] [ <command-name> ] [ <command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  -------------------------------------------------------------
   pymake7.py  import cmd [ here | hh ] [ there | tt ] [ default | dd ] [ <script-file> ] [ to <command-name> ] [ -a | --all ] [ -f | --force ] [ --recursive ] [ --encoding=<encoding-name> ] [ --filter=<name-filter> ... ]
   pymake7.py  outport cmd [ here | hh ] [ there | tt ] [ default | dd ] [ <command-name> ] [ to <script-file> ] [ -r | --raw ] [ -a | --all ] [ -f | --force ] [ --recursive ] [ --encoding=<encoding-name> ] [ --suffix=<.suffix-name> ]
   pymake7.py  use <env-name> outport cmd [ here | hh ] [ there | tt ] [ default | dd ] [ <command-name> ] [ to <script-file> ] [ -r | --raw ] [ -a | --all ] [ -f | --force ] [ --recursive ] [ --encoding=<encoding-name> ] [ --suffix=<.suffix-name> ]
   pymake7.py  backup [ here | hh ] [ there | tt ] [ default | dd ] [ <zip-file-name> ]
   pymake7.py  recovery [ here | hh ] [ there | tt ] [ default | dd ] [ <zip-file-name> ]
+  pymake7.py  -------------------------------------------------------------
   pymake7.py  system
   pymake7.py  system [ stat | status ]
   pymake7.py  system [ info | information ]
@@ -301,6 +303,12 @@ Usage:
   pymake7.py  dd backup [ <zip-file-name> ]
   pymake7.py  default recovery [ <zip-file-name> ]
   pymake7.py  dd recovery [ <zip-file-name> ]
+  pymake7.py  default export2 [ powershell ] [ <env-name> ] [ to <file-name> ] [ -c | --custom ] [ -l | --local ] [ -s | --system ]
+  pymake7.py  default type2 [ <cmd-name> ] [ to <file-name> ] [ --suffix=<.suffix-name> ] [ --encoding=<encoding-name> ] [ --samename ] [ -a | --all ]
+  pymake7.py  default use <env-name> type2 [ <cmd-name> ] [ to <file-name> ] [ --suffix=<.suffix-name> ] [ --encoding=<encoding-name> ] [ --samename ] [ -a | --all ]
+  pymake7.py  dd export2 [ powershell ] [ <env-name> ] [ to <file-name> ] [ -c | --custom ] [ -l | --local ] [ -s | --system ]
+  pymake7.py  dd type2 [ <cmd-name> ] [ to <file-name> ] [ --suffix=<.suffix-name> ] [ --encoding=<encoding-name> ] [ --samename ] [ -a | --all ]
+  pymake7.py  dd use <env-name> type2 [ <cmd-name> ] [ to <file-name> ] [ --suffix=<.suffix-name> ] [ --encoding=<encoding-name> ] [ --samename ] [ -a | --all ]
   pymake7.py  -------------------------------------------------------------
   pymake7.py  there clean
   pymake7.py  there export [ <env-name> ] [ to <file-name> ]
@@ -338,6 +346,12 @@ Usage:
   pymake7.py  tt backup [ <zip-file-name> ]
   pymake7.py  there recovery [ <zip-file-name> ]
   pymake7.py  tt recovery [ <zip-file-name> ]
+  pymake7.py  there export2 [ powershell ] [ <env-name> ] [ to <file-name> ] [ -c | --custom ] [ -l | --local ] [ -s | --system ]
+  pymake7.py  there type2 [ <cmd-name> ] [ to <file-name> ] [ --suffix=<.suffix-name> ] [ --encoding=<encoding-name> ] [ --samename ] [ -a | --all ]
+  pymake7.py  there use <env-name> type2 [ <cmd-name> ] [ to <file-name> ] [ --suffix=<.suffix-name> ] [ --encoding=<encoding-name> ] [ --samename ] [ -a | --all ]
+  pymake7.py  tt export2 [ powershell ] [ <env-name> ] [ to <file-name> ] [ -c | --custom ] [ -l | --local ] [ -s | --system ]
+  pymake7.py  tt type2 [ <cmd-name> ] [ to <file-name> ] [ --suffix=<.suffix-name> ] [ --encoding=<encoding-name> ] [ --samename ] [ -a | --all ]
+  pymake7.py  tt use <env-name> type2 [ <cmd-name> ] [ to <file-name> ] [ --suffix=<.suffix-name> ] [ --encoding=<encoding-name> ] [ --samename ] [ -a | --all ]
   pymake7.py  -------------------------------------------------------------
   pymake7.py  here clean
   pymake7.py  here export [ <env-name> ] [ to <file-name> ]
@@ -375,6 +389,12 @@ Usage:
   pymake7.py  here use <env-name> exec-with-params [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
   pymake7.py  hh exec-with-params [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
   pymake7.py  hh use <env-name> exec-with-params [ <command-name> ] [ --params=<command-params> ... ] [ --workroot=<work-root-path> ]
+  pymake7.py  here export2 [ powershell ] [ <env-name> ] [ to <file-name> ] [ -c | --custom ] [ -l | --local ] [ -s | --system ]
+  pymake7.py  here type2 [ <cmd-name> ] [ to <file-name> ] [ --suffix=<.suffix-name> ] [ --encoding=<encoding-name> ] [ --samename ] [ -a | --all ]
+  pymake7.py  here use <env-name> type2 [ <cmd-name> ] [ to <file-name> ] [ --suffix=<.suffix-name> ] [ --encoding=<encoding-name> ] [ --samename ] [ -a | --all ]
+  pymake7.py  hh export2 [ powershell ] [ <env-name> ] [ to <file-name> ] [ -c | --custom ] [ -l | --local ] [ -s | --system ]
+  pymake7.py  hh type2 [ <cmd-name> ] [ to <file-name> ] [ --suffix=<.suffix-name> ] [ --encoding=<encoding-name> ] [ --samename ] [ -a | --all ]
+  pymake7.py  hh use <env-name> type2 [ <cmd-name> ] [ to <file-name> ] [ --suffix=<.suffix-name> ] [ --encoding=<encoding-name> ] [ --samename ] [ -a | --all ]
   pymake7.py  -------------------------------------------------------------
   pymake7.py  (-h | --help)
   pymake7.py  --version
@@ -1071,10 +1091,10 @@ def main_function():
     """
     [pymake]
     [work]
-    root = default;here;there
-    there = 
+    root = default
+    there = $pymakeshellroot
     [source]
-    root = ~/.pymake;$pymakesourceroot
+    root = $pymakesourceroot
     config = pymake.json
     """
     userroot = getuserroot()
