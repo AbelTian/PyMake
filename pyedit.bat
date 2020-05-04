@@ -1,0 +1,7 @@
+@echo off
+
+set PYPROGRAMPATH=%~dp0
+set PYPROGRAMNAME=tools\pyedit\pyedit.py
+set PYPROGRAMPATHNAME=%PYPROGRAMPATH%%PYPROGRAMNAME%
+
+call py "%PYPROGRAMPATHNAME%" %*
