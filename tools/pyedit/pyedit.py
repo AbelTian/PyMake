@@ -4963,6 +4963,10 @@ def main_function():
             self.btnSaveCustom.clicked.connect(self.onBtnSaveCustomClicked)
             self.btnSaveCommands.clicked.connect(self.onBtnSaveCommandsClicked)
 
+            self.toolBtnCmdNew.clicked.connect(self.onToolBtnCmdNewClicked)
+            self.toolBtnCmdDel.clicked.connect(self.onToolBtnCmdDelClicked)
+            self.toolBtnCmdRename.clicked.connect(self.onToolBtnCmdRenameClicked)
+
             self.onBtnProgramClicked()
 
         def onBtnProgramClicked(self):
@@ -5142,11 +5146,13 @@ def main_function():
             self.labelCommand.setText(current_cmd)
             for (key) in config['command'][current_cmd]:
                 self.textEditCommands.append(key)
+            self.statusBar.showMessage("Show command %s success!" % (current_cmd) )
 
         def onBtnSaveProgramClicked(self):
             programText = self.textEditProgram.toPlainText()
             with open(pymakeini, 'w', encoding=cmd_codec) as f:
                 f.write(programText)
+            self.statusBar.showMessage("Save program configure file success!")
 
         def onBtnSaveCustomClicked(self):
             customPathText = self.textEditCustomPath.toPlainText()
@@ -5155,6 +5161,7 @@ def main_function():
             customEnvText = self.textEditCustomEnv.toPlainText()
             with open(customenvfile, 'w', encoding=cmd_codec) as f:
                 f.write(customEnvText)
+            self.statusBar.showMessage("Save custom environ success!")
 
         def onBtnSaveCommandsClicked(self):
             customCommandText = self.textEditCommands.toPlainText()
@@ -5163,6 +5170,115 @@ def main_function():
             for l in customCommandText.split('\n'):
                 config['command'][current_cmd].append(l)
             writeJsonData(sourceconfigfile, config)
+            self.statusBar.showMessage("Save command %s success!" % (current_cmd))
+
+        def onToolBtnCmdNewClicked(self):
+            ''
+            cmdname = self.lineEditCmdName.text().strip()
+            if(cmdname == ''):
+                self.statusBar.showMessage("Command: cmd name is empty!")
+                return
+
+            index = self.listViewCommands.currentIndex()
+            if(not index.isValid()):
+                self.statusBar.showMessage("Command: has no command item selected!")
+                return
+
+            current_row = index.row()
+            #current_cmd = index.data()
+
+            if(self.cmdlist.__contains__(cmdname)):
+                self.statusBar.showMessage("Command: %s is existed! index %s." % (cmdname,self.cmdlist.index(cmdname)))
+                return
+
+            self.cmdlist.insert(current_row, cmdname)
+            self.cmdmodel.insertRow(current_row)
+            self.cmdmodel.setData(self.cmdmodel.index(current_row), cmdname)
+
+            config['command'][cmdname]=[]
+            list_config = OrderedDict()
+            for key in self.cmdlist:
+                list_config[key] = copy.deepcopy(config['command'][key])
+            config['command'] = {}
+            for key in self.cmdlist:
+                config['command'][key] = copy.deepcopy(list_config[key])
+
+            self.listViewCommands.setCurrentIndex(self.cmdmodel.index(current_row))
+
+            writeJsonData(sourceconfigfile, config)
+            self.statusBar.showMessage("Add command %s success!" % (cmdname))
+
+        def onToolBtnCmdDelClicked(self):
+            ''
+            cmdname = self.lineEditCmdName.text().strip()
+            if(cmdname == ''):
+                self.statusBar.showMessage("Command: cmd name is empty!")
+                return
+
+            if(not self.cmdlist.__contains__(cmdname)):
+                self.statusBar.showMessage("Command: %s is not existed! no index." % (cmdname))
+                return
+
+            current_row = self.cmdlist.index(cmdname)
+            #index = self.cmdmodel.index(current_row)
+            #if(not index.isValid()):
+            #    self.statusBar.showMessage("Command: cant select command item!")
+            #    return
+
+            config['command'].__delitem__(cmdname)
+            self.cmdlist.remove(cmdname)
+            self.cmdmodel.removeRow(current_row)
+            #index = self.cmdmodel.index(current_row)
+            self.listViewCommands.setCurrentIndex(self.cmdmodel.index(current_row))
+
+            writeJsonData(sourceconfigfile, config)
+            self.statusBar.showMessage("Delete command %s success!" % (cmdname))
+
+        def onToolBtnCmdRenameClicked(self):
+            ''
+            cmdname = self.lineEditCmdName.text().strip()
+            if(cmdname == ''):
+                self.statusBar.showMessage("Command: cmd name is empty!")
+                return
+
+            index = self.listViewCommands.currentIndex()
+            if(not index.isValid()):
+                self.statusBar.showMessage("Command: has no command item selected!")
+                return
+
+            if(self.cmdlist.__contains__(cmdname)):
+                self.statusBar.showMessage("Command: %s is existed! index %s." % (cmdname,self.cmdlist.index(cmdname)))
+                return
+
+            current_row = index.row()
+            current_cmd = index.data()
+
+            #save list
+            cmddata = copy.deepcopy(config['command'][current_cmd])
+
+            #del
+            config['command'].__delitem__(current_cmd)
+            self.cmdlist.remove(current_cmd)
+            self.cmdmodel.removeRow(current_row)
+
+            #add
+            self.cmdlist.insert(current_row, cmdname)
+            self.cmdmodel.insertRow(current_row)
+            self.cmdmodel.setData(self.cmdmodel.index(current_row), cmdname)
+
+            config['command'][cmdname]=[]
+            list_config = OrderedDict()
+            for key in self.cmdlist:
+                list_config[key] = copy.deepcopy(config['command'][key])
+            config['command'] = {}
+            for key in self.cmdlist:
+                config['command'][key] = copy.deepcopy(list_config[key])
+            config['command'][cmdname]=copy.deepcopy(cmddata)
+
+            self.listViewCommands.setCurrentIndex(self.cmdmodel.index(current_row))
+
+            writeJsonData(sourceconfigfile, config)
+            self.statusBar.showMessage("Rename command %s to %s success!" % (current_cmd, cmdname))
 
     app = Application(sys.argv)
     win = MainWindow()
