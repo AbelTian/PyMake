@@ -108,6 +108,31 @@ set filepath=%~dp0
 set sourcefile=pypaths.bat
 call :install %*
 
+set mmfile=pyedit.bat
+set filepath=%~dp0
+set sourcefile=pyedit.bat
+call :install %*
+
+set mmfile=pysys.bat
+set filepath=%~dp0
+set sourcefile=pysys.bat
+call :install %*
+
+set mmfile=pysystem.bat
+set filepath=%~dp0
+set sourcefile=pysystem.bat
+call :install %*
+
+set mmfile=pylocal.bat
+set filepath=%~dp0
+set sourcefile=pylocal.bat
+call :install %*
+
+set mmfile=pycustom.bat
+set filepath=%~dp0
+set sourcefile=pycustom.bat
+call :install %*
+
 set mmfile=pyenv.ps1
 set filepath=%~dp0
 set sourcefile=pyenv.ps1

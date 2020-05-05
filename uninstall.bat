@@ -87,6 +87,26 @@ set sourcefile=pypaths.bat
 set mmfile=pypaths.bat
 call :uninstall
 
+set sourcefile=pyedit.bat
+set mmfile=pyedit.bat
+call :uninstall
+
+set sourcefile=pysys.bat
+set mmfile=pysys.bat
+call :uninstall
+
+set sourcefile=pysystem.bat
+set mmfile=pysystem.bat
+call :uninstall
+
+set sourcefile=pylocal.bat
+set mmfile=pylocal.bat
+call :uninstall
+
+set sourcefile=pycustom.bat
+set mmfile=pycustom.bat
+call :uninstall
+
 set sourcefile=pyenv.ps1
 set mmfile=pyenv.ps1
 call :uninstall
