@@ -4919,7 +4919,7 @@ def main_function():
     from PyQt5.QtCore import Qt
     from PyQt5.QtCore import QStringListModel, QModelIndex, QItemSelectionModel
     from PyQt5.QtCore import QEvent
-    from PyQt5.QtGui import QKeyEvent
+    from PyQt5.QtGui import QKeyEvent, QTextCursor, QTextDocument
     #from PyQt5.Qsci import QsciScintilla
 
     class Application(QApplication):
@@ -5034,6 +5034,9 @@ def main_function():
             self.textEditSeparateEnv.installEventFilter(self)
             self.textEditPaths.installEventFilter(self)
             self.textEditCommands.installEventFilter(self)
+
+            self.lineEditSearchPaths.textChanged.connect(self.onLineEditSearchPathsTextChanged)
+
             self.onBtnProgramClicked()
 
         def onBtnProgramClicked(self):
@@ -5219,7 +5222,8 @@ def main_function():
             programText = self.textEditProgram.toPlainText()
             with open(pymakeini, 'w', encoding=cmd_codec) as f:
                 f.write(programText)
-            self.statusBar.showMessage("Save program configure file success!")
+            self.statusBar.showMessage("Save program configure to file success!")
+            self.setWindowTitle('Multi-environ Editor [WANTED: Software Reboot!]')
 
         def onBtnSaveCustomClicked(self):
             customPathText = self.textEditCustomPath.toPlainText()
@@ -5393,6 +5397,41 @@ def main_function():
 
             writeJsonData(sourceconfigfile, config)
             self.statusBar.showMessage("Rename command %s to %s success!" % (current_cmd, cmdname))
+
+        def onLineEditSearchPathsTextChanged(self, text):
+            ''
+            doc = self.textEditPaths.document()
+            textCursor = QTextCursor(doc)
+            textCursor = doc.find(text, textCursor)
+
+            if(textCursor.isNull()):
+                textCursor.movePosition(QTextCursor.StartOfLine, QTextCursor.MoveAnchor)
+
+            self.textEditPaths.setTextCursor(textCursor)
+            
+
+            '''
+                layout = textCursor.block().layout()
+                cursorPos = textCursor.position() - textCursor.block().position()
+                cursorLineNumber = layout.lineForTextPosition(cursorPos).lineNumber() + textCursor.block().firstLineNumber()
+                cursorPos = self.textEditPaths.cursorRect(textCursor).topLeft()
+                self.textEditPaths.verticalScrollBar().setValue(cursorPos.y())
+            '''
+
+            '''
+            doc = self.textEditPaths.document()
+            textCursor = QTextCursor(doc)
+            textCursor = doc.find(text, textCursor)
+            print(textCursor.isNull())
+            if(not textCursor.isNull()):
+                textCursor.movePosition(QTextCursor.StartOfLine, QTextCursor.MoveAnchor)
+                print(self.textEditPaths.cursorRect(textCursor))
+                cursorPos = self.textEditPaths.cursorRect(textCursor).topLeft()
+                if(cursorPos.x() >= 0 and cursorPos.y() >= 0):
+                    self.textEditPaths.scrollContentsBy(0, cursorPos.y())
+            '''
+
+
 
     app = Application(sys.argv)
     win = MainWindow()
