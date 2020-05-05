@@ -920,7 +920,7 @@ def main_function():
     elif (workroottype == 'there'):
        shellroot = customshellroot
 
-    shellroot = pymakefilepath
+    # shellroot = pymakefilepath
     # if(workroottype == 'default'):
     #    print("WORK STARTING : %s" % (pymakeshellroot))
     # elif (workroottype == 'here'):
@@ -2032,8 +2032,8 @@ def main_function():
         else:
             localenv['PYMAKEINSTALLROOT'] = '/usr/local/bin'
 
-        localenv['path+'].append(localenv['PYMAKESOURCEROOT'])
         localenv['path+'].append(localenv['PYMAKEPROGRAMROOT'])
+        localenv['path+'].append(localenv['PYMAKESOURCEROOT'])
         localenv['path+'].append(localenv['PYMAKEDEFAULTWORKROOT'])
         #if(localenv['path+'].__contains__(localenv['PYMAKETHEREROOT']) is False):
         localenv['path+'].append(localenv['PYMAKETHEREROOT'])
@@ -4918,6 +4918,8 @@ def main_function():
     from PyQt5 import uic
     from PyQt5.QtCore import Qt
     from PyQt5.QtCore import QStringListModel, QModelIndex, QItemSelectionModel
+    from PyQt5.QtCore import QEvent
+    from PyQt5.QtGui import QKeyEvent
     #from PyQt5.Qsci import QsciScintilla
 
     class Application(QApplication):
@@ -4934,8 +4936,64 @@ def main_function():
 
             self.statusBar.showMessage("Ready!GO!")
 
+        def eventFilter(self, watched, event):
+            ''
+            if(event.type() == QEvent.Paint):
+                return QMainWindow.eventFilter(self, watched, event)
+
+            #print(event, watched)
+            if(watched == self.textEditCommands):
+                if(event.type() == QEvent.KeyPress):
+                    if(event.key() == Qt.Key_S):
+                        if(event.modifiers() & Qt.ControlModifier == Qt.ControlModifier):
+                            #CTRL+S
+                            #print(watched, event)
+                            self.onBtnSaveCommandsClicked()
+                            return False
+
+            elif(watched == self.textEditSeparatePath or watched == self.textEditSeparateEnv):
+                if(event.type() == QEvent.KeyPress):
+                    if(event.key() == Qt.Key_S):
+                        if(event.modifiers() & Qt.ControlModifier == Qt.ControlModifier):
+                            #CTRL+S
+                            #print(watched, event)
+                            self.onBtnSaveSeparateClicked()
+                            return False
+
+
+            elif(watched == self.textEditPaths):
+                if(event.type() == QEvent.KeyPress):
+                    if(event.key() == Qt.Key_S):
+                        if(event.modifiers() & Qt.ControlModifier == Qt.ControlModifier):
+                            #CTRL+S
+                            #print(watched, event)
+                            self.onBtnSavePathsClicked()
+                            return False
+
+            elif (watched == self.textEditCustomPath or watched == self.textEditCustomEnv):
+                if(event.type() == QEvent.KeyPress):
+                    if(event.key() == Qt.Key_S):
+                        if(event.modifiers() & Qt.ControlModifier == Qt.ControlModifier):
+                            #CTRL+S
+                            #print(watched, event)
+                            self.onBtnSaveCustomClicked()
+                            return False
+
+            elif(watched == self.textEditProgram):
+                if(event.type() == QEvent.KeyPress):
+                    if(event.key() == Qt.Key_S):
+                        if(event.modifiers() & Qt.ControlModifier == Qt.ControlModifier):
+                            #CTRL+S
+                            #print(watched, event)
+                            self.onBtnSaveProgramClicked()
+                            return False
+
+            return QMainWindow.eventFilter(self, watched, event)
+
         def setupUi(self):
-            uic.loadUi("tools/pyedit/mainwindow.ui", self)
+            pyedituipath = pymakefilepath + os.path.sep + "tools/pyedit/mainwindow.ui"
+            pyedituipath = os.path.join(pymakefilepath, 'tools', 'pyedit', 'mainwindow.ui')
+            uic.loadUi(pyedituipath, self)
             self.resize(800, 360)
 
             self.indexPageProgram = 0
@@ -4961,12 +5019,21 @@ def main_function():
 
             self.btnSaveProgram.clicked.connect(self.onBtnSaveProgramClicked)
             self.btnSaveCustom.clicked.connect(self.onBtnSaveCustomClicked)
+            self.btnSaveSeparate.clicked.connect(self.onBtnSaveSeparateClicked)
+            self.btnSavePaths.clicked.connect(self.onBtnSavePathsClicked)
             self.btnSaveCommands.clicked.connect(self.onBtnSaveCommandsClicked)
 
             self.toolBtnCmdNew.clicked.connect(self.onToolBtnCmdNewClicked)
             self.toolBtnCmdDel.clicked.connect(self.onToolBtnCmdDelClicked)
             self.toolBtnCmdRename.clicked.connect(self.onToolBtnCmdRenameClicked)
 
+            self.textEditProgram.installEventFilter(self)
+            self.textEditCustomPath.installEventFilter(self)
+            self.textEditCustomEnv.installEventFilter(self)
+            self.textEditSeparatePath.installEventFilter(self)
+            self.textEditSeparateEnv.installEventFilter(self)
+            self.textEditPaths.installEventFilter(self)
+            self.textEditCommands.installEventFilter(self)
             self.onBtnProgramClicked()
 
         def onBtnProgramClicked(self):
@@ -5162,6 +5229,53 @@ def main_function():
             with open(customenvfile, 'w', encoding=cmd_codec) as f:
                 f.write(customEnvText)
             self.statusBar.showMessage("Save custom environ success!")
+
+        def onBtnSavePathsClicked(self):
+            ''
+            pathText = self.textEditPaths.toPlainText()
+            config['path-assemblage'].clear()
+            for l in pathText.split('\n'):
+                key = str(l).split('=')[0].strip()
+                value = '='.join(str(l).split('=')[1:]).strip()
+                if(key == ''):
+                    continue
+                config['path-assemblage'][key] = value
+            writeJsonData(sourceconfigfile, config)
+            self.statusBar.showMessage("Save path-assamblage section success!")
+
+        def onBtnSaveSeparateClicked(self):
+            ''
+            index = self.listViewSeparateEnvList.currentIndex()
+            if(not index.isValid()):
+                self.statusBar.showMessage("Separate environ: has no selected env item!")
+                return
+
+            current_env = index.data()
+
+            config['environ'][current_env].clear()
+            config['environ'][current_env]['path+'] = []
+
+            envVarText = self.textEditSeparateEnv.toPlainText()
+            for l in envVarText.split('\n'):
+                key = str(l).split('=')[0].strip()
+                value = '='.join(str(l).split('=')[1:]).strip()
+                if(key == ''):
+                    continue
+                if(key.lower() == 'path+'):
+                    continue
+                if(key.lower() == 'path'):
+                    continue
+                config['environ'][current_env][key] = value
+
+            envPathText = self.textEditSeparatePath.toPlainText()
+            for l in envPathText.split('\n'):
+                key = str(l).strip()
+                if(key == ''):
+                    continue
+                config['environ'][current_env]['path+'].append(key)
+
+            writeJsonData(sourceconfigfile, config)
+            self.statusBar.showMessage("Separate environ: save env item %s successed!" % (current_env))
 
         def onBtnSaveCommandsClicked(self):
             customCommandText = self.textEditCommands.toPlainText()
