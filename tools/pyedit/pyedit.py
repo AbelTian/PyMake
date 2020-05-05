@@ -5022,6 +5022,8 @@ def main_function():
             self.btnSaveSeparate.clicked.connect(self.onBtnSaveSeparateClicked)
             self.btnSavePaths.clicked.connect(self.onBtnSavePathsClicked)
             self.btnSaveCommands.clicked.connect(self.onBtnSaveCommandsClicked)
+            self.btnSaveExecute.clicked.connect(self.onBtnSaveExecuteClicked)
+            self.btnSaveSource.clicked.connect(self.onBtnSaveSourceClicked)
 
             self.toolBtnCmdNew.clicked.connect(self.onToolBtnCmdNewClicked)
             self.toolBtnCmdDel.clicked.connect(self.onToolBtnCmdDelClicked)
@@ -5062,8 +5064,8 @@ def main_function():
 
         def setupData(self):
 
-            self.btnSource.setHidden(True)
-            self.btnExecute.setHidden(True)
+            #self.btnSource.setHidden(True)
+            #self.btnExecute.setHidden(True)
 
             #program
             self.labelProgramIni.setText(pymakeini)
@@ -5079,7 +5081,7 @@ def main_function():
                 self.textEditProgram.append(''.join(f.readlines()))
 
             #custom
-            customenvs
+            self.labelCustom.setText(custompathfile + '\n' + customenvfile)
             with open(custompathfile, 'r', encoding=cmd_codec) as f:
                 '''
                 for l in f.readlines():
@@ -5151,7 +5153,11 @@ def main_function():
                     continue
                 self.textEditLocalEnv.append(key + '=' + value)
 
+            self.labelLocal.setText(localini)
+
             #separete
+            self.labelSeparate.setText(sourceconfigfile)
+
             self.envmodel = QStringListModel()
             self.listViewSeparateEnvList.setModel(self.envmodel)
             self.envlist = list(config['environ'].keys())
@@ -5170,11 +5176,13 @@ def main_function():
 
 
             #path assemblage
+            self.labelPaths.setText(sourceconfigfile)
             for k, v in config['path-assemblage'].items():
                 self.textEditPaths.append(k + '=' + v)
 
 
             #command
+            self.labelCommands.setText(sourceconfigfile)
             self.cmdmodel = QStringListModel()
             self.listViewCommands.setModel(self.cmdmodel)
             self.cmdlist = list(config['command'].keys())
@@ -5408,7 +5416,7 @@ def main_function():
                 textCursor.movePosition(QTextCursor.StartOfLine, QTextCursor.MoveAnchor)
 
             self.textEditPaths.setTextCursor(textCursor)
-            
+
 
             '''
                 layout = textCursor.block().layout()
@@ -5431,6 +5439,36 @@ def main_function():
                     self.textEditPaths.scrollContentsBy(0, cursorPos.y())
             '''
 
+        def onBtnSaveSourceClicked(self):
+            roottext = self.lineEditSourceRoot.text()
+            configtext = self.lineEditSourceConfig.text()
+            #roottext = roottext.strip()
+            #configtext = configtext.strip()
+            allpath = os.path.join(roottext, configtext)
+            self.labelSource.setText(allpath)
+            conf['source']['root'] = roottext
+            conf['source']['config'] = configtext
+            conf.write(open(pymakeini, 'w'))
+
+            self.statusBar.showMessage("Save program configure, source config success!")
+            self.setWindowTitle('Multi-environ Editor [WANTED: Software Reboot!]')
+
+        def onBtnSaveExecuteClicked(self):
+            roottext = 'default'
+            if (self.radioBtnDefault.isChecked()):
+                roottext = 'default'
+            elif (self.radioBtnHere.isChecked()):
+                roottext = 'here'
+            elif (self.radioBtnThere.isChecked()):
+                roottext = 'there'
+
+            theretext = self.lineEditThere.text()
+            conf['work']['root'] = roottext
+            conf['work']['there'] = theretext
+            conf.write(open(pymakeini, 'w'))
+
+            self.statusBar.showMessage("Save program configure, work root config success!")
+            self.setWindowTitle('Multi-environ Editor [WANTED: Software Reboot!]')
 
 
     app = Application(sys.argv)
