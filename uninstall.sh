@@ -51,4 +51,19 @@ uninstall
 mmfile=pypaths
 uninstall
 
+mmfile=pyedit
+uninstall
+
+mmfile=pysys
+uninstall
+
+mmfile=pysystem
+uninstall
+
+mmfile=pylocal
+uninstall
+
+mmfile=pycustom
+uninstall
+
 echo uninstalled.

@@ -69,4 +69,24 @@ sourcefile=pypaths.sh
 mmfile=pypaths
 install
 
+sourcefile=pyedit.sh
+mmfile=pyedit
+install
+
+sourcefile=pysys.sh
+mmfile=pysys
+install
+
+sourcefile=pysystem.sh
+mmfile=pysystem
+install
+
+sourcefile=pylocal.sh
+mmfile=pylocal
+install
+
+sourcefile=pycustom.sh
+mmfile=pycustom
+install
+
 echo installed.
