@@ -75,3 +75,6 @@ if(not conf.has_option('install', 'trusted-host')):
     conf.set('install', 'trusted-host', 'mirrors.aliyun.com')
     conf.write(open(pipini, 'w'))
 
+conf.set('global', 'index-url', 'https://pypi.tuna.tsinghua.edu.cn/simple')
+conf.set('install', 'trusted-host', 'mirrors.aliyun.com')
+conf.write(open(pipini, 'w'))

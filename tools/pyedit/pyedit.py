@@ -4913,13 +4913,35 @@ def main_function():
 
         return cmd_list, name
 
+    '''
+    #edit.ini
+    [page]
+    number = 0
+    '''
+    pymakeeditini = os.path.join(sourceroot, 'edit.ini')
+    conf3 = MyConfigParser()
+    conf3.read(pymakeeditini)
+    if( not conf3.has_section('edit') ):
+        conf3.add_section('edit')
+        conf3.write(open(pymakeeditini, 'w'))
+    if( not conf3.has_option('edit', 'page') ):
+        conf3.set('edit', 'page', '0')
+        conf3.write(open(pymakeeditini, 'w'))
+
+    page1 = conf3['edit']['page']
+    #0->
+    if(page1 < '0' or page1 > '9'):
+        page1 = '0'
+        conf3.set('edit', 'page', page1)
+        conf3.write(open(pymakeeditini, 'w'))
+
 
     from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QStatusBar, QListView
     from PyQt5 import uic
     from PyQt5.QtCore import Qt
     from PyQt5.QtCore import QStringListModel, QModelIndex, QItemSelectionModel
     from PyQt5.QtCore import QEvent
-    from PyQt5.QtGui import QKeyEvent, QTextCursor, QTextDocument
+    from PyQt5.QtGui import QKeyEvent, QTextCursor, QTextDocument, QFontMetrics
     #from PyQt5.Qsci import QsciScintilla
 
     class Application(QApplication):
@@ -4933,7 +4955,6 @@ def main_function():
 
             self.setupUi()
             self.setupData()
-
             self.statusBar.showMessage("Ready!GO!")
 
         def eventFilter(self, watched, event):
@@ -4950,6 +4971,10 @@ def main_function():
                             #print(watched, event)
                             self.onBtnSaveCommandsClicked()
                             return False
+                    #elif(event.key() == Qt.Key_Tab):
+                    #    ''
+                    #    self.textEditCommands.insertPlainText('    ')
+                    #    return False
 
             elif(watched == self.textEditSeparatePath or watched == self.textEditSeparateEnv):
                 if(event.type() == QEvent.KeyPress):
@@ -4994,6 +5019,7 @@ def main_function():
             pyedituipath = pymakefilepath + os.path.sep + "tools/pyedit/mainwindow.ui"
             pyedituipath = os.path.join(pymakefilepath, 'tools', 'pyedit', 'mainwindow.ui')
             uic.loadUi(pyedituipath, self)
+
             self.resize(800, 360)
 
             self.indexPageProgram = 0
@@ -5039,28 +5065,55 @@ def main_function():
 
             self.lineEditSearchPaths.textChanged.connect(self.onLineEditSearchPathsTextChanged)
 
-            self.onBtnProgramClicked()
+            #self.onBtnProgramClicked()
+            self.stackedWidget.setCurrentIndex(int(page1))
+
+
+        def setPage(self, index):
+            ''
+            page1 = str(index)
+            conf3.set('edit', 'page', page1)
+            conf3.write(open(pymakeeditini, 'w'))
 
         def onBtnProgramClicked(self):
             self.stackedWidget.setCurrentIndex(self.indexPageProgram)
+            self.setPage(self.indexPageProgram)
+
         def onBtnSystemClicked(self):
             self.stackedWidget.setCurrentIndex(self.indexPageSystem)
+            self.setPage(self.indexPageSystem)
+
         def onBtnLocalClicked(self):
             self.stackedWidget.setCurrentIndex(self.indexPageLocal)
+            self.setPage(self.indexPageLocal)
+
         def onBtnCustomClicked(self):
             self.stackedWidget.setCurrentIndex(self.indexPageCustom)
+            self.setPage(self.indexPageCustom)
+
         def onBtnSeparateClicked(self):
             self.stackedWidget.setCurrentIndex(self.indexPageSeparate)
+            self.setPage(self.indexPageSeparate)
+
         def onBtnExecuteClicked(self):
             self.stackedWidget.setCurrentIndex(self.indexPageExecute)
+            self.setPage(self.indexPageExecute)
+
         def onBtnSourceClicked(self):
             self.stackedWidget.setCurrentIndex(self.indexPageSource)
+            self.setPage(self.indexPageSource)
+
         def onBtnPathsClicked(self):
             self.stackedWidget.setCurrentIndex(self.indexPagePaths)
+            self.setPage(self.indexPagePaths)
+
         def onBtnCommandsClicked(self):
             self.stackedWidget.setCurrentIndex(self.indexPageCommands)
+            self.setPage(self.indexPageCommands)
+
         def onBtnReadMeClicked(self):
             self.stackedWidget.setCurrentIndex(self.indexPageReadMe)
+            self.setPage(self.indexPageReadMe)
 
         def setupData(self):
 
@@ -5192,6 +5245,7 @@ def main_function():
             current_cmd = self.cmdlist[0]
             self.labelCommand.setText(current_cmd)
             for (key) in config['command'][current_cmd]:
+                #'' loading make 4 blank?
                 self.textEditCommands.append(key)
 
             self.listViewCommands.clicked.connect(self.onListViewCommandsClicked)
@@ -5202,6 +5256,9 @@ def main_function():
             self.listViewCommands.setCurrentIndex(self.cmdIndex)
             self.listViewCommands.setEditTriggers(QListView.NoEditTriggers)
 
+            #command edit, use QTextEdit? use QsciScililla?
+            mertics = QFontMetrics(self.textEditCommands.font())
+            self.textEditCommands.setTabStopWidth(4* mertics.width(' '))
 
 
         def onListViewSeparateEnvListClicked(self, index):
@@ -5294,6 +5351,7 @@ def main_function():
             current_cmd = self.listViewCommands.currentIndex().data()
             config['command'][current_cmd].clear()
             for l in customCommandText.split('\n'):
+                l = str(l).replace('\t', '    ')
                 config['command'][current_cmd].append(l)
             writeJsonData(sourceconfigfile, config)
             self.statusBar.showMessage("Save command %s success!" % (current_cmd))
