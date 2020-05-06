@@ -5471,8 +5471,8 @@ def main_function():
             textCursor = doc.find(text, textCursor)
 
             if(textCursor.isNull()):
-                textCursor.movePosition(QTextCursor.StartOfLine, QTextCursor.MoveAnchor)
-
+                #textCursor.movePosition(QTextCursor.StartOfLine, QTextCursor.MoveAnchor)
+                textCursor = QTextCursor(doc)
             self.textEditPaths.setTextCursor(textCursor)
 
 

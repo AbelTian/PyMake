@@ -80,16 +80,16 @@
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="btnPaths">
+        <widget class="QPushButton" name="btnCommands">
          <property name="text">
-          <string>Paths</string>
+          <string>Commands</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="btnCommands">
+        <widget class="QPushButton" name="btnPaths">
          <property name="text">
-          <string>Commands</string>
+          <string>Paths</string>
          </property>
         </widget>
        </item>
