@@ -2002,8 +2002,8 @@ def main_function():
 
     # set into env [no effect to system environ]
     while (True):
-        if(int(localswitch) == 0):
-            break
+        #if(int(localswitch) == 0):
+        #    break
 
         env = os.environ
 
