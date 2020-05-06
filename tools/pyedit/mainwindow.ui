@@ -80,16 +80,16 @@
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="btnCommands">
+        <widget class="QPushButton" name="btnPaths">
          <property name="text">
-          <string>Commands</string>
+          <string>Paths</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="btnPaths">
+        <widget class="QPushButton" name="btnCommands">
          <property name="text">
-          <string>Paths</string>
+          <string>Commands</string>
          </property>
         </widget>
        </item>
@@ -119,7 +119,7 @@
     <item>
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
-       <number>8</number>
+       <number>4</number>
       </property>
       <widget class="QWidget" name="pageProgram">
        <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -725,7 +725,17 @@
           </layout>
          </widget>
         </item>
-        <item row="3" column="1">
+        <item row="1" column="0" rowspan="2">
+         <widget class="QListView" name="listViewSeparateEnvList">
+          <property name="maximumSize">
+           <size>
+            <width>120</width>
+            <height>16777215</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0" colspan="2">
          <widget class="QWidget" name="widget_6" native="true">
           <layout class="QHBoxLayout" name="horizontalLayout_6">
            <property name="leftMargin">
@@ -761,16 +771,6 @@
             </widget>
            </item>
           </layout>
-         </widget>
-        </item>
-        <item row="1" column="0" rowspan="3">
-         <widget class="QListView" name="listViewSeparateEnvList">
-          <property name="maximumSize">
-           <size>
-            <width>120</width>
-            <height>16777215</height>
-           </size>
-          </property>
          </widget>
         </item>
        </layout>
@@ -1180,6 +1180,13 @@
             </widget>
            </item>
            <item>
+            <widget class="QLabel" name="labelCommands">
+             <property name="text">
+              <string>TextLabel</string>
+             </property>
+            </widget>
+           </item>
+           <item>
             <widget class="QLabel" name="labelCommand">
              <property name="text">
               <string>TextLabel</string>
@@ -1199,6 +1206,37 @@
              </property>
             </spacer>
            </item>
+          </layout>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QListView" name="listViewCommands">
+          <property name="maximumSize">
+           <size>
+            <width>140</width>
+            <height>16777215</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QTextEdit" name="textEditCommands"/>
+        </item>
+        <item row="2" column="0" colspan="2">
+         <widget class="QWidget" name="widget_20" native="true">
+          <layout class="QHBoxLayout" name="horizontalLayout_27">
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
+            <number>0</number>
+           </property>
            <item>
             <widget class="QLabel" name="label_15">
              <property name="text">
@@ -1234,44 +1272,6 @@
             <widget class="QPushButton" name="toolBtnCmdRename">
              <property name="text">
               <string>Rename</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <widget class="QListView" name="listViewCommands">
-          <property name="maximumSize">
-           <size>
-            <width>120</width>
-            <height>16777215</height>
-           </size>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <widget class="QTextEdit" name="textEditCommands"/>
-        </item>
-        <item row="2" column="0" colspan="2">
-         <widget class="QWidget" name="widget_20" native="true">
-          <layout class="QHBoxLayout" name="horizontalLayout_27">
-           <property name="leftMargin">
-            <number>0</number>
-           </property>
-           <property name="topMargin">
-            <number>0</number>
-           </property>
-           <property name="rightMargin">
-            <number>0</number>
-           </property>
-           <property name="bottomMargin">
-            <number>0</number>
-           </property>
-           <item>
-            <widget class="QLabel" name="labelCommands">
-             <property name="text">
-              <string>TextLabel</string>
              </property>
             </widget>
            </item>
@@ -1362,7 +1362,8 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:18pt; font-weight:600; text-decoration: underline;&quot;&gt;Paths：&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;编辑用户电脑上的命名的路径，&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;用户把常用的工具路径全都命名列举到这里，在Environ/Command的配置里都可以使用，${xxx}引用。&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;用户把常用的工具路径全都命名列举到这里，在Environ/Command的配置里都可以使用。&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;用户不必在乎格式，程序会对Key=Value等号两侧去头尾空格处理，${xxx}向上逐个引用。&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:18pt; font-weight:600; text-decoration: underline;&quot;&gt;Commands：&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;编辑用户环境文件里保存的简短、通用命令，写这个编辑器，主要就是为了编辑这些命令。&lt;/p&gt;
