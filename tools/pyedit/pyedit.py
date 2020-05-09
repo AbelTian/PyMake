@@ -5117,8 +5117,8 @@ def main_function():
 
         def setupData(self):
 
-            #self.btnSource.setHidden(True)
-            #self.btnExecute.setHidden(True)
+            self.btnSource.setHidden(True)
+            self.btnExecute.setHidden(True)
 
             #program
             self.labelProgramIni.setText(pymakeini)
