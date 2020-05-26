@@ -17,7 +17,7 @@ export PYPROGRAMNAME=tools/pyedit/pyedit.py
 export PYPROGRAMPATHNAME=$PYPROGRAMPATH/$PYPROGRAMNAME
 
 py=$(which python3)
-${py} "$PYPROGRAMPATHNAME" "$@"
+${py} "$PYPROGRAMPATHNAME" "$@" &
 exit $?
 
 break

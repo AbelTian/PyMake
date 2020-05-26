@@ -5211,7 +5211,7 @@ def main_function():
             #separete
             self.labelSeparate.setText(sourceconfigfile)
 
-            self.envmodel = QStringListModel()
+            self.envmodel = QStringListModel(self.listViewSeparateEnvList)
             self.listViewSeparateEnvList.setModel(self.envmodel)
             self.envlist = list(config['environ'].keys())
             self.envlist.remove('current')
@@ -5236,7 +5236,7 @@ def main_function():
 
             #command
             self.labelCommands.setText(sourceconfigfile)
-            self.cmdmodel = QStringListModel()
+            self.cmdmodel = QStringListModel(self.listViewCommands)
             self.listViewCommands.setModel(self.cmdmodel)
             self.cmdlist = list(config['command'].keys())
             #print(config['command'].keys())
