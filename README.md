@@ -942,6 +942,9 @@ User support shell module, user can install them to share their functions.
 | pymake.py | pytype |  |
 | pymake.py | pyexport |  |
 | pymake.py | pyclean |  |
+| pymake.py | pysystem | pysys |
+| pymake.py | pylocal |  |
+| pymake.py | pycustom |  |
 | pymake.py | pypython |  |
 | pymake.py | pylanguage |  |
 | pymake.py | pypowershell.bat |  |
@@ -953,6 +956,7 @@ User support shell module, user can install them to share their functions.
 | pymake.py | | pyvcpython.bat | 
 | pymake.py | | pyvclanguage.bat | 
 | pymake.py | | pyvcexport.bat | 
+| pyedit.py | pyedit | |
 | pyinfo.py | pyinfo | |
 | pypaths.py | pypaths | |
 | pycodec.py | | |
