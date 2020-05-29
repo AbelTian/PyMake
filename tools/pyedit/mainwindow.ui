@@ -169,14 +169,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QTextEdit" name="textEditProgram">
-          <property name="tabStopWidth">
-           <number>40</number>
-          </property>
-          <property name="acceptRichText">
-           <bool>false</bool>
-          </property>
-         </widget>
+         <widget class="QTextEdit" name="textEditProgram"/>
         </item>
         <item>
          <widget class="QWidget" name="widget_2" native="true">
@@ -577,14 +570,7 @@
             <number>0</number>
            </property>
            <item>
-            <widget class="QTextEdit" name="textEditCustomPath">
-             <property name="tabStopWidth">
-              <number>40</number>
-             </property>
-             <property name="acceptRichText">
-              <bool>false</bool>
-             </property>
-            </widget>
+            <widget class="QTextEdit" name="textEditCustomPath"/>
            </item>
           </layout>
          </widget>
@@ -608,14 +594,7 @@
             <number>0</number>
            </property>
            <item>
-            <widget class="QTextEdit" name="textEditCustomEnv">
-             <property name="tabStopWidth">
-              <number>40</number>
-             </property>
-             <property name="acceptRichText">
-              <bool>false</bool>
-             </property>
-            </widget>
+            <widget class="QTextEdit" name="textEditCustomEnv"/>
            </item>
           </layout>
          </widget>
@@ -733,14 +712,7 @@
             <number>0</number>
            </property>
            <item>
-            <widget class="QTextEdit" name="textEditSeparatePath">
-             <property name="tabStopWidth">
-              <number>40</number>
-             </property>
-             <property name="acceptRichText">
-              <bool>false</bool>
-             </property>
-            </widget>
+            <widget class="QTextEdit" name="textEditSeparatePath"/>
            </item>
           </layout>
          </widget>
@@ -764,14 +736,7 @@
             <number>0</number>
            </property>
            <item>
-            <widget class="QTextEdit" name="textEditSeparateEnv">
-             <property name="tabStopWidth">
-              <number>40</number>
-             </property>
-             <property name="acceptRichText">
-              <bool>false</bool>
-             </property>
-            </widget>
+            <widget class="QTextEdit" name="textEditSeparateEnv"/>
            </item>
           </layout>
          </widget>
@@ -1147,14 +1112,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QTextEdit" name="textEditPaths">
-          <property name="tabStopWidth">
-           <number>40</number>
-          </property>
-          <property name="acceptRichText">
-           <bool>false</bool>
-          </property>
-         </widget>
+         <widget class="QTextEdit" name="textEditPaths"/>
         </item>
         <item>
          <widget class="QWidget" name="widget_19" native="true">
@@ -1278,14 +1236,7 @@
          </widget>
         </item>
         <item row="1" column="1">
-         <widget class="QTextEdit" name="textEditCommands">
-          <property name="tabStopWidth">
-           <number>40</number>
-          </property>
-          <property name="acceptRichText">
-           <bool>false</bool>
-          </property>
-         </widget>
+         <widget class="QTextEdit" name="textEditCommands"/>
         </item>
         <item row="2" column="0" colspan="2">
          <widget class="QWidget" name="widget_20" native="true">

@@ -5116,10 +5116,6 @@ def main_function():
             self.setPage(self.indexPageReadMe)
 
         def setupData(self):
-
-            self.btnSource.setHidden(True)
-            self.btnExecute.setHidden(True)
-
             #program
             self.labelProgramIni.setText(pymakeini)
             with open(pymakeini, 'r', encoding=cmd_codec) as f:
@@ -5254,10 +5250,37 @@ def main_function():
             self.listViewCommands.setCurrentIndex(self.cmdIndex)
             self.listViewCommands.setEditTriggers(QListView.NoEditTriggers)
 
-            #command edit, use QTextEdit? use QsciScililla?
-            #mertics = QFontMetrics(self.textEditCommands.font())
-            #self.textEditCommands.setTabStopWidth(4* mertics.width(' '))
+            self.btnSource.setHidden(True)
+            self.btnExecute.setHidden(True)
 
+            #command edit, use QTextEdit? use QsciScililla?
+            mertics = QFontMetrics(self.textEditCommands.font())
+            self.textEditCommands.setTabStopWidth(4* mertics.width(' '))
+            self.textEditCommands.setAcceptRichText(False)
+
+            mertics = QFontMetrics(self.textEditProgram.font())
+            self.textEditProgram.setTabStopWidth(4* mertics.width(' '))
+            self.textEditProgram.setAcceptRichText(False)
+
+            mertics = QFontMetrics(self.textEditCustomPath.font())
+            self.textEditCustomPath.setTabStopWidth(4* mertics.width(' '))
+            self.textEditCustomPath.setAcceptRichText(False)
+
+            mertics = QFontMetrics(self.textEditCustomEnv.font())
+            self.textEditCustomEnv.setTabStopWidth(4* mertics.width(' '))
+            self.textEditCustomEnv.setAcceptRichText(False)
+
+            mertics = QFontMetrics(self.textEditSeparatePath.font())
+            self.textEditSeparatePath.setTabStopWidth(4* mertics.width(' '))
+            self.textEditSeparatePath.setAcceptRichText(False)
+
+            mertics = QFontMetrics(self.textEditSeparateEnv.font())
+            self.textEditSeparateEnv.setTabStopWidth(4* mertics.width(' '))
+            self.textEditSeparateEnv.setAcceptRichText(False)
+
+            mertics = QFontMetrics(self.textEditPaths.font())
+            self.textEditPaths.setTabStopWidth(4* mertics.width(' '))
+            self.textEditPaths.setAcceptRichText(False)
 
         def onListViewSeparateEnvListClicked(self, index):
             current_env = index.data()
