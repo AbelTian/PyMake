@@ -5169,8 +5169,6 @@ def main_function():
             '''
 
             #system
-            self.textEditSystemPath.setReadOnly(True)
-            self.textEditSystemEnv.setReadOnly(True)
             for (key) in pymakesystemenviron['PATH'].split(os.path.pathsep):
                 self.textEditSystemPath.append(key)
             for (key, value) in pymakesystemenviron.items():
@@ -5195,8 +5193,6 @@ def main_function():
             self.lineEditSourceConfig.setText(sourcefile)
 
             #local
-            self.textEditLocalPath.setReadOnly(True)
-            self.textEditLocalEnv.setReadOnly(True)
             for (key) in localenv['path+']:
                 self.textEditLocalPath.append(key)
             for (key, value) in localenv.items():
@@ -5230,9 +5226,11 @@ def main_function():
 
             #path assemblage
             self.labelPaths.setText(sourceconfigfile)
+            paths = ''
             for k, v in config['path-assemblage'].items():
-                self.textEditPaths.append(k + '=' + v)
-
+                paths += k + '=' + v + cmd_return
+            self.textEditPaths.clear()
+            self.textEditPaths.insertPlainText(paths)
 
             #command
             self.labelCommands.setText(sourceconfigfile)
@@ -5257,30 +5255,42 @@ def main_function():
             self.listViewCommands.setEditTriggers(QListView.NoEditTriggers)
 
             #command edit, use QTextEdit? use QsciScililla?
-            mertics = QFontMetrics(self.textEditCommands.font())
-            self.textEditCommands.setTabStopWidth(4* mertics.width(' '))
+            #mertics = QFontMetrics(self.textEditCommands.font())
+            #self.textEditCommands.setTabStopWidth(4* mertics.width(' '))
 
 
         def onListViewSeparateEnvListClicked(self, index):
-            self.textEditSeparatePath.clear()
-            self.textEditSeparateEnv.clear()
             current_env = index.data()
             self.labelCurrentEnv.setText(current_env)
+
+            paths = ''
             for (key) in config['environ'][current_env]['path+']:
-                self.textEditSeparatePath.append(key)
+                paths += key + cmd_return
+            self.textEditSeparatePath.clear()
+            self.textEditSeparatePath.insertPlainText(paths)
+
+            envs = ''
             for (key, value) in config['environ'][current_env].items():
                 if (key == 'path+'):
                     continue
                 if (str(key).lower() == "path"):
                     continue
-                self.textEditSeparateEnv.append(key + '=' + value)
+                envs += key + '=' + value + cmd_return
+            self.textEditSeparateEnv.clear()
+            self.textEditSeparateEnv.insertPlainText(envs)
+
+            self.statusBar.showMessage("Show environ %s success!" % (current_env) )
 
         def onListViewCommandsClicked(self, index):
-            self.textEditCommands.clear()
             current_cmd = index.data()
             self.labelCommand.setText(current_cmd)
+
+            steps = ''
             for (key) in config['command'][current_cmd]:
-                self.textEditCommands.append(key)
+                steps += key + cmd_return
+            self.textEditCommands.clear()
+            self.textEditCommands.insertPlainText(steps)
+
             self.statusBar.showMessage("Show command %s success!" % (current_cmd) )
 
         def onBtnSaveProgramClicked(self):
