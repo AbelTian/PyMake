@@ -79,21 +79,21 @@ rem echo %PYEXECPARAM[8]%
 rem echo %PYEXECPARAM[9]%
 
 if not ""%9"" == """" (
-    call "%PYPROGRAMPATHNAME%" system exec-with-params here %PYEXECNAME% --params %PYEXECPARAM[2]% --params %PYEXECPARAM[3]% --params %PYEXECPARAM[4]% --params %PYEXECPARAM[5]% --params %PYEXECPARAM[6]% --params %PYEXECPARAM[7]% --params %PYEXECPARAM[8]% --params %PYEXECPARAM[9]%
+    call "%PYPROGRAMPATHNAME%" system exec-with-params here %PYEXECNAME% --params=%PYEXECPARAM[2]% --params=%PYEXECPARAM[3]% --params=%PYEXECPARAM[4]% --params=%PYEXECPARAM[5]% --params=%PYEXECPARAM[6]% --params=%PYEXECPARAM[7]% --params=%PYEXECPARAM[8]% --params=%PYEXECPARAM[9]%
 ) else if not ""%8"" == """" (
-    call "%PYPROGRAMPATHNAME%" system exec-with-params here %PYEXECNAME% --params %PYEXECPARAM[2]% --params %PYEXECPARAM[3]% --params %PYEXECPARAM[4]% --params %PYEXECPARAM[5]% --params %PYEXECPARAM[6]% --params %PYEXECPARAM[7]% --params %PYEXECPARAM[8]%
+    call "%PYPROGRAMPATHNAME%" system exec-with-params here %PYEXECNAME% --params=%PYEXECPARAM[2]% --params=%PYEXECPARAM[3]% --params=%PYEXECPARAM[4]% --params=%PYEXECPARAM[5]% --params=%PYEXECPARAM[6]% --params=%PYEXECPARAM[7]% --params=%PYEXECPARAM[8]%
 ) else if not ""%7"" == """" (
-    call "%PYPROGRAMPATHNAME%" system exec-with-params here %PYEXECNAME% --params %PYEXECPARAM[2]% --params %PYEXECPARAM[3]% --params %PYEXECPARAM[4]% --params %PYEXECPARAM[5]% --params %PYEXECPARAM[6]% --params %PYEXECPARAM[7]%
+    call "%PYPROGRAMPATHNAME%" system exec-with-params here %PYEXECNAME% --params=%PYEXECPARAM[2]% --params=%PYEXECPARAM[3]% --params=%PYEXECPARAM[4]% --params=%PYEXECPARAM[5]% --params=%PYEXECPARAM[6]% --params=%PYEXECPARAM[7]%
 ) else if not ""%6"" == """" (
-    call "%PYPROGRAMPATHNAME%" system exec-with-params here %PYEXECNAME% --params %PYEXECPARAM[2]% --params %PYEXECPARAM[3]% --params %PYEXECPARAM[4]% --params %PYEXECPARAM[5]% --params %PYEXECPARAM[6]%
+    call "%PYPROGRAMPATHNAME%" system exec-with-params here %PYEXECNAME% --params=%PYEXECPARAM[2]% --params=%PYEXECPARAM[3]% --params=%PYEXECPARAM[4]% --params=%PYEXECPARAM[5]% --params=%PYEXECPARAM[6]%
 ) else if not ""%5"" == """" (
-    call "%PYPROGRAMPATHNAME%" system exec-with-params here %PYEXECNAME% --params %PYEXECPARAM[2]% --params %PYEXECPARAM[3]% --params %PYEXECPARAM[4]% --params %PYEXECPARAM[5]%
+    call "%PYPROGRAMPATHNAME%" system exec-with-params here %PYEXECNAME% --params=%PYEXECPARAM[2]% --params=%PYEXECPARAM[3]% --params=%PYEXECPARAM[4]% --params=%PYEXECPARAM[5]%
 ) else if not ""%4"" == """" (
-    call "%PYPROGRAMPATHNAME%" system exec-with-params here %PYEXECNAME% --params %PYEXECPARAM[2]% --params %PYEXECPARAM[3]% --params %PYEXECPARAM[4]%
+    call "%PYPROGRAMPATHNAME%" system exec-with-params here %PYEXECNAME% --params=%PYEXECPARAM[2]% --params=%PYEXECPARAM[3]% --params=%PYEXECPARAM[4]%
 ) else if not ""%3"" == """" (
-    call "%PYPROGRAMPATHNAME%" system exec-with-params here %PYEXECNAME% --params %PYEXECPARAM[2]% --params %PYEXECPARAM[3]%
+    call "%PYPROGRAMPATHNAME%" system exec-with-params here %PYEXECNAME% --params=%PYEXECPARAM[2]% --params=%PYEXECPARAM[3]%
 ) else if not ""%2"" == """" (
-    call "%PYPROGRAMPATHNAME%" system exec-with-params here %PYEXECNAME% --params %PYEXECPARAM[2]%
+    call "%PYPROGRAMPATHNAME%" system exec-with-params here %PYEXECNAME% --params=%PYEXECPARAM[2]%
 ) else (
     call "%PYPROGRAMPATHNAME%" system exec-with-params here %PYEXECNAME%
 )

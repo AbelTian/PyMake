@@ -109,23 +109,22 @@ export PYENVNAME=current
 #echo exec root: \[$PYMMSHELLROOT\] \[default\]
 #echo exec root: \[$(pwd)\] \[here\]
 
-
 if [ "$PYEXECPARAM9" != "" ]; then
-    "$PYPROGRAMPATHNAME" system exec-with-params here "$PYEXECNAME" --params "$PYEXECPARAM2" --params "$PYEXECPARAM3" --params "$PYEXECPARAM4" --params "$PYEXECPARAM5" --params "$PYEXECPARAM6" --params "$PYEXECPARAM7" --params "$PYEXECPARAM8" --params "$PYEXECPARAM9"
+    "$PYPROGRAMPATHNAME" system exec-with-params here "$PYEXECNAME" --params="$PYEXECPARAM2" --params="$PYEXECPARAM3" --params="$PYEXECPARAM4" --params="$PYEXECPARAM5" --params="$PYEXECPARAM6" --params="$PYEXECPARAM7" --params="$PYEXECPARAM8" --params="$PYEXECPARAM9"
 elif [ "$PYEXECPARAM8" != "" ]; then
-    "$PYPROGRAMPATHNAME" system exec-with-params here "$PYEXECNAME" --params "$PYEXECPARAM2" --params "$PYEXECPARAM3" --params "$PYEXECPARAM4" --params "$PYEXECPARAM5" --params "$PYEXECPARAM6" --params "$PYEXECPARAM7" --params "$PYEXECPARAM8"
+    "$PYPROGRAMPATHNAME" system exec-with-params here "$PYEXECNAME" --params="$PYEXECPARAM2" --params="$PYEXECPARAM3" --params="$PYEXECPARAM4" --params="$PYEXECPARAM5" --params="$PYEXECPARAM6" --params="$PYEXECPARAM7" --params="$PYEXECPARAM8"
 elif [ "$PYEXECPARAM7" != "" ]; then
-    "$PYPROGRAMPATHNAME" system exec-with-params here "$PYEXECNAME" --params "$PYEXECPARAM2" --params "$PYEXECPARAM3" --params "$PYEXECPARAM4" --params "$PYEXECPARAM5" --params "$PYEXECPARAM6" --params "$PYEXECPARAM7"
+    "$PYPROGRAMPATHNAME" system exec-with-params here "$PYEXECNAME" --params="$PYEXECPARAM2" --params="$PYEXECPARAM3" --params="$PYEXECPARAM4" --params="$PYEXECPARAM5" --params="$PYEXECPARAM6" --params="$PYEXECPARAM7"
 elif [ "$PYEXECPARAM6" != "" ]; then
-    "$PYPROGRAMPATHNAME" system exec-with-params here "$PYEXECNAME" --params "$PYEXECPARAM2" --params "$PYEXECPARAM3" --params "$PYEXECPARAM4" --params "$PYEXECPARAM5" --params "$PYEXECPARAM6"
+    "$PYPROGRAMPATHNAME" system exec-with-params here "$PYEXECNAME" --params="$PYEXECPARAM2" --params="$PYEXECPARAM3" --params="$PYEXECPARAM4" --params="$PYEXECPARAM5" --params="$PYEXECPARAM6"
 elif [ "$PYEXECPARAM5" != "" ]; then
-    "$PYPROGRAMPATHNAME" system exec-with-params here "$PYEXECNAME" --params "$PYEXECPARAM2" --params "$PYEXECPARAM3" --params "$PYEXECPARAM4" --params "$PYEXECPARAM5"
+    "$PYPROGRAMPATHNAME" system exec-with-params here "$PYEXECNAME" --params="$PYEXECPARAM2" --params="$PYEXECPARAM3" --params="$PYEXECPARAM4" --params="$PYEXECPARAM5"
 elif [ "$PYEXECPARAM4" != "" ]; then
-    "$PYPROGRAMPATHNAME" system exec-with-params here "$PYEXECNAME" --params "$PYEXECPARAM2" --params "$PYEXECPARAM3" --params "$PYEXECPARAM4"
+    "$PYPROGRAMPATHNAME" system exec-with-params here "$PYEXECNAME" --params="$PYEXECPARAM2" --params="$PYEXECPARAM3" --params="$PYEXECPARAM4"
 elif [ "$PYEXECPARAM3" != "" ]; then
-    "$PYPROGRAMPATHNAME" system exec-with-params here "$PYEXECNAME" --params "$PYEXECPARAM2" --params "$PYEXECPARAM3"
+    "$PYPROGRAMPATHNAME" system exec-with-params here "$PYEXECNAME" --params="$PYEXECPARAM2" --params="$PYEXECPARAM3"
 elif [ "$PYEXECPARAM2" != "" ]; then
-    "$PYPROGRAMPATHNAME" system exec-with-params here "$PYEXECNAME" --params "$PYEXECPARAM2"
+    "$PYPROGRAMPATHNAME" system exec-with-params here "$PYEXECNAME" --params="$PYEXECPARAM2"
 else
     "$PYPROGRAMPATHNAME" system exec-with-params here "$PYEXECNAME"
 fi
