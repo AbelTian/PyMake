@@ -111,21 +111,21 @@ export PYENVNAME=current
 
 
 if [ "$PYEXECPARAM9" != "" ]; then
-    "$PYPROGRAMPATHNAME" custom exec-with-params here "$PYEXECNAME" --params "$PYEXECPARAM2" --params "$PYEXECPARAM3" --params "$PYEXECPARAM4" --params "$PYEXECPARAM5" --params "$PYEXECPARAM6" --params "$PYEXECPARAM7" --params "$PYEXECPARAM8" --params "$PYEXECPARAM9"
+    "$PYPROGRAMPATHNAME" custom exec-with-params here "$PYEXECNAME" --params="$PYEXECPARAM2" --params="$PYEXECPARAM3" --params="$PYEXECPARAM4" --params="$PYEXECPARAM5" --params="$PYEXECPARAM6" --params="$PYEXECPARAM7" --params="$PYEXECPARAM8" --params="$PYEXECPARAM9"
 elif [ "$PYEXECPARAM8" != "" ]; then
-    "$PYPROGRAMPATHNAME" custom exec-with-params here "$PYEXECNAME" --params "$PYEXECPARAM2" --params "$PYEXECPARAM3" --params "$PYEXECPARAM4" --params "$PYEXECPARAM5" --params "$PYEXECPARAM6" --params "$PYEXECPARAM7" --params "$PYEXECPARAM8"
+    "$PYPROGRAMPATHNAME" custom exec-with-params here "$PYEXECNAME" --params="$PYEXECPARAM2" --params="$PYEXECPARAM3" --params="$PYEXECPARAM4" --params="$PYEXECPARAM5" --params="$PYEXECPARAM6" --params="$PYEXECPARAM7" --params="$PYEXECPARAM8"
 elif [ "$PYEXECPARAM7" != "" ]; then
-    "$PYPROGRAMPATHNAME" custom exec-with-params here "$PYEXECNAME" --params "$PYEXECPARAM2" --params "$PYEXECPARAM3" --params "$PYEXECPARAM4" --params "$PYEXECPARAM5" --params "$PYEXECPARAM6" --params "$PYEXECPARAM7"
+    "$PYPROGRAMPATHNAME" custom exec-with-params here "$PYEXECNAME" --params="$PYEXECPARAM2" --params="$PYEXECPARAM3" --params="$PYEXECPARAM4" --params="$PYEXECPARAM5" --params="$PYEXECPARAM6" --params="$PYEXECPARAM7"
 elif [ "$PYEXECPARAM6" != "" ]; then
-    "$PYPROGRAMPATHNAME" custom exec-with-params here "$PYEXECNAME" --params "$PYEXECPARAM2" --params "$PYEXECPARAM3" --params "$PYEXECPARAM4" --params "$PYEXECPARAM5" --params "$PYEXECPARAM6"
+    "$PYPROGRAMPATHNAME" custom exec-with-params here "$PYEXECNAME" --params="$PYEXECPARAM2" --params="$PYEXECPARAM3" --params="$PYEXECPARAM4" --params="$PYEXECPARAM5" --params="$PYEXECPARAM6"
 elif [ "$PYEXECPARAM5" != "" ]; then
-    "$PYPROGRAMPATHNAME" custom exec-with-params here "$PYEXECNAME" --params "$PYEXECPARAM2" --params "$PYEXECPARAM3" --params "$PYEXECPARAM4" --params "$PYEXECPARAM5"
+    "$PYPROGRAMPATHNAME" custom exec-with-params here "$PYEXECNAME" --params="$PYEXECPARAM2" --params="$PYEXECPARAM3" --params="$PYEXECPARAM4" --params="$PYEXECPARAM5"
 elif [ "$PYEXECPARAM4" != "" ]; then
-    "$PYPROGRAMPATHNAME" custom exec-with-params here "$PYEXECNAME" --params "$PYEXECPARAM2" --params "$PYEXECPARAM3" --params "$PYEXECPARAM4"
+    "$PYPROGRAMPATHNAME" custom exec-with-params here "$PYEXECNAME" --params="$PYEXECPARAM2" --params="$PYEXECPARAM3" --params="$PYEXECPARAM4"
 elif [ "$PYEXECPARAM3" != "" ]; then
-    "$PYPROGRAMPATHNAME" custom exec-with-params here "$PYEXECNAME" --params "$PYEXECPARAM2" --params "$PYEXECPARAM3"
+    "$PYPROGRAMPATHNAME" custom exec-with-params here "$PYEXECNAME" --params="$PYEXECPARAM2" --params="$PYEXECPARAM3"
 elif [ "$PYEXECPARAM2" != "" ]; then
-    "$PYPROGRAMPATHNAME" custom exec-with-params here "$PYEXECNAME" --params "$PYEXECPARAM2"
+    "$PYPROGRAMPATHNAME" custom exec-with-params here "$PYEXECNAME" --params="$PYEXECPARAM2"
 else
     "$PYPROGRAMPATHNAME" custom exec-with-params here "$PYEXECNAME"
 fi
