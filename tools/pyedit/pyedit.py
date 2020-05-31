@@ -4936,7 +4936,7 @@ def main_function():
         conf3.write(open(pymakeeditini, 'w'))
 
 
-    from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QStatusBar, QListView
+    from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QStatusBar, QListView, QTextEdit
     from PyQt5 import uic
     from PyQt5.QtCore import Qt
     from PyQt5.QtCore import QStringListModel, QModelIndex, QItemSelectionModel
@@ -5257,30 +5257,37 @@ def main_function():
             mertics = QFontMetrics(self.textEditCommands.font())
             self.textEditCommands.setTabStopWidth(4* mertics.width(' '))
             self.textEditCommands.setAcceptRichText(False)
+            self.textEditCommands.setLineWrapMode(QTextEdit.NoWrap)
 
             mertics = QFontMetrics(self.textEditProgram.font())
             self.textEditProgram.setTabStopWidth(4* mertics.width(' '))
             self.textEditProgram.setAcceptRichText(False)
+            self.textEditProgram.setLineWrapMode(QTextEdit.NoWrap)
 
             mertics = QFontMetrics(self.textEditCustomPath.font())
             self.textEditCustomPath.setTabStopWidth(4* mertics.width(' '))
             self.textEditCustomPath.setAcceptRichText(False)
+            self.textEditCustomPath.setLineWrapMode(QTextEdit.NoWrap)
 
             mertics = QFontMetrics(self.textEditCustomEnv.font())
             self.textEditCustomEnv.setTabStopWidth(4* mertics.width(' '))
             self.textEditCustomEnv.setAcceptRichText(False)
+            self.textEditCustomEnv.setLineWrapMode(QTextEdit.NoWrap)
 
             mertics = QFontMetrics(self.textEditSeparatePath.font())
             self.textEditSeparatePath.setTabStopWidth(4* mertics.width(' '))
             self.textEditSeparatePath.setAcceptRichText(False)
+            self.textEditSeparatePath.setLineWrapMode(QTextEdit.NoWrap)
 
             mertics = QFontMetrics(self.textEditSeparateEnv.font())
             self.textEditSeparateEnv.setTabStopWidth(4* mertics.width(' '))
             self.textEditSeparateEnv.setAcceptRichText(False)
+            self.textEditSeparateEnv.setLineWrapMode(QTextEdit.NoWrap)
 
             mertics = QFontMetrics(self.textEditPaths.font())
             self.textEditPaths.setTabStopWidth(4* mertics.width(' '))
             self.textEditPaths.setAcceptRichText(False)
+            self.textEditPaths.setLineWrapMode(QTextEdit.NoWrap)
 
         def onListViewSeparateEnvListClicked(self, index):
             current_env = index.data()
