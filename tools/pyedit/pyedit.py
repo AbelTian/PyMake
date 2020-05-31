@@ -5055,6 +5055,10 @@ def main_function():
             self.toolBtnCmdDel.clicked.connect(self.onToolBtnCmdDelClicked)
             self.toolBtnCmdRename.clicked.connect(self.onToolBtnCmdRenameClicked)
 
+            self.toolBtnEnvNew.clicked.connect(self.onToolBtnEnvNewClicked)
+            self.toolBtnEnvDel.clicked.connect(self.onToolBtnEnvDelClicked)
+            self.toolBtnEnvRename.clicked.connect(self.onToolBtnEnvRenameClicked)
+
             self.textEditProgram.installEventFilter(self)
             self.textEditCustomPath.installEventFilter(self)
             self.textEditCustomEnv.installEventFilter(self)
@@ -5257,37 +5261,37 @@ def main_function():
             mertics = QFontMetrics(self.textEditCommands.font())
             self.textEditCommands.setTabStopWidth(4* mertics.width(' '))
             self.textEditCommands.setAcceptRichText(False)
-            self.textEditCommands.setLineWrapMode(QTextEdit.NoWrap)
+            #self.textEditCommands.setLineWrapMode(QTextEdit.NoWrap)
 
             mertics = QFontMetrics(self.textEditProgram.font())
             self.textEditProgram.setTabStopWidth(4* mertics.width(' '))
             self.textEditProgram.setAcceptRichText(False)
-            self.textEditProgram.setLineWrapMode(QTextEdit.NoWrap)
+            #self.textEditProgram.setLineWrapMode(QTextEdit.NoWrap)
 
             mertics = QFontMetrics(self.textEditCustomPath.font())
             self.textEditCustomPath.setTabStopWidth(4* mertics.width(' '))
             self.textEditCustomPath.setAcceptRichText(False)
-            self.textEditCustomPath.setLineWrapMode(QTextEdit.NoWrap)
+            #self.textEditCustomPath.setLineWrapMode(QTextEdit.NoWrap)
 
             mertics = QFontMetrics(self.textEditCustomEnv.font())
             self.textEditCustomEnv.setTabStopWidth(4* mertics.width(' '))
             self.textEditCustomEnv.setAcceptRichText(False)
-            self.textEditCustomEnv.setLineWrapMode(QTextEdit.NoWrap)
+            #self.textEditCustomEnv.setLineWrapMode(QTextEdit.NoWrap)
 
             mertics = QFontMetrics(self.textEditSeparatePath.font())
             self.textEditSeparatePath.setTabStopWidth(4* mertics.width(' '))
             self.textEditSeparatePath.setAcceptRichText(False)
-            self.textEditSeparatePath.setLineWrapMode(QTextEdit.NoWrap)
+            #self.textEditSeparatePath.setLineWrapMode(QTextEdit.NoWrap)
 
             mertics = QFontMetrics(self.textEditSeparateEnv.font())
             self.textEditSeparateEnv.setTabStopWidth(4* mertics.width(' '))
             self.textEditSeparateEnv.setAcceptRichText(False)
-            self.textEditSeparateEnv.setLineWrapMode(QTextEdit.NoWrap)
+            #self.textEditSeparateEnv.setLineWrapMode(QTextEdit.NoWrap)
 
             mertics = QFontMetrics(self.textEditPaths.font())
             self.textEditPaths.setTabStopWidth(4* mertics.width(' '))
             self.textEditPaths.setAcceptRichText(False)
-            self.textEditPaths.setLineWrapMode(QTextEdit.NoWrap)
+            #self.textEditPaths.setLineWrapMode(QTextEdit.NoWrap)
 
         def onListViewSeparateEnvListClicked(self, index):
             current_env = index.data()
@@ -5503,6 +5507,120 @@ def main_function():
 
             writeJsonData(sourceconfigfile, config)
             self.statusBar.showMessage("Rename command %s to %s success!" % (current_cmd, cmdname))
+
+        def onToolBtnEnvNewClicked(self):
+            ''
+            envname = self.lineEditEnvName.text().strip()
+            if(envname == ''):
+                self.statusBar.showMessage("Environ: env name is empty!")
+                return
+
+            index = self.listViewSeparateEnvList.currentIndex()
+            if(not index.isValid()):
+                self.statusBar.showMessage("Environ: has no env item selected!")
+                return
+
+            current_row = index.row()
+            #current_env = index.data()
+
+            if(self.envlist.__contains__(envname)):
+                self.statusBar.showMessage("Environ: %s is existed! index %s." % (envname,self.envlist.index(envname)))
+                return
+
+            self.envlist.insert(current_row, envname)
+            self.envmodel.insertRow(current_row)
+            self.envmodel.setData(self.envmodel.index(current_row), envname)
+
+            current_env_var = config['environ']['current']
+            config['environ'][envname]={}
+            config['environ'][envname]['path+']=[]
+            list_config = OrderedDict()
+            for key in self.envlist:
+                list_config[key] = copy.deepcopy(config['environ'][key])
+            config['environ'] = {}
+            for key in self.envlist:
+                config['environ'][key] = copy.deepcopy(list_config[key])
+            config['environ']['current'] = current_env_var
+
+            self.listViewSeparateEnvList.setCurrentIndex(self.envmodel.index(current_row))
+
+            writeJsonData(sourceconfigfile, config)
+            self.statusBar.showMessage("Add env %s success!" % (envname))
+
+        def onToolBtnEnvDelClicked(self):
+            ''
+            envname = self.lineEditEnvName.text().strip()
+            if(envname == ''):
+                self.statusBar.showMessage("Environ: env name is empty!")
+                return
+
+            if(not self.envlist.__contains__(envname)):
+                self.statusBar.showMessage("Environ: %s is not existed! no index." % (envname))
+                return
+
+            current_row = self.envlist.index(envname)
+            #index = self.envmodel.index(current_row)
+            #if(not index.isValid()):
+            #    self.statusBar.showMessage("Environ: cant select env item!")
+            #    return
+
+            config['environ'].__delitem__(envname)
+            self.envlist.remove(envname)
+            self.envmodel.removeRow(current_row)
+            #index = self.envmodel.index(current_row)
+            self.listViewSeparateEnvList.setCurrentIndex(self.envmodel.index(current_row))
+
+            writeJsonData(sourceconfigfile, config)
+            self.statusBar.showMessage("Delete env %s success!" % (envname))
+
+        def onToolBtnEnvRenameClicked(self):
+            ''
+            envname = self.lineEditEnvName.text().strip()
+            if(envname == ''):
+                self.statusBar.showMessage("Environ: env name is empty!")
+                return
+
+            index = self.listViewSeparateEnvList.currentIndex()
+            if(not index.isValid()):
+                self.statusBar.showMessage("Environ: has no env item selected!")
+                return
+
+            if(self.envlist.__contains__(envname)):
+                self.statusBar.showMessage("Environ: %s is existed! index %s." % (envname, self.envlist.index(envname)))
+                return
+
+            current_row = index.row()
+            current_env = index.data()
+
+            #save list
+            envdata = copy.deepcopy(config['environ'][current_env])
+
+            #del
+            config['environ'].__delitem__(current_env)
+            self.envlist.remove(current_env)
+            self.envmodel.removeRow(current_row)
+
+            #add
+            self.envlist.insert(current_row, envname)
+            self.envmodel.insertRow(current_row)
+            self.envmodel.setData(self.envmodel.index(current_row), envname)
+
+            current_env_var = config['environ']['current']
+            config['environ'][envname]={}
+            config['environ'][envname]['path+']=[]
+            list_config = OrderedDict()
+            for key in self.envlist:
+                list_config[key] = copy.deepcopy(config['environ'][key])
+            config['environ'] = {}
+            for key in self.envlist:
+                config['environ'][key] = copy.deepcopy(list_config[key])
+            config['environ'][envname]=copy.deepcopy(envdata)
+            config['environ']['current'] = current_env_var
+
+            self.listViewSeparateEnvList.setCurrentIndex(self.envmodel.index(current_row))
+
+            writeJsonData(sourceconfigfile, config)
+            self.statusBar.showMessage("Rename env %s to %s success!" % (current_env, envname))
 
         def onLineEditSearchPathsTextChanged(self, text):
             ''
