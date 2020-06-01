@@ -6216,11 +6216,18 @@ def main_function():
                 #cmd_list.append(powershellexecfile + ' ' + params_string)
                 if (str(powershellexecfile).__contains__(' ')):
                     if(os.path.isfile(powershellexecfile)):
+                        powershellexecfile = powershellexecfile.replace('/', os.path.sep)
+                        powershellexecfile = powershellexecfile.replace('\\', os.path.sep)
                         cmd_list.append(". \"%s\" @args" % powershellexecfile)
                     else:
-                        cmd_list.append(". %s @args" % powershellexecfile)
+                        cmd_list.append("%s" % powershellexecfile)
                 else:
-                    cmd_list.append(". %s @args" % powershellexecfile)
+                    if(os.path.isfile(powershellexecfile)):
+                        powershellexecfile = powershellexecfile.replace('/', os.path.sep)
+                        powershellexecfile = powershellexecfile.replace('\\', os.path.sep)
+                        cmd_list.append(". %s @args" % powershellexecfile)
+                    else:
+                        cmd_list.append("%s" % powershellexecfile)
 
         # append exit 0
         cmd_list.append(cmd_exit)
