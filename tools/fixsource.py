@@ -6,7 +6,8 @@ import pickle
 import re
 import platform
 
-if sys.version_info[0] == 2:
+
+if (sys.version_info[0] == 2):
     reload(sys)
     sys.setdefaultencoding('utf-8')
     #import Tkinter as tk
@@ -20,12 +21,18 @@ if sys.version_info[0] == 2:
     # import tkSimpleDialog
 
 else:  # Python 3.x
+    ''
     #import tkinter as tk
     #import tkinter.font as tkFont
     #import tkinter.ttk as ttk
     #import tkinter.messagebox as tkMessageBox
     # import tkinter.filedialog as tkFileDialog
     # import tkinter.simpledialog as tkSimpleDialog    #askstring()
+
+    #print(sys.version_info[0])
+    #print(sys.version_info[1])
+    if(sys.version_info[1] < 6):
+        ModuleNotFoundError = ImportError
 
 if ( sys.version_info[0] == 2 ):
     import ConfigParser as PyConfigParser
