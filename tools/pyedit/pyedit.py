@@ -5020,8 +5020,6 @@ def main_function():
             pyedituipath = os.path.join(pymakefilepath, 'tools', 'pyedit', 'mainwindow.ui')
             uic.loadUi(pyedituipath, self)
 
-            self.resize(800, 360)
-
             self.indexPageProgram = 0
             self.indexPageSystem = 1
             self.indexPageLocal = 2
