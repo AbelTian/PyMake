@@ -9,10 +9,10 @@ import platform
 if sys.version_info[0] == 2:
     reload(sys)
     sys.setdefaultencoding('utf-8')
-    import Tkinter as tk
-    import tkFont as tkFont
-    import ttk as ttk
-    import tkMessageBox as tkMessageBox
+    #import Tkinter as tk
+    #import tkFont as tkFont
+    #import ttk as ttk
+    #import tkMessageBox as tkMessageBox
 
     # Usage:showinfo/warning/error,askquestion/okcancel/yesno/retrycancel
     # Usage:f=tkFileDialog.askopenfilename(initialdir='E:/Python')
@@ -20,10 +20,10 @@ if sys.version_info[0] == 2:
     # import tkSimpleDialog
 
 else:  # Python 3.x
-    import tkinter as tk
-    import tkinter.font as tkFont
-    import tkinter.ttk as ttk
-    import tkinter.messagebox as tkMessageBox
+    #import tkinter as tk
+    #import tkinter.font as tkFont
+    #import tkinter.ttk as ttk
+    #import tkinter.messagebox as tkMessageBox
     # import tkinter.filedialog as tkFileDialog
     # import tkinter.simpledialog as tkSimpleDialog    #askstring()
 
