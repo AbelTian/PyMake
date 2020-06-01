@@ -89,74 +89,75 @@ else:
     pipexe = 'python3 -m pip install '
 
 
-try:
-    import requests
-except ModuleNotFoundError:
-    os.system(pipexe + "requests")
-    import requests
+#windows none?
+#try:
+#    import requests
+#except ModuleNotFoundError:
+#    os.system(pipexe + "requests")
+#    import requests
 
-#linux none
+#linux none?
 #try:
 #    import itchat
 #except ModuleNotFoundError:
 #    os.system(pipexe + "itchat")
 #    import itchat
 
-try:
-    import jieba
-except ModuleNotFoundError:
-    os.system(pipexe + "jieba")
-    import jieba
+#try:
+#    import jieba
+#except ModuleNotFoundError:
+#    os.system(pipexe + "jieba")
+#    import jieba
 
-try:
-    import matplotlib.pyplot as plt
-except ModuleNotFoundError:
-    os.system(pipexe + "Matplotlib")
-    import matplotlib.pyplot as plt
+#try:
+#    import matplotlib.pyplot as plt
+#except ModuleNotFoundError:
+#    os.system(pipexe + "Matplotlib")
+#    import matplotlib.pyplot as plt
 
-try:
-    from wordcloud import WordCloud, ImageColorGenerator
-except ModuleNotFoundError:
-    os.system(pipexe + "wordcloud")
-    from wordcloud import WordCloud, ImageColorGenerator
+#try:
+#    from wordcloud import WordCloud, ImageColorGenerator
+#except ModuleNotFoundError:
+#    os.system(pipexe + "wordcloud")
+#    from wordcloud import WordCloud, ImageColorGenerator
 
-try:
-    import numpy as np
-except ModuleNotFoundError:
-    os.system(pipexe + "numpy")
-    import numpy as np
+#try:
+#    import numpy as np
+#except ModuleNotFoundError:
+#    os.system(pipexe + "numpy")
+#    import numpy as np
 
-try:
-    import PIL.Image as Image
-except ModuleNotFoundError:
-    os.system(pipexe + "PIL")
-    import PIL.Image as Image
+#try:
+#    import PIL.Image as Image
+#except ModuleNotFoundError:
+#    os.system(pipexe + "PIL")
+#    import PIL.Image as Image
 
-try:
-    from bs4 import BeautifulSoup
-except ModuleNotFoundError:
-    os.system(pipexe + "bs4")
-    from bs4 import BeautifulSoup
+#try:
+#    from bs4 import BeautifulSoup
+#except ModuleNotFoundError:
+#    os.system(pipexe + "bs4")
+#    from bs4 import BeautifulSoup
 
-try:
-    from pymongo import MongoClient
-except ModuleNotFoundError:
-    os.system(pipexe + "pymongo")
-    from pymongo import MongoClient
+#try:
+#    from pymongo import MongoClient
+#except ModuleNotFoundError:
+#    os.system(pipexe + "pymongo")
+#    from pymongo import MongoClient
 
-try:
-    import cv2
-except ModuleNotFoundError:
-    os.system(pipexe + "opencv-python")
-    os.system(pipexe + "pytesseract")
-    os.system(pipexe + "opencv-contrib-python")
-    import cv2
+#try:
+#    import cv2
+#except ModuleNotFoundError:
+#    os.system(pipexe + "opencv-python")
+#    os.system(pipexe + "pytesseract")
+#    os.system(pipexe + "opencv-contrib-python")
+#    import cv2
 
-try:
-    import docopt
-except ModuleNotFoundError:
-    os.system(pipexe + "docopt")
-    import docopt
+#try:
+#    import docopt
+#except ModuleNotFoundError:
+#    os.system(pipexe + "docopt")
+#    import docopt
 
 try:
     from PyQt5.QtCore import QEvent
@@ -164,8 +165,8 @@ except ModuleNotFoundError:
     os.system(pipexe + "PyQt5")
     from PyQt5.QtCore import QEvent
 
-try:
-    from PyQt5.Qsci import QsciScintilla
-except ModuleNotFoundError:
-    os.system(pipexe + "QScintilla")
-    from PyQt5.Qsci import QsciScintilla
+#try:
+#    from PyQt5.Qsci import QsciScintilla
+#except ModuleNotFoundError:
+#    os.system(pipexe + "QScintilla")
+#    from PyQt5.Qsci import QsciScintilla
