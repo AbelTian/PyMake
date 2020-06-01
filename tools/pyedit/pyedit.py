@@ -4984,19 +4984,46 @@ def main_function():
         conf3.set('edit', 'page', page1)
         conf3.write(open(pymakeeditini, 'w'))
 
+    pymakeeditpath = os.path.join(pymakefilepath, "tools", "pyedit")
 
-    from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QStatusBar, QListView, QTextEdit
+
+    from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QStatusBar
+    from PyQt5.QtWidgets import QListView, QTextEdit, QToolButton, QItemDelegate
     from PyQt5 import uic
     from PyQt5.QtCore import Qt
     from PyQt5.QtCore import QStringListModel, QModelIndex, QItemSelectionModel
     from PyQt5.QtCore import QEvent
+    from PyQt5.QtCore import QRect
     from PyQt5.QtGui import QKeyEvent, QTextCursor, QTextDocument, QFontMetrics
+    from PyQt5.QtGui import QIcon
+    from PyQt5.QtGui import QPainter, QPen, QColor
     #from PyQt5.Qsci import QsciScintilla
 
     class Application(QApplication):
         def __init__(self, argv=[]):
             QApplication.setAttribute(Qt.AA_EnableHighDpiScaling)
             QApplication.__init__(self, argv)
+
+    class EnvItemDelegate(QItemDelegate):
+        def __init__(self, parent=None):
+            QItemDelegate.__init__(self, parent)
+
+        def drawDisplay(self, painter, option, rect, text):
+            ''
+            if(not config['environ'].__contains__('current')):
+                return QItemDelegate.drawDisplay(self, painter, option, rect, text)
+
+            if( text != config['environ']['current']):
+                return QItemDelegate.drawDisplay(self, painter, option, rect, text)
+
+            painter.save()
+            pen = QPen()
+            pen.setColor(Qt.darkCyan)
+            painter.setPen(pen)
+            painter.drawText(rect.adjusted(5, 0, 0, 0), Qt.AlignLeft|Qt.AlignVCenter, text)
+            painter.restore()
+
+
 
     class MainWindow(QMainWindow):
         def __init__(self, parent=None):
@@ -5103,10 +5130,23 @@ def main_function():
             self.toolBtnCmdRename.clicked.connect(self.onToolBtnCmdRenameClicked)
             self.toolBtnCmdClone.clicked.connect(self.onToolBtnCmdCloneClicked)
 
+            self.toolBtnCmdUp.clicked.connect(self.onToolBtnCmdUpClicked)
+            self.toolBtnCmdDown.clicked.connect(self.onToolBtnCmdDownClicked)
+            self.toolBtnCmdUp.setIcon(QIcon(os.path.join(pymakeeditpath, "up.png")))
+            self.toolBtnCmdDown.setIcon(QIcon(os.path.join(pymakeeditpath, "down.png")))
+
+            self.toolBtnEnvCurrent.setIcon(QIcon(os.path.join(pymakeeditpath, "current.png")))
+            self.toolBtnEnvCurrent.clicked.connect(self.onToolBtnEnvCurrentClicked)
+
             self.toolBtnEnvNew.clicked.connect(self.onToolBtnEnvNewClicked)
             self.toolBtnEnvDel.clicked.connect(self.onToolBtnEnvDelClicked)
             self.toolBtnEnvRename.clicked.connect(self.onToolBtnEnvRenameClicked)
             self.toolBtnEnvClone.clicked.connect(self.onToolBtnEnvCloneClicked)
+
+            self.toolBtnEnvUp.clicked.connect(self.onToolBtnEnvUpClicked)
+            self.toolBtnEnvDown.clicked.connect(self.onToolBtnEnvDownClicked)
+            self.toolBtnEnvUp.setIcon(QIcon(os.path.join(pymakeeditpath, "up.png")))
+            self.toolBtnEnvDown.setIcon(QIcon(os.path.join(pymakeeditpath, "down.png")))
 
             self.textEditProgram.installEventFilter(self)
             self.textEditCustomPath.installEventFilter(self)
@@ -5267,6 +5307,9 @@ def main_function():
                 config['environ']['current']='default'
                 self.envlist.append("default")
             self.envmodel.setStringList(self.envlist)
+
+            self.envItemDelegate = EnvItemDelegate(self.listViewSeparateEnvList)
+            self.listViewSeparateEnvList.setItemDelegate(self.envItemDelegate)
 
             self.listViewSeparateEnvList.clicked.connect(self.onListViewSeparateEnvListClicked)
             self.listViewSeparateEnvList.selectionModel().currentRowChanged.connect(self.onListViewSeparateEnvListClicked)
@@ -5636,6 +5679,112 @@ def main_function():
             writeJsonData(sourceconfigfile, config)
             self.statusBar.showMessage("Clone command %s to %s success!" % (current_cmd, cmdname))
 
+        def onToolBtnCmdUpClicked(self):
+            ''
+            cmdname = self.lineEditCmdName.text().strip()
+            if(cmdname == ''):
+                self.statusBar.showMessage("Command: cmd name is empty!")
+                return
+
+            index = self.listViewCommands.currentIndex()
+            if(not index.isValid()):
+                self.statusBar.showMessage("Command: has no command item selected!")
+                return
+
+            if(not self.cmdlist.__contains__(cmdname)):
+                self.statusBar.showMessage("Command: %s is not existed! no index." % (cmdname))
+                return
+
+            current_row = index.row()-1
+            current_cmd = index.data()
+            if(current_cmd != cmdname):
+                self.statusBar.showMessage("Command: %s has not been selected!" % (cmdname))
+                return
+
+            if(current_row < 0):
+                self.statusBar.showMessage("Command: top position arrived!")
+                return
+
+            #save list
+            cmddata = copy.deepcopy(config['command'][current_cmd])
+
+            #del
+            config['command'].__delitem__(current_cmd)
+            self.cmdlist.remove(current_cmd)
+            self.cmdmodel.removeRow(current_row+1)
+
+            #add
+            self.cmdlist.insert(current_row, cmdname)
+            self.cmdmodel.insertRow(current_row)
+            self.cmdmodel.setData(self.cmdmodel.index(current_row), cmdname)
+
+            config['command'][cmdname]=[]
+            list_config = OrderedDict()
+            for key in self.cmdlist:
+                list_config[key] = copy.deepcopy(config['command'][key])
+            config['command'] = {}
+            for key in self.cmdlist:
+                config['command'][key] = copy.deepcopy(list_config[key])
+            config['command'][cmdname]=copy.deepcopy(cmddata)
+
+            self.listViewCommands.setCurrentIndex(self.cmdmodel.index(current_row))
+
+            writeJsonData(sourceconfigfile, config)
+            self.statusBar.showMessage("Command: %s up position success!" % (cmdname))
+
+        def onToolBtnCmdDownClicked(self):
+            ''
+            cmdname = self.lineEditCmdName.text().strip()
+            if(cmdname == ''):
+                self.statusBar.showMessage("Command: cmd name is empty!")
+                return
+
+            index = self.listViewCommands.currentIndex()
+            if(not index.isValid()):
+                self.statusBar.showMessage("Command: has no command item selected!")
+                return
+
+            if(not self.cmdlist.__contains__(cmdname)):
+                self.statusBar.showMessage("Command: %s is not existed! no index." % (cmdname))
+                return
+
+            current_row = index.row()+1
+            current_cmd = index.data()
+            if(current_cmd != cmdname):
+                self.statusBar.showMessage("Command: %s has not been selected!" % (cmdname))
+                return
+
+            if(current_row >= self.cmdlist.__len__()):
+                self.statusBar.showMessage("Command: bottom position arrived!")
+                return
+
+            #save list
+            cmddata = copy.deepcopy(config['command'][current_cmd])
+
+            #del
+            config['command'].__delitem__(current_cmd)
+            self.cmdlist.remove(current_cmd)
+            self.cmdmodel.removeRow(current_row-1)
+
+            #add
+            self.cmdlist.insert(current_row, cmdname)
+            self.cmdmodel.insertRow(current_row)
+            self.cmdmodel.setData(self.cmdmodel.index(current_row), cmdname)
+
+            config['command'][cmdname]=[]
+            list_config = OrderedDict()
+            for key in self.cmdlist:
+                list_config[key] = copy.deepcopy(config['command'][key])
+            config['command'] = {}
+            for key in self.cmdlist:
+                config['command'][key] = copy.deepcopy(list_config[key])
+            config['command'][cmdname]=copy.deepcopy(cmddata)
+
+            self.listViewCommands.setCurrentIndex(self.cmdmodel.index(current_row))
+
+            writeJsonData(sourceconfigfile, config)
+            self.statusBar.showMessage("Command: %s down position success!" % (cmdname))
+
         def onToolBtnEnvNewClicked(self):
             ''
             envname = self.lineEditEnvName.text().strip()
@@ -5823,6 +5972,151 @@ def main_function():
 
             writeJsonData(sourceconfigfile, config)
             self.statusBar.showMessage("Clone env %s to %s success!" % (current_env, envname))
+
+        def onToolBtnEnvUpClicked(self):
+            ''
+            envname = self.lineEditEnvName.text().strip()
+            if(envname == ''):
+                self.statusBar.showMessage("Environ: env name is empty!")
+                return
+
+            index = self.listViewSeparateEnvList.currentIndex()
+            if(not index.isValid()):
+                self.statusBar.showMessage("Environ: has no env item selected!")
+                return
+
+            if(not self.envlist.__contains__(envname)):
+                self.statusBar.showMessage("Environ: %s is not existed! no index." % (envname))
+                return
+
+            current_row = index.row()-1
+            current_env = index.data()
+
+            if(current_env != envname):
+                self.statusBar.showMessage("Environ: %s has not been selected!" % (envname))
+                return
+
+            if(current_row < 0):
+                self.statusBar.showMessage("Environ: top position arrived!")
+                return
+
+            #save list
+            envdata = copy.deepcopy(config['environ'][current_env])
+
+            #del
+            config['environ'].__delitem__(current_env)
+            self.envlist.remove(current_env)
+            self.envmodel.removeRow(current_row+1)
+
+            #add
+            self.envlist.insert(current_row, envname)
+            self.envmodel.insertRow(current_row)
+            self.envmodel.setData(self.envmodel.index(current_row), envname)
+
+            current_env_var = config['environ']['current']
+            config['environ'][envname]={}
+            config['environ'][envname]['path+']=[]
+            list_config = OrderedDict()
+            for key in self.envlist:
+                list_config[key] = copy.deepcopy(config['environ'][key])
+            config['environ'] = {}
+            for key in self.envlist:
+                config['environ'][key] = copy.deepcopy(list_config[key])
+            config['environ'][envname]=copy.deepcopy(envdata)
+            config['environ']['current'] = current_env_var
+
+            self.listViewSeparateEnvList.setCurrentIndex(self.envmodel.index(current_row))
+
+            writeJsonData(sourceconfigfile, config)
+            self.statusBar.showMessage("Environ: %s up position success!" % (envname))
+
+        def onToolBtnEnvDownClicked(self):
+            ''
+            envname = self.lineEditEnvName.text().strip()
+            if(envname == ''):
+                self.statusBar.showMessage("Environ: env name is empty!")
+                return
+
+            index = self.listViewSeparateEnvList.currentIndex()
+            if(not index.isValid()):
+                self.statusBar.showMessage("Environ: has no env item selected!")
+                return
+
+            if(not self.envlist.__contains__(envname)):
+                self.statusBar.showMessage("Environ: %s is not existed! no index." % (envname))
+                return
+
+            current_row = index.row()+1
+            current_env = index.data()
+
+            if(current_env != envname):
+                self.statusBar.showMessage("Environ: %s has not been selected!" % (envname))
+                return
+
+            if(current_row >= self.envlist.__len__()):
+                self.statusBar.showMessage("Environ: bottom position arrived!")
+                return
+
+            #save list
+            envdata = copy.deepcopy(config['environ'][current_env])
+
+            #del
+            config['environ'].__delitem__(current_env)
+            self.envlist.remove(current_env)
+            self.envmodel.removeRow(current_row-1)
+
+            #add
+            self.envlist.insert(current_row, envname)
+            self.envmodel.insertRow(current_row)
+            self.envmodel.setData(self.envmodel.index(current_row), envname)
+
+            current_env_var = config['environ']['current']
+            config['environ'][envname]={}
+            config['environ'][envname]['path+']=[]
+            list_config = OrderedDict()
+            for key in self.envlist:
+                list_config[key] = copy.deepcopy(config['environ'][key])
+            config['environ'] = {}
+            for key in self.envlist:
+                config['environ'][key] = copy.deepcopy(list_config[key])
+            config['environ'][envname]=copy.deepcopy(envdata)
+            config['environ']['current'] = current_env_var
+
+            self.listViewSeparateEnvList.setCurrentIndex(self.envmodel.index(current_row))
+
+            writeJsonData(sourceconfigfile, config)
+            self.statusBar.showMessage("Environ: %s down position success!" % (envname))
+
+        def onToolBtnEnvCurrentClicked(self):
+            ''
+            envname = self.lineEditEnvName.text().strip()
+            if(envname == ''):
+                self.statusBar.showMessage("Environ: env name is empty!")
+                return
+
+            index = self.listViewSeparateEnvList.currentIndex()
+            if(not index.isValid()):
+                self.statusBar.showMessage("Environ: has no env item selected!")
+                return
+
+            if(not self.envlist.__contains__(envname)):
+                self.statusBar.showMessage("Environ: %s is not existed! no index." % (envname))
+                return
+
+            current_row = index.row()
+            current_env = index.data()
+
+            if(current_env != envname):
+                self.statusBar.showMessage("Environ: %s has not been selected!" % (envname))
+                return
+
+            config['environ']['current'] = envname
+
+            self.listViewSeparateEnvList.setCurrentIndex(self.envmodel.index(current_row))
+            self.listViewSeparateEnvList.setFocus()
+
+            writeJsonData(sourceconfigfile, config)
+            self.statusBar.showMessage("Environ: set current env %s success!" % (envname))
 
         def onLineEditSearchPathsTextChanged(self, text):
             ''
