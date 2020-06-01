@@ -5054,6 +5054,7 @@ def main_function():
             self.toolBtnCmdNew.clicked.connect(self.onToolBtnCmdNewClicked)
             self.toolBtnCmdDel.clicked.connect(self.onToolBtnCmdDelClicked)
             self.toolBtnCmdRename.clicked.connect(self.onToolBtnCmdRenameClicked)
+            self.toolBtnCmdClone.clicked.connect(self.onToolBtnCmdCloneClicked)
 
             self.toolBtnEnvNew.clicked.connect(self.onToolBtnEnvNewClicked)
             self.toolBtnEnvDel.clicked.connect(self.onToolBtnEnvDelClicked)
@@ -5508,6 +5509,52 @@ def main_function():
 
             writeJsonData(sourceconfigfile, config)
             self.statusBar.showMessage("Rename command %s to %s success!" % (current_cmd, cmdname))
+
+        def onToolBtnCmdCloneClicked(self):
+            ''
+            cmdname = self.lineEditCmdName.text().strip()
+            if(cmdname == ''):
+                self.statusBar.showMessage("Command: cmd name is empty!")
+                return
+
+            index = self.listViewCommands.currentIndex()
+            if(not index.isValid()):
+                self.statusBar.showMessage("Command: has no command item selected!")
+                return
+
+            if(self.cmdlist.__contains__(cmdname)):
+                self.statusBar.showMessage("Command: %s is existed! index %s." % (cmdname,self.cmdlist.index(cmdname)))
+                return
+
+            current_row = index.row()
+            current_cmd = index.data()
+
+            #save list
+            cmddata = copy.deepcopy(config['command'][current_cmd])
+
+            #no del
+            #config['command'].__delitem__(current_cmd)
+            #self.cmdlist.remove(current_cmd)
+            #self.cmdmodel.removeRow(current_row)
+
+            #add
+            self.cmdlist.insert(current_row, cmdname)
+            self.cmdmodel.insertRow(current_row)
+            self.cmdmodel.setData(self.cmdmodel.index(current_row), cmdname)
+
+            config['command'][cmdname]=[]
+            list_config = OrderedDict()
+            for key in self.cmdlist:
+                list_config[key] = copy.deepcopy(config['command'][key])
+            config['command'] = {}
+            for key in self.cmdlist:
+                config['command'][key] = copy.deepcopy(list_config[key])
+            config['command'][cmdname]=copy.deepcopy(cmddata)
+
+            self.listViewCommands.setCurrentIndex(self.cmdmodel.index(current_row))
+
+            writeJsonData(sourceconfigfile, config)
+            self.statusBar.showMessage("Clone command %s to %s success!" % (current_cmd, cmdname))
 
         def onToolBtnEnvNewClicked(self):
             ''
