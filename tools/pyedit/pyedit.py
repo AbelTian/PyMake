@@ -1085,9 +1085,58 @@ def main_function():
     config = readJsonData(sourceconfigfile)
     #print(config)
 
+    def check_config():
+        #hard
+        if(config.__contains__("path-assemblage") is False):
+            config['path-assemblage']={}
+            writeJsonData(sourceconfigfile, config)
+        if(config.__contains__("environ") is False):
+            config['environ']={}
+            writeJsonData(sourceconfigfile, config)
+        if (config.__contains__("command") is False):
+            config['command'] = {}
+            writeJsonData(sourceconfigfile, config)
 
+        #soft
+        #if(portconfig['environ'].__contains__("default") is False):
+        #    portconfig['environ']['default']={"path+":[]}
+        #    writeJsonData(portsourceconfigfile, portconfig)
+        #if(portconfig['environ']['default'].__contains__("path+") is False):
+        #    portconfig['environ']['default']['path+']=[]
+        #    writeJsonData(portsourceconfigfile, portconfig)
+        #if(portconfig['environ'].__contains__("current") is False):
+        #    portconfig['environ']['current']='default'
+        #    writeJsonData(portsourceconfigfile, portconfig)
 
+        #soft
+        order_of_keys = config['environ'].keys()
+        list_of_tuples = [key for key in order_of_keys]
+        if (list_of_tuples.__len__() < 2):
+            if(config['environ'].__contains__("default") is False):
+                config['environ']['default']={"path+":[]}
+                writeJsonData(sourceconfigfile, config)
+            if(config['environ']['default'].__contains__("path+") is False):
+                config['environ']['default']['path+']=[]
+                writeJsonData(sourceconfigfile, config)
+            if(config['environ'].__contains__("current") is False):
+                config['environ']['current']='default'
+                writeJsonData(sourceconfigfile, config)
 
+        #move 'current' to be last key
+        order_of_keys = config['environ'].keys()
+        list_of_tuples = [key for key in order_of_keys]
+        #print(order_of_keys)
+        #print(list_of_tuples)
+        #print(list_of_tuples[-1])
+        if(list_of_tuples[-1] != 'current'):
+            #print(".....")
+            current_var = config['environ']['current']
+            config['environ'].__delitem__('current')
+            config['environ']['current']=current_var
+            writeJsonData(sourceconfigfile, config)
+        return
+
+    check_config()
 
     # record system environ
     pymakesystemenviron = copy.deepcopy(os.environ)
@@ -5212,6 +5261,11 @@ def main_function():
             self.envlist = list(config['environ'].keys())
             self.envlist.remove('current')
             #print(config['environ'].keys())
+            if (self.envlist.__len__() <= 0):
+                config['environ']['default']={}
+                config['environ']['default']['path+']=[]
+                config['environ']['current']='default'
+                self.envlist.append("default")
             self.envmodel.setStringList(self.envlist)
 
             self.listViewSeparateEnvList.clicked.connect(self.onListViewSeparateEnvListClicked)
@@ -5238,6 +5292,9 @@ def main_function():
             self.listViewCommands.setModel(self.cmdmodel)
             self.cmdlist = list(config['command'].keys())
             #print(config['command'].keys())
+            if (self.cmdlist.__len__() <= 0):
+                config['command']['cmd.new1']=[]
+                self.cmdlist.append("cmd.new1")
             self.cmdmodel.setStringList(self.cmdlist)
 
             current_cmd = self.cmdlist[0]
@@ -5294,6 +5351,10 @@ def main_function():
             #self.textEditPaths.setLineWrapMode(QTextEdit.NoWrap)
 
         def onListViewSeparateEnvListClicked(self, index):
+            if(not index.isValid()):
+                self.statusBar.showMessage("Environ: invalid index!")
+                return
+
             current_env = index.data()
             self.labelCurrentEnv.setText(current_env)
 
@@ -5316,6 +5377,10 @@ def main_function():
             self.statusBar.showMessage("Show environ %s success!" % (current_env) )
 
         def onListViewCommandsClicked(self, index):
+            if(not index.isValid()):
+                self.statusBar.showMessage("Command: invalid index!")
+                return
+
             current_cmd = index.data()
             self.labelCommand.setText(current_cmd)
 
@@ -5407,12 +5472,27 @@ def main_function():
                 self.statusBar.showMessage("Command: cmd name is empty!")
                 return
 
+            #count <= 0
+            if(self.cmdlist.__len__() <= 0):
+                ''
+                current_row = 0
+                self.cmdlist.insert(current_row, cmdname)
+                self.cmdmodel.insertRow(current_row)
+                self.cmdmodel.setData(self.cmdmodel.index(current_row), cmdname)
+
+                config['command'][cmdname] = []
+                self.listViewCommands.setCurrentIndex(self.cmdmodel.index(current_row))
+
+                writeJsonData(sourceconfigfile, config)
+                self.statusBar.showMessage("Add command %s success!" % (cmdname))
+                return
+
             index = self.listViewCommands.currentIndex()
             if(not index.isValid()):
                 self.statusBar.showMessage("Command: has no command item selected!")
                 return
 
-            current_row = index.row()
+            current_row = index.row()+1
             #current_cmd = index.data()
 
             if(self.cmdlist.__contains__(cmdname)):
@@ -5450,13 +5530,15 @@ def main_function():
             current_row = self.cmdlist.index(cmdname)
             #index = self.cmdmodel.index(current_row)
             #if(not index.isValid()):
-            #    self.statusBar.showMessage("Command: cant select command item!")
+            #    self.statusBar.showMessage("Command: command item is invalid, illegal index!")
             #    return
 
             config['command'].__delitem__(cmdname)
             self.cmdlist.remove(cmdname)
             self.cmdmodel.removeRow(current_row)
-            #index = self.cmdmodel.index(current_row)
+            # index = self.cmdmodel.index(current_row)
+            if(current_row == self.cmdlist.__len__()):
+                current_row = current_row - 1
             self.listViewCommands.setCurrentIndex(self.cmdmodel.index(current_row))
 
             writeJsonData(sourceconfigfile, config)
@@ -5524,7 +5606,7 @@ def main_function():
                 self.statusBar.showMessage("Command: %s is existed! index %s." % (cmdname,self.cmdlist.index(cmdname)))
                 return
 
-            current_row = index.row()
+            current_row = index.row()+1
             current_cmd = index.data()
 
             #save list
@@ -5561,12 +5643,31 @@ def main_function():
                 self.statusBar.showMessage("Environ: env name is empty!")
                 return
 
+            #count <= 0
+            if(self.envlist.__len__() <= 0):
+                ''
+                current_row = 0
+                self.envlist.insert(current_row, envname)
+                self.envmodel.insertRow(current_row)
+                self.envmodel.setData(self.envmodel.index(current_row), envname)
+
+                if(config['environ'].__contains__('current')):
+                    config['environ'].__delitem__('current')
+                config['environ'][envname] = {}
+                config['environ'][envname]['path+'] = []
+                config['environ']['current'] = envname
+                self.listViewCommands.setCurrentIndex(self.envmodel.index(current_row))
+
+                writeJsonData(sourceconfigfile, config)
+                self.statusBar.showMessage("Add env %s success!" % (envname))
+                return
+
             index = self.listViewSeparateEnvList.currentIndex()
             if(not index.isValid()):
                 self.statusBar.showMessage("Environ: has no env item selected!")
                 return
 
-            current_row = index.row()
+            current_row = index.row()+1
             #current_env = index.data()
 
             if(self.envlist.__contains__(envname)):
@@ -5604,16 +5705,22 @@ def main_function():
                 self.statusBar.showMessage("Environ: %s is not existed! no index." % (envname))
                 return
 
+            if(config['environ']['current'] == envname):
+                self.statusBar.showMessage("Environ: %s is current env, cant be deleted!" % (envname))
+                return
+
             current_row = self.envlist.index(envname)
             #index = self.envmodel.index(current_row)
             #if(not index.isValid()):
-            #    self.statusBar.showMessage("Environ: cant select env item!")
+            #    self.statusBar.showMessage("Environ: env item is invalid, illegal index!")
             #    return
 
             config['environ'].__delitem__(envname)
             self.envlist.remove(envname)
             self.envmodel.removeRow(current_row)
             #index = self.envmodel.index(current_row)
+            if(current_row == self.cmdlist.__len__()):
+                current_row = current_row - 1
             self.listViewSeparateEnvList.setCurrentIndex(self.envmodel.index(current_row))
 
             writeJsonData(sourceconfigfile, config)
@@ -5684,7 +5791,7 @@ def main_function():
                 self.statusBar.showMessage("Environ: %s is existed! index %s." % (envname, self.envlist.index(envname)))
                 return
 
-            current_row = index.row()
+            current_row = index.row()+1
             current_env = index.data()
 
             #save list

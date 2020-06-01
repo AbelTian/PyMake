@@ -33,55 +33,6 @@ else:  # Python 3.x
     if(sys.version_info[1] < 6):
         ModuleNotFoundError = ImportError
 
-if ( sys.version_info[0] == 2 ):
-    import ConfigParser as PyConfigParser
-else:
-    import configparser as PyConfigParser
-
-class MyConfigParser(PyConfigParser.ConfigParser):
-    def __init__(self,defaults=None):
-        PyConfigParser.ConfigParser.__init__(self,defaults=None)
-    def optionxform(self, optionstr):
-        return optionstr
-
-def getuserroot():
-    root = ""
-    sysstr = platform.system()
-    if(sysstr =="Windows"):
-        #root = os.environ["HOMEDRIVE"] + os.environ["HOMEPATH"]
-        root = os.environ["USERPROFILE"]
-    else:
-        root = os.environ["HOME"]
-    return root
-
-pipini = ''
-if(platform.system() == "Windows"):
-    piproot = getuserroot() + os.path.sep + 'pip'
-    if(not os.path.exists(piproot)):
-        os.mkdir(piproot)
-    pipini = piproot + os.path.sep + 'pip.ini'
-else:
-    piproot = getuserroot() + os.path.sep + '.pip'
-    if(not os.path.exists(piproot)):
-        os.mkdir(piproot)
-    pipini = piproot + os.path.sep + 'pip.ini'
-
-conf = MyConfigParser()
-conf.read(pipini)
-if( not conf.has_section('global') ):
-    conf.add_section('global')
-    conf.write(open(pipini, 'w'))
-if( not conf.has_section('install') ):
-    conf.add_section('install')
-    conf.write(open(pipini, 'w'))
-if( not conf.has_option('global', 'index-url') ):
-    conf.set('global', 'index-url', 'https://pypi.tuna.tsinghua.edu.cn/simple')
-    conf.write(open(pipini, 'w'))
-if(not conf.has_option('install', 'trusted-host')):
-    conf.set('install', 'trusted-host', 'mirrors.aliyun.com')
-    conf.write(open(pipini, 'w'))
-
-
 pipexe = ''
 if(platform.system() == "Windows"):
     pipexe = 'py -m pip install '
