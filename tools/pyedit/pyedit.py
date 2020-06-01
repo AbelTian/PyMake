@@ -5058,6 +5058,7 @@ def main_function():
             self.toolBtnEnvNew.clicked.connect(self.onToolBtnEnvNewClicked)
             self.toolBtnEnvDel.clicked.connect(self.onToolBtnEnvDelClicked)
             self.toolBtnEnvRename.clicked.connect(self.onToolBtnEnvRenameClicked)
+            self.toolBtnEnvClone.clicked.connect(self.onToolBtnEnvCloneClicked)
 
             self.textEditProgram.installEventFilter(self)
             self.textEditCustomPath.installEventFilter(self)
@@ -5621,6 +5622,55 @@ def main_function():
 
             writeJsonData(sourceconfigfile, config)
             self.statusBar.showMessage("Rename env %s to %s success!" % (current_env, envname))
+
+        def onToolBtnEnvCloneClicked(self):
+            ''
+            envname = self.lineEditEnvName.text().strip()
+            if(envname == ''):
+                self.statusBar.showMessage("Environ: env name is empty!")
+                return
+
+            index = self.listViewSeparateEnvList.currentIndex()
+            if(not index.isValid()):
+                self.statusBar.showMessage("Environ: has no env item selected!")
+                return
+
+            if(self.envlist.__contains__(envname)):
+                self.statusBar.showMessage("Environ: %s is existed! index %s." % (envname, self.envlist.index(envname)))
+                return
+
+            current_row = index.row()
+            current_env = index.data()
+
+            #save list
+            envdata = copy.deepcopy(config['environ'][current_env])
+
+            #no del
+            #config['environ'].__delitem__(current_env)
+            #self.envlist.remove(current_env)
+            #self.envmodel.removeRow(current_row)
+
+            #add
+            self.envlist.insert(current_row, envname)
+            self.envmodel.insertRow(current_row)
+            self.envmodel.setData(self.envmodel.index(current_row), envname)
+
+            current_env_var = config['environ']['current']
+            config['environ'][envname]={}
+            config['environ'][envname]['path+']=[]
+            list_config = OrderedDict()
+            for key in self.envlist:
+                list_config[key] = copy.deepcopy(config['environ'][key])
+            config['environ'] = {}
+            for key in self.envlist:
+                config['environ'][key] = copy.deepcopy(list_config[key])
+            config['environ'][envname]=copy.deepcopy(envdata)
+            config['environ']['current'] = current_env_var
+
+            self.listViewSeparateEnvList.setCurrentIndex(self.envmodel.index(current_row))
+
+            writeJsonData(sourceconfigfile, config)
+            self.statusBar.showMessage("Clone env %s to %s success!" % (current_env, envname))
 
         def onLineEditSearchPathsTextChanged(self, text):
             ''
