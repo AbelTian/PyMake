@@ -5028,20 +5028,17 @@ def main_function():
 
         def drawDisplay(self, painter, option, rect, text):
             ''
-            if(not config['environ'].__contains__('current')):
-                return QItemDelegate.drawDisplay(self, painter, option, rect, text)
-
-            if( text != config['environ']['current']):
-                return QItemDelegate.drawDisplay(self, painter, option, rect, text)
 
             painter.save()
-            pen = QPen()
-            pen.setColor(Qt.darkCyan)
-            painter.setPen(pen)
+            if (config['environ'].__contains__('current')):
+                if (text == config['environ']['current']):
+                    pen = QPen()
+                    pen.setColor(Qt.darkCyan)
+                    painter.setPen(pen)
             painter.drawText(rect.adjusted(5, 0, 0, 0), Qt.AlignLeft|Qt.AlignVCenter, text)
             painter.restore()
 
-
+            #return QItemDelegate.drawDisplay(self, painter, option, rect, text)
 
     class MainWindow(QMainWindow):
         def __init__(self, parent=None):
@@ -5332,6 +5329,10 @@ def main_function():
 
             self.envItemDelegate = EnvItemDelegate(self.listViewSeparateEnvList)
             self.listViewSeparateEnvList.setItemDelegate(self.envItemDelegate)
+
+            #self.listViewSeparateEnvList.setViewportMargins(10,0,0,0)
+            #self.listViewSeparateEnvList.setContentsMargins(10,0,0,0)
+            #self.listViewSeparateEnvList.setStyleSheet("QListView::item { margin:10px 10px 10px 10px; padding:20px; }")
 
             self.listViewSeparateEnvList.clicked.connect(self.onListViewSeparateEnvListClicked)
             self.listViewSeparateEnvList.selectionModel().currentRowChanged.connect(self.onListViewSeparateEnvListClicked)
