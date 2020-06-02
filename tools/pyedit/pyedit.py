@@ -823,15 +823,6 @@ def main_function():
     if(not conf.has_option('source', 'config')):
         conf.set('source', 'config', pymakedefaultsourcefile)
         conf.write(open(pymakeini, 'w'))
-    if( not conf.has_section('work') ):
-        conf.add_section('work')
-        conf.write(open(pymakeini, 'w'))
-    if( not conf.has_option('work', 'root') ):
-        conf.set('work', 'root', 'default')
-        conf.write(open(pymakeini, 'w'))
-    if(not conf.has_option('work', 'there')):
-        conf.set('work', 'there', pymakeshellroot)
-        conf.write(open(pymakeini, 'w'))
 
     # init pymake.json in sourceroot [ + program create ]
     #record user source root directory
@@ -906,9 +897,34 @@ def main_function():
     # print("execute directory: %s" % (shellroot) )
     
     # support pymake default shell root, pymake custom shell root, pymake current shell root.
+    pymakeexecini = sourceroot + os.path.sep + 'exec.ini'
+    execconf = MyConfigParser()
+    execconf.read(pymakeexecini)
+    if( not execconf.has_section('exec') ):
+        execconf.add_section('exec')
+        execconf.write(open(pymakeexecini, 'w'))
+    if( not execconf.has_section('work') ):
+        execconf.add_section('work')
+        execconf.write(open(pymakeexecini, 'w'))
+    if( not execconf.has_section('root') ):
+        execconf.add_section('root')
+        execconf.write(open(pymakeexecini, 'w'))
+    if( not execconf.has_option('work', 'where') ):
+        execconf.set('work', 'where', 'default')
+        execconf.write(open(pymakeexecini, 'w'))
+    if(not execconf.has_option('root', 'default')):
+        execconf.set('root', 'default', pymakeshellroot)
+        execconf.write(open(pymakeexecini, 'w'))
+    if( not execconf.has_option('root', 'there') ):
+        execconf.set('root', 'there', pymakeshellroot)
+        execconf.write(open(pymakeexecini, 'w'))
+    if(not execconf.has_option('root', 'here')):
+        execconf.set('root', 'here', '')
+        execconf.write(open(pymakeexecini, 'w'))
+
     # record pymake custom shell root [ user custom work path ]
-    workroottype = conf.get('work', 'root')
-    customshellroot = conf.get('work', 'there')
+    workroottype = execconf.get('work', 'where')
+    customshellroot = execconf.get('root', 'there')
     if (not os.path.exists(customshellroot)):
         os.makedirs(customshellroot)
     #custom work root
@@ -2064,13 +2080,13 @@ def main_function():
         localenv['PYMAKESOURCECONFIG'] = sourcefile
 
         localenv['PYMAKEDEFAULTWORKROOT'] = pymakeshellroot
-        localenv['PYMAKETHEREROOT'] = customshellroot
-        localenv['PYMAKEHEREROOT'] = pymakeworkpath
+        localenv['PYMAKETHEREWORKROOT'] = customshellroot
+        localenv['PYMAKEHEREWORKROOT'] = pymakeworkpath
         localenv['PYMAKEWORKROOT'] = shellroot
 
-        localenv['PYMAKEPROGRAM'] = os.path.realpath(__file__)
-        localenv['PYMAKEPROGRAMROOT'] = os.path.split(os.path.realpath(__file__))[0]
-        localenv['PYMAKEPROGRAMFILE'] = os.path.split(os.path.realpath(__file__))[1]
+        localenv['PYMAKEPROGRAM'] = pymakefilepath + os.path.sep + "pymake7.py"
+        localenv['PYMAKEPROGRAMROOT'] = pymakefilepath
+        localenv['PYMAKEPROGRAMFILE'] = "pymake7.py"
 
         localenv['PYMAKEPROGRAMCONFIGURE'] = os.path.realpath(pymakeini)
         localenv['PYMAKEPROGRAMCONFIGUREROOT'] = os.path.split(os.path.realpath(pymakeini))[0]
@@ -2084,10 +2100,10 @@ def main_function():
         localenv['path+'].append(localenv['PYMAKEPROGRAMROOT'])
         localenv['path+'].append(localenv['PYMAKESOURCEROOT'])
         localenv['path+'].append(localenv['PYMAKEDEFAULTWORKROOT'])
-        #if(localenv['path+'].__contains__(localenv['PYMAKETHEREROOT']) is False):
-        localenv['path+'].append(localenv['PYMAKETHEREROOT'])
-        #if(localenv['path+'].__contains__(localenv['PYMAKEHEREROOT']) is False):
-        localenv['path+'].append(localenv['PYMAKEHEREROOT'])
+        #if(localenv['path+'].__contains__(localenv['PYMAKETHEREWORKROOT']) is False):
+        localenv['path+'].append(localenv['PYMAKETHEREWORKROOT'])
+        #if(localenv['path+'].__contains__(localenv['PYMAKEHEREWORKROOT']) is False):
+        localenv['path+'].append(localenv['PYMAKEHEREWORKROOT'])
         #if(localenv['path+'].__contains__(localenv['PYMAKEWORKROOT']) is False):
         localenv['path+'].append(localenv['PYMAKEWORKROOT'])
 
@@ -2115,20 +2131,20 @@ def main_function():
 
     #initial custom environ module
     pymakecustomini = sourceroot + os.path.sep + "custom.ini"
-    conf2 = MyConfigParser()
-    conf2.read(pymakecustomini)
-    if( not conf2.has_section('custom') ):
-        conf2.add_section('custom')
-        conf2.write(open(pymakecustomini, 'w'))
-    if( not conf2.has_option('custom', 'switch') ):
-        conf2.set('custom', 'switch', '1')
-        conf2.write(open(pymakecustomini, 'w'))
+    customconf = MyConfigParser()
+    customconf.read(pymakecustomini)
+    if( not customconf.has_section('custom') ):
+        customconf.add_section('custom')
+        customconf.write(open(pymakecustomini, 'w'))
+    if( not customconf.has_option('custom', 'switch') ):
+        customconf.set('custom', 'switch', '1')
+        customconf.write(open(pymakecustomini, 'w'))
 
-    switch0 = conf2['custom']['switch']
+    switch0 = customconf['custom']['switch']
     if(switch0 != '0' and switch0 != '1'):
         switch0 = '1'
-        conf2.set('custom', 'switch', switch0)
-        conf2.write(open(pymakecustomini, 'w'))
+        customconf.set('custom', 'switch', switch0)
+        customconf.write(open(pymakecustomini, 'w'))
 
     custompathfile = sourceroot + os.path.sep + "custom.path+.ini"
     customenvfile = sourceroot + os.path.sep + "custom.var+.ini"
@@ -4962,27 +4978,29 @@ def main_function():
 
         return cmd_list, name
 
+    pymakeedittitle = "PyEdit V1.0"
+
     '''
     #edit.ini
     [page]
     number = 0
     '''
     pymakeeditini = os.path.join(sourceroot, 'edit.ini')
-    conf3 = MyConfigParser()
-    conf3.read(pymakeeditini)
-    if( not conf3.has_section('edit') ):
-        conf3.add_section('edit')
-        conf3.write(open(pymakeeditini, 'w'))
-    if( not conf3.has_option('edit', 'page') ):
-        conf3.set('edit', 'page', '0')
-        conf3.write(open(pymakeeditini, 'w'))
+    editconf = MyConfigParser()
+    editconf.read(pymakeeditini)
+    if( not editconf.has_section('edit') ):
+        editconf.add_section('edit')
+        editconf.write(open(pymakeeditini, 'w'))
+    if( not editconf.has_option('edit', 'page') ):
+        editconf.set('edit', 'page', '0')
+        editconf.write(open(pymakeeditini, 'w'))
 
-    page1 = conf3['edit']['page']
+    page1 = editconf['edit']['page']
     #0->
     if(page1 < '0' or page1 > '9'):
         page1 = '0'
-        conf3.set('edit', 'page', page1)
-        conf3.write(open(pymakeeditini, 'w'))
+        editconf.set('edit', 'page', page1)
+        editconf.write(open(pymakeeditini, 'w'))
 
     pymakeeditpath = os.path.join(pymakefilepath, "tools", "pyedit")
 
@@ -5161,12 +5179,15 @@ def main_function():
             #self.onBtnProgramClicked()
             self.stackedWidget.setCurrentIndex(int(page1))
 
+            self.setWindowTitle(pymakeedittitle)
+
+
 
         def setPage(self, index):
             ''
             page1 = str(index)
-            conf3.set('edit', 'page', page1)
-            conf3.write(open(pymakeeditini, 'w'))
+            editconf.set('edit', 'page', page1)
+            editconf.write(open(pymakeeditini, 'w'))
 
         def onBtnProgramClicked(self):
             self.stackedWidget.setCurrentIndex(self.indexPageProgram)
@@ -5275,6 +5296,7 @@ def main_function():
             elif (workroottype == 'there'):
                 self.radioBtnThere.setChecked(True)
             self.lineEditThere.setText(customshellroot)
+            self.labelExecute.setText(pymakeexecini)
 
             #source
             self.labelSource.setText(sourceconfigfile)
@@ -5355,7 +5377,7 @@ def main_function():
             self.listViewCommands.setEditTriggers(QListView.NoEditTriggers)
 
             self.btnSource.setHidden(True)
-            self.btnExecute.setHidden(True)
+            #self.btnExecute.setHidden(True)
 
             #command edit, use QTextEdit? use QsciScililla?
             mertics = QFontMetrics(self.textEditCommands.font())
@@ -5440,7 +5462,7 @@ def main_function():
             with open(pymakeini, 'w', encoding=cmd_codec) as f:
                 f.write(programText)
             self.statusBar.showMessage("Save program configure to file success!")
-            self.setWindowTitle('Multi-environ Editor [WANTED: Software Reboot!]')
+            self.setWindowTitle(pymakeedittitle + ' [WANTED: Software Reboot!]')
 
         def onBtnSaveCustomClicked(self):
             customPathText = self.textEditCustomPath.toPlainText()
@@ -6163,7 +6185,7 @@ def main_function():
             conf.write(open(pymakeini, 'w'))
 
             self.statusBar.showMessage("Save program configure, source config success!")
-            self.setWindowTitle('Multi-environ Editor [WANTED: Software Reboot!]')
+            self.setWindowTitle(pymakeedittitle + ' [WANTED: Software Reboot!]')
 
         def onBtnSaveExecuteClicked(self):
             roottext = 'default'
@@ -6175,12 +6197,12 @@ def main_function():
                 roottext = 'there'
 
             theretext = self.lineEditThere.text()
-            conf['work']['root'] = roottext
-            conf['work']['there'] = theretext
-            conf.write(open(pymakeini, 'w'))
+            execconf['work']['where'] = roottext
+            execconf['root']['there'] = theretext
+            execconf.write(open(pymakeexecini, 'w'))
 
-            self.statusBar.showMessage("Save program configure, work root config success!")
-            self.setWindowTitle('Multi-environ Editor [WANTED: Software Reboot!]')
+            self.statusBar.showMessage("Save work root success!")
+            self.setWindowTitle(pymakeedittitle + ' [WANTED: Software Reboot!]')
 
 
     app = Application(sys.argv)

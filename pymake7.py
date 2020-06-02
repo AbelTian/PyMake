@@ -1121,15 +1121,6 @@ def main_function():
     if(not conf.has_option('source', 'config')):
         conf.set('source', 'config', pymakedefaultsourcefile)
         conf.write(open(pymakeini, 'w'))
-    if( not conf.has_section('work') ):
-        conf.add_section('work')
-        conf.write(open(pymakeini, 'w'))
-    if( not conf.has_option('work', 'root') ):
-        conf.set('work', 'root', 'default')
-        conf.write(open(pymakeini, 'w'))
-    if(not conf.has_option('work', 'there')):
-        conf.set('work', 'there', pymakeshellroot)
-        conf.write(open(pymakeini, 'w'))
 
     args = docopt(__doc__, version='pymake7.py v7.8.3')
     #print(args)
@@ -1145,15 +1136,6 @@ def main_function():
             print("SOURCE        : %s%s%s" % (r, os.path.sep, f))
             print("SOURCE ROOT   : %s" % (r))
             print("SOURCE CONFIG : %s" % (f))
-
-            conf.set('work', 'root', 'default')
-            conf.set('work', 'there', pymakeshellroot)
-            conf.write(open(pymakeini, 'w'))
-            w = conf.get('work', 'root')
-            c = conf.get('work', 'there')
-            print("WORK ROOT     : %s" % (w))
-            print("WORK CUSTOM   : %s" % (c))
-            print("WORK STARTING : %s" % (pymakeshellroot))
 
             print("successed")
             return
@@ -1389,9 +1371,34 @@ def main_function():
     # print("execute directory: %s" % (shellroot) )
     
     # support pymake default shell root, pymake custom shell root, pymake current shell root.
+    pymakeexecini = sourceroot + os.path.sep + 'exec.ini'
+    execconf = MyConfigParser()
+    execconf.read(pymakeexecini)
+    if( not execconf.has_section('exec') ):
+        execconf.add_section('exec')
+        execconf.write(open(pymakeexecini, 'w'))
+    if( not execconf.has_section('work') ):
+        execconf.add_section('work')
+        execconf.write(open(pymakeexecini, 'w'))
+    if( not execconf.has_section('root') ):
+        execconf.add_section('root')
+        execconf.write(open(pymakeexecini, 'w'))
+    if( not execconf.has_option('work', 'where') ):
+        execconf.set('work', 'where', 'default')
+        execconf.write(open(pymakeexecini, 'w'))
+    if(not execconf.has_option('root', 'default')):
+        execconf.set('root', 'default', pymakeshellroot)
+        execconf.write(open(pymakeexecini, 'w'))
+    if( not execconf.has_option('root', 'there') ):
+        execconf.set('root', 'there', pymakeshellroot)
+        execconf.write(open(pymakeexecini, 'w'))
+    if(not execconf.has_option('root', 'here')):
+        execconf.set('root', 'here', '')
+        execconf.write(open(pymakeexecini, 'w'))
+
     # record pymake custom shell root [ user custom work path ]
-    workroottype = conf.get('work', 'root')
-    customshellroot = conf.get('work', 'there')
+    workroottype = execconf.get('work', 'where')
+    customshellroot = execconf.get('root', 'there')
     if (not os.path.exists(customshellroot)):
         os.makedirs(customshellroot)
     #custom work root
@@ -2519,6 +2526,59 @@ def main_function():
     config = readJsonData(sourceconfigfile)
     #print(config)
 
+    def check_config():
+        #hard
+        if(config.__contains__("path-assemblage") is False):
+            config['path-assemblage']={}
+            writeJsonData(sourceconfigfile, config)
+        if(config.__contains__("environ") is False):
+            config['environ']={}
+            writeJsonData(sourceconfigfile, config)
+        if (config.__contains__("command") is False):
+            config['command'] = {}
+            writeJsonData(sourceconfigfile, config)
+
+        #soft
+        #if(portconfig['environ'].__contains__("default") is False):
+        #    portconfig['environ']['default']={"path+":[]}
+        #    writeJsonData(portsourceconfigfile, portconfig)
+        #if(portconfig['environ']['default'].__contains__("path+") is False):
+        #    portconfig['environ']['default']['path+']=[]
+        #    writeJsonData(portsourceconfigfile, portconfig)
+        #if(portconfig['environ'].__contains__("current") is False):
+        #    portconfig['environ']['current']='default'
+        #    writeJsonData(portsourceconfigfile, portconfig)
+
+        #soft
+        order_of_keys = config['environ'].keys()
+        list_of_tuples = [key for key in order_of_keys]
+        if (list_of_tuples.__len__() < 2):
+            if(config['environ'].__contains__("default") is False):
+                config['environ']['default']={"path+":[]}
+                writeJsonData(sourceconfigfile, config)
+            if(config['environ']['default'].__contains__("path+") is False):
+                config['environ']['default']['path+']=[]
+                writeJsonData(sourceconfigfile, config)
+            if(config['environ'].__contains__("current") is False):
+                config['environ']['current']='default'
+                writeJsonData(sourceconfigfile, config)
+
+        #move 'current' to be last key
+        order_of_keys = config['environ'].keys()
+        list_of_tuples = [key for key in order_of_keys]
+        #print(order_of_keys)
+        #print(list_of_tuples)
+        #print(list_of_tuples[-1])
+        if(list_of_tuples[-1] != 'current'):
+            #print(".....")
+            current_var = config['environ']['current']
+            config['environ'].__delitem__('current')
+            config['environ']['current']=current_var
+            writeJsonData(sourceconfigfile, config)
+        return
+
+    check_config()
+
     # import command
     while (True):
         if (args['import'] is True):
@@ -2861,8 +2921,8 @@ def main_function():
                             workroottype1 = 'default'
                         else:
                             workroottype1 = 'default'
-                        conf.set('work', 'root', workroottype1)
-                        conf.write(open(pymakeini, 'w'))
+                        execconf.set('work', 'where', workroottype1)
+                        execconf.write(open(pymakeexecini, 'w'))
                         print("successed: change work root to %s." % workroottype1)
                         return
                     
@@ -2885,8 +2945,8 @@ def main_function():
                                 print("failed: %s is not a dir." % args['<work-root-path>'])
                                 return
 
-                        conf.set('work', 'there', workroot1)
-                        conf.write(open(pymakeini, 'w'))
+                        execconf.set('root', 'there', workroot1)
+                        execconf.write(open(pymakeexecini, 'w'))
                         print("successed: change there work root to %s." % workroot1)
                         return
 
@@ -2894,8 +2954,8 @@ def main_function():
                     or args['<work-root-path>'] == 'there' or args['<work-root-path>'] == 'tt'
                     or args['<work-root-path>'] == 'default' or args['<work-root-path>'] == 'dd' ):
                         workroottype1 = args['<work-root-path>']
-                        conf.set('work', 'root', workroottype1)
-                        conf.write(open(pymakeini, 'w'))
+                        execconf.set('work', 'where', workroottype1)
+                        execconf.write(open(pymakeexecini, 'w'))
                         print("successed: change starting work root to %s." % workroottype1)
                         return
 
@@ -2908,9 +2968,9 @@ def main_function():
                         print("failed: %s is not a dir." % args['<work-root-path>'])
                         return
 
-                    conf.set('work', 'root', 'there')
-                    conf.set('work', 'there', workroot1)
-                    conf.write(open(pymakeini, 'w'))
+                    execconf.set('work', 'where', 'there')
+                    execconf.set('root', 'there', workroot1)
+                    execconf.write(open(pymakeexecini, 'w'))
                     print ("successed: change work root to custom position %s." % workroot1)
                     return
                 else:
@@ -2923,8 +2983,8 @@ def main_function():
                         workroottype1 = 'default'
                     else:
                         workroottype1 = 'default'
-                    conf.set('work', 'root', workroottype1)
-                    conf.write(open(pymakeini, 'w'))
+                    execconf.set('work', 'where', workroottype1)
+                    execconf.write(open(pymakeexecini, 'w'))
                     print ("successed: change starting work root to %s." % workroottype1)
                     return
             else:
@@ -3099,7 +3159,7 @@ def main_function():
                 if (args['--position'] or args['-p'] is True):
                     print("%s" % (workroottype))
                     return
-                #workroottype1 = conf.get("work", "root")
+                #workroottype1 = execconf.get("work", "where")
                 #print("WORK ROOT TYPE     : %s" % (workroottype1))
                 #print("STARTING WORK ROOT : %s" % (shellroot))
                 print("%s" % (shellroot))
@@ -4621,8 +4681,8 @@ def main_function():
         localenv['PYMAKESOURCECONFIG'] = sourcefile
 
         localenv['PYMAKEDEFAULTWORKROOT'] = pymakeshellroot
-        localenv['PYMAKETHEREROOT'] = customshellroot
-        localenv['PYMAKEHEREROOT'] = pymakeworkpath
+        localenv['PYMAKETHEREWORKROOT'] = customshellroot
+        localenv['PYMAKEHEREWORKROOT'] = pymakeworkpath
         localenv['PYMAKEWORKROOT'] = shellroot
 
         if(args['here'] or args['hh'] is True):
@@ -4657,10 +4717,10 @@ def main_function():
         localenv['path+'].append(localenv['PYMAKESOURCEROOT'])
         localenv['path+'].append(localenv['PYMAKEPROGRAMROOT'])
         localenv['path+'].append(localenv['PYMAKEDEFAULTWORKROOT'])
-        #if(localenv['path+'].__contains__(localenv['PYMAKETHEREROOT']) is False):
-        localenv['path+'].append(localenv['PYMAKETHEREROOT'])
-        #if(localenv['path+'].__contains__(localenv['PYMAKEHEREROOT']) is False):
-        localenv['path+'].append(localenv['PYMAKEHEREROOT'])
+        #if(localenv['path+'].__contains__(localenv['PYMAKETHEREWORKROOT']) is False):
+        localenv['path+'].append(localenv['PYMAKETHEREWORKROOT'])
+        #if(localenv['path+'].__contains__(localenv['PYMAKEHEREWORKROOT']) is False):
+        localenv['path+'].append(localenv['PYMAKEHEREWORKROOT'])
         #if(localenv['path+'].__contains__(localenv['PYMAKEWORKROOT']) is False):
         localenv['path+'].append(localenv['PYMAKEWORKROOT'])
 
@@ -4980,20 +5040,20 @@ def main_function():
 
     #initial custom environ module
     pymakecustomini = sourceroot + os.path.sep + "custom.ini"
-    conf2 = MyConfigParser()
-    conf2.read(pymakecustomini)
-    if( not conf2.has_section('custom') ):
-        conf2.add_section('custom')
-        conf2.write(open(pymakecustomini, 'w'))
-    if( not conf2.has_option('custom', 'switch') ):
-        conf2.set('custom', 'switch', '1')
-        conf2.write(open(pymakecustomini, 'w'))
+    customconf = MyConfigParser()
+    customconf.read(pymakecustomini)
+    if( not customconf.has_section('custom') ):
+        customconf.add_section('custom')
+        customconf.write(open(pymakecustomini, 'w'))
+    if( not customconf.has_option('custom', 'switch') ):
+        customconf.set('custom', 'switch', '1')
+        customconf.write(open(pymakecustomini, 'w'))
 
-    switch0 = conf2['custom']['switch']
+    switch0 = customconf['custom']['switch']
     if(switch0 != '0' and switch0 != '1'):
         switch0 = '1'
-        conf2.set('custom', 'switch', switch0)
-        conf2.write(open(pymakecustomini, 'w'))
+        customconf.set('custom', 'switch', switch0)
+        customconf.write(open(pymakecustomini, 'w'))
 
     custompathfile = sourceroot + os.path.sep + "custom.path+.ini"
     customenvfile = sourceroot + os.path.sep + "custom.var+.ini"
@@ -10383,13 +10443,13 @@ def main_function():
         if( args['custom'] is True ):
             #print('gggg')
             if(args['open'] is True):
-                conf2.set('custom', 'switch', '1')
-                conf2.write(open(pymakecustomini, 'w'))
+                customconf.set('custom', 'switch', '1')
+                customconf.write(open(pymakecustomini, 'w'))
                 print('success: custom environment is opened, you can exec script at any path.')
                 return
             elif (args['close'] is True):
-                conf2.set('custom', 'switch', '0')
-                conf2.write(open(pymakecustomini, 'w'))
+                customconf.set('custom', 'switch', '0')
+                customconf.write(open(pymakecustomini, 'w'))
                 print('success: custom environment is closed, you can use pymake .json environ.')
                 return
             elif (args['export'] is True):
@@ -12055,9 +12115,11 @@ def main_function():
                     print("PORT INI ROOT : %s" % os.path.split(os.path.realpath(portinifile))[0])
                     print("PORT INI CONF : %s" % os.path.split(os.path.realpath(portinifile))[1])
                     print("-----------------------------------------")
-                    print("EXECUTE ROOT [HERE   ]: %s" % pymakeworkpath)
-                    print("EXECUTE ROOT [THERE  ]: %s" % customshellroot)
-                    print("EXECUTE ROOT [DEFAULT]: %s" % pymakeshellroot)
+                    print("EXECUTE ROOT [HERE    ]: %s" % pymakeworkpath)
+                    print("EXECUTE ROOT [THERE   ]: %s" % customshellroot)
+                    print("EXECUTE ROOT [DEFAULT ]: %s" % pymakeshellroot)
+                    print("EXECUTE ROOT [TYPE    ]: %s" % workroottype)
+                    print("EXECUTE ROOT [STARTING]: %s" % shellroot)
                     print("-----------------------------------------")
                     plat = getplatform()
                     if (plat == "Windows"):
