@@ -20,7 +20,12 @@ rem start py "%PYPROGRAMPATHNAME%" %*
 ::set PYPROGRAMPATHNAME=%PYPROGRAMPATH%%PYPROGRAMNAME%
 ::call "%PYPROGRAMPATHNAME%" %*
 
+rem if "%1"=="h" goto begin
+rem start mshta vbscript:createobject("wscript.shell").run("""%~nx0"" h",0)(window.close)&&exit
+rem :begin
+
 set PYPROGRAMPATH=%~dp0
-set PYPROGRAMNAME=tools\pyedit\pyedit.exe
+set PYPROGRAMNAME=tools\pyedit\pyedit.py
 set PYPROGRAMPATHNAME=%PYPROGRAMPATH%%PYPROGRAMNAME%
-start "" "%PYPROGRAMPATHNAME%" %*
+set PYSTART=%~dp0\tools\pystart.vbs
+"%PYSTART%" py %PYPROGRAMPATHNAME% %*
