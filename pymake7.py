@@ -1090,9 +1090,7 @@ def main_function():
 
     """
     [pymake]
-    [work]
-    root = default
-    there = $pymakeshellroot
+
     [source]
     root = $pymakesourceroot
     config = pymake.json
@@ -1157,16 +1155,25 @@ def main_function():
     #print ("root: %s, default config: %s" % (sourceroot, pymakedefaultsourcefile))
     #print("default source config: %s" % (defaultsourceconfigfile) )
 
+    #check source root
     #prepare to user source root
     if (not os.path.exists(sourceroot)):
         os.makedirs(sourceroot)
     os.chdir(sourceroot)
 
+    # check default source file [default:d]
     if (os.path.exists(sourceroot)):
         if (os.path.abspath(sourceroot) != os.path.abspath(pymakeroot)
             and os.path.abspath(sourceroot) != os.path.abspath(pymakefilepath)):
             if (not os.path.exists(defaultsourceconfigfile)):
                 writeJsonData(defaultsourceconfigfile, d)
+
+    #check source file [default:d]
+    if (os.path.exists(sourceroot)):
+        if (os.path.abspath(sourceroot) != os.path.abspath(pymakeroot)
+            and os.path.abspath(sourceroot) != os.path.abspath(pymakefilepath)):
+            if (not os.path.exists(sourceconfigfile)):
+                writeJsonData(sourceconfigfile, d)
 
     def open_file(file0):
         plat = getplatform()

@@ -792,9 +792,7 @@ def main_function():
 
     """
     [pymake]
-    [work]
-    root = default
-    there = $pymakeshellroot
+    
     [source]
     root = $pymakesourceroot
     config = pymake.json
@@ -838,6 +836,7 @@ def main_function():
     #print ("root: %s, default config: %s" % (sourceroot, pymakedefaultsourcefile))
     #print("default source config: %s" % (defaultsourceconfigfile) )
 
+    #check source root
     #prepare to user source root
     if (not os.path.exists(sourceroot)):
         os.makedirs(sourceroot)
@@ -848,6 +847,13 @@ def main_function():
             and os.path.abspath(sourceroot) != os.path.abspath(pymakefilepath)):
             if (not os.path.exists(defaultsourceconfigfile)):
                 writeJsonData(defaultsourceconfigfile, d)
+
+    #check source file
+    if (os.path.exists(sourceroot)):
+        if (os.path.abspath(sourceroot) != os.path.abspath(pymakeroot)
+            and os.path.abspath(sourceroot) != os.path.abspath(pymakefilepath)):
+            if (not os.path.exists(sourceconfigfile)):
+                writeJsonData(sourceconfigfile, d)
 
     def open_file(file0):
         plat = getplatform()
@@ -5175,7 +5181,6 @@ def main_function():
 
             #self.onBtnProgramClicked()
             self.stackedWidget.setCurrentIndex(int(page1))
-
             self.setWindowTitle(pymakeedittitle)
 
 
