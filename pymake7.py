@@ -2772,9 +2772,9 @@ def main_function():
                     #print(keylist2)
                     count2 = 1
                     for (key1, key2) in itertools.zip_longest(tarkeylist, keylist2, fillvalue=""):
-                        if (key1 is not ""):
+                        if (key1 != ""):
                             key1 = str("%s" % (key1))
-                        if (key2 is not ""):
+                        if (key2 != ""):
                             key2 = str("%-4s%s" % (count2, key2))
                             count2 += 1
                         print("%-30s%-30s" % (key2, key1))
@@ -2834,9 +2834,9 @@ def main_function():
                         # print(keylist2)
                         count2 = 1
                         for (key1, key2) in itertools.zip_longest(tarkeylist, keylist2, fillvalue=""):
-                            if (key1 is not ""):
+                            if (key1 != ""):
                                 key1 = str("%s" % (key1))
-                            if (key2 is not ""):
+                            if (key2 != ""):
                                 key2 = str("%-4s%s" % (count2, key2))
                                 count2 += 1
                             print("%-30s%-30s" % (key2, key1))
@@ -4344,9 +4344,9 @@ def main_function():
                     # print(keylist2)
                     count2 = 1
                     for (key1, key2) in itertools.zip_longest(tarkeylist, keylist2, fillvalue=""):
-                        if (key1 is not ""):
+                        if (key1 != ""):
                             key1 = str("%s" % (key1))
-                        if (key2 is not ""):
+                        if (key2 != ""):
                             key2 = str("%-4s%s" % (count2, key2))
                             count2 += 1
                         print("%-30s%-30s" % (key2, key1))
@@ -4427,9 +4427,9 @@ def main_function():
                             # print(keylist2)
                             count2 = 1
                             for (key1, key2) in itertools.zip_longest(tarkeylist, keylist2, fillvalue=""):
-                                if (key1 is not ""):
+                                if (key1 != ""):
                                     key1 = str("%s" % (key1))
-                                if (key2 is not ""):
+                                if (key2 != ""):
                                     key2 = str("%-4s%s" % (count2, key2))
                                     count2 += 1
                                 print("%-30s%-30s" % (key2, key1))
@@ -5761,7 +5761,7 @@ def main_function():
                         #if(has_set != '0'):
                         #    print(native_dict[current_vcvarsall])
 
-                        if(has_set is '0'):
+                        if(has_set == '0'):
                             print("please set env variable: vcvarsall.")
                             break
 
@@ -5960,7 +5960,7 @@ def main_function():
                             # if(has_set != '0'):
                             #    print(native_dict[current_vcvarsall])
 
-                            if (has_set is '0'):
+                            if (has_set == '0'):
                                 print("please set env variable: vcvarsall.")
                                 break
 
@@ -7433,7 +7433,7 @@ def main_function():
                 #if(has_set != '0'):
                 #    print(native_dict[current_vcvarsall])
 
-                if(has_set is '0'):
+                if(has_set == '0'):
                     print('please set env variable vcvarsall in %s, env %s.' % (sourcefile, current_env))
                     return
 
@@ -7610,7 +7610,7 @@ def main_function():
                 #if(has_set != '0'):
                 #    print(native_dict[current_vcvarsall])
 
-                if(has_set is '0'):
+                if(has_set == '0'):
                     print('please set env variable vcvarsall in %s, env %s.' % (sourcefile, current_env))
                     return
 
@@ -7693,7 +7693,7 @@ def main_function():
                 #if(has_set != '0'):
                 #    print(native_dict[current_vcvarsall])
 
-                if(has_set is '0'):
+                if(has_set == '0'):
                     print("please set env variable: vcvarsall.")
                     return
 
@@ -7886,7 +7886,7 @@ def main_function():
                 #if(has_set != '0'):
                 #    print(native_dict[current_vcvarsall])
 
-                if(has_set is '0'):
+                if(has_set == '0'):
                     print("please set env variable: vcvarsall.")
                     return
 
@@ -7980,7 +7980,7 @@ def main_function():
                 #if(has_set != '0'):
                 #    print(native_dict[current_vcvarsall])
 
-                if(has_set is '0'):
+                if(has_set == '0'):
                     print("please set env variable: vcvarsall.")
                     return 1
 
@@ -8106,7 +8106,7 @@ def main_function():
                     # if(has_set != '0'):
                     #    print(native_dict[current_vcvarsall])
 
-                    if (has_set is '0'):
+                    if (has_set == '0'):
                         print("please set env variable: vcvarsall.")
                         return
 
@@ -8274,7 +8274,7 @@ def main_function():
                     # if(has_set != '0'):
                     #    print(native_dict[current_vcvarsall])
 
-                    if (has_set is '0'):
+                    if (has_set == '0'):
                         print("please set env variable: vcvarsall.")
                         return
 
@@ -8454,7 +8454,7 @@ def main_function():
                     # if(has_set != '0'):
                     #    print(native_dict[current_vcvarsall])
 
-                    if (has_set is '0'):
+                    if (has_set == '0'):
                         print("please set env variable: vcvarsall.")
                         return
 
@@ -8644,7 +8644,7 @@ def main_function():
                 # if(has_set != '0'):
                 #    print(native_dict[current_vcvarsall])
 
-                if (has_set is '0'):
+                if (has_set == '0'):
                     print("please set env variable: vcvarsall.")
                     return
 
@@ -8814,7 +8814,7 @@ def main_function():
                         # if(has_set != '0'):
                         #    print(native_dict[current_vcvarsall])
 
-                        if (has_set is '0'):
+                        if (has_set == '0'):
                             print('please set env variable vcvarsall in %s, env %s.' % (sourcefile, current_env))
                             continue
 
