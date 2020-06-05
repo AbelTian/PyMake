@@ -5012,7 +5012,7 @@ def main_function():
 
 
     from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QStatusBar
-    from PyQt5.QtWidgets import QListView, QTextEdit, QToolButton, QItemDelegate
+    from PyQt5.QtWidgets import QListView, QTextEdit, QToolButton, QItemDelegate, QStyle
     from PyQt5 import uic
     from PyQt5.QtCore import Qt
     from PyQt5.QtCore import QStringListModel, QModelIndex, QItemSelectionModel
@@ -5036,11 +5036,20 @@ def main_function():
             ''
 
             painter.save()
+
+            pen = QPen()
+            if (option.state & QStyle.State_Selected):
+                pen.setColor(Qt.white)
+            else:
+                pen.setColor(Qt.black)
             if (config['environ'].__contains__('current')):
                 if (text == config['environ']['current']):
-                    pen = QPen()
-                    pen.setColor(Qt.darkCyan)
-                    painter.setPen(pen)
+                    if(option.state & QStyle.State_Selected):
+                        pen.setColor(Qt.cyan)
+                    else:
+                        pen.setColor(Qt.darkCyan)
+            painter.setPen(pen)
+
             painter.drawText(rect.adjusted(5, 0, 0, 0), Qt.AlignLeft|Qt.AlignVCenter, text)
             painter.restore()
 
